@@ -25,6 +25,7 @@
         <!--<spring-cloud.version>Finchley.RELEASE</spring-cloud.version>-->
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <lombok.version>1.16.22</lombok.version>
+        <mysql.version>8.0.16</mysql.version>
     </properties>
 
 
