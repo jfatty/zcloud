@@ -418,7 +418,7 @@ public class CodepageProcessor
   }
 
   /**
-   * @param files
+   * @param document
    */
   private void process(File document) throws Exception {
     Charset charset = null;

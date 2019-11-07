@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.PermRelationshipMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.PermRelationship">
+        <id column="privilege_id" property="privilegeId" />
+        <result column="auth_id" property="authId" />
+    </resultMap>
+
+
+    <!-- 页面权限树 封装 -->
+    <resultMap id="PrivilegeTreeMap" type="com.jfatty.zcloud.base.vo.SystemTree" >
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="id" property="value" jdbcType="VARCHAR" />
+        <!--
+        <result column="root" property="checked" jdbcType="BIT" />
+        <result column="spread" property="spread" jdbcType="BIT" />
+         -->
+    </resultMap>
+    <!-- 拿到权限列表 -->
+    <select id="getPrivilegeTreeList" resultMap="PrivilegeTreeMap" parameterType="map" >
+        select id,title
+        from sys_privilege where 1=1
+        <if test="authId != null" >
+            and id in (select privilege_id from sys_perm_relationship where auth_id = #{authId,jdbcType=VARCHAR} )
+        </if>
+        <if test="authId == null" >
+            <if test="privilegeId != null" >
+                and parent_id = #{privilegeId,jdbcType=VARCHAR}
+            </if>
+            <if test="privilegeId == null" >
+                and root = 1
+            </if>
+        </if>
+        <if test="sm == 0" >
+            AND ( id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            )
+            )
+            OR id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id = #{userId,jdbcType=VARCHAR}
+            )
+            OR id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT user_group_id
+            FROM sys_user_gp
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            )
+            )
+            OR id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT dept
+            FROM sys_user
+            WHERE id = #{userId,jdbcType=VARCHAR}
+            )
+            )
+            )
+        </if>
+    </select>
+
+    <!-- 对角色 授权 先删除原有 权限-->
+    <delete id="deleteOldPrivilege" parameterType="java.lang.String" >
+        delete from sys_perm_relationship
+        where auth_id = #{authId,jdbcType=VARCHAR}
+    </delete>
+    <!-- 对角色 授权 增加新的 权限-->
+    <insert id="auth" parameterType="map"  >
+        insert into sys_perm_relationship (privilege_id, auth_id)
+        values
+        <foreach collection="index" index="index" item="privilege_id" separator=",">
+            (#{privilege_id,jdbcType=VARCHAR}, #{authId,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+</mapper>

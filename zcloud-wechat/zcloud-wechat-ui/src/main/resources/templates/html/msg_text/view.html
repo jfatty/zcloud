@@ -1,0 +1,55 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>文本消息</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <input type="hidden" name="baseId" id="baseId"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><i>*</i>关键字</label>
+            <div class="layui-input-block">
+                <input type="text" name="inputcode" id="inputcode" lay-verify="required" placeholder="请输入关键字" class="layui-input">
+                <p class="layui-bg-red tips-line">
+                    如果 关键字 为 subscribe ，那么此消息为订阅消息
+                </p>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i>*</i>标题</label>
+            <div class="layui-input-block">
+                <input name="title" id="title" maxlength="20" lay-verify="required" placeholder="请输入标题" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i>*</i>内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" id="msgContent" maxlength="200" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "msgText/edit?id=" + editId,
+            async: false,
+            data: null,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#baseId").val(obj.baseId);
+                    $("#inputcode").val(obj.inputcode);
+                    $("#title").val(obj.title);
+                    $("#msgContent").val(obj.content);
+                    form.render();
+                }
+
+            }
+        });
+    });
+</script>

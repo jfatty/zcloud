@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.DictionaryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.Dictionary">
+        <id column="id" property="id" />
+        <result column="dic_value" property="dicValue" />
+        <result column="dic_code" property="dicCode" />
+        <result column="parent_dic" property="parentDic" />
+        <result column="dictionary_menu" property="dictionaryMenu" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        t1.id, t1.dic_value, t1.dic_code, t1.parent_dic, t1.state, t1.create_time, t1.create_operator,
+        t1.update_operator, t1.update_time, t2.name as dictionary_menu
+        from
+        (	select
+        id, dic_value, dic_code, parent_dic, dictionary_menu, state, create_time, create_operator,
+        update_operator, update_time
+        from
+        sys_dictionary
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm,jdbcType=VARCHAR}
+        </if>
+        <if test="dicValue != null" >
+            and dic_value = #{dicValue,jdbcType=VARCHAR}
+        </if>
+        <if test="dicCode != null" >
+            and dic_code = #{dicCode,jdbcType=VARCHAR}
+        </if>
+        <if test="parentDic != null" >
+            and parent_dic = #{parentDic,jdbcType=VARCHAR}
+        </if>
+        <if test="dictionaryMenu != null" >
+            and dictionary_menu = #{dictionaryMenu,jdbcType=VARCHAR}
+        </if>
+        <if test="state != null" >
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="createTime != null" >
+            and create_time = #{createTime,jdbcType=VARCHAR}
+        </if>
+        <if test="createOperator != null" >
+            and create_operator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateOperator != null" >
+            and update_operator = #{updateOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null" >
+            and update_time = #{updateTime,jdbcType=VARCHAR}
+        </if> )  t1 left join sys_dictionary_menu t2 on t2.id = t1.dictionary_menu
+        order by t1.create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据 条数  -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from sys_dictionary
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm,jdbcType=VARCHAR}
+        </if>
+        <if test="dicValue != null" >
+            and dic_value = #{dicValue,jdbcType=VARCHAR}
+        </if>
+        <if test="dicCode != null" >
+            and dic_code = #{dicCode,jdbcType=VARCHAR}
+        </if>
+        <if test="parentDic != null" >
+            and parent_dic = #{parentDic,jdbcType=VARCHAR}
+        </if>
+        <if test="dictionaryMenu != null" >
+            and dictionary_menu = #{dictionaryMenu,jdbcType=VARCHAR}
+        </if>
+        <if test="state != null" >
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        <if test="createTime != null" >
+            and create_time = #{createTime,jdbcType=VARCHAR}
+        </if>
+        <if test="createOperator != null" >
+            and create_operator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateOperator != null" >
+            and update_operator = #{updateOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null" >
+            and update_time = #{updateTime,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+</mapper>

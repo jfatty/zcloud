@@ -1,0 +1,85 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>模板消息</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模板ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="tplId" id="tplId" lay-verify="required" placeholder="请输入模板ID" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模板标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入模板标题"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">微信模板</label>
+            <div class="layui-input-block">
+                <textarea name="wxTpl" id="wxTpl" rows="6" placeholder="请输入微信模板" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" id="state_y" value="1" title="启用">
+                <input type="radio" name="state" id="state_n" value="0" title="停用">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">模板内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" id="tplContent" rows="6" placeholder="请输入模板内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><i>*</i>发送内容</label>
+            <div class="layui-input-block">
+                <textarea name="sendContent" id="sendContent" maxlength="200" lay-verify="required" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">链接</label>
+            <div class="layui-input-block">
+                <input name="url" id="url" maxlength="200" lay-verify="required" placeholder="请输入链接" class="layui-input">
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "tplMsgText/edit?id=" + objId,
+            async: false,
+            data: null,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#tplId").val(obj.tplId);
+                    $("#title").val(obj.title);
+                    $("#wxTpl").val(obj.wxTpl);
+                    $("#tplContent").val(obj.content);
+                    $("#sendContent").val(obj.sendContent);
+                    $("#url").val(obj.url);
+                    if (obj.state == 1) {
+                        $("#state_y").attr("checked", true);
+                    } else {
+                        $("#state_n").attr("checked", true);
+                    }
+                    form.render();
+                }
+
+            }
+        });
+    });
+</script>

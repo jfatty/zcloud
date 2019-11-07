@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author jfatty on 2019/11/7
  * @email jfatty@163.com
  */
-@RequestMapping(value={"/account"})
+@RequestMapping(value={"/accountFans"})
 public interface IAccountFans extends BInterface<AccountFans> {
 }

@@ -1,0 +1,120 @@
+<div style="margin: 15px;">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+		<legend>微信公众号</legend>
+	</fieldset>
+	<div class="fsh-rightPanel">
+		<div class="layui-anim layui-anim-upbit">
+			<div class="layui-row layui-col-space10">
+				<div class="layui-col-md8">
+					<form class="layui-form" action="">
+						<input type="hidden" name="id" id="id" />
+						<div class="layui-form-item">
+							<label class="layui-form-label">公众号名称</label>
+							<div class="layui-input-block">
+								<input type="text" id="name" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">公众号原始ID</label>
+							<div class="layui-input-block">
+								<input type="text" id="account" name="account" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">appid</label>
+							<div class="layui-input-block">
+								<input type="text" id="appid" name="appid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">appsecret</label>
+							<div class="layui-input-block">
+								<input type="text" id="appsecret" name="appsecret" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">配置地址</label>
+							<button class="layui-btn btn-copy" style="float: right" data-clipboard-action="copy" data-clipboard-target="#url"><i class="icon-fuzhi iconfont"></i>复制</button>
+							<div class="layui-input-block"  style="margin-right: 100px;">
+								<input type="text" id="url" readonly name="url" readonly placeholder="系统自动生成" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">token</label>
+							<button class="layui-btn btn-copy" style="float: right" data-clipboard-action="copy" data-clipboard-target="#token"><i class="icon-fuzhi iconfont"></i>复制</button>
+							<div class="layui-input-block" style="margin-right: 100px;">
+								<input type="text" id="token" readonly name="token" readonly placeholder="系统自动生成" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">消息数量</label>
+							<div class="layui-input-block">
+								<input type="text" id="msgCount" name="msgCount" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">使用状态</label>
+							<div class="layui-input-block">
+								<input type="radio" name="state" id="state_y" value="1" title="启用" checked="">
+								<input type="radio" name="state" id="state_n"  value="0" title="停用">
+							</div>
+						</div>
+						<div class="layui-form-item layui-form-text">
+							<label class="layui-form-label">描述</label>
+							<div class="layui-input-block">
+								<textarea id="description" name="description" rows="6" placeholder="请输入内容" class="layui-textarea"></textarea>
+							</div>
+						</div>
+						<button lay-filter="edit" lay-submit style="display: none;"></button>
+					</form>
+				</div>
+				<div class="layui-col-md4 text-center">
+					<img id="url_img" style="width: 100%;max-width:200px;margin-top: 50px;">
+					<p style="margin-top: 20px;margin-left: 40px;">公众号二维码</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	layui.use(['form', 'layedit', 'laydate'], function() {
+		var form = layui.form,
+			layer = layui.layer;
+        //修改前预览 通过GET方式拿到数据
+        JFATTY.doGet({
+            url : JFATTY.basePath() + "account/edit?id=" + accountId,
+            async : false,
+            success : function(value, type) {
+                if(value.ok){
+                    var obj =  value.data ;
+                    $("#url_img").attr("src","http://open.weixin.qq.com/qr/code?username="+obj.account);
+                    $("#id").val(obj.id);
+                    $("#name").val(obj.name);
+                    $("#appid").val(obj.appid);
+                    $("#appsecret").val(obj.appsecret);
+                    $("#token").val(obj.token);
+                    $("#url").val(obj.url);
+                    $("#account").val(obj.account);
+                    $("#msgCount").val(obj.msgCount);
+                    $("#description").val(obj.description);
+                    if(obj.state == 1){
+                        $("#state_y").attr("checked",true);
+                    }else {
+                        $("#state_n").attr("checked",true);
+                    }
+                    form.render();
+                    var clipboard = new ClipboardJS('.btn-copy');
+                    clipboard.on('success', function(e) {
+                        layer.msg("复制成功！");
+                    });
+
+                    clipboard.on('error', function(e) {
+                        layer.msg("复制失败！");
+                    });
+                    //g_form.render('select');
+                }
+            }
+        });
+
+    });
+</script>

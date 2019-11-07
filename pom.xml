@@ -35,6 +35,7 @@
         <httpclient.version>4.5.2</httpclient.version>
         <httpcore.version>4.4.6</httpcore.version>
         <ehcache.version>2.6.11</ehcache.version>
+        <swagger.version>2.7.0</swagger.version>
     </properties>
 
 

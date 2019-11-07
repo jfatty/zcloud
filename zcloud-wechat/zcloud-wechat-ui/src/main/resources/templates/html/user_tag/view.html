@@ -1,0 +1,51 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>用户标签</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <input type="hidden" name="realm" id="realm"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签名称</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" id="state_y" value="1" title="启用">
+                <input type="radio" name="state" id="state_n" value="0" title="停用">
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "userTag/edit?id=" + editId,
+            async: false,
+            data: null,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#realm").val(obj.realm);
+                    $("#name").val(obj.name);
+                    if (obj.state == 1) {
+                        $("#state_y").attr("checked", true);
+                    } else {
+                        $("#state_n").attr("checked", true);
+                    }
+                    form.render();
+                }
+
+            }
+        });
+    });
+</script>

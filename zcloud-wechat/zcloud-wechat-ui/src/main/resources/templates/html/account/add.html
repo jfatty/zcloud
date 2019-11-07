@@ -1,0 +1,71 @@
+<div style="margin: 15px;">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+		<legend>微信公众号</legend>
+	</fieldset>
+
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">公众号名称</label>
+			<div class="layui-input-block">
+				<input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">公众号原始ID</label>
+			<div class="layui-input-block">
+				<input type="text" name="account" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">appid</label>
+			<div class="layui-input-block">
+				<input type="text" name="appid" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">appsecret</label>
+			<div class="layui-input-block">
+				<input type="text" name="appsecret" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">配置地址</label>
+			<div class="layui-input-block">
+				<input type="text" name="url" readonly placeholder="系统自动生成" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">token</label>
+			<div class="layui-input-block">
+				<input type="text" name="token" readonly placeholder="系统自动生成" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">消息数量</label>
+			<div class="layui-input-block">
+				<input type="text" name="msgCount" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">使用状态</label>
+			<div class="layui-input-block">
+				<input type="radio" name="state" value="1" title="启用" checked="">
+				<input type="radio" name="state" value="0" title="停用">
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">描述</label>
+			<div class="layui-input-block">
+				<textarea name="description" rows="6" placeholder="请输入内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script>
+	layui.use(['form', 'layedit', 'laydate'], function() {
+		var form = layui.form,
+			layer = layui.layer;
+
+	});
+</script>

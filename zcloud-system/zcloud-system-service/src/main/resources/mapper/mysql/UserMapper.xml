@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.User">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="gender" property="gender" />
+        <result column="age" property="age" />
+        <result column="org_id" property="orgId" />
+        <result column="org" property="org" />
+        <result column="dept_id" property="deptId" />
+        <result column="dept" property="dept" />
+        <result column="office_id" property="officeId" />
+        <result column="office" property="office" />
+        <result column="remark" property="remark" />
+        <result column="avatar" property="avatar" />
+        <result column="user_code" property="userCode" />
+        <result column="type" property="type" />
+        <result column="identity" property="identity" />
+        <result column="post" property="post" />
+        <result column="realm" property="realm" />
+        <result column="auth" property="auth" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+
+        <result column="user_name" property="userName" />
+        <result column="tel" property="tel" />
+        <result column="id_card" property="idCard" />
+
+    </resultMap>
+
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        SELECT a.id_card ,a.tel,a.user_name ,u.* FROM sys_user u , sys_account_unique a
+        WHERE 1=1 AND a.id = u.id
+        <if test="realm != null and '' != realm">
+            AND u.realm = #{realm}
+        </if>
+        <if test="identity != null ">
+            AND u.identity = #{identity}
+        </if>
+        order by u.create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer"  parameterType="map" >
+        select count(0)
+        from sys_user
+        where 1=1
+        <if test="realm != null and '' != realm">
+            AND realm = #{realm}
+        </if>
+        <if test="identity != null ">
+            AND identity = #{identity}
+        </if>
+    </select>
+
+    <!--根据ID获取用户信息-->
+    <select id="getUserInfoById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT a.id_card ,a.tel,a.user_name ,u.* FROM sys_user u , sys_account_unique a
+        WHERE a.id = u.id AND u.id = #{id}
+    </select>
+
+    <!-- 根据用户id删除原有用户与用户组的对应关系-->
+    <delete id="deleteOldUserRelationship" parameterType="java.util.Map" >
+        delete from
+        <if test="type == 'ug'" >
+            sys_user_gp
+        </if>
+        <if test="type == 'role'" >
+            sys_user_role
+        </if>
+        where user_id = #{userId,jdbcType=VARCHAR}
+    </delete>
+    <!-- 更新用户有用户组之间的对应关系-->
+    <insert id="updateUserRelationship" parameterType="java.util.Map"  >
+        insert into
+        <if test="type == 'ug'" >
+            sys_user_gp (user_group_id, user_id)
+            values
+            <foreach collection="index" index="index" item="obj_id" separator=",">
+                (#{obj_id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR})
+            </foreach>
+        </if>
+        <if test="type == 'role'" >
+            sys_user_role (user_id, role_id)
+            values
+            <foreach collection="index" index="index" item="obj_id" separator=",">
+                (#{userId,jdbcType=VARCHAR}, #{obj_id,jdbcType=VARCHAR})
+            </foreach>
+        </if>
+    </insert>
+
+</mapper>

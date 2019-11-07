@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.RoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.Role">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="description" property="description" />
+        <result column="role_code" property="roleCode" />
+        <result column="level" property="level" />
+        <result column="level_max" property="levelMax" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <sql id="Base_Column_List" >
+      id, name, description, role_code, create_time, create_operator, update_operator,
+      update_time, state, level, level_max, realm
+    </sql>
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        <include refid="Base_Column_List" />
+        from sys_role
+        where 1 = 1
+        <if test="realm != null and '' != realm" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据 条数  -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from sys_role
+        where 1 = 1
+        <if test="realm != null and '' != realm" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+
+    <!-- 获取已经绑定角色集合 -->
+    <select id="getRoleList" resultMap="RoleTreeMap" parameterType="map" >
+        select
+        id,name
+        from sys_role
+        where 1 = 1 AND #{randomString} = #{randomString}
+        <if test="realm != null and '' != realm" >
+            and realm = #{realm}
+        </if>
+        <if test="userId != null" >
+            AND id in ( select role_id from sys_user_role where user_id = #{userId,jdbcType=VARCHAR} )
+        </if>
+    </select>
+    <!-- 角色树 -->
+    <resultMap id="RoleTreeMap" type="com.jfatty.zcloud.base.vo.SystemTree" >
+        <result column="name" property="title" jdbcType="VARCHAR" />
+        <result column="id" property="value" jdbcType="VARCHAR" />
+        <!--
+        <result column="root" property="checked" jdbcType="BIT" />
+        <result column="spread" property="spread" jdbcType="BIT" />
+         -->
+    </resultMap>
+
+</mapper>

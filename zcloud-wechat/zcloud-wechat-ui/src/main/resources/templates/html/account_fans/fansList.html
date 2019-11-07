@@ -1,0 +1,98 @@
+<div class="admin-main">
+    <fieldset class="layui-elem-field">
+        <legend>粉丝列表</legend>
+        <form class="layui-field-box layui-form" action="">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="fansallselector" lay-skin="primary"></th>
+                    <th>昵称</th>
+                    <th>头像</th>
+                    <th>性别</th>
+                    <th>省/市</th>
+                </tr>
+                </thead>
+                <tbody id="fans-content">
+                </tbody>
+            </table>
+            <button lay-filter="edit" lay-submit style="display: none;"></button>
+        </form>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="fans-paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="fans-tpl">
+    {{# layui.each(d.list, function(index, item){ }}
+    <tr>
+        <td><input type="checkbox" name="openIds" value="{{ item.openId }}" lay-skin="primary"></td>
+        <td>{{ item.nicknameStr }}</td>
+        <td><img class="fans-portrait" src="{{ item.headImgUrl }}" /></td>
+        <td>{{ item.gender == 1 ? '男' : '女' }}</td>
+        <td>{{ item.province }}/{{ item.city }}</td>
+    </tr>
+    {{# }); }}
+</script>
+<script type="text/javascript" th:inline="none">
+
+    var fansId ;
+    var g_url = JFATTY.basePath() + 'accountFans/table/list?v=' + new Date().getTime() ;
+    layui.config({
+        base: JFATTY.basePath() + '/js/'
+    });
+
+    var pageObj = {//调用数据获取函数
+        pageIndex: 1,
+        refre: false,
+        url: null
+    } ;
+
+    layui.use(['paging', 'form'], function() {
+        var $ = layui.jquery,
+            pag = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form;
+
+        var Opts  = {
+            openWait: true,
+            url:  g_url  , //地址
+            elem: '#fans-content', //内容容器
+            params: { //发送到服务端的参数
+            },
+            type: 'POST',
+            tempElem: '#fans-tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: 'fans-paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function() { //渲染成功的回调
+                //alert('渲染成功');
+            },
+            fail: function(msg) { //获取数据失败的回调
+                //alert('获取数据失败');
+            },
+            complate: function() { //完成的回调
+                //alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(fansallselector)', function(data) {
+                    var elem = data.elem;
+                    $('#fans-content').children('tr').each(function() {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+
+            },
+        };
+
+        pag.init(Opts);
+
+    });
+</script>

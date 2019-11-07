@@ -1,10 +1,10 @@
 package com.jfatty.zcloud.wechat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.io.Serializable;
 
 /**
  * <p>
@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @Data
 @TableName("wxcms_account_menu")
-public class AccountMenu implements Serializable {
+public class AccountMenu extends Model<AccountMenu> {
 
     private static final long serialVersionUID = 1L;
 

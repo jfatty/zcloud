@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.AccountUniqueMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.AccountUnique">
+        <id column="id" property="id" />
+        <result column="user_name" property="userName" />
+        <result column="password" property="password" />
+        <result column="salt" property="salt" />
+        <result column="tel" property="tel" />
+        <result column="realm" property="realm" />
+        <result column="id_card" property="idCard" />
+        <result column="email" property="email" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!--
+       @description:根据用户ID获取对应角色名称集合
+       @author jfatty
+       @date 2018年7月12日
+       @version 1.0.0
+       @param map 封装查询参数用户id   userId
+       @return 返回角色名称  String Set集合
+      -->
+    <select id="getRoles" resultType="java.lang.String" parameterType="map" >
+        SELECT role_code
+        FROM sys_role
+        WHERE 1 = 1
+        <if test="userId != null" >
+            AND id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            )
+        </if>
+        AND role_code IS NOT NUll
+        AND  <![CDATA[ role_code <> '' ]]>
+    </select>
+    <!--
+      @description:根据用户ID获取对应操作权限集合
+      @author jfatty
+      @date 2018年7月12日
+      @version 1.0.0
+      @param map 封装查询参数用户id   userId
+      @return 返回操作权限 路径 String Set 集合
+    -->
+    <select id="getPermissions" resultType="java.lang.String" parameterType="map" >
+        SELECT DISTINCT sys_permission
+        FROM sys_privilege
+        WHERE 1 = 1
+        <if test="userId != null" >
+            AND (id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+                  )
+                )
+            )
+        </if>
+        AND sys_permission IS NOT NUll
+        AND  <![CDATA[ sys_permission <> '' ]]>
+    </select>
+
+</mapper>
