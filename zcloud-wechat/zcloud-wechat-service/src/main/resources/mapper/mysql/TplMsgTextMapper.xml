@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.TplMsgTextMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.TplMsgText">
+        <id column="id" property="id" />
+        <result column="tpl_id" property="tplId" />
+        <result column="url" property="url" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="wx_tpl" property="wxTpl" />
+        <result column="send_content" property="sendContent" />
+        <result column="base_id" property="baseId" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from wxcms_tpl_msg_text
+        <where>
+            <if test="account != null">
+                and account = #{account}
+            </if>
+        </where>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from wxcms_tpl_msg_text
+        <where>
+            <if test="account != null">
+                and account = #{account}
+            </if>
+        </where>
+    </select>
+
+</mapper>

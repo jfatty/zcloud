@@ -26,6 +26,15 @@
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <lombok.version>1.16.22</lombok.version>
         <mysql.version>8.0.16</mysql.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <fastjson.version>1.2.51</fastjson.version>
+        <xstream.version>1.4.9</xstream.version>
+        <commons-net.version>3.3</commons-net.version>
+        <zxing.version>3.3.0</zxing.version>
+        <guava.version>20.0</guava.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <httpcore.version>4.4.6</httpcore.version>
+        <ehcache.version>2.6.11</ehcache.version>
     </properties>
 
 
@@ -35,6 +44,14 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>
@@ -48,6 +65,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <modules>
+        <module>zcloud-base</module>
+        <module>zcloud-alipay</module>
+        <module>zcloud-wechat</module>
+        <module>zcloud-system</module>
+        <module>zcloud-ui</module>
+        <module>zcloud-gateway</module>
+    </modules>
 
     <build>
         <plugins>

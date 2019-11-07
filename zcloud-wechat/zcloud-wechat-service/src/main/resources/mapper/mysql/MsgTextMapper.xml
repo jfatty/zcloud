@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.wechat.mapper.MsgTextMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.MsgText">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="base_id" property="baseId" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!--获取文本消息列表-->
+    <select id="getMsgTextList" resultMap="BaseResultMap" parameterType="com.jfatty.zcloud.wechat.entity.MsgText">
+        SELECT b.msg_type as msgtype ,b.input_code as inputcode ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+        WHERE t.base_id = b.id
+        <if test="inputcode != '' and inputcode != null">
+            and b.input_code=#{inputcode}
+        </if>
+        <if test="account != null">
+            and t.account = #{account}
+        </if>
+        ORDER BY b.create_time DESC
+    </select>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultType="com.jfatty.zcloud.wechat.entity.MsgText" parameterType="map" >
+        SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+        WHERE t.base_id = b.id
+        <if test="inputcode != '' and inputcode != null">
+            and b.input_code=#{inputcode}
+        </if>
+        <if test="keywords != null">
+            and b.input_code LIKE concat('%',#{keywords},'%')
+        </if>
+        <if test="account != null">
+            and t.account = #{account}
+        </if>
+        ORDER BY b.create_time DESC limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        FROM wxcms_msg_text t , wxcms_msg_base b
+        WHERE t.base_id = b.id
+        <if test="inputcode != '' and inputcode != null">
+            and b.input_code=#{inputcode}
+        </if>
+        <if test="keywords != null">
+            and b.input_code LIKE concat('%',#{keywords},'%')
+        </if>
+        <if test="account != null">
+            and t.account = #{account}
+        </if>
+    </select>
+
+    <!--保存文本消息-->
+    <insert id="save" parameterType="com.jfatty.zcloud.wechat.entity.MsgText">
+        INSERT INTO wxcms_msg_text ( id,title,content,base_id,account,create_operator,create_time )
+        VALUES ( #{id},#{title},#{content},#{baseId},#{account},#{createOperator},#{createTime} )
+    </insert>
+
+    <!--根据id查询信息-->
+    <select id="getById" resultType="com.jfatty.zcloud.wechat.entity.MsgText" parameterType="java.lang.String" >
+        SELECT b.msg_type ,b.input_code ,t.* FROM wxcms_msg_text t , wxcms_msg_base b
+        WHERE t.base_id = b.id AND t.id = #{id}
+    </select>
+
+    <!--更新文本消息-->
+    <update id="updateById" parameterType="com.jfatty.zcloud.wechat.entity.MsgText" >
+        UPDATE wxcms_msg_text SET title = #{title},content = #{content},account = #{account},update_operator = #{updateOperator} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteByIds" parameterType="list" >
+        DELETE FROM wxcms_msg_text WHERE 1=1 AND id IN <foreach item="item" index="idList" collection="list" open="(" separator="," close=")">#{item}</foreach>
+    </delete>
+
+</mapper>

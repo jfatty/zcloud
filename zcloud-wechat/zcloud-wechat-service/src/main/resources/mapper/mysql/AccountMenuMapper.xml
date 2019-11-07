@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.AccountMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.AccountMenu">
+        <id column="id" property="id" />
+        <result column="mtype" property="mtype" />
+        <result column="event_type" property="eventType" />
+        <result column="name" property="name" />
+        <result column="input_code" property="inputCode" />
+        <result column="url" property="url" />
+        <result column="sort" property="sort" />
+        <result column="parent_id" property="parentId" />
+        <result column="msg_type" property="msgType" />
+        <result column="msg_id" property="msgId" />
+        <result column="gid" property="gid" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!--微信公众号菜单查询-->
+    <select id="selectWxMenus" resultType="com.jfatty.zcloud.wechat.entity.AccountMenu" parameterType="java.lang.String">
+        SELECT * FROM wxcms_account_menu WHERE account=#{account} ORDER BY parent_id, sort
+    </select>
+
+    <!--删除原有菜单-->
+    <delete id="deleteMenu"  parameterType="com.jfatty.zcloud.wechat.entity.AccountMenu">
+        DELETE FROM wxcms_account_menu WHERE account=#{account}
+    </delete>
+
+    <!--保存菜单-->
+    <insert id="save"  parameterType="com.jfatty.zcloud.wechat.entity.AccountMenu" >
+        INSERT INTO wxcms_account_menu (id,mtype,event_type,name,input_code,url,sort,msg_type,msg_id,parent_id,gid,account,realm,create_operator )
+        VALUES (#{id},#{mtype},#{eventType},#{name},#{inputCode},#{url},#{sort},#{msgType},#{msgId},#{parentId},#{gid},#{account},#{realm},#{createOperator} )
+    </insert>
+
+</mapper>

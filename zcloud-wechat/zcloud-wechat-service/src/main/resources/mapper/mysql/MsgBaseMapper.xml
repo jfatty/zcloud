@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.MsgBaseMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.MsgBase">
+        <id column="id" property="id" />
+        <result column="msg_type" property="msgtype" />
+        <result column="input_code" property="inputcode" />
+        <result column="rule" property="rule" />
+        <result column="enable" property="enable" />
+        <result column="read_count" property="readcount" />
+        <result column="favour_count" property="favourcount" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="MsgTextResultMap" type="com.jfatty.zcloud.wechat.entity.MsgText">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="base_id" property="baseId" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <resultMap id="MsgNewsResultMap" type="com.jfatty.zcloud.wechat.entity.MsgNews">
+        <id column="id" property="id" />
+        <result column="mult_type" property="multType" />
+        <result column="title" property="title" />
+        <result column="author" property="author" />
+        <result column="brief" property="brief" />
+        <result column="description" property="description" />
+        <result column="pic_path" property="picPath" />
+        <result column="show_pic" property="showPic" />
+        <result column="url" property="url" />
+        <result column="from_url" property="fromUrl" />
+        <result column="base_id" property="baseId" />
+        <result column="media_id" property="mediaId" />
+        <result column="thumb_media_id" property="thumbMediaId" />
+        <result column="news_index" property="newsIndex" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="listForPage" parameterType="com.jfatty.zcloud.wechat.entity.MsgBase" resultMap="BaseResultMap">
+        SELECT * FROM wxcms_msg_base
+        <trim prefix="where" prefixOverrides="and|or">
+            1=1
+            <if test="msgtype != null and msgtype != '' ">
+                AND  MSG_TYPE = #{msgtype}
+            </if>
+        </trim>
+        ORDER BY ID
+    </select>
+
+    <!--新增一条基础消息数据-->
+    <insert id="insert" parameterType="com.jfatty.zcloud.wechat.entity.MsgBase">
+        INSERT INTO wxcms_msg_base ( id,msg_type,input_code,rule,enable,account,create_operator,create_time ) VALUES ( #{id},#{msgtype},#{inputcode},#{rule},#{enable},#{account},#{createOperator},#{createTime} )
+    </insert>
+
+    <!--更新数据-->
+    <update id="updateById" parameterType="com.jfatty.zcloud.wechat.entity.MsgBase" >
+        UPDATE wxcms_msg_base SET input_code = #{inputcode},rule = #{rule},enable = #{enable},account = #{account},update_operator = #{updateOperator} WHERE id = #{id}
+    </update>
+
+    <select id="getById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT * FROM wxcms_msg_base WHERE ID = #{id}
+	</select>
+
+    <select id="getMsgTextByBaseId" parameterType="java.lang.String" resultMap="MsgTextResultMap">
+		SELECT t.* FROM wxcms_msg_text t , wxcms_msg_base b
+		WHERE t.base_id = b.id
+		AND b.id = #{id}
+	</select>
+
+    <select id="getMsgTextBySubscribe" resultMap="MsgTextResultMap" parameterType="java.lang.String">
+		SELECT t.* FROM wxcms_msg_text t , wxcms_msg_base b
+		WHERE t.base_id = b.id
+		AND b.input_code = 'subscribe' AND t.account = #{account}
+	</select>
+
+    <select id="getMsgTextByInputCode" resultMap="MsgTextResultMap" parameterType="map" >
+		SELECT t.* FROM wxcms_msg_text t , wxcms_msg_base b
+		WHERE t.base_id = b.id
+		AND t.account = #{account}
+        <if test="inputcode != null and inputcode != '' ">
+            AND b.input_code = #{inputcode}
+        </if>
+        <if test="tmpContent != null and tmpContent != '' ">
+            AND b.input_code like CONCAT('%',#{tmpContent},'%' )
+        </if>
+        <if test="msgCount != null and msgCount != '' ">
+            LIMIT #{msgCount}
+        </if>
+	</select>
+
+    <select id="listMsgNewsByBaseId" resultMap="MsgNewsResultMap">
+        SELECT t.* FROM wxcms_msg_news t , wxcms_msg_base b
+        WHERE t.base_id = b.id
+        AND b.id in
+        <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <delete id="deleteByMsgTextIds" parameterType="list" >
+        DELETE  FROM wxcms_msg_base WHERE 1=1 AND id IN ( SELECT DISTINCT(base_id) FROM wxcms_msg_text WHERE id IN <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach> )
+    </delete>
+
+
+</mapper>

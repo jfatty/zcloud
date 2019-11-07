@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.AccountFansMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.AccountFans">
+        <id column="id" property="id" />
+        <result column="open_id" property="openId" />
+        <result column="subscribe_status" property="subscribeStatus" />
+        <result column="subscribe_time" property="subscribeTime" />
+        <result column="nick_name" property="nickName" />
+        <result column="gender" property="gender" />
+        <result column="language" property="language" />
+        <result column="country" property="country" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="head_img_url" property="headImgUrl" />
+        <result column="remark" property="remark" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <select id="getByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap" >
+		SELECT * FROM wxcms_account_fans WHERE open_id = #{openId}
+	</select>
+
+    <sql id="Base_Column_List" >
+      id, open_id, subscribe_status, subscribe_time, nick_name, gender, language,
+      country, province, city, head_img_url, state, remark,
+      account, create_time
+    </sql>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        <include refid="Base_Column_List" />
+        from wxcms_account_fans
+        <where>
+            <if test="nickName != null">
+                nick_name LIKE concat('%',#{nickName},'%')
+            </if>
+            <if test="account != null">
+                and account = #{account}
+            </if>
+            <if test="openIds != null">
+                AND open_id IN <foreach collection="openIds" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+            </if>
+        </where>
+        order by subscribe_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from wxcms_account_fans
+        <where>
+            <if test="nickName != null">
+                nick_name LIKE concat('%',#{nickName},'%')
+            </if>
+            <if test="account != null">
+                and account = #{account}
+            </if>
+            <if test="openIds != null">
+                AND open_id IN <foreach collection="openIds" index="index" item="item" open="(" separator="," close=")">#{item}</foreach>
+            </if>
+        </where>
+    </select>
+
+    <!--获取上次最后同步的一个粉丝-->
+    <select id="getLastOpenId" resultType="com.jfatty.zcloud.wechat.entity.AccountFans" parameterType="com.jfatty.zcloud.wechat.entity.AccountFans">
+        SELECT * FROM wxcms_account_fans
+		WHERE account = #{account}
+		ORDER BY create_time DESC
+		LIMIT 0 , 1
+    </select>
+
+
+    <!--批量新增粉丝-->
+    <insert id="insertList"  parameterType="list">
+        INSERT INTO wxcms_account_fans ( id,open_id,subscribe_status,subscribe_time,nick_name,gender,language,country,province,city,head_img_url,remark,account )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+            ( #{item.id},#{item.openId},#{item.subscribeStatus},#{item.subscribeTime},#{item.nickName},#{item.gender},#{item.language},#{item.country},#{item.province},#{item.city},#{item.headImgUrl},#{item.remark},#{item.account} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+</mapper>

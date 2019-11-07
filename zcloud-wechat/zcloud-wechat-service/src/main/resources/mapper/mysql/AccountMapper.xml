@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.AccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.Account">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="account" property="account" />
+        <result column="appid" property="appid" />
+        <result column="appsecret" property="appsecret" />
+        <result column="url" property="url" />
+        <result column="token" property="token" />
+        <result column="wx_account" property="wxAccount" />
+        <result column="access_token" property="accessToken" />
+        <result column="msg_count" property="msgCount" />
+        <result column="description" property="description" />
+        <result column="encodingaes_key" property="encodingaesKey" />
+        <result column="type" property="type" />
+        <result column="email" property="email" />
+        <result column="manager" property="manager" />
+        <result column="data_type" property="dataType" />
+        <result column="manager_contact" property="managerContact" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!--根据微信账号信息进行查询-->
+    <select id="getByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
+		SELECT * FROM wxcms_account WHERE account = #{account} ORDER BY ID DESC limit 1
+	</select>
+
+    <sql id="Base_Column_List" >
+      id, name, account, create_time, create_operator, update_operator,
+      update_time, state, appid, appsecret, url, token,
+      access_token, msg_count, encodingaes_key, type, email, realm, manager, wx_account
+    </sql>
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        <include refid="Base_Column_List" />
+        from wxcms_account
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null" >
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null" >
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="account != null" >
+            and account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+            and create_time = #{createTime,jdbcType=VARCHAR}
+        </if>
+        <if test="createOperator != null" >
+            and create_operator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateOperator != null" >
+            and update_operator = #{updateOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null" >
+            and update_time = #{updateTime,jdbcType=VARCHAR}
+        </if>
+        <if test="state != null" >
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from wxcms_account
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm,jdbcType=VARCHAR}
+        </if>
+        <if test="name != null" >
+            and name = #{name,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null" >
+            and description = #{description,jdbcType=VARCHAR}
+        </if>
+        <if test="deptCode != null" >
+            and account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null" >
+            and create_time = #{createTime,jdbcType=VARCHAR}
+        </if>
+        <if test="createOperator != null" >
+            and create_operator = #{createOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateOperator != null" >
+            and update_operator = #{updateOperator,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null" >
+            and update_time = #{updateTime,jdbcType=VARCHAR}
+        </if>
+        <if test="state != null" >
+            and state = #{state,jdbcType=INTEGER}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.UserTagMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.UserTag">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="count" property="count" />
+        <result column="account" property="account" />
+        <result column="tag_num" property="tagNum" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        SELECT * FROM wxcms_user_tag
+        <trim prefix="where" prefixOverrides="and|or">
+            1=1
+            <if test="account != null and account != '' ">
+                AND account = #{account}
+            </if>
+            <if test="name != null and name != '' ">
+                AND  name = #{name}
+            </if>
+        </trim>
+        ORDER BY create_time DESC limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        FROM wxcms_user_tag
+        <trim prefix="where" prefixOverrides="and|or">
+            1=1
+            <if test="account != null and account != '' ">
+                AND account = #{account}
+            </if>
+            <if test="name != null and name != '' ">
+                AND  name = #{name}
+            </if>
+        </trim>
+    </select>
+
+    <!--最大用户标签ID查询-->
+    <select id="getMaxId" resultType="java.lang.Integer" parameterType="java.lang.String" >
+		SELECT MAX(ID) FROM wxcms_user_tag  WHERE account = #{account}
+	</select>
+
+    <!-- 批量添加微信服务器的用户标签到本地库 -->
+    <insert id="addList"  parameterType="list">
+        INSERT INTO wxcms_user_tag ( ID,NAME,COUNT )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+             ( #{item.id},#{item.name},#{item.count} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+</mapper>

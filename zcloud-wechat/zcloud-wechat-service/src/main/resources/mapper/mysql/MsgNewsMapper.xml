@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.wechat.mapper.MsgNewsMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.MsgNews">
+        <id column="id" property="id" />
+        <result column="mult_type" property="multType" />
+        <result column="title" property="title" />
+        <result column="author" property="author" />
+        <result column="brief" property="brief" />
+        <result column="description" property="description" />
+        <result column="pic_path" property="picPath" />
+        <result column="show_pic" property="showPic" />
+        <result column="url" property="url" />
+        <result column="from_url" property="fromUrl" />
+        <result column="base_id" property="baseId" />
+        <result column="media_id" property="mediaId" />
+        <result column="thumb_media_id" property="thumbMediaId" />
+        <result column="news_index" property="newsIndex" />
+        <result column="account" property="account" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <!-- 配置一对多关联映射 fetchType="lazy" -->
+        <collection property="articles" column="id" fetchType="eager"
+                    ofType="com.jfatty.zcloud.wechat.entity.MsgArticle"
+                    javaType="ArrayList"
+                    select="com.jfatty.wechat.mapper.MsgArticleMapper.getById">
+            <id column="ar_id" property="arId" />
+            <result column="title" property="title" />
+            <result column="author" property="author" />
+            <result column="content" property="content" />
+            <result column="digest" property="digest" />
+            <result column="show_cover_pic" property="showCoverPic" />
+            <result column="url" property="url" />
+            <result column="thumb_media_id" property="thumbMediaId" />
+            <result column="content_source_url" property="contentSourceUrl" />
+            <result column="media_id" property="mediaId" />
+            <result column="news_id" property="newsId" />
+            <result column="news_index" property="newsIndex" />
+            <result column="pic_url" property="picUrl" />
+            <result column="account" property="account" />
+            <result column="realm" property="realm" />
+            <result column="state" property="state" />
+            <result column="create_operator" property="createOperator" />
+            <result column="create_time" property="createTime" />
+            <result column="update_operator" property="updateOperator" />
+            <result column="update_time" property="updateTime" />
+        </collection>
+    </resultMap>
+
+
+    <select id="getRandomMsgByContent" resultMap="BaseResultMap" parameterType="map">
+		SELECT t.* from wxcms_msg_news t LEFT JOIN wxcms_msg_base b
+		ON b.id = t.base_id WHERE b.input_code like CONCAT('%',#{tmpContent},'%' ) and t.account = #{account}  AND  b.account = #{account}
+		ORDER BY RAND() LIMIT #{msgCount}
+	</select>
+
+
+    <!--获取新闻消息列表-->
+    <select id="listMsgNewsList" resultMap="BaseResultMap" parameterType="com.jfatty.zcloud.wechat.entity.MsgNews">
+        SELECT * FROM wxcms_msg_news t , wxcms_msg_base b WHERE t.base_id = b.id
+        <if test="account != null">
+            and t.account = #{account}
+        </if>
+        ORDER BY b.create_time DESC
+    </select>
+
+
+</mapper>
