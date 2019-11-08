@@ -1,5 +1,5 @@
 server:
-    port: 9873
+    port: 80
     servlet:
       context-path: /wechat
 #日志相关配置
