@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.alipay.mapper.AlipayTexttemplateMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.alipay.entity.AlipayTexttemplate">
+        <id column="id" property="id" />
+        <result column="template_name" property="templateName" />
+        <result column="template_content" property="templateContent" />
+        <result column="accountid" property="accountid" />
+        <result column="create_name" property="createName" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_name" property="updateName" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+</mapper>

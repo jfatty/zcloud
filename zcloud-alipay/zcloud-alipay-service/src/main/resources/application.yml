@@ -1,7 +1,7 @@
 server:
-    port: 9873
+    port: 9874
     servlet:
-      context-path: /wechat
+      context-path: /alipay
 #日志相关配置
 logging:
   config: classpath:logback-win.xml
@@ -9,10 +9,10 @@ logging:
       root: DEBUG  # DEBUG INFO WARN ERROR
 spring:
     application:
-        name: zcloud-wechat-service
+        name: zcloud-alipay-service
     datasource:
         name: test
-        url: jdbc:mysql://${MYSQL_HOST:122.112.137.97}:${MYSQL_PORT:3306}/db_wechat?useUnicode=true&characterEncoding=UTF8
+        url: jdbc:mysql://${MYSQL_HOST:122.112.137.97}:${MYSQL_PORT:3306}/igo-alipay?useUnicode=true&characterEncoding=UTF8
         username: root
         password: tobeNO.1
         # 使用druid数据源

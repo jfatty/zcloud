@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.alipay.mapper.AlipayMenuMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.alipay.entity.AlipayMenu">
+        <id column="id" property="id" />
+        <result column="agent_id" property="agentId" />
+        <result column="menu_name" property="menuName" />
+        <result column="menu_type" property="menuType" />
+        <result column="menu_key" property="menuKey" />
+        <result column="orders" property="orders" />
+        <result column="msg_type" property="msgType" />
+        <result column="template_id" property="templateId" />
+        <result column="url" property="url" />
+        <result column="father_id" property="fatherId" />
+        <result column="create_name" property="createName" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_name" property="updateName" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+    </resultMap>
+
+</mapper>
