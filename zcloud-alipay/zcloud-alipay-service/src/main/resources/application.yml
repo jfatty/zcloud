@@ -1,5 +1,5 @@
 server:
-    port: 9874
+    port: 81
     servlet:
       context-path: /alipay
 #日志相关配置
