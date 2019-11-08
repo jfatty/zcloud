@@ -22,4 +22,9 @@
         <result column="update_date" property="updateDate" />
     </resultMap>
 
+    <!--通过菜单KEY，查询菜单-->
+    <select id="getMenuByMenuKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM alipay_menu WHERE menu_key = #{menuKey}
+    </select>
+
 </mapper>

@@ -18,4 +18,8 @@
         <result column="update_date" property="updateDate" />
     </resultMap>
 
+    <select id="getAlipayAutoresponseByAccountid" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT *  FROM alipay_autoresponse WHERE accountid = #{accountid}
+    </select>
+
 </mapper>

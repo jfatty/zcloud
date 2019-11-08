@@ -22,4 +22,8 @@
         <result column="update_date" property="updateDate" />
     </resultMap>
 
+    <select id="getAlipayNewsitemByTemplateId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+        SELECT * FROM alipay_newsitem WHERE templateid = #{newsTemplateId} ORDER BY order_no ASC
+    </select>
+
 </mapper>

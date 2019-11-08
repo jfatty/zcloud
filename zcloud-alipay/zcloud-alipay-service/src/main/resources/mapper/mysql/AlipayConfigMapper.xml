@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.alipay.mapper.AlipayConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.alipay.entity.AlipayConfig">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="rsa_private_key" property="rsaPrivateKey" />
+        <result column="alipay_gateway" property="alipayGateway" />
+        <result column="sign_charset" property="signCharset" />
+        <result column="pay_charset" property="payCharset" />
+        <result column="alipay_format" property="alipayFormat" />
+        <result column="sign_type" property="signType" />
+        <result column="alipay_public_key" property="alipayPublicKey" />
+        <result column="public_key" property="publicKey" />
+        <result column="private_key" property="privateKey" />
+        <result column="grant_type" property="grantType" />
+        <result column="partner" property="partner" />
+        <result column="notify_url" property="notifyUrl" />
+        <result column="return_url" property="returnUrl" />
+        <result column="timeout_express" property="timeoutExpress" />
+        <result column="product_code" property="productCode" />
+        <result column="ver_res_success" property="verResSuccess" />
+        <result column="ver_res_failed" property="verResFailed" />
+        <result column="auth_failed" property="authFailed" />
+        <result column="accountid" property="accountid" />
+    </resultMap>
+
+    <!--根据appid获取对应支付宝生活服务号或者支付配置信息-->
+    <select id="getAlipayConfig" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT * FROM  alipay_config WHERE appid = #{appid}
+    </select>
+
+</mapper>
