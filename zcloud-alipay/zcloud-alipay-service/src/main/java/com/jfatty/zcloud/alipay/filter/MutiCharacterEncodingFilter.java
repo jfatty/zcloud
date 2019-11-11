@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.alipay.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @author jfatty on 2019/4/23
  * @email jfatty@163.com
  */
+@Slf4j
 public class MutiCharacterEncodingFilter extends CharacterEncodingFilter implements Ordered {
 
 
@@ -97,6 +99,7 @@ public class MutiCharacterEncodingFilter extends CharacterEncodingFilter impleme
      */
     private boolean matchAny(List<String> mutiUrls , String path){
         for (String url : mutiUrls){
+            log.warn("path==>" + path + "  url:" + url);
             if (path.contains(url))
                 return true ;
         }
