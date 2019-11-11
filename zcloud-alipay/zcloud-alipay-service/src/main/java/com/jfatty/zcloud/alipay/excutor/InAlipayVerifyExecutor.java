@@ -5,7 +5,6 @@
 package com.jfatty.zcloud.alipay.excutor;
 
 
-import com.jfatty.zcloud.alipay.contants.AlipayServiceEnvConstants;
 import com.jfatty.zcloud.alipay.entity.AlipayConfig;
 
 /**
@@ -22,7 +21,7 @@ public class InAlipayVerifyExecutor implements ActionExecutor {
      */
     @Override
     public String execute(AlipayConfig config) throws Exception {
-        return this.setResponse();
+        return this.setResponse(config);
     }
 
     /**
@@ -30,11 +29,11 @@ public class InAlipayVerifyExecutor implements ActionExecutor {
      * 
      * @return
      */
-    private String setResponse() throws Exception {
+    private String setResponse(AlipayConfig config) throws Exception {
         //固定响应格式，必须按此格式返回
         StringBuilder builder = new StringBuilder();
         builder.append("<success>").append(Boolean.TRUE.toString()).append("</success>");
-        builder.append("<biz_content>").append(AlipayServiceEnvConstants.PUBLIC_KEY).append("</biz_content>");
+        builder.append("<biz_content>").append(config.getPublicKey()).append("</biz_content>");
         return builder.toString();
     }
 }

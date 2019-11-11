@@ -48,7 +48,7 @@ public class AlipayKeyWordDealInterfaceServiceImpl implements AlipayKeyWordDealI
         //---------【测试】auhthor2.0  网页授权--------------------
         if("授权测试".equals(content)){
             AlipayTexttemplate textTemplate = new AlipayTexttemplate();
-            String testurl = "/alipay/alipayGzuserinfo.do?userinfo";
+            String testurl = "http://alipay.ngrok.jfatty.com/alipay/alipayGzuserinfo?userinfo";
             try {
                 String authurl="https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id="+config.getAppid()+"&scope=auth_userinfo&redirect_uri="+URLEncoder.encode(testurl, "GBK");
                 textTemplate.setTemplateContent("<a href='"+authurl+"'>授权测试，点击后获取用户信息</a>");

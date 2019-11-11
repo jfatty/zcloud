@@ -23,7 +23,7 @@ public class RequestUtil {
      * @return
      */
     public static Map<String, String> getRequestParams(HttpServletRequest request){
-        log.error("CharacterEncoding ============================> " + request.getCharacterEncoding());
+        log.info("CharacterEncoding ============================> " + request.getCharacterEncoding());
         Map<String, String> params = new HashMap<String, String>();
         if(null != request){
             Set<String> paramsKey = request.getParameterMap().keySet();

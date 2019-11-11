@@ -18,4 +18,8 @@
         <result column="update_date" property="updateDate" />
     </resultMap>
 
+    <select id="getAutoresponseDefault" resultMap="BaseResultMap" >
+        SELECT * FROM alipay_autoresponse_default WHERE accountid = #{accountId} and iswork = #{isWork}
+    </select>
+
 </mapper>

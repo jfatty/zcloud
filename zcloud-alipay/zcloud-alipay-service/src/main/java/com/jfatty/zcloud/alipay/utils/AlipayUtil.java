@@ -25,12 +25,12 @@ import java.util.List;
  * @date 2016-04-06
  */
 public class AlipayUtil {
+
 	public static final String REQ_MESSAGE_TYPE_TEXT ="text";
+
 	/**
 	 * 构建群发文本消息,按模版
 	 * @param textTemplate
-	 * @param fromUserName
-	 * @param toUserName
 	 * @return
 	 */
 	public static SendMessageTextMore wrapperGroupTextMessage(AlipayTexttemplate textTemplate){
@@ -68,6 +68,8 @@ public class AlipayUtil {
 			article.setDesc(news.getDescription());
 			article.setActionName("立即查看");
 			article.setTitle(news.getTitle());
+			article.setImageUrl("");
+			article.setUrl("");
 			//article.setImageUrl(AlipayResourceUtil.getDomain()+"/"+news.getImagePath());
             //article.setUrl(AlipayResourceUtil.getDomain()+"/alipay/alipayNewsitem.do?goContent&id="+news.getId());
 			articleList.add(article);
@@ -80,7 +82,6 @@ public class AlipayUtil {
 	/**
 	 * 构建单条文本消息
 	 * @param textTemplate
-	 * @param fromUserName
 	 * @param toUserName
 	 * @return
 	 */
@@ -98,9 +99,7 @@ public class AlipayUtil {
 	/**
 	 * 发送图文消息
 	 * @param newsList
-	 * @param fromUserName
 	 * @param toUserName
-	 * @param accountId
 	 * @return
 	 */
 	public static SendMessageImageText wrapperNewsMessage(List<AlipayNewsitem> newsList, String toUserName){
@@ -111,6 +110,8 @@ public class AlipayUtil {
 			article.setDesc(news.getDescription());
 			article.setActionName("立即查看");
 			article.setTitle(news.getTitle());
+			article.setImageUrl("");
+			article.setUrl("");
 			//article.setImageUrl(AlipayResourceUtil.getDomain()+"/"+news.getImagePath());
            //article.setUrl(AlipayResourceUtil.getDomain()+"/alipay/alipayNewsitem.do?goContent&id="+news.getId());
 			articleList.add(article);

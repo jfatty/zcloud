@@ -99,7 +99,6 @@ public class MutiCharacterEncodingFilter extends CharacterEncodingFilter impleme
      */
     private boolean matchAny(List<String> mutiUrls , String path){
         for (String url : mutiUrls){
-            log.warn("path==>" + path + "  url:" + url);
             if (path.contains(url))
                 return true ;
         }

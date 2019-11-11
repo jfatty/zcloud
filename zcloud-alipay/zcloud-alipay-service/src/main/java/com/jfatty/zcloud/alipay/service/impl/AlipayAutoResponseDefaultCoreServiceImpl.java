@@ -5,6 +5,7 @@ import com.jfatty.zcloud.alipay.entity.AlipayAutoresponseDefault;
 import com.jfatty.zcloud.alipay.entity.AlipayNewsitem;
 import com.jfatty.zcloud.alipay.entity.AlipayNewstemplate;
 import com.jfatty.zcloud.alipay.entity.AlipayTexttemplate;
+import com.jfatty.zcloud.alipay.mapper.AlipayAutoresponseDefaultMapper;
 import com.jfatty.zcloud.alipay.mapper.AlipayNewsitemMapper;
 import com.jfatty.zcloud.alipay.mapper.AlipayNewstemplateMapper;
 import com.jfatty.zcloud.alipay.mapper.AlipayTexttemplateMapper;
@@ -16,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,9 +38,12 @@ public class AlipayAutoResponseDefaultCoreServiceImpl implements AlipayAutoRespo
     @Autowired
     private AlipayNewsitemMapper alipayNewsitemMapper ;
 
+    @Autowired
+    private AlipayAutoresponseDefaultMapper alipayAutoresponseDefaultMapper ;
+
     @Override
     public String getWorkDefaultResponse(String toUserid, String accountId) {
-        List<AlipayAutoresponseDefault> defaultResponseList = new ArrayList<AlipayAutoresponseDefault>();
+        List<AlipayAutoresponseDefault> defaultResponseList = alipayAutoresponseDefaultMapper.getAutoresponseDefault(accountId, "1");
         if(defaultResponseList!=null&&defaultResponseList.size()>0){
             AlipayAutoresponseDefault defaultResponse =  defaultResponseList.get(0);
             String msgType = defaultResponse.getMsgtype();

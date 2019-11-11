@@ -74,6 +74,7 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
         }
         // 将XML转化成json对象
         JSONObject bizContentJson = (JSONObject) new XMLSerializer().read(bizContent);
+
         // 1.获取消息类型信息
         String msgType = bizContentJson.getString("MsgType");
         if (StringUtils.isEmpty(msgType)) {
@@ -84,13 +85,10 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
         if ("text".equals(msgType)) {
             //文本，按关键字消息进行回复
             return doSendKeyMessage(bizContentJson,config);
-
             // 2.2 事件类型
         } else if ("event".equals(msgType)) {
-
             return doEventExcute(service, bizContentJson,config);
         } else {
-
             // 2.3 后续支付宝还会新增其他类型，因此默认返回ack应答
             return doSendDefaultMessage(bizContentJson,config);
         }
@@ -121,14 +119,11 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
      * @throws Exception
      */
     private String doEventExcute(String service, JSONObject bizContentJson, AlipayConfig config) throws Exception {
-
         // 1. 获取事件类型
         String eventType = bizContentJson.getString("EventType");
-
         if (StringUtils.isEmpty(eventType)) {
             throw new Exception("无法取得事件类型");
         }
-
         // 2.根据事件类型再次区分服务类型
         // 2.1 激活验证开发者模式
         if (AlipayServiceNameConstants.ALIPAY_CHECK_SERVICE.equals(service)&& eventType.equals(AlipayServiceEventConstants.VERIFYGW_EVENT)) {
@@ -143,7 +138,7 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
     }
 
     /**
-     * 默认返回私钥
+     * 默认返回ACK响应
      * @param bizContent
      * @return
      */
@@ -162,26 +157,18 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
      */
     private String getMsgNotifyExecutor(String eventType, JSONObject bizContentJson,AlipayConfig config) throws Exception {
         if (eventType.equals(AlipayServiceEventConstants.FOLLOW_EVENT)) {
-
             // 服务窗关注事件
             return  alipayFollowExecutor(bizContentJson,config);
-
         } else if (eventType.equals(AlipayServiceEventConstants.UNFOLLOW_EVENT)) {
-
             // 服务窗取消关注事件
-            return alipayFollowExecutor(bizContentJson,config);
-
+            return alipayUnFollowExecutor(bizContentJson,config);
             // 根据actionParam进行执行器的转发
         } else if (eventType.equals(AlipayServiceEventConstants.CLICK_EVENT)) {
-
             // 点击事件
             return clickEventExecutor(bizContentJson,config);
-
         } else if (eventType.equals(AlipayServiceEventConstants.ENTER_EVENT)) {
-
             // 进入事件
             return enterEventTypeExecutor(bizContentJson,config);
-
         } else {
             // 对于后续支付宝可能新增的类型，统一默认返回AKC响应
             return doSendDefaultMessage(bizContentJson,config);
@@ -189,9 +176,22 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
 
     }
 
-    private String enterEventTypeExecutor(JSONObject bizContentJson, AlipayConfig config) {
-        // TODO Auto-generated method stub
-        return "";
+
+
+    /**
+     * 进入事件执行器
+     * @param bizContent
+     * @return
+     */
+    private String enterEventTypeExecutor(JSONObject bizContent, AlipayConfig config) {
+        final String fromUserId = bizContent.getString("FromUserId");
+        JSONObject param = JSONObject.fromObject(bizContent.get("ActionParam"));
+        JSONObject scene = JSONObject.fromObject(param.get("scene"));
+        if (!StringUtils.isEmpty(scene.getString("sceneId"))) {
+            //自定义场景参数进入服务窗事件
+        }
+        String syncResponseMsg = AlipayMsgBuildUtil.buildBaseAckMsg(fromUserId,config);
+        return syncResponseMsg;
     }
 
     /**
@@ -219,7 +219,7 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
                     AlipayReceivetext rt = new AlipayReceivetext();
                     String randomSeed = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
                     rt.setId(randomSeed);
-                    //rt.setAccountid(SystemUtil.getOnlieAlipayAccountId());
+                    rt.setAccountid(config.getAccountid());
                     rt.setContent(requestMsg);
                     rt.setCreatetime(new Date());
                     rt.setFromusername(fromUserId);
@@ -281,6 +281,23 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
         return sendMsg(responseMsg, bizContentJson, "用户关注", "用户关注",config);
     }
 
+    private String alipayUnFollowExecutor(JSONObject bizContentJson, AlipayConfig config) {
+        String toUserid = bizContentJson.getString("FromUserId");
+        // 1. 首先同步构建ACK响应
+        String syncResponseMsg = AlipayMsgBuildUtil.buildBaseAckMsg(toUserid,config);
+        AlipayReceivetext rt = new AlipayReceivetext();
+        String randomSeed = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
+        rt.setId(randomSeed);
+        rt.setAccountid(config.getAccountid());
+        rt.setContent("用户取消关注");
+        rt.setCreatetime(new Date());
+        rt.setFromusername(toUserid);
+        //rt.setTousername(alipayAccountService.getAccount().getAccontName());
+        rt.setMsgtype("文本消息");
+        alipayReceivetextMapper.insert(rt);
+        return syncResponseMsg;
+    }
+
     /**
      * 菜单点击事件
      * @param bizContentJson
@@ -303,8 +320,8 @@ public class AlipayCoreServiceImpl implements AlipayCoreService {
             AlipayNewstemplate newsTemplate = alipayNewstemplateMapper.selectById(tempalteId);
             if(newsTemplate!=null){
                 List<AlipayNewsitem> newsList = alipayNewsitemMapper.getAlipayNewsitemByTemplateId(newsTemplate.getId());
-                if(newsList!=null&&newsList.size()>0){
-                    responseMessage =com.alibaba.fastjson.JSONObject.toJSONString(AlipayUtil.wrapperNewsMessage(newsList, fromUserId));
+                if(newsList != null && newsList.size()>0){
+                    responseMessage = com.alibaba.fastjson.JSONObject.toJSONString(AlipayUtil.wrapperNewsMessage(newsList, fromUserId));
                 }
             }
         }
