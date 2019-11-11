@@ -41,8 +41,8 @@ spring:
         force-response: false
         muti-charset: GBK
         muti-urls:
-          - /api/alipay/*/gateway
-          - /api/alipay/*/oauth
+          - /api/alipay/gateway
+          - /api/alipay/oauth
 
 mybatis-plus:
   #mapper-locations: classpath*:/com@{/static/*/mapper/**Mapper.xml

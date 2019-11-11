@@ -48,7 +48,7 @@ public class ApiAlipayServiceWindowController {
      * @throws ServletException
      * @throws IOException
      */
-    @RequestMapping(value={"/alipay/{appid}/gateway"},method = RequestMethod.POST , produces = "text/xml;charset=GBK")
+    @RequestMapping(value={"/alipay/gateway/{appid}"},method = RequestMethod.POST , produces = "text/xml;charset=GBK")
     @ResponseBody
     public String gateway(HttpServletRequest request, HttpServletResponse response,@PathVariable String appid) throws ServletException,IOException {
         //支付宝响应消息
