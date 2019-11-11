@@ -34,6 +34,15 @@ spring:
     jackson:
       time-zone: GMT+8
       date-format: yyyy-MM-dd HH:mm:ss
+    http:
+      encoding:
+        charset: UTF-8
+        force-request: true
+        force-response: false
+        muti-charset: GBK
+        muti-urls:
+          - /api/alipay/*/gateway
+          - /api/alipay/*/oauth
 
 mybatis-plus:
   #mapper-locations: classpath*:/com@{/static/*/mapper/**Mapper.xml

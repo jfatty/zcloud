@@ -63,7 +63,7 @@ public class ApiAlipayServiceWindowController {
         //1. 解析请求参数
         Map<String, String> params = RequestUtil.getRequestParams(request);
         // 打印本次请求日志，开发者自行决定是否需要
-        log.info("支付宝授权请求串", params.toString());
+        log.info("支付宝授权请求串" + params.toString());
 
         try {
             //2. 验证签名
