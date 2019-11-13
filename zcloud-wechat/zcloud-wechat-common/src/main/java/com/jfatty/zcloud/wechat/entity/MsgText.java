@@ -20,7 +20,9 @@ package com.jfatty.zcloud.wechat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -62,7 +64,9 @@ public class MsgText extends Model<MsgText> {
 	/**
 	 * 创建时间
 	 */
-	private LocalDateTime createTime;
+	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createTime = LocalDateTime.now();
 
 	/**
 	 * 更新人
@@ -72,6 +76,8 @@ public class MsgText extends Model<MsgText> {
 	/**
 	 * 更新时间
 	 */
+	@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime updateTime;
 
 

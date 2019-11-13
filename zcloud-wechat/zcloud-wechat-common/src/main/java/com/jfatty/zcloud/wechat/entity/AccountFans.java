@@ -82,7 +82,7 @@ public class AccountFans extends Model<AccountFans> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss",iso= DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createTime;
+    private LocalDateTime createTime = LocalDateTime.now();
 
     /**
      * 更新人
@@ -92,6 +92,8 @@ public class AccountFans extends Model<AccountFans> {
     /**
      * 更新时间
      */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
     public String getNicknameStr() {

@@ -1,6 +1,8 @@
 package com.jfatty.zcloud.wechat.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -75,7 +77,9 @@ public class MsgArticle implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime = LocalDateTime.now();
 
     /**
      * 更新人
@@ -85,6 +89,8 @@ public class MsgArticle implements Serializable {
     /**
      * 更新时间
      */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
 }
