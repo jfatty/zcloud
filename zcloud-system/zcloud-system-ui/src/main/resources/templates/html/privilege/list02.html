@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head head
+      th:replace="common/header::header('权限管理','/treetable/libs/v3/bootstrap.min.css,/treetable/bootstrap-treetable.css','/treetable/libs/v3/bootstrap.min.js,/treetable/bootstrap-treetable.js')"></head>
+<body>
+<div class="admin-main">
+    <div id="demo-toolbar" class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default">向表格添加数据</button>
+        <button id="selectBtn" type="button" class="btn btn-default">删除</button>
+        <button id="expandRowBtn" type="button" class="btn btn-default">展开/折叠【系统管理】</button>
+        <button id="expandAllBtn" type="button" class="btn btn-default">展开/折叠 所有</button>
+        <button id="showColumnBtn" type="button" class="btn btn-default">显示/隐藏 【排序】列</button>
+        <button id="destroyBtn" type="button" class="btn btn-default">销毁</button>
+    </div>
+    <table id="demo" class="layui-table admin-table">
+
+    </table>
+
+</div>
+<!--模板-->
+
+<script type="text/javascript" th:inline="none">
+    /**
+     rootIdValue: null,//设置根节点id值----可指定根节点，默认为null,"",0,"0"
+     id : "id",               // 选取记录返回的值,用于设置父子关系
+     parentId : "parentId",       // 用于设置父子关系
+     type: 'get',                   // 请求方式（*）
+     url: "./data.json",             // 请求后台的URL（*）
+     ajaxParams : {},               // 请求数据的ajax的data属性
+     expandColumn : 0,            // 在哪一列上面显示展开按钮
+     expandAll : false,                // 是否全部展开
+     expandFirst : true, // 是否默认第一级展开--expandAll为false时生效
+     toolbar: null,//顶部工具条
+     height: 0,
+     expanderExpandedClass : 'glyphicon glyphicon-chevron-down',// 展开的按钮的图标
+     expanderCollapsedClass : 'glyphicon glyphicon-chevron-right',// 缩起的按钮的图标
+     **/
+    var privilegeId, xtree;
+    var taleOpt = {
+        toolbar: "#demo-toolbar",    //顶部工具条
+        expandColumn: 1,            // 在哪一列上面显示展开按钮
+        url: JFATTY.basePath() + 'privilege/list',         // 请求后台的URL（*）
+        height: 500,
+        columns: [{
+            field: 'id',
+            width: '15',
+            checkbox: true
+        }, {
+            title: '权限名称',
+            field: 'title',
+            fixed: true,
+            width: '150',
+            formatter: function (value, row, index) {
+                if (row.icon == null || row == "") {
+                    return row.title;
+                } else {
+                    if (row.icon.indexOf('fa-') !== -1) {
+                        return '<i class="fa ' + row.icon + '" data-icon="' + row.icon + '" aria-hidden="true"></i> <span class="nav-label">' + row.title + '</span>';
+                    } else if (row.icon.indexOf('layui-icon') !== -1) {
+                        return '<i class="layui-icon  ' + row.icon + '" ></i> <span class="nav-label">' + row.title + '</span>';
+                    } else {
+                        return '<i class="layui-icon" data-icon="' + row.icon + '">' + row.icon + '</i> <span class="nav-label">' + row.title + '</span>';
+                    }
+                    return '<i class="' + row.icon + '"></i> <span class="nav-label">' + row.title + '</span>';
+                }
+            }
+        },
+            {
+                field: 'orderNumber',
+                title: '排序',
+                width: '50',
+                align: "left",
+                valign: "bottom",
+                visible: true
+            },
+            {
+                field: 'href',
+                title: '权限控制',
+                width: '300',
+                align: "left"
+            },
+            {
+                title: '类型',
+                field: 'type',
+                width: '60',
+                align: "center",
+                valign: "top",
+                formatter: function (value, item, index) {
+                    if (item.type == 'TARGET') {
+                        return '<span class="label label-success">目录</span>';
+                    }
+                    else if (item.type == 'MENU') {
+                        return '<span class="label label-primary">菜单</span>';
+                    }
+                    else if (item.type == 'BUTTON') {
+                        return '<span class="label label-warning">按钮</span>';
+                    }
+                }
+            },
+            {
+                field: 'plass',
+                title: '权限样式',
+                width: '180',
+                align: "center",
+                visible: false,
+                formatter: function (value, row, index) {
+                    return value;
+                }
+            },
+            {
+                field: 'sysPermission',
+                title: '权限标识',
+                width: '150',
+                align: "center",
+            },
+            {
+                title: '操作',
+                width: '200',
+                align: "center",
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs " href="#"><i class="fa fa-edit"></i>修改</a> ');
+                    return actions.join('');
+                }
+            }]
+    };
+    var treeTable = $('#demo').bootstrapTreeTable(taleOpt);
+    layui.config({
+        base: JFATTY.basePath() + '/js/'
+    });
+    layui.use(['form'], function () {
+        var $ = layui.jquery,
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form;
+
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function () {
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('./edit.html', null, function (form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '新增权限',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['30px', '30%'],
+                    area: ['600px', '500px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form;
+                        form.render();
+                        form.on('submit(edit)', function (data) {
+                            var roleIds = ''
+                            var oCks = xtree.GetChecked(); //这是方法
+                            for (var i = 0; i < oCks.length; i++) {
+                                if ("on" != oCks[i].value) {
+                                    roleIds += oCks[i].value + ',';
+                                }
+                            }
+                            if ('' != roleIds) {
+                                roleIds = roleIds.substring(0, roleIds.length - 1);
+                                data.field.sysRole = roleIds;
+                            }
+                            data.field.sysRole = roleIds;
+                            if ("请选择上级权限" == data.field.parentId || "" == data.field.parentId) {
+                                data.field.parentId = null;
+                            }
+                            console.log(data.field);
+                            JFATTY.doPost({
+                                url: JFATTY.basePath() + "privilege/save",
+                                data: data.field,
+                                success: function (value, type) {
+                                    var msg = "";
+                                    if (value.ok) {
+                                        msg = '新增成功!';
+                                    } else {
+                                        msg = value.msg;
+                                    }
+                                    //调用父窗口的layer对象
+                                    layerTips.alert(msg, {
+                                        title: '温馨提示!'
+                                    }, function (index) {
+                                        //do something
+                                        layerTips.close(index);
+                                        layer.close(addBoxIndex);
+                                        //渲染navbar
+                                        //重新加载菜单列表
+                                        parent.gNavbar();
+
+                                    })
+                                    //console.log(value);
+                                }
+                            });
+                            return false;
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+    });
+
+    $("#selectBtn").click(function () {
+        var ids = '';
+        var selecteds = $('#demo').bootstrapTreeTable('getSelections');
+        $.each(selecteds, function (_i, _item) {
+            ids += _item.id + ',';
+        });
+        if ('' == ids) {
+            layer.msg('请至少选择一条数据!');
+            return false;
+        } else {
+            ids = ids.substring(0, ids.length - 1);
+        }
+        layer.alert("您确定要删除选中的数据吗?", {
+            title: '温馨提示!'
+        }, function (index) {
+            layer.close(index);
+            //var ids = ids ;
+            var params = {map: {"ids": ids}};
+            JFATTY.doPost({
+                url: JFATTY.basePath() + "privilege/delete",
+                data: params,
+                success: function (value, type) {
+                    var msg = "";
+                    if (value.ok) {
+                        msg = '删除成功!';
+                    } else {
+                        msg = value.msg;
+                    }
+                    //调用父窗口的layer对象
+                    layer.alert(msg, {
+                        title: '温馨提示!'
+                    }, function (index) {
+                        layer.close(index);
+                        treeTable.refresh(taleOpt);
+                    })
+
+                }
+            });
+        })
+    })
+    $("#addBtn").click(function () {
+        //TODO
+    })
+    $("#expandRowBtn").click(function () {
+        $('#demo').bootstrapTreeTable('toggleRow', 1);
+    })
+    var _expandFlag_all = false;
+    $("#expandAllBtn").click(function () {
+        if (_expandFlag_all) {
+            $('#demo').bootstrapTreeTable('expandAll');
+        } else {
+            $('#demo').bootstrapTreeTable('collapseAll');
+        }
+        _expandFlag_all = _expandFlag_all ? false : true;
+    })
+    var _showFlag = true;
+    $("#showColumnBtn").click(function () {
+        if (_showFlag) {
+            $('#demo').bootstrapTreeTable('hideColumn', "orderNumber");
+        } else {
+            $('#demo').bootstrapTreeTable('showColumn', "orderNumber");
+        }
+        _showFlag = _showFlag ? false : true;
+    })
+    //销毁数据
+    $("#destroyBtn").click(function () {
+        //$('#demo').bootstrapTreeTable('destroy');
+    })
+</script>
+</body>
+</html>

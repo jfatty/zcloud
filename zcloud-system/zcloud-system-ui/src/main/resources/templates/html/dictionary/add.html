@@ -1,0 +1,106 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>数据字典值</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典值</label>
+            <div class="layui-input-block">
+                <input type="text" name="dicValue" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典编码</label>
+            <div class="layui-input-block">
+                <input type="text" name="dicCode" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div id="dictionaryMenuDiv" style="display: none" class="layui-form-item">
+            <label class="layui-form-label">字典菜单</label>
+            <div class="layui-input-inline">
+                <select id="dictionaryMenu" name="dictionaryMenu" lay-filter="dictionaryMenu">
+                </select>
+            </div>
+        </div>
+
+        <div id="parentDicDiv" style="display: none" class="layui-form-item">
+            <label class="layui-form-label">上级字典</label>
+            <div class="layui-input-inline">
+                <select id="parentDic" name="parentDic">
+                    <option>请选择父级字典</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" title="启用" checked="">
+                <input type="radio" name="state" value="0" title="停用">
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "dictionaryMenu/list",
+            async: false,
+            data: null,
+            success: function (value, type) {
+                var html = "<option >请选择字典菜单</option>";
+                if (value.ok) {
+                    var result = value.data;
+                    var size = result.length;
+                    for (var i = 0; i < size; i++) {
+                        var dictionaryMenu = result[i];
+                        html += "<option value=\"" + dictionaryMenu.id + "\">" + dictionaryMenu.name + "</option>";
+                    }
+                    $("#dictionaryMenu").append(html);
+                    $("#dictionaryMenuDiv").css("display", "");
+                    form.render(); //更新全部
+                }
+
+            }
+        });
+
+        form.on('select(dictionaryMenu)', function (data) {
+            if ("请选择字典菜单" == data.value) {
+                return false;
+            }
+            JFATTY.doGet({
+                url: JFATTY.basePath() + "dictionary/list/" + data.value,
+                async: false,
+                data: null,
+                success: function (value, type) {
+                    $("#parentDic").html("");
+                    var html = "<option >请选择父级字典</option>";
+                    if (value.ok) {
+                        console.log(value.data);
+                        $("#parentDic").html("");
+                        var result = value.data;
+                        var size = result.length;
+                        for (var i = 0; i < size; i++) {
+                            var dictionary = result[i];
+                            html += "<option value=\"" + dictionary.id + "\">" + dictionary.dicValue + "</option>";
+                        }
+                        $("#parentDic").append(html);
+                        //form.render(); //更新全部
+                        form.render('select'); //刷新select选择框渲染
+                        //form.render('select','parentDic');
+                        $("#parentDicDiv").css("display", "");
+                    } else {
+                        $("#parentDicDiv").css("display", "none");
+                    }
+                }
+            });
+        });
+    });
+</script>

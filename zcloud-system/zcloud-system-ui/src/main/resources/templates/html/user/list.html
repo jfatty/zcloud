@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head head th:replace="common/header::header('用户管理','','')">
+</head>
+<body>
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a shiro:hasPermission="user:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
+            <i class="layui-icon">&#xe608;</i> 分配用户
+        </a>
+        <a shiro:hasPermission="user:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
+            <i class="layui-icon">&#xe608;</i> 导入信息
+        </a>
+        <a shiro:hasPermission="user:export" href="javascript:;" class="layui-btn layui-btn-small">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
+        </a>
+        <a shiro:hasPermission="user:delete" href="javascript:;" class="layui-btn layui-btn-small" id="getSelected">
+            <i class="layui-icon" aria-hidden="true">&#xe640;</i> 删除
+        </a>
+        <a shiro:hasPermission="user:search" href="javascript:;" class="layui-btn layui-btn-small" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>数据列表</legend>
+        <div class="layui-field-box layui-form">
+            <table class="layui-table admin-table">
+                <thead>
+                <tr>
+                    <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>姓名</th>
+                    <th>身份证号</th>
+                    <th>账号</th>
+                    <th>联系电话</th>
+                    <th>所在科室</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="content">
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="paged" class="page">
+        </div>
+    </div>
+</div>
+<!--模板-->
+<script type="text/html" id="tpl">
+    {{# layui.each(d.list, function(index, item){ }}
+    <tr>
+        <td><input type="checkbox" lay-skin="primary"></td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.idCard }}</td>
+        <td>{{ item.userName }}</td>
+        <td>{{ item.tel }}</td>
+        <td>{{ item.office }}</td>
+        <td>{{ item.createTime }}</td>
+        <td>
+            <a shiro:hasPermission="user:edit" href="javascript:;" data-id="{{ item.id }}" data-opt="edit"
+               class="layui-btn layui-btn-mini">修改</a>
+            <a shiro:hasPermission="user:initpwd" href="javascript:;" data-id="{{ item.id }}" data-opt="initpwd"
+               class="layui-btn layui-btn-mini">初始化密码</a>
+            <a shiro:hasPermission="user:auth" href="javascript:;" data-id="{{ item.id }}" data-name="{{ item.name }}"
+               data-opt="auth" class="layui-btn layui-btn-danger layui-btn-mini">授权</a>
+        </td>
+    </tr>
+    {{# }); }}
+</script>
+<script type="text/javascript" th:inline="none">
+
+    var userId, xtree, privilegeIds, ugXtree;
+    var pageObj = {//调用数据获取函数
+        pageIndex: 1,
+        refre: false
+    };
+
+    var userId;
+    layui.config({
+        base: JFATTY.basePath() + '/js/'
+    });
+
+    layui.use(['paging', 'form'], function () {
+        var $ = layui.jquery,
+            paging = layui.paging(),
+            layerTips = parent.layer === undefined ? layui.layer : parent.layer, //在父窗口存在layer对象的时候获取父窗口的layer对象
+            layer = layui.layer, //获取当前窗口的layer对象
+            form = layui.form;
+
+        var jq = layui.jquery;
+
+        var pageOpts = {
+            openWait: true,
+            url: JFATTY.basePath() + 'user/table/list?v=' + new Date().getTime(), //地址
+            elem: '#content', //内容容器
+            params: { //发送到服务端的参数
+            },
+            type: 'GET',
+            tempElem: '#tpl', //模块容器
+            pageConfig: { //分页参数配置
+                elem: 'paged', //分页容器
+                pageSize: 10 //分页大小
+            },
+            success: function () { //渲染成功的回调
+                //alert('渲染成功');
+            },
+            fail: function (msg) { //获取数据失败的回调
+                //alert('获取数据失败')
+            },
+            complate: function () { //完成的回调
+                //alert('处理完成');
+                //重新渲染复选框
+                form.render('checkbox');
+                form.on('checkbox(allselector)', function (data) {
+                    var elem = data.elem;
+
+                    $('#content').children('tr').each(function () {
+                        var $that = $(this);
+                        //全选或反选
+                        $that.children('td').eq(0).children('input[type=checkbox]')[0].checked = elem.checked;
+                        form.render('checkbox');
+                    });
+                });
+
+
+                //绑定所有修改按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+                    var viewBoxIndex = -1;
+                    $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
+                        userId = $(this).data('id');
+                        //图片盒子开始
+                        if (viewBoxIndex !== -1)
+                            return;
+                        //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+                        $.get('./view.html', null, function (form) {
+                            viewBoxIndex = layer.open({
+                                type: 1,
+                                title: '修改用户信息',
+                                content: form,
+                                btn: ['保存', '取消'],
+                                shade: false,
+                                offset: ['100px', '10%'],
+                                area: [0.8*$(window).width() + 'px', 0.8*$(window).height() + 'px'],
+                                zIndex: 19950925,
+                                maxmin: true,
+                                yes: function (index) {
+                                    //触发表单的提交事件
+                                    $('form.layui-form').find('button[lay-filter=edit]').click();
+                                },
+                                full: function (elem) {
+                                    var win = window.top === window.self ? window : parent.window;
+                                    $(win).on('resize', function () {
+                                        var $this = $(this);
+                                        elem.width($this.width()).height($this.height()).css({
+                                            top: 0,
+                                            left: 0
+                                        });
+                                        elem.children('div.layui-layer-content').height($this.height() - 95);
+                                    });
+                                },
+                                success: function (layero, index) {
+                                    //弹出窗口成功后渲染表单
+                                    var form = layui.form;
+                                    form.render();
+                                    form.on('submit(edit)', function (data) {
+                                        var groups = new Array() ;
+                                        var roles = new Array() ;
+                                        var oCks = xtree.GetChecked(); //这是方法
+                                        var ougCks = ugXtree.GetChecked(); //这是方法
+                                        for (var i = 0; i < oCks.length; i++) {
+                                            if ("on" != oCks[i].value) {
+                                                roles[i] = oCks[i].value ;
+                                            }
+                                        }
+                                        for (var i = 0; i < ougCks.length; i++) {
+                                            if ("on" != ougCks[i].value) {
+                                                groups[i] = ougCks[i].value ;
+                                            }
+                                        }
+                                        if (  groups.length == 0 ) {
+                                            layerTips.msg("请选择用户组");
+                                            return false;
+                                        } else if ("请选择组织机构" == data.field.orgId) {
+                                            layerTips.msg("请选择组织机构");
+                                            return false;
+                                        } else if ("请选择部门" == data.field.deptId) {
+                                            layerTips.msg("请选择部门");
+                                            return false;
+                                        } else if("请选择科室" == data.field.officeId){
+                                            layerTips.msg("请选择科室");
+                                            return false;
+                                        } else if (roles.length == 0) {
+                                            layerTips.msg("请选择角色");
+                                            return false;
+                                        } else{
+                                            data.field.roles = roles;
+                                            data.field.groups = groups;
+                                            JFATTY.doPost({
+                                                url: JFATTY.basePath() + "user/edit",
+                                                data: data.field,
+                                                success: function (value, type) {
+                                                    var msg = "";
+                                                    if (value.ok) {
+                                                        msg = '修改成功!';
+                                                    } else {
+                                                        msg = value.msg;
+                                                    }
+                                                    //调用父窗口的layer对象
+                                                    layerTips.alert(msg, {
+                                                        title: '温馨提示!'
+                                                    }, function (index) {
+                                                        //do something
+                                                        layerTips.close(index);
+                                                        layer.close(viewBoxIndex);
+                                                        pageObj.refre = true;
+                                                        pageObj.pageIndex = paging.getCurrPageIndex();
+                                                        paging.get(pageObj);
+                                                    })
+                                                }
+                                            });
+                                        }
+                                        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                                    });
+                                    //console.log(layero, index);
+                                },
+                                end: function () {
+                                    viewBoxIndex = -1;
+                                }
+                            });
+                        });
+                        //图片盒子结束
+                    });
+
+                });
+
+                //绑定所有初始化密码按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+                    $that.children('td:last-child').children('a[data-opt=initpwd]').on('click', function () {
+                        userId = $(this).data('id');
+                        layer.alert("您确定要初始化选中用户的密码吗?", {
+                            title: '温馨提示!'
+                        }, function (index) {
+                            layer.close(index);
+                            JFATTY.doGet({
+                                url: JFATTY.basePath() + "user/initpwd?userId="+userId,
+                                data: null,
+                                success: function (value, type) {
+                                    var msg = "";
+                                    msg = value.msg;
+                                    //调用父窗口的layer对象
+                                    layer.alert(msg, {
+                                        title: '温馨提示!'
+                                    }, function (index) {
+                                        //do something
+                                        layer.close(index);
+                                        pageObj.refre = true;
+                                        pageObj.pageIndex = paging.getCurrPageIndex();
+                                        paging.get(pageObj);
+                                    })
+                                }
+                            });
+                        });
+                    });
+
+                });
+
+
+                //绑定所有授权按钮事件
+                $('#content').children('tr').each(function () {
+                    var $that = $(this);
+                    var authBoxIndex = -1;
+                    $that.children('td:last-child').children('a[data-opt=auth]').on('click', function () {
+                        userId = $(this).data('id');
+                        var name = $(this).data('name');
+                        //processInstanceId = $(this).data('key') ;
+                        //授权盒子开始
+                        if (authBoxIndex !== -1)
+                            return;
+                        //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+                        $.get('./auth.html', null, function (form) {
+                            authBoxIndex = layer.open({
+                                type: 1,
+                                title: '给' + name + '授权',
+                                content: form,
+                                btn: ['授权', '取消'],
+                                shade: false,
+                                offset: ['100px', '10%'],
+                                area: [0.8*$(window).width() + 'px', 0.8*$(window).height() + 'px'],
+                                zIndex: 19950925,
+                                maxmin: true,
+                                yes: function (index) {
+                                    //触发表单的提交事件
+                                    $('form.layui-form').find('button[lay-filter=edit]').click();
+                                },
+                                full: function (elem) {
+                                    var win = window.top === window.self ? window : parent.window;
+                                    $(win).on('resize', function () {
+                                        var $this = $(this);
+                                        elem.width($this.width()).height($this.height()).css({
+                                            top: 0,
+                                            left: 0
+                                        });
+                                        elem.children('div.layui-layer-content').height($this.height() - 95);
+                                    });
+                                },
+                                success: function (layero, index) {
+                                    //弹出窗口成功后渲染表单
+                                    var form = layui.form;
+                                    form.render();
+                                    form.on('submit(edit)', function (data) {
+                                        var privilegeIds = new Array() ;
+                                        var oCks = xtree.GetChecked(); //这是方法
+                                        var aIndex = 0 ;
+                                        for (var i = 0; i < oCks.length; i++) {
+                                            if ("on" != oCks[i].value) {
+                                                privilegeIds[aIndex] = oCks[i].value ;
+                                                aIndex ++ ;
+                                            }
+                                        }
+                                        if ( privilegeIds.length == 0 ) {
+                                            layerTips.msg("请选择对应权限");
+                                            return false;
+                                        }
+                                        var params = {"authId": userId, "privilegeIds": privilegeIds};
+                                        JFATTY.doPost({
+                                            url: JFATTY.basePath() + "perm/auth",
+                                            data: params,
+                                            success: function (value, type) {
+                                                var msg = "";
+                                                if (value.ok) {
+                                                    msg = '授权成功!';
+                                                } else {
+                                                    msg = value.msg;
+                                                }
+                                                //调用父窗口的layer对象
+                                                layerTips.alert(msg, {
+                                                    title: '温馨提示!'
+                                                }, function (index) {
+                                                    //do something
+                                                    layerTips.close(index);
+                                                    layer.close(authBoxIndex);
+                                                    //渲染navbar
+                                                    //重新加载菜单列表
+                                                    //parent.gNavbar();
+                                                    pageObj.refre = true;
+                                                    pageObj.pageIndex = paging.getCurrPageIndex();
+                                                    paging.get(pageObj);
+                                                    //window.location.reload();
+                                                })
+                                            }
+                                        });
+
+
+                                        //这里可以写ajax方法提交表单
+                                        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                                    });
+                                    //console.log(layero, index);
+                                },
+                                end: function () {
+                                    authBoxIndex = -1;
+                                }
+                            });
+                        });
+                        //授权盒子结束
+                    });
+
+                });
+
+
+            },
+        };
+
+        paging.init(pageOpts);
+
+        //获取所有选择的列 删除
+        $('#getSelected').on('click', function () {
+            var ids =  new Array() ;
+            var i = 0 ;
+            $('#content').children('tr').each(function () {
+                var $that = $(this);
+                var $cbx = $that.children('td').eq(0).children('input[type=checkbox]')[0].checked;
+                if ($cbx) {
+                    ids[i] = $that.children('td:last-child').children('a[data-opt=edit]').data('id');
+                    i++ ;
+                }
+            });
+            if (  ids.length == 0 ) {
+                layer.msg('请至少选择一条数据!');
+                return false;
+            }
+            //var ids = ids ;
+            layer.alert("您确定要删除选中的数据吗?", {
+                title: '温馨提示!'
+            }, function (index) {
+                var params = {"ids": ids};
+                JFATTY.doPost({
+                    url: JFATTY.basePath() + "user/delete",
+                    data: params,
+                    success: function (value, type) {
+                        var msg = "";
+                        if (value.ok) {
+                            msg = '删除成功!';
+                        } else {
+                            msg = value.msg;
+                        }
+                        //调用父窗口的layer对象
+                        layer.alert(msg, {
+                            title: '温馨提示!'
+                        }, function (index) {
+                            layer.close(index);
+                            pageObj.refre = true;
+                            pageObj.pageIndex = paging.getCurrPageIndex();
+                            paging.get(pageObj);
+                            //window.location.reload();
+                        })
+                        //console.log(value);
+                    }
+                });
+            });
+        });
+
+
+        $('#search').on('click', function () {
+            parent.layer.alert('你点击了搜索按钮')
+        });
+
+        var addBoxIndex = -1;
+        $('#add').on('click', function () {
+            if (addBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('./add.html', null, function (form) {
+                addBoxIndex = layer.open({
+                    type: 1,
+                    title: '分配用户',
+                    content: form,
+                    btn: ['保存', '取消'],
+                    shade: false,
+                    offset: ['100px', '10%'],
+                    area: [0.8*$(window).width() + 'px', 0.8*$(window).height() + 'px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('button[lay-filter=edit]').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        var form = layui.form;
+                        form.render();
+                        layui.selMeltiple(jq);
+                        form.on('submit(edit)', function (data) {
+                            var groups = new Array() ;
+                            var roles = new Array() ;
+                            var oCks = xtree.GetChecked(); //这是方法
+                            var ougCks = ugXtree.GetChecked(); //这是方法
+                            for (var i = 0; i < oCks.length; i++) {
+                                if ("on" != oCks[i].value) {
+                                    roles[i] = oCks[i].value ;
+                                }
+                            }
+                            for (var i = 0; i < ougCks.length; i++) {
+                                if ("on" != ougCks[i].value) {
+                                    groups[i] = ougCks[i].value ;
+                                }
+                            }
+                            if (  groups.length == 0 ) {
+                                layerTips.msg("请选择用户组");
+                                return false;
+                            } else if ("请选择组织机构" == data.field.orgId) {
+                                layerTips.msg("请选择组织机构");
+                                return false;
+                            } else if ("请选择部门" == data.field.deptId) {
+                                layerTips.msg("请选择部门");
+                                return false;
+                            } else if("请选择科室" == data.field.officeId){
+                                layerTips.msg("请选择科室");
+                                return false;
+                            } else if (roles.length == 0) {
+                                layerTips.msg("请选择角色");
+                                return false;
+                            } else {
+                                data.field.roles = roles;
+                                data.field.groups = groups;
+                                JFATTY.doPost({
+                                    url: JFATTY.basePath() + "user/save",
+                                    data: data.field,
+                                    success: function (value, type) {
+                                        var msg = "";
+                                        if (value.ok) {
+                                            msg = '分配成功!用户初始登录密码为12345678';
+                                        } else {
+                                            msg = value.msg;
+                                        }
+                                        //调用父窗口的layer对象
+                                        layerTips.alert(msg, {
+                                            title: '温馨提示!'
+                                        }, function (index) {
+                                            //do something
+                                            layerTips.close(index);
+                                            layer.close(addBoxIndex);
+                                            pageObj.refre = true;
+                                            pageObj.pageIndex = paging.getCurrPageIndex();
+                                            paging.get(pageObj);
+                                        })
+                                    }
+                                });
+                            }
+                            return false;
+                        });
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        addBoxIndex = -1;
+                    }
+                });
+            });
+        });
+
+
+        $('#import').on('click', function () {
+            var that = this;
+            var index = layer.tips('只想提示地精准些', that, {tips: [1, 'white']});
+            $('#layui-layer' + index).children('div.layui-layer-content').css('color', '#000000');
+        });
+    });
+</script>
+</body>
+
+</html>

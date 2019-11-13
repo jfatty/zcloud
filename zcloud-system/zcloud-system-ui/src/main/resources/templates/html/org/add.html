@@ -1,0 +1,131 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新增操作</legend>
+    </fieldset>
+
+    <form class="layui-form"  id="fm" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入单位名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">单位法人</label>
+            <div class="layui-input-block">
+                <input type="text" name="legal" id="legal" lay-verify="required" placeholder="请输入单位法人姓名" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人</label>
+            <div class="layui-input-block">
+                <input type="text" name="contact" lay-verify="required" placeholder="请输入联系人" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系人电话</label>
+            <div class="layui-input-block">
+                <input type="tel" name="tel" lay-verify="phone" autocomplete="off" placeholder="请输入联系人电话"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">编码</label>
+            <div class="layui-input-block">
+                <input type="text" id="orgCode" name="orgCode" lay-verify="required" readonly placeholder="请输入单位编码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" lay-verify="required" placeholder="请输入单位地址" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" lay-verify="email" autocomplete="off" placeholder="请输入单位邮箱"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">官网地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="www" lay-verify="url" autocomplete="off" placeholder="请输入单位官网"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系QQ</label>
+            <div class="layui-input-block">
+                <input type="text" name="qq" id="qq"  autocomplete="off" placeholder="请输入联系QQ"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">联系微信</label>
+            <div class="layui-input-block">
+                <input type="text" name="wx" id="wx"  autocomplete="off" placeholder="请输入联系微信"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上级单位</label>
+                <div class="layui-input-block">
+                    <select id="parentId" name="parentId">
+                        <option value="">请选择上级单位</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">简介</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="请输入简介内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+        var serial = Date.parse(new Date());
+        serial = "ORG" + serial;
+        $("#orgCode").val(serial);
+
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "org/list",
+            data: null,
+            success: function (value, type) {
+                $("#parentId").html("");
+                var html = "<option value=''>请选择上级单位</option>";
+                if (value.ok) {
+                    var result = value.data;
+                    var size = result.length;
+                    for (var i = 0; i < size; i++) {
+                        var parent = result[i];
+                        html += "<option value=\"" + parent.id + "\">" + parent.name + "</option>";
+                    }
+                    $("#parentId").append(html);
+                    form.render('select');
+                }
+
+            }
+        });
+
+    });
+</script>

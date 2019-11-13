@@ -1,0 +1,119 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新增角色</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色编码</label>
+            <div class="layui-input-block">
+                <input type="text" id="roleCode" name="roleCode" lay-verify="required" readonly placeholder="请输入"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" title="启用" checked="">
+                <input type="radio" name="state" value="0" title="停用">
+            </div>
+        </div>
+        <div style="display: none;" class="layui-form-item">
+            <label class="layui-form-label">角色类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="sys" id="sys_y" value="Y" title="系统角色">
+                <input type="radio" name="sys" id="sys_n" value="N" title="普通角色" checked="">
+            </div>
+        </div>
+        <div style="display: none;" class="layui-form-item">
+            <label class="layui-form-label">参与审批流程</label>
+            <div class="layui-input-block">
+                <input type="radio" name="joinFlow" lay-filter="join" value="1" title="参与">
+                <input type="radio" name="joinFlow" value="0" lay-filter="njoin" title="不参与" checked="">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">角色描述</label>
+            <div class="layui-input-block">
+                <textarea name="description" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div id="parentRoleDiv" style="display: none" class="layui-form-item">
+            <label class="layui-form-label">上级角色</label>
+            <div class="layui-input-inline">
+                <select id="parentId" name="parentId">
+                    <option>请选择角色</option>
+                </select>
+            </div>
+        </div>
+        <div id="processKeyDiv" style="display: none" class="layui-form-item">
+            <label class="layui-form-label">选择流程</label>
+            <div class="layui-input-inline">
+                <select id="processKey" name="processKey">
+                    <option>请选择流程</option>
+                </select>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+        var serial = Date.parse(new Date());
+        serial = "ROLE" + serial;
+        $("#roleCode").val(serial);
+
+        form.on('radio(join)', function (data) {
+            // console.log(data.elem); //得到radio原始DOM对象
+            // console.log(data.value); //被点击的radio的value值
+            $("#parentRoleDiv").css("display", "");
+            $("#processKeyDiv").css("display", "");
+            form.render();
+        });
+        form.on('radio(njoin)', function (data) {
+            //  console.log(data.elem); //得到radio原始DOM对象
+            // console.log(data.value); //被点击的radio的value值
+            $("#parentRoleDiv").css("display", "none");
+            $("#processKeyDiv").css("display", "none");
+            form.render();
+        });
+        //拿到角色集合
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "role/list",
+            async: false,
+            data: null,
+            success: function (value, type) {
+                var html = "<option >请选择角色</option>";
+                if (value.ok) {
+                    var result = value.data;
+                    var size = result.length;
+                    for (var i = 0; i < size; i++) {
+                        var role = result[i];
+                        if (role.joinFlow == 1) {
+                            html += "<option value=\"" + role.id + "\">" + role.name + "</option>";
+                        }
+                    }
+                    $("#parentId").html("");
+                    $("#parentId").append(html);
+
+                    //form.render('select');
+                    //layui.selMeltiple($);
+                    //$("#dictionaryMenuDiv").css("display","");
+                }
+
+            }
+        });
+
+    });
+
+</script>

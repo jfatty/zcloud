@@ -1,0 +1,248 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新增权限</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">控制路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="href" lay-verify="required" placeholder="请输入" value="/user/list"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="icon" class="layui-form-label">
+                <span style="color: red;">*</span>图标
+            </label>
+            <div class="layui-input-inline">
+                <div style="margin-left: 20px;margin-top:5px">
+                    <ul>
+                        <li style="vertical-align: middle;display: inline-block;width: 90px;" id="menu-icon">
+                            <i class="layui-icon" id="icon" style="font-size: 25px;"></i>
+                        </li>
+                        <li style="vertical-align: middle;display: inline-block;">
+                            <i class="layui-btn layui-btn-primary layui-btn-sm" id="select_icon">选择图标</i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限样式</label>
+            <div class="layui-input-block">
+                <input type="text" name="plass" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="sortNum" lay-verify="required" placeholder="请输入" value="1"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限标示</label>
+            <div class="layui-input-block">
+                <input type="text" name="sysPermission" id="sysPermission" placeholder="请输入" value="authc"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面索引</label>
+            <div class="layui-input-block">
+                <input type="text" name="pageIndex" id="pageIndex" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作角色</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="sysRole" id="sysRole"/>
+                <div id="xtree" class="xtree_contianer"></div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级权限</label>
+            <div class="layui-input-inline">
+                <select id="parentId" name="parentId">
+                    <option>请选择上级权限</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限类型</label>
+            <div class="layui-input-inline">
+                <select id="type" name="type">
+                    <option>请选择类型</option>
+                    <option value="MENU">菜单</option>
+                    <option value="TARGET">窗口</option>
+                    <option value="BUTTON">按钮</option>
+                    <option value="HREF">链接</option>
+                    <option value="ACTION">操作</option>
+                    <option value="SCRIPT">脚本</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">布局位置</label>
+            <div class="layui-input-inline">
+                <select id="layoutPosition" name="layoutPosition">
+                    <option>请选择类型</option>
+                    <option value="TOPNAV">顶部导航</option>
+                    <option value="LEFTMENU">左侧菜单</option>
+                    <option value="RIGHTCONTENT">右侧内容</option>
+                    <option value="BOTTOM">底部权限</option>
+                </select>
+            </div>
+        </div>
+
+
+        <!--
+        <div class="layui-form-item">
+            <label class="layui-form-label">复选框</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="like[write]" title="写作">
+                <input type="checkbox" name="like[read]" title="阅读" checked="">
+                <input type="checkbox" name="like[game]" title="游戏">
+            </div>
+        </div>
+        -->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" title="启用" checked="">
+                <input type="radio" name="state" value="0" title="停用">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否为顶级权限</label>
+            <div class="layui-input-block">
+                <input type="radio" name="root" value="true" title="是">
+                <input type="radio" name="root" value="false" title="否" checked="">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">权限描述</label>
+            <div class="layui-input-block">
+                <textarea name="description" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    var g_form;
+    var iconBoxIndex = -1;
+    var lay;
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        g_form = form;
+        lay = layer;
+        var jq = layui.jquery;
+        //var $ = parent.jquery === undefined ? layui.jquery : parent.jquery ;
+        var param = {id: null};
+        //1、最基础的用法 - 直接绑定json
+        xtree = new layuiXtree({
+            elem: 'xtree'   //(必填) 放置xtree的容器，样式参照 .xtree_contianer
+            , form: form     //(必填) layui 的 from
+            , params: param     //参数封装
+            , data: JFATTY.basePath() + "privilege/role?privilegeId="     //(必填) json数据
+            , isopen: false  //加载完毕后的展开状态，默认值：true
+            , ckall: true    //启用全选功能，默认值：false
+            , ckallback: function () {
+            } //全选框状态改变后执行的回调函数
+            , icon: {        //三种图标样式，更改几个都可以，用的是layui的图标
+                open: "&#xe7a0;"       //节点打开的图标
+                , close: "&#xe622;"    //节点关闭的图标
+                , end: "&#xe621;"      //末尾节点的图标
+            }
+            , color: {       //三种图标颜色，独立配色，更改几个都可以
+                open: "#EE9A00"        //节点图标打开的颜色
+                , close: "#EEC591"     //节点图标关闭的颜色
+                , end: "#828282"       //末级节点图标的颜色
+            }
+            , click: function (data) {  //节点选中状态改变事件监听，全选框有自己的监听事件
+                console.log(data.elem); //得到checkbox原始DOM对象
+                console.log(data.elem.checked); //开关是否开启，true或者false
+                console.log(data.value); //开关value值，也可以通过data.elem.value得到
+                console.log(data.othis); //得到美化后的DOM对象
+            }
+        });
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "privilege/list",
+            data: null,
+            success: function (value, type) {
+                $("#parentId").html("");
+                var html = "<option >请选择上级权限</option>";
+                if (value.ok) {
+                    var result = value.data;
+                    var size = result.length;
+                    for (var i = 0; i < size; i++) {
+                        var parent = result[i];
+                        html += "<option value=\"" + parent.id + "\">" + parent.title + "</option>";
+                    }
+                    $("#parentId").append(html);
+                    g_form.render('select');
+                }
+
+            }
+        });
+
+        $('#select_icon').on('click', function () {
+            if (iconBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('./icon.html', null, function (form) {
+                iconBoxIndex = layer.open({
+                    type: 1,
+                    title: '选择图标',
+                    content: form,
+                    //	btn: ['确定', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('li').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        //console.log("1397");
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        iconBoxIndex = -1;
+                    }
+                });
+            });
+
+        });
+    });
+</script>

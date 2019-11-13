@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head head th:replace="common/header::header('修改密码','','')">
+</head>
+<body>
+<div style="margin: 15px;">
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label"> 原密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="oldpwd" name="oldpwd" lay-verify="required" placeholder="请输入原密码" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"> 新密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="newpassword" name="newpassword" lay-verify="required" placeholder="请输入新密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="repassword" name="repassword" lay-verify="required|same"
+                       placeholder="请再次确认密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="edit">确认修改</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        form.verify({
+            'same': function (value, item) {
+                var repw = value.trim();
+                var npwd = $("#newpassword").val() ;
+                var checkResult = '';
+                if (repw !== npwd.trim()) {
+                    checkResult = "您输入的新密码不一致,请重新输入!";
+                }
+                return checkResult;
+            }
+        });
+
+        //监听提交
+        form.on('submit(edit)', function (data) {
+            //参数封装
+            var params = {"oldpwd": data.field.oldpwd,"newpwd": data.field.newpassword} ;
+            JFATTY.doPost({
+                url: JFATTY.basePath() + "user/resetpwd",
+                data: params,
+                async: false,
+                success: function (value, type) {
+                    var msg = "";
+                    if (value.ok) {
+                        msg = value.msg;
+                    } else {
+                        msg = value.msg;
+                    }
+                    //调用父窗口的layer对象
+                    layer.alert(msg, {
+                        title: '温馨提示!'
+                    }, function (index) {
+                        //do something
+                        layer.close(index);
+                    })
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

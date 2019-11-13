@@ -1,0 +1,127 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>数据关系</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类全名</label>
+            <div class="layui-input-block">
+                <input type="text" name="clazz" id="clazz" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类全名(中文)</label>
+            <div class="layui-input-block">
+                <input type="text" name="clazzCn" id="clazzCn" lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类属性名</label>
+            <div class="layui-input-block">
+                <input type="text" name="attr" id="attr" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类属性名(中文)</label>
+            <div class="layui-input-block">
+                <input type="text" name="alias" id="alias" lay-verify="required" placeholder="XZDQ" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">表字段名</label>
+            <div class="layui-input-block">
+                <input type="text" name="dbAttr" id="dbAttr" lay-verify="required" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div id="dictionaryMenuDiv" style="display: none" class="layui-form-item">
+            <label class="layui-form-label">字典菜单</label>
+            <div class="layui-input-inline">
+                <select id="dictionaryMenuId" name="dictionaryMenuId">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">样式类型</label>
+            <div class="layui-input-inline">
+                <select id="styleClass" name="styleClass">
+                    <option value="SELECT">下拉选择</option>
+                    <option value="RADIO">单选框</option>
+                    <option value="CHECKBOX">复选框</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="num" id="num" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">jsKey</label>
+            <div class="layui-input-block">
+                <input type="text" name="jsKey" id="jsKey" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script>
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+        //拿到数据字典菜单列表
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "dictionaryMenu/list",
+            async: false,
+            data: null,
+            success: function (value, type) {
+                var html = "<option >请选择字典菜单</option>";
+                if (value.ok) {
+                    var result = value.data;
+                    var size = result.length;
+                    for (var i = 0; i < size; i++) {
+                        var dictionaryMenu = result[i];
+                        html += "<option value=\"" + dictionaryMenu.id + "\">" + dictionaryMenu.name + "</option>";
+                    }
+                    $("#dictionaryMenuId").append(html);
+                    $("#dictionaryMenuDiv").css("display", "");
+                    form.render();
+                }
+
+            }
+        });
+        var params = {id: dictRelationshipId};
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "dictRelationship/edit?id=" + dictRelationshipId,
+            async: false,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#clazz").val(obj.clazz);
+                    $("#clazzCn").val(obj.clazzCn);
+                    $("#alias").val(obj.alias);
+                    $("#attr").val(obj.attr);
+                    $("#dbAttr").val(obj.dbAttr);
+                    $("#styleClass").val(obj.styleClass);
+                    $("#num").val(obj.num);
+                    $("#jsKey").val(obj.jsKey);
+                    $("#dictionaryMenuId").val(obj.dictionaryMenuId);
+                    form.render();
+                    //g_form.render('select');
+                }
+
+            }
+        });
+    });
+
+</script>
