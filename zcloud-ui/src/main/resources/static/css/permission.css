@@ -1,0 +1,20 @@
+/*角色权限样式 */
+.role-button-add {
+    display: none;
+}
+
+.role-button-edit {
+    display: none;
+}
+
+.role-button-delete {
+    display: none;
+}
+
+.role-button-auth {
+    display: none;
+}
+
+.role-button-propt {
+    display: none;
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header::header('','/js/index.js')">
+    <title th:text="${sysTitle}">首页</title>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" style="border-bottom: solid 5px #1aa094;">
+    <div class="layui-header header header-demo">
+        <div class="layui-main">
+            <div class="admin-login-box">
+                <a class="logo" style="left: 0;" th:href="@{/index}">
+                    <span style="font-size: 13px;" th:text="${sysTitle}"></span>
+                </a>
+                <div class="admin-side-toggle">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
+                </div>
+                <div class="admin-side-full">
+                    <i class="fa fa-life-bouy" aria-hidden="true"></i>
+                </div>
+            </div>
+            <ul id="accountPanel" class="layui-nav admin-header-item">
+
+            </ul>
+            <ul class="layui-nav admin-header-item-mobile">
+                <li class="layui-nav-item">
+                    <a href="javascript:;" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-side layui-bg-black" id="admin-side">
+        <div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side"></div>
+    </div>
+    <div class="layui-body" style="bottom: 0;border-left: solid 2px #1AA094;" id="admin-body">
+        <div class="layui-tab admin-nav-card layui-tab-brief" lay-filter="admin-tab">
+            <ul class="layui-tab-title">
+                <li class="layui-this">
+                    <i class="fa fa-dashboard" aria-hidden="true"></i>
+                    <cite>控制面板</cite>
+                </li>
+            </ul>
+            <div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">
+                <div class="layui-tab-item layui-show">
+                    <iframe th:src="@{/html/welcome.htm}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-footer footer footer-demo" id="admin-footer">
+        <div class="layui-main">
+            <p>2019 &copy;
+                <a href="javascript:;" th:text="${sysCopyright}" ></a> LGPL license
+            </p>
+        </div>
+    </div>
+    <div class="site-tree-mobile layui-hide">
+        <i class="layui-icon">&#xe602;</i>
+    </div>
+    <div class="site-mobile-shade"></div>
+
+
+    <!--锁屏模板 start-->
+    <script type="text/template" id="lock-temp">
+        <div class="admin-header-lock" id="lock-box">
+            <div class="admin-header-lock-img">
+                <img th:src="@{/images/0.jpg}"/>
+            </div>
+            <div class="admin-header-lock-name" id="lockUserName">beginner</div>
+            <input type="hidden" name="username" id="lockAccount"/>
+            <input type="text" class="admin-header-lock-input" value="输入密码解锁.." name="password" id="password"/>
+            <button class="layui-btn layui-btn-small" id="unlock">解锁</button>
+        </div>
+    </script>
+    <!--锁屏模板 end -->
+
+    <script id="none" type="text/html">
+        <li id="clearCached" class="layui-nav-item">
+            <a href="javascript:;">清除缓存</a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;" class="admin-header-user">
+                <input type="hidden" id="account"/>
+                <img th:src="@{/images/0.jpg}"/>
+                <span id="userName">beginner</span>
+            </a>
+            <dl class="layui-nav-child">
+                <dd id="setting">
+                    <a href="javascript:;"><i class="fa fa-gear" aria-hidden="true"></i> 个人信息</a>
+                </dd>
+                <dd  shiro:hasPermission="user:resetpwd"  id="edit-pw">
+                    <a href="javascript:;"><i class="fa fa-user-circle" aria-hidden="true"></i> 修改密码</a>
+                </dd>
+                <dd id="lock">
+                    <a href="javascript:;">
+                        <i class="fa fa-lock" aria-hidden="true" style="padding-right: 3px;padding-left: 1px;"></i> 锁屏
+                        (Alt+L)
+                    </a>
+                </dd>
+                <dd id="logout">
+                    <a href="javascript:;" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销</a>
+                </dd>
+            </dl>
+        </li>
+    </script>
+    <script id="test" type="text/html">
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                当前公众号
+            </a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="javascript:;">
+                {{defaul}}
+            </a>
+            <dl class="layui-nav-child">
+                {{each list as obj i}}
+                <dd>
+                    <a onclick="switchAccount('{{obj.account}}')" href="javascript:;"><i class="iconfont" aria-hidden="true"></i>{{obj.name}}</a>
+                </dd>
+                {{/each}}
+            </dl>
+        </li>
+        {{include 'none' }}
+    </script>
+
+
+    <script type="text/javascript" th:inline="none">
+        layui.use(['form', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer;
+
+            //var html = template('none');
+            //$("#accountPanel").html(html);
+
+            JFATTY.doGet({
+                url: JFATTY.basePath() + "user/getUserInfo",
+                data: null,
+                success: function (value, type) {
+                    console.log(value);
+                    if (value.ok) {
+                        $("#userName").html(value.data.name);
+                        $("#account").val(value.data.userName);
+                    }
+                }
+            });
+
+            $("#logout").click(function () {
+                JFATTY.doGet({
+                    url: JFATTY.basePath() + "logout",
+                    data: null,
+                    success: function (value, type) {
+                        if (value.ok) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            });
+
+            //获取账户关联微信
+            // JFATTY.doGet({
+            //     url: JFATTY.basePath() + "user/getWxAccounts",
+            //     data: null,
+            //     async: false,
+            //     success: function (value, type) {
+            //         if (value.ok) {
+            //             var list = value.data.list;
+            //             var size = list.length;
+            //             var delFlag;
+            //             for (var i = 0; i < size; i++) {
+            //                 var obj = list[i];
+            //                 if (value.data.defaul == obj.account) {
+            //                     value.data.defaul = obj.name;
+            //                     delFlag = i;
+            //                 }
+            //             }
+            //             list.splice(delFlag, 1);
+            //             var html = template('test', value.data);
+            //             $("#accountPanel").html(html);
+            //         } else {
+            //             var html = template('none');
+            //             $("#accountPanel").html(html);
+            //         }
+            //     }
+            // });
+
+
+        });
+
+        //切换微信公众号账号
+        function switchAccount(account) {
+            JFATTY.doGet({
+                url: JFATTY.basePath() + "user/switchAccount/" + account,
+                data: null,
+                success: function (value, type) {
+                    if (value.ok) {
+                        //重新加载页面
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    </script>
+</div>
+</body>
+
+</html>
