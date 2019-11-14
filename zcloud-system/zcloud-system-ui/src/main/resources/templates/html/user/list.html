@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head head th:replace="common/header::header('用户管理','','')">
+<head head th:replace="common/header::header('','')">
 </head>
 <body>
 <div class="admin-main">
@@ -80,7 +80,7 @@
 
     var userId;
     layui.config({
-        base: JFATTY.basePath() + '/js/'
+        base: JFATTY.basePath() + 'js/'
     });
 
     layui.use(['paging', 'form'], function () {
