@@ -10,6 +10,6 @@ import com.jfatty.zcloud.wechat.entity.TplMsgText;
  * @author jfatty
  * @since 2019-04-23
  */
-public interface TplMsgTextService extends BaseService<TplMsgText> {
+public interface TplMsgTextService extends BaseWechatService<TplMsgText> {
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
  * @author jfatty
  * @since 2019-04-07
  */
-public interface AccountMenuService {
+public interface AccountMenuService extends BaseWechatService<AccountMenu> {
 
     /**
      * 获取微信菜单
@@ -32,5 +32,5 @@ public interface AccountMenuService {
      * @param accountMenu
      * @throws Exception
      */
-    boolean save(AccountMenu accountMenu) throws  Exception ;
+    boolean save(AccountMenu accountMenu) ;
 }

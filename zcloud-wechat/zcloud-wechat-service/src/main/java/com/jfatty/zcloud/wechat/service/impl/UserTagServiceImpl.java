@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.wechat.service.impl;
 
 
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.wechat.entity.UserTag;
 import com.jfatty.zcloud.wechat.mapper.UserTagMapper;
 import com.jfatty.zcloud.wechat.service.UserTagService;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class UserTagServiceImpl extends BaseServiceImpl<UserTag, UserTagMapper> implements UserTagService {
+public class UserTagServiceImpl extends BaseWechatServiceImpl<UserTag, UserTagMapper> implements UserTagService {
 
     private  UserTagMapper userTagMapper ;
 

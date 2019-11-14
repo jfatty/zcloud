@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @RequestMapping(value={"/account"})
 public interface IAccount extends BInterface<Account> {
+
 }

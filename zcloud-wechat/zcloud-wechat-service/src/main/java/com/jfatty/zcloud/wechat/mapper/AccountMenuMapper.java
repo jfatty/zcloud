@@ -2,6 +2,7 @@ package com.jfatty.zcloud.wechat.mapper;
 
 
 
+import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.wechat.entity.AccountMenu;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author jfatty
  * @since 2019-04-07
  */
-public interface AccountMenuMapper  {
+public interface AccountMenuMapper extends IBaseMapper<AccountMenu> {
 
     /**
      * 微信公众号菜单查询

@@ -4,6 +4,7 @@ package com.jfatty.zcloud.base.api;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.service.BaseService;
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,14 @@ public abstract class ApiBaseController<T extends Model>  implements BInterface<
     }
 
     @Override
-    public List<T> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<T> table(Map<String, Object> params) {
+        Integer pageIndex = (Integer) params.get("pageIndex");
+        Integer pageSize = (Integer) params.get("pageSize");
+        return this.table("",pageIndex,pageSize);
+    }
+
+    @Override
+    public RELResultUtils<T> table(String v, Integer pageIndex, Integer pageSize) {
         return baseService.getTable(v,pageIndex,pageSize);
     }
 

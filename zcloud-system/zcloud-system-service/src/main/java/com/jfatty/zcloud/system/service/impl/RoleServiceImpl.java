@@ -4,6 +4,7 @@ import com.jfatty.zcloud.system.entity.Role;
 import com.jfatty.zcloud.system.mapper.RoleMapper;
 import com.jfatty.zcloud.system.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +18,11 @@ import org.springframework.stereotype.Service;
 public class RoleServiceImpl extends BaseSystemServiceImpl<Role,RoleMapper> implements RoleService {
 
 
+    private RoleMapper roleMapper ;
+
+    @Autowired
+    public void setRoleMapper(RoleMapper roleMapper) {
+        super.setBaseMapper(roleMapper);
+        this.roleMapper = roleMapper;
+    }
 }

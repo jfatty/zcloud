@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.wechat.service;
 
 
-import com.jfatty.zcloud.base.service.BaseService;
 import com.jfatty.zcloud.wechat.entity.Account;
 
 /**
@@ -12,7 +11,7 @@ import com.jfatty.zcloud.wechat.entity.Account;
  * @author jfatty
  * @since 2019-04-04
  */
-public interface AccountService extends BaseService<Account> {
+public interface AccountService extends BaseWechatService<Account> {
 
     /**
      * 根据微信账号信息进行查询

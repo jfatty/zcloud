@@ -21,17 +21,17 @@ public interface MsgBaseMapper {
 
 
 
-    public MsgBase getById(String id);
+    MsgBase getById(String id);
 
-    public List<MsgBase> listForPage(MsgBase searchEntity);
+    List<MsgBase> listForPage(MsgBase searchEntity);
 
-    public List<MsgNews> listMsgNewsByBaseId(String[] ids);
+    List<MsgNews> listMsgNewsByBaseId(String[] ids);
 
-    public MsgText getMsgTextByBaseId(String id);
+    MsgText getMsgTextByBaseId(String id);
 
-    public MsgText getMsgTextBySubscribe(String account);
+    MsgText getMsgTextBySubscribe(String account);
 
-    public MsgText getMsgTextByInputCode(Map<String, Object> map);
+    MsgText getMsgTextByInputCode(Map<String, Object> map);
 
     //插入
     int insert(MsgBase msgBase);

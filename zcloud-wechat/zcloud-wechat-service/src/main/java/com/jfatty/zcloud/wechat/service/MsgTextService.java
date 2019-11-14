@@ -11,7 +11,7 @@ import java.util.List;
  * @author jfatty on 2019/4/16
  * @email jfatty@163.com
  */
-public interface MsgTextService extends BaseService<MsgText> {
+public interface MsgTextService extends BaseWechatService<MsgText> {
 
 
     /**

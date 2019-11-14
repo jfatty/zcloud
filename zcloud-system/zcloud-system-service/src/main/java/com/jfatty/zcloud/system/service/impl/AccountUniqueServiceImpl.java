@@ -2,7 +2,6 @@ package com.jfatty.zcloud.system.service.impl;
 
 
 
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.mapper.AccountUniqueMapper;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
@@ -24,7 +23,7 @@ import java.util.Set;
  */
 @Slf4j
 @Service
-public class AccountUniqueServiceImpl extends BaseServiceImpl<AccountUnique,AccountUniqueMapper> implements AccountUniqueService {
+public class AccountUniqueServiceImpl extends BaseSystemServiceImpl<AccountUnique,AccountUniqueMapper> implements AccountUniqueService {
 
 
     private AccountUniqueMapper accountUniqueMapper;

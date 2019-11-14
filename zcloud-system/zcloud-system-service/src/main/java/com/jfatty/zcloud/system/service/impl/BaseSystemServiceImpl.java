@@ -1,7 +1,7 @@
 package com.jfatty.zcloud.system.service.impl;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.system.service.BaseSystemService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * @email jfatty@163.com
  */
 @Slf4j
-public class BaseSystemServiceImpl<T extends Model, M extends BaseMapper<T>>   extends BaseServiceImpl<T,M> implements BaseSystemService<T> {
+public class BaseSystemServiceImpl<T extends Model, M extends IBaseMapper<T>>   extends BaseServiceImpl<T,M> implements BaseSystemService<T> {
 
 
 

@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.wechat.api;
 
 
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.interfaces.IAccount;
 import com.jfatty.zcloud.wechat.service.AccountService;
@@ -10,6 +11,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -24,9 +26,9 @@ import java.util.Map;
  * @author jfatty
  * @since 2019-04-04
  */
-@RestController
-//@RequestMapping("/account")
 @Slf4j
+@RestController
+@RequestMapping("/api/account")
 public class ApiAccountController extends ApiBaseWechatController<Account>  implements IAccount {
 
 
@@ -50,7 +52,7 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "pageSize", value = "每页显示条数",dataType = "Integer")
     })
     @Override
-    public List<Account> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<Account> table(String v, Integer pageIndex, Integer pageSize) {
         return super.table(v, pageIndex, pageSize);
     }
 

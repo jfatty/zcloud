@@ -12,6 +12,6 @@ import com.jfatty.zcloud.wechat.entity.AccountFans;
  * @author jfatty
  * @since 2019-04-07
  */
-public interface AccountFansService extends BaseService<AccountFans> {
+public interface AccountFansService extends BaseWechatService<AccountFans> {
 
 }

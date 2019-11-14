@@ -2,7 +2,6 @@ package com.jfatty.zcloud.system.service;
 
 
 
-import com.jfatty.zcloud.base.service.BaseService;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 
 import java.util.Set;
@@ -15,7 +14,7 @@ import java.util.Set;
  * @author jfatty
  * @since 2019-03-25
  */
-public interface AccountUniqueService extends BaseService<AccountUnique> {
+public interface AccountUniqueService extends BaseSystemService<AccountUnique> {
 
 
     /**

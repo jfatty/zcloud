@@ -1,6 +1,6 @@
 package com.jfatty.zcloud.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.system.entity.Role;
 
 /**
@@ -9,7 +9,7 @@ import com.jfatty.zcloud.system.entity.Role;
  * @author jfatty on 2019/11/1
  * @email jfatty@163.com
  */
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleMapper extends IBaseMapper<Role> {
 
 
 }

@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.wechat.service.impl;
 
 
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.wechat.entity.TplMsgText;
 import com.jfatty.zcloud.wechat.mapper.TplMsgTextMapper;
 import com.jfatty.zcloud.wechat.service.TplMsgTextService;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class TplMsgTextServiceImpl extends BaseServiceImpl<TplMsgText,TplMsgTextMapper> implements TplMsgTextService {
+public class TplMsgTextServiceImpl extends BaseWechatServiceImpl<TplMsgText,TplMsgTextMapper> implements TplMsgTextService {
 
     private TplMsgTextMapper tplMsgTextMapper ;
 

@@ -1,6 +1,5 @@
 package com.jfatty.zcloud.wechat.service.impl;
 
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.mapper.AccountMapper;
 import com.jfatty.zcloud.wechat.service.AccountService;
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class AccountServiceImpl extends BaseServiceImpl<Account,AccountMapper> implements AccountService {
+public class AccountServiceImpl extends BaseWechatServiceImpl<Account,AccountMapper> implements AccountService {
 
     private AccountMapper accountMapper ;
 

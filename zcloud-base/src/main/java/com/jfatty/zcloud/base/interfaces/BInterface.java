@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.base.interfaces;
 
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,12 +19,16 @@ public interface BInterface<T> {
 
     //列表 增删改查 其余接口子类自定义
 
-    @RequestMapping(value={"/table/list"})
-    List<T> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
-                  @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
-                  @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
+    @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
+    RELResultUtils<T> table(@RequestBody Map<String,Object> params) ;
 
-    @RequestMapping(value={"/list"})
+
+    @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
+    RELResultUtils<T> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+                            @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
+                            @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
+
+    @RequestMapping(value={"/list"},method=RequestMethod.GET)
     List<T>  list() ;
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)

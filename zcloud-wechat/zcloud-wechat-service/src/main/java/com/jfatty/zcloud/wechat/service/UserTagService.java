@@ -11,6 +11,6 @@ import com.jfatty.zcloud.wechat.entity.UserTag;
  * @author jfatty
  * @since 2019-04-28
  */
-public interface UserTagService extends BaseService<UserTag> {
+public interface UserTagService extends BaseWechatService<UserTag> {
 
 }

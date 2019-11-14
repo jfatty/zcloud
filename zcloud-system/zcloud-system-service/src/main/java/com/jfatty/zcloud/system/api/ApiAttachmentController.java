@@ -5,6 +5,7 @@ import com.jfatty.zcloud.system.entity.Attachment;
 import com.jfatty.zcloud.system.interfaces.IAttachment;
 import com.jfatty.zcloud.system.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @email jfatty@163.com
  */
 @RestController
+@RequestMapping(value={"/api/attachment"})
 public class ApiAttachmentController extends ApiBaseSystemController<Attachment>  implements IAttachment {
 
     private AttachmentService attachmentService ;

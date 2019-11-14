@@ -1,67 +1,25 @@
 server:
-    port: 8762
+    port: 8080
 #日志相关配置
 logging:
-  config: classpath:logback-win.xml
+  #config: classpath:logback-win.xml
   level:
       root: DEBUG  # DEBUG INFO WARN ERROR
 spring:
-    application:
-        name: zcloud-system-service
-    datasource:
-        name: test
-        url: jdbc:mysql://${MYSQL_HOST:122.112.137.97}:${MYSQL_PORT:3306}/db_wechat?useUnicode=true&characterEncoding=UTF8
-        username: root
-        password: tobeNO.1
-        # 使用druid数据源
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        filters: stat
-        maxActive: 20
-        initialSize: 1
-        maxWait: 60000
-        minIdle: 1
-        timeBetweenEvictionRunsMillis: 60000
-        minEvictableIdleTimeMillis: 300000
-        validationQuery: select 'x'
-        testWhileIdle: true
-        testOnBorrow: false
-        testOnReturn: false
-        poolPreparedStatements: true
-        maxOpenPreparedStatements: 20
-    jackson:
-      time-zone: GMT+8
-      date-format: yyyy-MM-dd HH:mm:ss
-
-mybatis-plus:
-  #mapper-locations: classpath*:/com@{/static/*/mapper/**Mapper.xml
-  mapper-locations: classpath*:mapper/*/*Mapper.xml
-  #实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.jfatty.zcloud.*.entity
-  global-config:
-    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-    id-type: 3
-    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
-    field-strategy: 2
-    #驼峰下划线转换
-    db-column-underline: true
-    #刷新mapper 调试神器
-    refresh-mapper: true
-    #数据库大写下划线转换
-    #capital-mode: true
-    #序列接口实现类配置
-    #key-generator: com.baomidou.mybatisplus.incrementer.OracleKeyGenerator
-    #逻辑删除配置（下面3个配置）
-    logic-delete-value: 0
-    logic-not-delete-value: 1
-    #sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
-    #自定义填充策略接口实现
-    #meta-object-handler: com.baomidou.springboot.MyMetaObjectHandler
-  configuration:
-    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
-    map-underscore-to-camel-case: true
-    cache-enabled: false
-    #配置JdbcTypeForNull, oracle数据库必须配置
-    jdbc-type-for-null: 'null'
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
+    cloud:
+      nacos:
+        discovery:
+          server-addr: 122.112.137.97:8849
+      gateway:
+        discovery:
+          locator:
+            lower-case-service-id: true #是将请求路径上的服务名配置为小写（因为服务注册的时候，向注册中心注册时将服务名转成大写的了
+            enabled: true #表明gateway开启服务注册和发现的功能 gateway自动根据服务发现为每一个服务创建了一个router，这个router将以服务名开头的请求路径转发到对应的服务
+        routes:
+          - id: zcloud-system-service
+            url: lb://zcloud-system-service
+            predicates:
+              - Path=/demo/**
+            filters:
+              - StripPrefix=1
+              - RequestTime=true

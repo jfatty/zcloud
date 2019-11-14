@@ -32,15 +32,15 @@ import java.util.List;
  * @author jfatty
  * @since 2019-04-07
  */
-@RestController
-//@RequestMapping("/accountMenu")
+
 @Slf4j
+@RestController
+@RequestMapping("/api/accountMenu")
 public class ApiAccountMenuController extends ApiBaseWechatController<AccountMenu>  implements IAccountMenu {
 
     @Autowired
     private WxService wxService ;
 
-    @Autowired
     private AccountMenuService accountMenuService;
 
     @Autowired
@@ -48,6 +48,12 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
 
     @Autowired
     private MsgNewsService msgNewsService ;
+
+    @Autowired
+    public void setAccountMenuService(AccountMenuService accountMenuService) {
+        super.setBaseService(accountMenuService);
+        this.accountMenuService = accountMenuService;
+    }
 
     @RequestMapping(value = "/menus")
     public Object menus() {

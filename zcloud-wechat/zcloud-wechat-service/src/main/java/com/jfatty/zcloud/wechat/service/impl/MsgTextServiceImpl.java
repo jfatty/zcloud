@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.wechat.service.impl;
 
 
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import com.jfatty.zcloud.base.utils.UUIDGenerator;
 import com.jfatty.zcloud.wechat.entity.MsgBase;
 import com.jfatty.zcloud.wechat.entity.MsgText;
@@ -25,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class MsgTextServiceImpl  extends BaseServiceImpl<MsgText,MsgTextMapper> implements MsgTextService {
+public class MsgTextServiceImpl  extends BaseWechatServiceImpl<MsgText,MsgTextMapper> implements MsgTextService {
 
 
     @Autowired

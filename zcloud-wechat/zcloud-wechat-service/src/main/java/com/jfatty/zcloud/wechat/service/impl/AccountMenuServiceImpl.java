@@ -20,10 +20,16 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class AccountMenuServiceImpl implements AccountMenuService {
+public class AccountMenuServiceImpl extends BaseWechatServiceImpl<AccountMenu,AccountMenuMapper> implements AccountMenuService {
+
+    private AccountMenuMapper accountMenuMapper ;
+
 
     @Autowired
-    private AccountMenuMapper accountMenuMapper ;
+    public void setAccountMenuMapper(AccountMenuMapper accountMenuMapper) {
+        super.setBaseMapper(accountMenuMapper);
+        this.accountMenuMapper = accountMenuMapper;
+    }
 
     @Override
     public List<AccountMenu> selectWxMenus(String account) {
@@ -37,7 +43,7 @@ public class AccountMenuServiceImpl implements AccountMenuService {
     }
 
     @Override
-    public boolean save(AccountMenu accountMenu) throws Exception {
+    public boolean save(AccountMenu accountMenu) {
         return ( accountMenuMapper.save(accountMenu) > 0 );
     }
 }

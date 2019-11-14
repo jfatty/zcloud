@@ -2,6 +2,7 @@ package com.jfatty.zcloud.base.service;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface BaseService<T  extends Model> extends IService<T> {
 
 
-    List<T> getTable(String v, Integer pageIndex, Integer pageSize);
+    RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize);
 
 
 }
