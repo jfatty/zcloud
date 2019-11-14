@@ -19,6 +19,7 @@
         <module>zcloud-wechat-common</module>
         <module>zcloud-wechat-service</module>
         <module>zcloud-wechat-ui</module>
+        <module>zcloud-wechat-feign</module>
     </modules>
 
 
