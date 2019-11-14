@@ -15,7 +15,66 @@
     <name>zcloud-ui</name>
     <packaging>jar</packaging>
 
+    <dependencies>
 
+        <dependency>
+            <groupId>com.jfatty.zcloud</groupId>
+            <artifactId>zcloud-system-ui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jfatty.zcloud</groupId>
+            <artifactId>zcloud-wechat-ui</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>0.9.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-nacos-config</artifactId>
+            <version>0.9.0.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <version>1.4.7.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>0.9.0.RELEASE</version>
+        </dependency>
+
+        <!-- email quartz shiro thymeleaf模版 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
+        <!-- email quartz shiro thymeleaf模版插件 -->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+
+        <!--shiro  thymeleaf模板中shiro标签-->
+        <!--<dependency>-->
+            <!--<groupId>com.github.theborakompanioni</groupId>-->
+            <!--<artifactId>thymeleaf-extras-shiro</artifactId>-->
+            <!--<version>2.0.0</version>-->
+        <!--</dependency>-->
+
+
+
+    </dependencies>
 
     <build>
         <plugins>
