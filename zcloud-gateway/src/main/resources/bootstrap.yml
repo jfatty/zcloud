@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: zcloud-gateway
+  cloud:
+    nacos:
+      config:
+        server-addr: 122.112.137.97:8849
+        file-extension: yaml
+  profiles:
+    active: dev
