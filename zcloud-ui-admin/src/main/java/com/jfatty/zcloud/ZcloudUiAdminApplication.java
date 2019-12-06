@@ -17,9 +17,12 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(value = {"com.jfatty.zcloud" })
 @EnableDiscoveryClient
 @EnableFeignClients
-public class ZcloudUiApplication {
+public class ZcloudUiAdminApplication {
+
 
     public static void main(String[] args) {
-        SpringApplication.run(ZcloudUiApplication.class, args);
+        SpringApplication.run(ZcloudUiAdminApplication.class, args);
     }
+
+
 }

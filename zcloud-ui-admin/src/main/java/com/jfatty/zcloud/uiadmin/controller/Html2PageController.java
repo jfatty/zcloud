@@ -1,4 +1,4 @@
-package com.jfatty.zcloud.ui.controller;
+package com.jfatty.zcloud.uiadmin.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
