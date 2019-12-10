@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Org;
 import com.jfatty.zcloud.system.feign.OrgFeignClient;
 import com.jfatty.zcloud.system.interfaces.IOrg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class OrgController implements IOrg {
+@RequestMapping(value={"/org"})
+public class OrgController implements IBaseController<Org> {
 
     @Autowired
     private OrgFeignClient orgFeignClient ;
@@ -36,8 +41,13 @@ public class OrgController implements IOrg {
     }
 
     @Override
-    public List<Org> list() {
+    public Object list() {
         return orgFeignClient.list();
+    }
+
+    @Override
+    public List<Org> list(Long v) {
+        return orgFeignClient.list(v);
     }
 
     @Override

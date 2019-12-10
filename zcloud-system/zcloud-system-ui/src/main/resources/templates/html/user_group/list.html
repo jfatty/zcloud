@@ -159,6 +159,7 @@
                                     var form = layui.form;
                                     form.render();
                                     form.on('submit(edit)', function (data) {
+                                        console.log(data.field);
                                         JFATTY.doPost({
                                             url: JFATTY.basePath() + "userGroup/edit",
                                             data: data.field,

@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Department;
 import com.jfatty.zcloud.system.feign.DepartmentFeignClient;
 import com.jfatty.zcloud.system.interfaces.IDepartment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class DepartmentController implements IDepartment {
+@RequestMapping(value={"/department"})
+public class DepartmentController implements IBaseController<Department> {
 
     @Autowired
     private DepartmentFeignClient departmentFeignClient ;
@@ -35,8 +40,13 @@ public class DepartmentController implements IDepartment {
     }
 
     @Override
-    public List<Department> list() {
+    public Object list() {
         return departmentFeignClient.list();
+    }
+
+    @Override
+    public List<Department> list(Long v) {
+        return departmentFeignClient.list(v);
     }
 
     @Override

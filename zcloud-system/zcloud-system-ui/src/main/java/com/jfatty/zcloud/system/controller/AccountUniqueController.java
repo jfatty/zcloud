@@ -1,11 +1,14 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.feign.AccountUniqueFeignClient;
 import com.jfatty.zcloud.system.interfaces.IAccountUnique;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +22,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class AccountUniqueController implements IAccountUnique {
+@RequestMapping(value={"/accountUnique"})
+public class AccountUniqueController implements IBaseController<AccountUnique> {
 
     @Autowired
     private AccountUniqueFeignClient accountUniqueFeignClient ;
@@ -35,8 +39,13 @@ public class AccountUniqueController implements IAccountUnique {
     }
 
     @Override
-    public List<AccountUnique> list() {
+    public Object list() {
         return accountUniqueFeignClient.list();
+    }
+
+    @Override
+    public List<AccountUnique> list(Long v) {
+        return accountUniqueFeignClient.list(v);
     }
 
     @Override

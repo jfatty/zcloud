@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Attachment;
 import com.jfatty.zcloud.system.feign.AttachmentFeignClient;
 import com.jfatty.zcloud.system.interfaces.IAttachment;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class AttachmentController implements IAttachment {
+@RequestMapping(value={"/attachment"})
+public class AttachmentController implements IBaseController<Attachment> {
 
     @Autowired
     private AttachmentFeignClient attachmentFeignClient ;
@@ -35,8 +40,13 @@ public class AttachmentController implements IAttachment {
     }
 
     @Override
-    public List<Attachment> list() {
+    public Object list() {
         return attachmentFeignClient.list();
+    }
+
+    @Override
+    public List<Attachment> list(Long v) {
+        return attachmentFeignClient.list(v);
     }
 
     @Override

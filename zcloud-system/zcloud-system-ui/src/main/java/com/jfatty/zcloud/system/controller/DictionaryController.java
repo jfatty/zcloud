@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Dictionary;
 import com.jfatty.zcloud.system.feign.DictionaryFeignClient;
 import com.jfatty.zcloud.system.interfaces.IDictionary;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class DictionaryController implements IDictionary {
+@RequestMapping(value={"/dictionary"})
+public class DictionaryController implements IBaseController<Dictionary> {
 
     @Autowired
     private DictionaryFeignClient dictionaryFeignClient ;
@@ -36,8 +41,13 @@ public class DictionaryController implements IDictionary {
     }
 
     @Override
-    public List<Dictionary> list() {
+    public Object list() {
         return dictionaryFeignClient.list();
+    }
+
+    @Override
+    public List<Dictionary> list(Long v) {
+        return dictionaryFeignClient.list(v);
     }
 
     @Override

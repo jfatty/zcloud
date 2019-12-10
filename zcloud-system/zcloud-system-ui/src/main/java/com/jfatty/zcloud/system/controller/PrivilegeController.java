@@ -1,16 +1,17 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.PrivilegeMenu;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.base.utils.UUIDGenerator;
+import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Privilege;
 import com.jfatty.zcloud.system.feign.PrivilegeFeignClient;
-import com.jfatty.zcloud.system.interfaces.IPrivilege;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,7 +26,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class PrivilegeController implements IPrivilege {
+@RequestMapping(value={"/privilege"})
+public class PrivilegeController implements IBaseController<Privilege>{
 
     @Autowired
     private PrivilegeFeignClient privilegeFeignClient ;
@@ -42,8 +44,13 @@ public class PrivilegeController implements IPrivilege {
     }
 
     @Override
-    public List<Privilege> list() {
+    public Object list() {
         return privilegeFeignClient.list();
+    }
+
+    @Override
+    public List<Privilege> list(Long v) {
+        return null;
     }
 
     @Override
@@ -74,4 +81,16 @@ public class PrivilegeController implements IPrivilege {
         List<PrivilegeMenu> list = privilegeFeignClient.getPrivilegeMenu(user);
         return list ;
     }
+
+    @RequestMapping(value={"/copy"},method=RequestMethod.POST)
+    public Object copy(HttpServletRequest request,HttpSession session,@RequestBody Privilege privilege) {
+        return privilegeFeignClient.copy(privilege) ;
+    }
+
+    @GetMapping(value={"/role"})
+    public Object roles(HttpServletRequest request,HttpSession session,String privilegeId) {
+        return privilegeFeignClient.getRoleList(privilegeId);
+    }
+
+
 }

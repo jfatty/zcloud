@@ -1,13 +1,21 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Role;
 import com.jfatty.zcloud.system.feign.RoleFeignClient;
 import com.jfatty.zcloud.system.interfaces.IRole;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +27,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class RoleController implements IRole {
+@RequestMapping(value={"/role"})
+public class RoleController implements IBaseController<Role> {
 
 
     @Autowired
@@ -31,9 +40,14 @@ public class RoleController implements IRole {
     }
 
     @Override
-    public List<Role> list() {
+    public Object list() {
         System.out.println("===========================>  list " );
         return roleFeignClient.list() ;
+    }
+
+    @Override
+    public List<Role> list(Long v) {
+        return roleFeignClient.list(v);
     }
 
     @Override
@@ -48,7 +62,8 @@ public class RoleController implements IRole {
 
     @Override
     public Object view(String id) {
-        return roleFeignClient.view(id);
+        System.out.println(" view ====> " + id );
+        return roleFeignClient.view(id) ;
     }
 
     @Override
@@ -60,4 +75,11 @@ public class RoleController implements IRole {
     public Object delete(Map<String, Object> params) {
         return roleFeignClient.delete(params);
     }
+
+    @RequestMapping(value={"/user"},method = RequestMethod.GET)
+    public Object roles(HttpServletRequest request, HttpSession session,String userId) {
+        System.out.println(" ==========>  " + userId);
+        return roleFeignClient.roles(userId);
+    }
+
 }

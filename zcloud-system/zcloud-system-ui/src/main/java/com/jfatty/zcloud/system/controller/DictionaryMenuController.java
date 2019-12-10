@@ -1,11 +1,16 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.system.entity.AccountUnique;
+import com.jfatty.zcloud.system.entity.Dictionary;
 import com.jfatty.zcloud.system.entity.DictionaryMenu;
 import com.jfatty.zcloud.system.feign.DictionaryMenuFeignClient;
 import com.jfatty.zcloud.system.interfaces.IDictionaryMenu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +24,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class DictionaryMenuController implements IDictionaryMenu {
+@RequestMapping(value={"/dictionaryMenu"})
+public class DictionaryMenuController implements IBaseController<DictionaryMenu> {
 
     @Autowired
     private DictionaryMenuFeignClient dictionaryMenuFeignClient ;
@@ -35,8 +41,13 @@ public class DictionaryMenuController implements IDictionaryMenu {
     }
 
     @Override
-    public List<DictionaryMenu> list() {
+    public Object list() {
         return dictionaryMenuFeignClient.list();
+    }
+
+    @Override
+    public List<DictionaryMenu> list(Long v) {
+        return dictionaryMenuFeignClient.list(v);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.system.controller;
 
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.User;
@@ -24,7 +25,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class UserController implements IUser {
+@RequestMapping(value={"/user"})
+public class UserController implements IBaseController<User> {
 
     @Autowired
     private UserFeignClient userFeignClient ;
@@ -40,8 +42,13 @@ public class UserController implements IUser {
     }
 
     @Override
-    public List<User> list() {
+    public Object list() {
         return userFeignClient.list();
+    }
+
+    @Override
+    public List<User> list(Long v) {
+        return userFeignClient.list(v);
     }
 
     @Override
