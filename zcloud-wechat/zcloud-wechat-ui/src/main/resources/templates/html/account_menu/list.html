@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head head th:replace="common/header::header('/css/build/common.css,/css/menu.css','/js/plugin/Sortable.min.js')">
+<head head th:replace="common/header::header('/css/build/common.css,/css/menu.css','/js/plugins/Sortable.min.js,/js/jwechat.js')">
 </head>
 <body  class="layui-layout-body">
      <div class="admin-main">
@@ -418,8 +418,9 @@
                  });
                  $("#menu-container").on('click', "#menuSave", function () {
                      var menus = getMenuList();
-                     ajax({
-                         url: JFATTY.basePath() + '/accountMenu/save',
+                     $.ajax({
+                         url: JFATTY.basePath() + '/accountMenu/saveMenu',
+						 type: "POST" ,
                          data: {"menus": JSON.stringify(menus)},
                          success: function (result) {
                              if (result.success) {
@@ -432,9 +433,10 @@
                  });
                  //同步菜单到微信中
                  $("#menu-container").on('click', "#menuSyn", function () {
-                     ajax({
+                     $.ajax({
                          url: JFATTY.basePath() + 'accountMenu/publishMenu',
-                         data: {},
+                         type: "GET" ,
+                         data: null,
                          success: function (result) {
                              if (result.success) {
                                  showAlert("菜单同步更新成功，生效时间看微信官网说明，或者重新关注微信号！");

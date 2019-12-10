@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.wechat.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.wechat.entity.AccountMenu;
 import com.jfatty.zcloud.wechat.entity.MsgText;
 import com.jfatty.zcloud.wechat.feign.MsgTextFeignClient;
 import com.jfatty.zcloud.wechat.interfaces.IMsgText;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class MsgTextController implements IMsgText {
+@RequestMapping(value={"/msgText"})
+public class MsgTextController implements IBaseController<MsgText> {
 
     @Autowired
     private MsgTextFeignClient msgTextFeignClient ;
@@ -35,8 +40,13 @@ public class MsgTextController implements IMsgText {
     }
 
     @Override
-    public List<MsgText> list() {
+    public Object list() {
         return msgTextFeignClient.list();
+    }
+
+    @Override
+    public List<MsgText> list(Long v) {
+        return msgTextFeignClient.list(v);
     }
 
     @Override

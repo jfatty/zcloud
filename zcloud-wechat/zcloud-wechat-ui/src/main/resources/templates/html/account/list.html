@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head head th:replace="common/header::header('/css/build/common.css,/css/menu.css','/js/plugin/clipboard/clipboard.min.js')">
+<head head th:replace="common/header::header('/css/build/common.css,/css/menu.css','/js/plugins/clipboard/clipboard.min.js')">
 </head>
 <body>
 <div class="admin-main">
@@ -69,7 +69,7 @@
     </tr>
     {{# }); }}
 </script>
-<script type="text/javascript" th:inline="none">
+<script type="text/javascript" th:inline="none" >
     var accountId;
     var pageObj = {//调用数据获取函数
         pageIndex: 1,

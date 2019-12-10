@@ -1,11 +1,17 @@
 package com.jfatty.zcloud.wechat.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.entity.AccountFans;
 import com.jfatty.zcloud.wechat.feign.AccountFansFeignClient;
 import com.jfatty.zcloud.wechat.interfaces.IAccountFans;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +25,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class AccountFansController implements IAccountFans {
+@RequestMapping(value={"/accountFans"})
+public class AccountFansController implements IBaseController<AccountFans> {
 
     @Autowired
     private AccountFansFeignClient accountFansFeignClient ;
@@ -35,8 +42,17 @@ public class AccountFansController implements IAccountFans {
     }
 
     @Override
-    public List<AccountFans> list() {
-        return accountFansFeignClient.list();
+    public Object list() {
+        Long v = System.currentTimeMillis();
+        List<AccountFans> list = accountFansFeignClient.list(v);
+        if(CollectionUtils.isNotEmpty(list))
+            return ResultUtils.ok(list);
+        return ResultUtils.build(400, "没有查询到数据");
+    }
+
+    @Override
+    public List<AccountFans> list(Long v) {
+        return accountFansFeignClient.list(v);
     }
 
     @Override
@@ -45,8 +61,9 @@ public class AccountFansController implements IAccountFans {
     }
 
     @Override
-    public Object view(String id) {
-        return accountFansFeignClient.view(id);
+    public AccountFans view(String id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.convertValue(accountFansFeignClient.view(id),AccountFans.class);
     }
 
     @Override

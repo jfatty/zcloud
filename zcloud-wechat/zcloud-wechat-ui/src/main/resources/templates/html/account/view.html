@@ -85,7 +85,10 @@
             url : JFATTY.basePath() + "account/edit?id=" + accountId,
             async : false,
             success : function(value, type) {
+                console.log(value);
+                debugger;
                 if(value.ok){
+
                     var obj =  value.data ;
                     $("#url_img").attr("src","http://open.weixin.qq.com/qr/code?username="+obj.account);
                     $("#id").val(obj.id);

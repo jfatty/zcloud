@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.wechat.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.wechat.entity.TplMsgText;
 import com.jfatty.zcloud.wechat.entity.UserTag;
 import com.jfatty.zcloud.wechat.feign.UserTagFeignClient;
 import com.jfatty.zcloud.wechat.interfaces.IUserTag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +23,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class UserTagController implements IUserTag {
+@RequestMapping(value={"/userTag"})
+public class UserTagController implements IBaseController<UserTag> {
 
     @Autowired
     private UserTagFeignClient userTagFeignClient ;
@@ -35,8 +40,13 @@ public class UserTagController implements IUserTag {
     }
 
     @Override
-    public List<UserTag> list() {
+    public Object list() {
         return userTagFeignClient.list();
+    }
+
+    @Override
+    public List<UserTag> list(Long v) {
+        return userTagFeignClient.list(v);
     }
 
     @Override

@@ -1,11 +1,17 @@
 package com.jfatty.zcloud.wechat.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.feign.AccountFeignClient;
 import com.jfatty.zcloud.wechat.interfaces.IAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,7 +25,8 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-public class AccountController implements IAccount {
+@RequestMapping(value={"/account"})
+public class AccountController implements IBaseController<Account> {
 
     @Autowired
     private AccountFeignClient accountFeignClient ;
@@ -35,8 +42,13 @@ public class AccountController implements IAccount {
     }
 
     @Override
-    public List<Account> list() {
+    public Object list() {
         return accountFeignClient.list();
+    }
+
+    @Override
+    public List<Account> list(Long v) {
+        return accountFeignClient.list(v);
     }
 
     @Override
@@ -46,6 +58,10 @@ public class AccountController implements IAccount {
 
     @Override
     public Object view(String id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.registerModule(new JavaTimeModule());
+        //return objectMapper.convertValue(accountFeignClient.view(id),Account.class);
         return accountFeignClient.view(id);
     }
 

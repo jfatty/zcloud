@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head head th:replace="common/header::header('/css/build/common.css','/js/plugin/echarts/echarts.min.js,/js/plugin/echarts/macarons.js,/js/plugin/moment.js')">
+<head head th:replace="common/header::header('/css/build/common.css','/js/plugins/echarts/echarts.min.js,/js/plugins/echarts/macarons.js,/js/plugins/moment.js')">
 </head>
 <body class="layui-layout-body">
 <div class="admin-main">
@@ -236,7 +236,7 @@
                 $.ajax({
                     type: "POST",
                     async: false,
-                    url: JFATTY.basePath() + '/api/wx/dataCube',
+                    url: JFATTY.basePath() + 'wechat/dataCube',
                     data: {
                         type: type,
                         start: start,
