@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.base.service.BaseService;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.UUIDGenerator;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,46 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
     public void setBaseMapper(IBaseMapper<T> baseMapper) {
         this.baseMapper = baseMapper;
     }
+
+    /**
+     * 通用给实体类获取
+     * ID属性
+     * @param entity 传入poji实体
+     * @return 返回id
+     * @throws Exception 抛出异常
+     */
+    private String getId(T entity) throws Exception {
+        String mname = "getId" ;
+        Method m = entity.getClass().getMethod(mname, null);
+        String id = (m.invoke(entity, null)).toString();
+        return id;
+    }
+
+    /**
+     * 通用给实体类设置
+     * ID属性
+     * @param entity  传入poji实体
+     * @return  设置id属性后返回实体pojo
+     * @throws Exception 抛出异常
+     */
+    private T setId(T entity) throws Exception {
+        String value = UUIDGenerator.uuid() ;
+        String mname = "setId" ;
+        log.info("类:"+entity.getClass().getName()+" 当前生成的ID为:"+value);
+        Method m = entity.getClass().getMethod(mname,String.class);
+        m.invoke(entity, value);
+        return entity;
+    }
+
+    @Override
+    public boolean save(T entity, Map<String, Object> params) throws Exception {
+        /**
+         * 首先判断id是否存在
+         */
+        entity = this.setId(entity) ;
+        return super.save(entity);
+    }
+
 
     @Override
     public RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize) {

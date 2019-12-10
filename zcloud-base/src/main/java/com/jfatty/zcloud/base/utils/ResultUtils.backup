@@ -35,7 +35,7 @@ public class ResultUtils implements Serializable {
      */
     private boolean success = false;
     // 响应业务状态
-    private Integer code;
+    private Integer status;
 
     // 响应消息
     private String msg;
@@ -47,8 +47,8 @@ public class ResultUtils implements Serializable {
         return new ResultUtils(500, "服务器错误!", null);
     }
 
-    public static ResultUtils failure(Integer code, String msg) {
-        return new ResultUtils(code, msg, null);
+    public static ResultUtils failure(Integer status, String msg) {
+        return new ResultUtils(status, msg, null);
     }
 
     public static ResultUtils success(Object data) {
@@ -63,12 +63,12 @@ public class ResultUtils implements Serializable {
         return new ResultUtils(200, msg, data);
     }
 
-    public static ResultUtils success(Integer code, String msg, Object data) {
-        return new ResultUtils(code, msg, data);
+    public static ResultUtils success(Integer status, String msg, Object data) {
+        return new ResultUtils(status, msg, data);
     }
 
-    public static ResultUtils build(Integer code, String msg, Object data) {
-        return new ResultUtils(code, msg, data);
+    public static ResultUtils build(Integer status, String msg, Object data) {
+        return new ResultUtils(status, msg, data);
     }
 
     public static ResultUtils ok(Object data) {
@@ -83,34 +83,34 @@ public class ResultUtils implements Serializable {
 
     }
 
-    public static ResultUtils build(Integer code, String msg) {
-        return new ResultUtils(code, msg, null);
+    public static ResultUtils build(Integer status, String msg) {
+        return new ResultUtils(status, msg, null);
     }
 
-    public ResultUtils(Integer code, String msg, Object data) {
-        this.code = code;
-        this.success = (code == 200) ;
+    public ResultUtils(Integer status, String msg, Object data) {
+        this.status = status;
+        this.success = (status == 200) ;
         this.msg = msg;
         this.data = data;
     }
 
     public ResultUtils(Object data) {
-        this.code = 200 ;
+        this.status = 200 ;
         this.success = true ;
         this.msg = "OK" ;
         this.data = data ;
     }
 
     public Boolean isOK() {
-        return this.code == 200 ;
+        return this.status == 200 ;
     }
 
-    public Integer getCode() {
-        return code;
+    public Integer getStatus() {
+        return status;
     }
 
-    public void setCode(Integer code) {
-        this.code = code;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getMsg() {
@@ -159,7 +159,7 @@ public class ResultUtils implements Serializable {
                     obj = MAPPER.readValue(data.asText(), clazz);
                 }
             }
-            return build(jsonNode.get("code").intValue(), jsonNode.get("msg").asText(), obj);
+            return build(jsonNode.get("status").intValue(), jsonNode.get("msg").asText(), obj);
         } catch (Exception e) {
             return null;
         }
@@ -196,7 +196,7 @@ public class ResultUtils implements Serializable {
                 obj = MAPPER.readValue(data.traverse(),
                         MAPPER.getTypeFactory().constructCollectionType(List.class, clazz));
             }
-            return build(jsonNode.get("code").intValue(), jsonNode.get("msg").asText(), obj);
+            return build(jsonNode.get("status").intValue(), jsonNode.get("msg").asText(), obj);
         } catch (Exception e) {
             return null;
         }
@@ -204,6 +204,6 @@ public class ResultUtils implements Serializable {
 
     @Override
     public String toString() {
-        return "ResultUtils [code=" + code + ", msg=" + msg + ", data=" + data + "]";
+        return "ResultUtils [status=" + status + ", msg=" + msg + ", data=" + data + "]";
     }
 }
