@@ -1,18 +1,18 @@
 package com.jfatty.zcloud.system.service.impl;
 
 import com.jfatty.zcloud.base.utils.PrivilegeMenu;
+import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Privilege;
+import com.jfatty.zcloud.system.mapper.PermRelationshipMapper;
 import com.jfatty.zcloud.system.mapper.PrivilegeMapper;
 import com.jfatty.zcloud.system.service.PrivilegeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 描述
@@ -25,6 +25,9 @@ import java.util.Map;
 public class PrivilegeServiceImpl extends BaseSystemServiceImpl<Privilege,PrivilegeMapper> implements PrivilegeService {
 
     private PrivilegeMapper privilegeMapper ;
+
+    @Autowired
+    private PermRelationshipMapper permRelationshipMapper ;
 
     @Autowired
     public void setPrivilegeMapper(PrivilegeMapper privilegeMapper) {
@@ -102,4 +105,38 @@ public class PrivilegeServiceImpl extends BaseSystemServiceImpl<Privilege,Privil
         }
         return privilegeMenus;
     }
+
+
+    @Override
+    public List<SystemTree> getRoleList(String privilegeId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<SystemTree> all = privilegeMapper.getRoleList(map);
+        if (privilegeId != null && StringUtils.isNotBlank(privilegeId)) {
+            Privilege privilege = this.getById(privilegeId);
+            String sysRole = privilege.getRole();
+            if (StringUtils.isNotBlank(sysRole)) {
+                String[] roles = sysRole.split(",");
+                for (SystemTree a : all) {
+                    for (String role : roles) {
+                        if (role.equals(a.getValue())) {
+                            a.setChecked(true);
+                        }
+                    }
+                }
+            }
+        }
+        return all;
+    }
+
+    @Override
+    public boolean save(Privilege entity, AccountUnique user) throws Exception {
+        //非超级管理员操作 默认保存关联关系
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("authId", user.getId());
+        map.put("index", Arrays.asList(entity.getId()));
+        permRelationshipMapper.auth(map) ;
+        return super.save(entity) ;
+    }
+
+
 }

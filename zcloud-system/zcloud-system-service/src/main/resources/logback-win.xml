@@ -121,7 +121,7 @@
         </filter>
     </appender>
 
-    <logger name="com.jfatty.*.mapper" level="DEBUG" />
+    <logger name="com.jfatty.zcloud.*.mapper" level="DEBUG" />
 
     <root level="DEBUG">
         <!--控制台输出-->

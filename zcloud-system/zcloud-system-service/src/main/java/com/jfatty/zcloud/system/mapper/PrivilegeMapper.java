@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.system.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
+import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.Privilege;
 
 import java.util.List;
@@ -21,4 +22,10 @@ public interface PrivilegeMapper  extends IBaseMapper<Privilege> {
      */
     List<Privilege> getPrivilegeMenu(Map<String, Object> map);
 
+    /**
+     * 描述 获取已经绑定的角色列表
+     * @author jfatty
+     * 创建时间：2018年6月14日
+     */
+    List<SystemTree> getRoleList(Map<String, Object> map);
 }

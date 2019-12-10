@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 122.112.137.97:8849
+        server-addr: nacos.zealsoft.com.cn:8848
         file-extension: yaml
   profiles:
     active: dev

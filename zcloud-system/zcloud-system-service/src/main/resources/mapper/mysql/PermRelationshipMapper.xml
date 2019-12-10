@@ -77,8 +77,7 @@
     </delete>
     <!-- 对角色 授权 增加新的 权限-->
     <insert id="auth" parameterType="map"  >
-        insert into sys_perm_relationship (privilege_id, auth_id)
-        values
+        insert into sys_perm_relationship (privilege_id, auth_id) values
         <foreach collection="index" index="index" item="privilege_id" separator=",">
             (#{privilege_id,jdbcType=VARCHAR}, #{authId,jdbcType=VARCHAR})
         </foreach>
