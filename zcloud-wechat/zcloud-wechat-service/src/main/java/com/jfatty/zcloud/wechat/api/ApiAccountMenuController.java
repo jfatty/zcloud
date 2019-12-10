@@ -8,10 +8,7 @@ import com.jfatty.zcloud.wechat.constants.Constants;
 import com.jfatty.zcloud.wechat.entity.*;
 import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.interfaces.IAccountMenu;
-import com.jfatty.zcloud.wechat.service.AccountMenuService;
-import com.jfatty.zcloud.wechat.service.MsgNewsService;
-import com.jfatty.zcloud.wechat.service.MsgTextService;
-import com.jfatty.zcloud.wechat.service.WxService;
+import com.jfatty.zcloud.wechat.service.*;
 import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
 import com.jfatty.zcloud.wechat.utils.wx.ErrCode;
 import com.jfatty.zcloud.wechat.utils.wx.WxUtil;
@@ -19,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,9 +48,28 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
     private MsgNewsService msgNewsService ;
 
     @Autowired
+    private AccountService accountService ;
+
+    @Autowired
     public void setAccountMenuService(AccountMenuService accountMenuService) {
         super.setBaseService(accountMenuService);
         this.accountMenuService = accountMenuService;
+    }
+
+
+    @Override
+    public ResultUtils list() {
+        System.out.println("==============================>菜单获取");
+        Account account = accountService.getActiveAccount() ;
+        List<AccountMenu> menus = accountMenuService.selectWxMenus(account.getAccount());
+        MsgText msgText = new MsgText() ;
+        msgText.setAccount(account.getAccount());
+        List<MsgText> msgTextList = msgTextService.getMsgTextList(msgText);
+        MsgNews msgNew = new MsgNews();
+        msgNew.setAccount(account.getAccount());
+        List<MsgNews> msgNews = msgNewsService.listMsgNewsList(msgNew);
+        Matchrule matchrule = new Matchrule();
+        return ResultUtils.ok(WxUtil.prepareMenus(menus, matchrule,msgTextList,msgNews));
     }
 
     @RequestMapping(value = "/menus")
@@ -69,13 +86,12 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
         return ResultUtils.ok(WxUtil.prepareMenus(menus, matchrule,msgTextList,msgNews));
     }
 
-    @RequestMapping(value = "/save002")
-    public Object save(String menus)  {
-        //获取当前用户
-        //AccountUnique user = (AccountUnique)ShiroKit.getUser();
-        String account = WxMemoryCacheClient.getAccount();
+
+    @RequestMapping(value = "/saveMenu" ,method=RequestMethod.POST )
+    public ResultUtils save(String menus)  {
+        Account account = accountService.getActiveAccount() ;
         AccountMenu delMenu =  new AccountMenu() ;
-        delMenu.setAccount(account);
+        delMenu.setAccount(account.getAccount());
         JSONArray jsons = JSONArray.parseArray(menus);
         //每次先行删除公众号所有菜单
         try {
@@ -108,7 +124,7 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
                         accountMenu.setId(UUIDGenerator.uuid());
                         //accountMenu.setCreateOperator(user.getId());
                         //accountMenu.setRealm(user.getRealm());
-                        accountMenu.setAccount(account);
+                        accountMenu.setAccount(account.getAccount());
                         //保存
                         accountMenuService.save(accountMenu);
                         //判断是否有subbutton
@@ -140,7 +156,7 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
                                     accountMenu.setId(UUIDGenerator.uuid());
                                     //accountMenu.setCreateOperator(user.getId());
                                     //accountMenu.setRealm(user.getRealm());
-                                    accountMenu.setAccount(account);
+                                    accountMenu.setAccount(account.getAccount());
                                     accountMenuService.save(accountMenu);
                                 }
                             }
@@ -168,10 +184,11 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
     }
 
     //创建(发布)微信公众账号菜单
-    @RequestMapping(value = "/publishMenu")
-    public Object publishMenu() throws WxErrorException  {
+    @RequestMapping(value = "/publishMenu" , method=RequestMethod.GET )
+    public ResultUtils publishMenu() throws WxErrorException  {
         JSONObject rstObj = null;
-        Account mpAccount = WxMemoryCacheClient.getMpAccount();
+        //Account mpAccount = WxMemoryCacheClient.getMpAccount();
+        Account mpAccount = accountService.getActiveAccount() ;
         if(mpAccount != null){
             rstObj = wxService.publishMenu(mpAccount);
             if(rstObj != null){//成功，更新菜单组
@@ -191,11 +208,11 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
 
     //删除微信公众账号菜单
     @RequestMapping(value = "/deleteMenu")
-    public Object deleteMenu(HttpServletRequest request) throws WxErrorException {
+    public ResultUtils deleteMenu(HttpServletRequest request) throws WxErrorException {
         JSONObject rstObj = null;
-        Account mpAccount = WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
-        if(mpAccount != null){
-            rstObj = wxService.deleteMenu(mpAccount);
+        Account account = accountService.getActiveAccount() ;
+        if(account != null){
+            rstObj = wxService.deleteMenu(account);
             if(rstObj != null && rstObj.getIntValue("errcode") == 0)
                 return ResultUtils.ok("删除菜单成功");
         }

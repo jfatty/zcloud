@@ -20,4 +20,10 @@ public interface AccountMapper extends IBaseMapper<Account> {
      * @return
      */
     Account getByAccount(String account);
+
+    /**
+     * 获取系统当前出去激活状态微信账号
+     * @return
+     */
+    Account getActiveAccount();
 }

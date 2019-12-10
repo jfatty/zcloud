@@ -1,6 +1,10 @@
 package com.jfatty.zcloud.wechat.mapper;
 
 
+import com.jfatty.zcloud.wechat.entity.MsgArticle;
+
+import java.io.Serializable;
+
 /**
  * <p>
  * 微信文章 Mapper 接口
@@ -11,5 +15,7 @@ package com.jfatty.zcloud.wechat.mapper;
  */
 public interface MsgArticleMapper  {
 
+
+    MsgArticle getById(Serializable id);
 
 }

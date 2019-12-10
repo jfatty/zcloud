@@ -20,4 +20,9 @@ public interface AccountService extends BaseWechatService<Account> {
      */
     Account getByAccount(String account);
 
+    /**
+     * 获取系统当前出去激活状态微信账号
+     * @return
+     */
+    Account getActiveAccount();
 }

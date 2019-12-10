@@ -74,7 +74,7 @@ public class ApiAccountFansController extends ApiBaseWechatController<AccountFan
             @ApiImplicitParam(name = "用户粉丝ID", value = "id",dataType = "String")
     })
     @Override
-    public Object view(String id) {
+    public ResultUtils view(String id) {
         return super.view(id);
     }
 

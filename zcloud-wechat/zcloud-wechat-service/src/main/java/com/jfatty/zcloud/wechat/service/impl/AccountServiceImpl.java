@@ -31,4 +31,9 @@ public class AccountServiceImpl extends BaseWechatServiceImpl<Account,AccountMap
     public Account getByAccount(String account) {
         return accountMapper.getByAccount(account);
     }
+
+    @Override
+    public Account getActiveAccount() {
+        return accountMapper.getActiveAccount();
+    }
 }

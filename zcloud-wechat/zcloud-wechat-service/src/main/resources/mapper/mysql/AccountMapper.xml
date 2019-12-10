@@ -109,4 +109,9 @@
         </if>
     </select>
 
+    <!--获取系统当前出去激活状态微信账号-->
+    <select id="getActiveAccount" resultMap="BaseResultMap">
+        SELECT * FROM wxcms_account WHERE active_status = 1 ORDER BY ID DESC limit 1
+    </select>
+
 </mapper>

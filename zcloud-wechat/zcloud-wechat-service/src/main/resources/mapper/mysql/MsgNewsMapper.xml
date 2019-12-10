@@ -30,7 +30,7 @@
         <collection property="articles" column="id" fetchType="eager"
                     ofType="com.jfatty.zcloud.wechat.entity.MsgArticle"
                     javaType="ArrayList"
-                    select="com.jfatty.wechat.mapper.MsgArticleMapper.getById">
+                    select="com.jfatty.zcloud.wechat.mapper.MsgArticleMapper.getById">
             <id column="ar_id" property="arId" />
             <result column="title" property="title" />
             <result column="author" property="author" />

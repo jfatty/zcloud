@@ -2,6 +2,7 @@ package com.jfatty.zcloud.wechat.api;
 
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.interfaces.IAccount;
 import com.jfatty.zcloud.wechat.service.AccountService;
@@ -14,8 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -56,10 +59,13 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
         return super.table(v, pageIndex, pageSize);
     }
 
-
+    @Override
+    public List<Account> list(Long v) {
+        return super.list(v);
+    }
 
     @Override
-    public List<Account> list() {
+    public ResultUtils list() {
         return super.list();
     }
 
@@ -73,8 +79,23 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "json包微信数据数据", value = "account",dataType = "json")
     })
     @Override
-    public Object save(Account entity) {
-        return super.save(entity);
+    public ResultUtils save(Account entity) {
+        String url =  "/api/wx/" + entity.getAccount() + "/message";
+        if(entity.getId() == null) {//新增
+            entity.setUrl(url);
+            entity.setToken(UUID.randomUUID().toString().replace("-", ""));
+            entity.setCreateTime(LocalDateTime.now());
+            return super.save(entity);
+        }
+        Account tmpAccount = accountService.getById(entity.getId());
+        tmpAccount.setUrl(url);
+        tmpAccount.setAccount(entity.getAccount());
+        tmpAccount.setAppid(entity.getAppid());
+        tmpAccount.setAppsecret(entity.getAppsecret());
+        tmpAccount.setMsgCount(entity.getMsgCount());
+        tmpAccount.setName(entity.getName());
+        tmpAccount.setUpdateTime(LocalDateTime.now());
+        return super.edit(entity);
     }
 
 
@@ -88,7 +109,7 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "微信账号ID", value = "id",dataType = "String")
     })
     @Override
-    public Object view(String id) {
+    public ResultUtils view(String id) {
         return super.view(id);
     }
 
@@ -103,7 +124,8 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "json包微信账号数据", value = "account",dataType = "json")
     })
     @Override
-    public Object edit(Account entity) {
+    public ResultUtils edit(Account entity) {
+        entity.setUpdateTime(LocalDateTime.now());
         return super.edit(entity);
     }
 
@@ -118,7 +140,7 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "json包微信账号数据", value = "ids",dataType = "json")
     })
     @Override
-    public Object delete(Map<String, Object> params) {
+    public ResultUtils delete(Map<String, Object> params) {
         return super.delete(params);
     }
 }

@@ -1,11 +1,17 @@
 package com.jfatty.zcloud.wechat.api;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
+import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.service.AccountService;
 import com.jfatty.zcloud.wechat.service.WxService;
 import com.jfatty.zcloud.wechat.utils.MsgXmlUtil;
+import com.jfatty.zcloud.wechat.utils.WxApiClient;
+import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
 import com.jfatty.zcloud.wechat.utils.wx.SignUtil;
+import com.jfatty.zcloud.wechat.utils.wx.WxApi;
 import com.jfatty.zcloud.wechat.vo.MsgRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +28,10 @@ import java.util.Set;
  * @author jfatty on 2019/4/10
  * @email jfatty@163.com
  */
+
+@Slf4j
 @RestController
 @RequestMapping("/api")
-@Slf4j
 public class ApiWechatController {
 
     @Autowired
@@ -79,6 +86,24 @@ public class ApiWechatController {
             log.error("POST 请求：进行消息处理时出现异常" + e.getMessage());
             return "error";
         }
+    }
+
+    /**
+     * 统计分析
+     * @param start 开始时间
+     * @param end 结束时间
+     * @return
+     * @throws WxErrorException
+     */
+    @RequestMapping(value = "/wx/dataCube" , method = RequestMethod.POST)
+    public ResultUtils dataCube(@RequestParam(value = "type" , defaultValue = "WX") String type ,
+                                @RequestParam(value = "start" , defaultValue = "2019-01-01" ) String start ,
+                                @RequestParam(value = "end" , defaultValue = "201-11-11") String end) throws WxErrorException {
+        //WxMemoryCacheClient.getMpAccount();//获取缓存中的唯一账号
+        Account mpAccount = accountService.getActiveAccount() ;
+        String accessToken = WxApiClient.getAccessToken(mpAccount);
+        JSONObject result = WxApi.forDataCube(accessToken, type, start, end);
+        return ResultUtils.build(200, "SUCCESS",result) ;
     }
 
 
