@@ -32,7 +32,7 @@ public abstract class ApiBaseController<T extends Model>  implements BInterface<
     public RELResultUtils<T> table(Map<String, Object> params) {
         Integer pageIndex = (Integer) params.get("pageIndex");
         Integer pageSize = (Integer) params.get("pageSize");
-        return this.table("",pageIndex,pageSize);
+        return baseService.getTable("",pageIndex,pageSize,params);
     }
 
     @Override

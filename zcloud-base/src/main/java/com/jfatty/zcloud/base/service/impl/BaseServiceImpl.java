@@ -73,13 +73,24 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
     @Override
     public RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize) {
         Map<String, Object> map = new HashMap<String, Object>();
+        return  getTable(v,pageIndex,pageSize,map) ;
+    }
+
+    @Override
+    public RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize, Map<String, Object> params) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        for ( Map.Entry<String, Object> entry : params.entrySet() ) {
+            log.error(" ===============================>   根据 Map 参数分页查询  参数名 key: " + entry.getKey() + " 参数值 value: " + entry.getValue());
+            map.put(entry.getKey(), entry.getValue());
+        }
         //一定要注意起始数据是从第几条开始的
         map.put("pageIndex", (pageIndex - 1) * pageSize);
         map.put("pageSize", pageSize);
         List<T> list = baseMapper.getTable(map);
         Integer count = baseMapper.getTableCount(map);
-        if(CollectionUtils.isNotEmpty(list))
+        if (list != null && list.size() > 0) {
             return new RELResultUtils<T>(200,RELResultUtils.SUCCESS, list, count);
+        }
         return new RELResultUtils<T>(400, "没有查询到数据!", list);
     }
 }

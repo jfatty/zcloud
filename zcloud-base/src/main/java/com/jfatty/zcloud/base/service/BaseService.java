@@ -19,4 +19,14 @@ public interface BaseService<T  extends Model> extends IService<T> {
 
     RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize);
 
+    /**
+     * 描述 页面表格数据获取
+     * @param v
+     * @param pageIndex
+     * @param pageSize
+     * @param  params  封装参数
+     * @return
+     */
+    RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize, Map<String, Object> params);
+
 }
