@@ -1,0 +1,74 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新增操作</legend>
+    </fieldset>
+
+    <form class="layui-form"  id="fm" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">协议标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入协议标题" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">协议内容</label>
+            <div class="layui-input-block">
+                <textarea name="content" id="xycontent" placeholder="请输入协议内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">协议署名</label>
+            <div class="layui-input-block">
+                <input type="text" name="signature" id="signature" autocomplete="off" placeholder="请输入协议署名"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">协议类型</label>
+            <div class="layui-input-block">
+                <input type="text" id="type" name="type" lay-verify="required" placeholder="请输入协议类型"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本</label>
+            <div class="layui-input-block">
+                <input type="text" name="version" id="version"  placeholder="请输入版本" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用方</label>
+            <div class="layui-input-block">
+                <input type="text" name="user" id="user" autocomplete="off" placeholder="请输入使用方"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">操作码</label>
+            <div class="layui-input-block">
+                <input type="text" name="opcode" id="opcode" autocomplete="off" placeholder="请输入操作码"
+                       class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+
+    });
+</script>
