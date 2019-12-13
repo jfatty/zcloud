@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.PageConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.PageConfig">
+        <id column="id" property="id" />
+        <result column="title" property="title" />
+        <result column="pype" property="pype" />
+        <result column="use_client" property="useClient" />
+        <result column="use_sys" property="useSys" />
+        <result column="version" property="version" />
+        <result column="js_type" property="jsType" />
+        <result column="css_type" property="cssType" />
+        <result column="description" property="description" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+</mapper>

@@ -1,10 +1,7 @@
 package com.jfatty.zcloud.system.api;
 
 
-import com.jfatty.zcloud.base.utils.PrivilegeMenu;
-import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.base.utils.UUIDGenerator;
+import com.jfatty.zcloud.base.utils.*;
 import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Privilege;
@@ -20,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -44,6 +42,17 @@ public class ApiPrivilegeController extends ApiBaseSystemController<Privilege>  
         this.privilegeService = privilegeService;
     }
 
+    @Override
+    public RELResultUtils<Privilege> table(Map<String, Object> params) {
+        String key = "name" ;
+        String name = (String) params.get(key);
+        if(!StringUtils.isEmptyOrBlank(name)){
+            params.put(key,"%"+name+"%");
+        } else {
+            params.remove(key);
+        }
+        return super.table(params);
+    }
 
     @Override
     public RELResultUtils<Privilege> table(String v, Integer pageIndex, Integer pageSize) {
