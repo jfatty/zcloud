@@ -4,7 +4,7 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
-import com.jfatty.zcloud.system.feign.fallback.AccountUniqueFallbackFactory;
+import com.jfatty.zcloud.system.fallback.AccountUniqueFallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

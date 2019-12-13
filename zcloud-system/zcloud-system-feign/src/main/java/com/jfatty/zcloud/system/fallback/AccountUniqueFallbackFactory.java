@@ -1,4 +1,4 @@
-package com.jfatty.zcloud.system.feign.fallback;
+package com.jfatty.zcloud.system.fallback;
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
