@@ -1,0 +1,98 @@
+package com.jfatty.zcloud.gateway;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.gateway.handler.AsyncPredicate;
+import org.springframework.cloud.gateway.handler.predicate.AbstractRoutePredicateFactory;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.codec.HttpMessageReader;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequestDecorator;
+import org.springframework.web.reactive.function.server.HandlerStrategies;
+import org.springframework.web.reactive.function.server.ServerRequest;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+import static org.springframework.cloud.gateway.filter.AdaptCachedBodyGlobalFilter.CACHED_REQUEST_BODY_KEY;
+
+/**
+ * 描述
+ *
+ * @author jfatty on 2019/12/6
+ * @email jfatty@163.com
+ */
+@Slf4j
+public class RequestBodyRoutePredicateFactory extends AbstractRoutePredicateFactory<RequestBodyRoutePredicateFactory.Config> {
+
+
+    private static final List<HttpMessageReader<?>> messageReaders = HandlerStrategies.withDefaults().messageReaders();
+
+    public static final String REQUEST_BODY_ATTR = "requestBodyAttr";
+
+    public RequestBodyRoutePredicateFactory() {
+        super(Config.class);
+    }
+
+    @Override
+    public AsyncPredicate<ServerWebExchange> applyAsync(Config config) {
+        return exchange -> {
+            if (!"POST".equals(exchange.getRequest().getMethodValue())) {
+                return Mono.just(true);
+            }
+            Object cachedBody = exchange.getAttribute(REQUEST_BODY_ATTR);
+            if (cachedBody != null) {
+                try {
+                    return Mono.just(true);
+                } catch (ClassCastException e) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Predicate test failed because class in predicate does not match the cached body object", e);
+                    }
+                }
+                return Mono.just(true);
+            } else {
+                return DataBufferUtils.join(exchange.getRequest().getBody())
+                        .flatMap(dataBuffer -> {
+                            DataBufferUtils.retain(dataBuffer);
+                            Flux<DataBuffer> cachedFlux = Flux.defer(() -> Flux.just(dataBuffer.slice(0, dataBuffer.readableByteCount())));
+                            ServerHttpRequest mutatedRequest = new ServerHttpRequestDecorator(exchange.getRequest()) {
+                                @Override
+                                public Flux<DataBuffer> getBody() {
+                                    return cachedFlux;
+                                }
+                            };
+                            return ServerRequest.create(exchange.mutate().request(mutatedRequest).build(), messageReaders)
+                                    .bodyToMono(String.class)
+                                    .doOnNext(objectValue -> {
+                                        exchange.getAttributes().put(REQUEST_BODY_ATTR, objectValue);
+                                        exchange.getAttributes().put(CACHED_REQUEST_BODY_KEY, cachedFlux);
+                                    })
+                                    .map(objectValue -> true);
+                        });
+
+            }
+        };
+    }
+
+    @Override
+    public Predicate<ServerWebExchange> apply(Config config) {
+        throw new UnsupportedOperationException( "ReadBodyPredicateFactory is only async.");
+    }
+
+
+    public static class Config {
+        private String attr;
+
+        public String getAttr() {
+            return attr;
+        }
+
+        public void setAttr(String attr) {
+            this.attr = attr;
+        }
+    }
+
+}

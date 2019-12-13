@@ -1,5 +1,6 @@
 package com.jfatty.zcloud;
 
+import com.jfatty.zcloud.gateway.RequestBodyRoutePredicateFactory;
 import com.jfatty.zcloud.gateway.RequestTimeGatewayFilterFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,6 +18,11 @@ public class ZcloudGatewayApplication {
     @Bean
     public RequestTimeGatewayFilterFactory requestTimeGatewayFilterFactory() {
         return new RequestTimeGatewayFilterFactory();
+    }
+
+    @Bean
+    public RequestBodyRoutePredicateFactory requestBodyRoutePredicateFactory() {
+        return new RequestBodyRoutePredicateFactory();
     }
 
 }
