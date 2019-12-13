@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.SysPatientInfoMapper">
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.SysPatientInfo">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="card_num" property="cardNum" />
+        <result column="id_card" property="idCard" />
+    </resultMap>
+
+    <select id="add01"  resultType="java.lang.String">
+        SELECT  trace_id FROM zipkin_spans
+    </select>
+
+    <select id="add02" resultType="java.lang.String">
+       SELECT  id  FROM  config_info
+    </select>
+
+
+    <insert id="addTeacher" >
+        INSERT INTO teacher (tname,tage) values ( '张三 ',20)
+    </insert>
+
+    <insert id="addStudent" >
+        INSERT INTO student (sname,sage) values ( '李四 ',12)
+    </insert>
+    
+    <select id="getTableCount" resultType="java.lang.Integer" >
+        SELECT COUNT(0) FROM dbo.xt_brxx
+    </select>
+
+    <!--查询返回map集合-->
+    <select  id="getMap" resultType="java.util.HashMap" parameterType="map" >
+        SELECT
+            *
+        FROM
+            (
+                SELECT
+                    TOP ${pageSize} *
+                FROM
+                    (
+                        SELECT
+                            TOP ${pageIndex} *
+                        FROM
+                            dbo.xt_brxx
+                        ORDER BY
+                            jdrq DESC
+                    )
+                    AS temp_sum_brxx
+                ORDER BY jdrq ASC
+            ) temp_brxx
+        ORDER BY
+            jdrq DESC
+    </select>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        SELECT
+            brid AS id , xm AS name , xb AS sex , ckh AS card_num , sfzh AS id_card
+        FROM
+            (
+                SELECT
+                    TOP ${pageSize} *
+                FROM
+                    (
+                        SELECT
+                            TOP ${pageIndex} *
+                        FROM
+                            dbo.xt_brxx
+                        ORDER BY
+                            jdrq DESC
+                    )
+                    AS temp_sum_brxx
+                ORDER BY jdrq ASC
+            ) temp_brxx
+        ORDER BY
+            jdrq DESC
+    </select>
+
+
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        SELECT COUNT(0) FROM dbo.xt_brxx
+    </select>
+
+
+
+</mapper>

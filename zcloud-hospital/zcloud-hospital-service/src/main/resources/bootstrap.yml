@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: zcloud-hospital-service
+  cloud:
+    nacos:
+      config:
+        server-addr: nacos.zealsoft.com.cn:8848
+        file-extension: yaml
+  profiles:
+    active: dev
