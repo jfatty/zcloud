@@ -9,6 +9,8 @@ import com.alipay.api.response.AlipayUserUserinfoShareResponse;
 import com.jfatty.zcloud.alipay.entity.AlipayConfig;
 import com.jfatty.zcloud.alipay.entity.AlipayGzuserinfo;
 import com.jfatty.zcloud.alipay.interfaces.IAlipayGzuserinfo;
+import com.jfatty.zcloud.alipay.req.AlipayGzuserinfoReq;
+import com.jfatty.zcloud.alipay.res.AlipayGzuserinfoRes;
 import com.jfatty.zcloud.alipay.service.AlipayConfigService;
 import com.jfatty.zcloud.alipay.service.AlipayGzuserinfoService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +30,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @Slf4j
 @RestController
-public class ApiAlipayGzuserinfoController extends ApiBaseAlipayController<AlipayGzuserinfo>  implements IAlipayGzuserinfo {
+@RequestMapping(value={"/api/alipayGzuserinfo"})
+public class ApiAlipayGzuserinfoController extends ApiBaseAlipayController<AlipayGzuserinfo,AlipayGzuserinfoReq,AlipayGzuserinfoRes>  implements IAlipayGzuserinfo {
 
     private AlipayGzuserinfoService alipayGzuserinfoService ;
 
@@ -47,7 +50,7 @@ public class ApiAlipayGzuserinfoController extends ApiBaseAlipayController<Alipa
      * @param response
      * @throws Exception
      */
-    @RequestMapping(params = "userinfo",method ={RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(params = "/userinfo",method ={RequestMethod.GET, RequestMethod.POST})
     public Object userinfo(HttpServletRequest request, HttpServletResponse response)throws Exception{
         // 支付宝用户号
         String app_id = request.getParameter("app_id");

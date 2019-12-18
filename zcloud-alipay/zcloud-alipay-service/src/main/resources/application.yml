@@ -4,7 +4,7 @@ server:
       context-path: /alipay
 #日志相关配置
 logging:
-  config: classpath:logback-win.xml
+  #config: classpath:logback-win.xml
   level:
       root: DEBUG  # DEBUG INFO WARN ERROR
 spring:
