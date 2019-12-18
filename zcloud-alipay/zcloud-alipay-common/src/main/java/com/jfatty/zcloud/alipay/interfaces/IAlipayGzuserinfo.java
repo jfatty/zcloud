@@ -1,6 +1,8 @@
 package com.jfatty.zcloud.alipay.interfaces;
 
 import com.jfatty.zcloud.alipay.entity.AlipayGzuserinfo;
+import com.jfatty.zcloud.alipay.req.AlipayGzuserinfoReq;
+import com.jfatty.zcloud.alipay.res.AlipayGzuserinfoRes;
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 @RequestMapping(value={"/alipayGzuserinfo"})
-public interface IAlipayGzuserinfo  extends BInterface<AlipayGzuserinfo> {
-
+public interface IAlipayGzuserinfo  extends BInterface<AlipayGzuserinfo,AlipayGzuserinfoReq,AlipayGzuserinfoRes> {
 
 
 }
