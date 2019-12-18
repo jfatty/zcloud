@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ElectronicDocMapper">
+
+    <!--
+	 	2018年4月12日
+		 获取我的服务单列表信息
+	  -->
+    <select id="getElectronicDocList" resultType="com.jfatty.zcloud.hospital.vo.ElectronicDoc" parameterType="map">
+        exec dbo.pro_web_service #{openId},#{openIdType},#{startTime},#{endTime}
+    </select>
+
+    <!--
+     2019年6月18日
+     获取门诊缴费详情列表
+    -->
+    <select id="getElectronicDocDetail" resultType="com.jfatty.zcloud.hospital.vo.ElectronicDocDetail" parameterType="map">
+        exec dbo.pro_web_service_detail #{openId},#{openIdType},#{brbh},#{sfh}
+    </select>
+
+
+</mapper>

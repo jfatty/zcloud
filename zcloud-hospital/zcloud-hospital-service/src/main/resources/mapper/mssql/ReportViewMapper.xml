@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ReportViewMapper">
+
+    <!--
+	 	2018年11月05日
+		 报告任务  返回结果是列表
+	  -->
+    <select id="getWebReportMission" resultType="com.jfatty.zcloud.hospital.vo.WebReportMission">
+        exec dbo.pro_web_report_mission #{openId},#{openIdType}
+    </select>
+
+    <!--
+       2018年11月05日
+       检验  检查 报告列表  返回结果是列表
+     -->
+    <select id="getWebReportList" resultType="com.jfatty.zcloud.hospital.vo.WebReportList">
+        exec dbo.pro_web_report_list #{openId},#{openIdType},#{bglx},#{brbh}
+    </select>
+
+
+    <!--
+	 	2018年11月05日
+		 检查报告内容
+	  -->
+    <select id="getWebPacsReport" resultType="com.jfatty.zcloud.hospital.vo.WebPacsReport">
+        exec dbo.pro_web_pacs_report #{openId},#{openIdType},#{djh}
+    </select>
+
+
+    <!--
+	 	2018年11月05日
+		 检验报告表头   一条信息
+	  -->
+    <select id="getWebReportListHead" resultType="com.jfatty.zcloud.hospital.vo.WebReportLisHead">
+        exec dbo.pro_web_lis_head #{openId},#{openIdType},#{sn}
+    </select>
+
+
+    <!--
+	 	2018年11月05日
+		 检验报告内容 数据时列表形式
+	  -->
+    <select id="getWebReportListDetail" resultType="com.jfatty.zcloud.hospital.vo.WebReportLisDetail">
+        exec dbo.pro_web_lis_detail #{openId},#{openIdType},#{sn}
+    </select>
+
+
+</mapper>

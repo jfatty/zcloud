@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.RegistrationMapper">
+
+
+
+    <!--预约科室信息-->
+    <select id="getHosDepts" resultType="com.jfatty.zcloud.hospital.vo.HosDept">
+        exec dbo.pro_web_yyks #{openId},#{openIdType}
+    </select>
+
+
+
+    <select id="getHosClazzs" resultType="com.jfatty.zcloud.hospital.vo.HosClazz">
+        exec dbo.pro_web_yybc #{openId},#{openIdType}
+    </select>
+
+    <select id="checkHoliday" resultType="com.jfatty.zcloud.hospital.vo.HosHoliday">
+        exec dbo.pro_web_yyjjr #{openId},#{openIdType},#{checkTime}
+    </select>
+
+    <!--挂号预约-->
+    <select id="preRegistered" resultType="com.jfatty.zcloud.hospital.vo.PreRegistered">
+        exec dbo.pro_web_mzyy #{openId},#{openIdType},#{brid},#{name},#{sex},#{idCard},#{tel},#{ksid},#{preDate},#{preTime}
+    </select>
+
+</mapper>

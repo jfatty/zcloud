@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ComplexPayMapper">
+
+
+    <!--查询住院预交与门诊缴费人员名单-->
+    <select id="getWebMissionList" resultType="com.jfatty.zcloud.hospital.vo.WebMission">
+        exec dbo.pro_web_mission #{openId},#{openIdType}
+    </select>
+
+
+
+    <!--
+        2018年3月27日
+        查询就诊人当前住院详情 就是之前已经缴费的详细信息
+     -->
+    <select id="getZYPre" resultType="com.jfatty.zcloud.hospital.vo.InHospitalInfo" parameterType="map">
+		exec dbo.pro_web_zyxx #{openId},#{openIdType},#{djh},#{Ext1},#{Ext2},#{Ext3}
+	</select>
+
+
+    <!--调用存储过程 查询门诊缴费单详情 通过费用单号-->
+    <select id="getWebmzDetail" resultType="com.jfatty.zcloud.hospital.vo.OutpatientDetail">
+		exec dbo.pro_web_mz_detail #{openId},#{openIdType},#{fydh}
+	</select>
+
+    <!--调用存储过程 查询就诊人待缴费单信息-->
+    <select id="getWebmzList" resultType="com.jfatty.zcloud.hospital.vo.WebmzList">
+		exec dbo.pro_web_mz_list #{openId},#{openIdType},#{djh}
+	</select>
+
+    <!--
+     * 通过  outTradeNo 查询订单情况  jfatty 2017-11-19
+     * @param outTradeNo
+     -->
+    <select id="getPayRecordByOutTradeNo" resultType="com.jfatty.zcloud.hospital.vo.ComplexPay">
+		select * from numo.t_pay where outTradeNo = #{outTradeNo}
+	</select>
+
+</mapper>

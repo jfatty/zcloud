@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 协议或用户需知表 服务实现类
@@ -26,5 +28,10 @@ public class ProtocolServiceImpl extends BaseHospitalServiceImpl<Protocol, Proto
     public void setProtocolMapper(ProtocolMapper protocolMapper) {
         super.setBaseMapper(protocolMapper);
         this.protocolMapper = protocolMapper;
+    }
+
+    @Override
+    public List<Protocol> getByDiffs(String appId, String version, String opcode) {
+        return protocolMapper.getByDiffs(version,opcode);
     }
 }

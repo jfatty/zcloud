@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -26,5 +28,10 @@ public class BannerImgServiceImpl extends BaseHospitalServiceImpl<BannerImg, Ban
     public void setBannerImgMapper(BannerImgMapper bannerImgMapper) {
         super.setBaseMapper(bannerImgMapper);
         this.bannerImgMapper = bannerImgMapper;
+    }
+
+    @Override
+    public List<BannerImg> getDiffBannerImgs(String appId, String version, String position, String module) {
+        return bannerImgMapper.getDiffBannerImgs(version,position, module);
     }
 }

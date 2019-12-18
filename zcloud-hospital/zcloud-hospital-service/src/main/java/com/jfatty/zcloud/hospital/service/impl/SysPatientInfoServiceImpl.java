@@ -31,14 +31,14 @@ public class SysPatientInfoServiceImpl extends BaseHospitalServiceImpl<SysPatien
         this.sysPatientInfoMapper = sysPatientInfoMapper;
     }
 
-    @TargetDataSource(name="hfxzxyy")
+    @TargetDataSource(name="mssql")
     @Override
     public RELResultUtils<SysPatientInfo> getTable(String v, Integer pageIndex, Integer pageSize) {
         Map<String, Object> map = new HashMap<String, Object>();
         return  getTable(v,pageIndex,pageSize,map) ;
     }
 
-    @TargetDataSource(name="hfxzxyy")
+    @TargetDataSource(name="mssql")
     @Override
     public RELResultUtils<SysPatientInfo> getTable(String v, Integer pageIndex, Integer pageSize, Map<String, Object> params) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -57,7 +57,7 @@ public class SysPatientInfoServiceImpl extends BaseHospitalServiceImpl<SysPatien
         return new RELResultUtils<SysPatientInfo>(400, "没有查询到数据!", list);
     }
 
-    @TargetDataSource(name="hfxzxyy")
+    @TargetDataSource(name="mssql")
     @Override
     public List<Map<String, Object>> getMap(Integer pageIndex, Integer pageSize) {
         Map<String, Object> map = new HashMap<String, Object>();

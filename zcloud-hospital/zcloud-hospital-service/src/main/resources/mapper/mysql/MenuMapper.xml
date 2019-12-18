@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Menu">
         <id column="id" property="id" />
         <result column="title" property="title" />
+        <result column="nav_id" property="navId" />
         <result column="module" property="module" />
         <result column="route" property="route" />
         <result column="layout_mode" property="layoutMode" />
@@ -26,6 +27,7 @@
         <result column="sort_num" property="sortNum" />
         <result column="version" property="version" />
         <result column="display" property="display" />
+        <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />
         <result column="create_operator" property="createOperator" />
@@ -55,4 +57,22 @@
             and realm = #{realm}
         </if>
     </select>
+
+
+    <select id="getDiffMenus" resultMap="BaseResultMap" >
+        select
+          *
+        from hospital_menu
+        where 1 = 1
+        <if test="version != null" >
+            and version = #{version}
+        </if>
+        <if test="position != null" >
+            and pos = #{position}
+        </if>
+        <if test="navId != null" >
+            and nav_id = #{navId}
+        </if>
+    </select>
+
 </mapper>

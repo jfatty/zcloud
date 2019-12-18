@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.WebPriceinfoMapper">
+
+
+    <!--
+	 	2018年4月16日
+		 物价查询 exec dbo.pro_wechar_wjcx #{xmmc},#{pageIndex},#{pageSize}
+		 exec dbo.pro_wechar_wjcx #{xmmc}
+		 2019年9月29日 exec pro_web_priceinfo 'test',1,1,'葡萄糖'
+	  -->
+    <select id="getWebPriceinfo" resultType="com.jfatty.zcloud.hospital.vo.WebPriceinfo" parameterType="map">
+		exec dbo.pro_web_priceinfo  #{openId},#{openIdType},#{cxlb},#{xmmc}
+	</select>
+</mapper>

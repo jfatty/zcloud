@@ -47,4 +47,14 @@
         </if>
     </select>
 
+    <select id="getDiffBannerImgs" resultMap="BaseResultMap" >
+        select
+         *
+        from hospital_banner_img
+        where 1 = 1
+        <if test="version != null" >
+            and version = #{version}
+        </if>
+    </select>
+
 </mapper>

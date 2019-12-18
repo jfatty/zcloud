@@ -43,4 +43,17 @@
         </if>
     </select>
 
+    <select id="getByDiffs" resultMap="BaseResultMap" >
+        select
+        *
+        from hospital_protocol
+        where 1 = 1
+        <if test="version != null" >
+            and version = #{version}
+        </if>
+        <if test="opcode != null" >
+            and opcode = #{opcode}
+        </if>
+    </select>
+
 </mapper>

@@ -2,6 +2,9 @@ package com.jfatty.zcloud.hospital.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.hospital.entity.Protocol;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.jfatty.zcloud.hospital.entity.Protocol;
  */
 public interface ProtocolMapper extends IBaseMapper<Protocol> {
 
+    List<Protocol> getByDiffs(@Param("version") String version,@Param("opcode")  String opcode);
 }

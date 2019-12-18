@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 智慧医疗首页菜单表 服务实现类
@@ -25,5 +27,10 @@ public class MenuServiceImpl extends BaseHospitalServiceImpl<Menu, MenuMapper> i
     public void setMenuMapper(MenuMapper menuMapper) {
         super.setBaseMapper(menuMapper);
         this.menuMapper = menuMapper;
+    }
+
+    @Override
+    public List<Menu> getDiffMenus(String appId, String version, String position, String navId) {
+        return menuMapper.getDiffMenus(version,position,navId) ;
     }
 }

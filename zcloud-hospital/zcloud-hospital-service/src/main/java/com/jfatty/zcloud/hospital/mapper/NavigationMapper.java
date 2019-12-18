@@ -2,6 +2,9 @@ package com.jfatty.zcloud.hospital.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.hospital.entity.Navigation;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.jfatty.zcloud.hospital.entity.Navigation;
  */
 public interface NavigationMapper extends IBaseMapper<Navigation> {
 
+    List<Navigation> getDiffNavigations(@Param("version") String version,@Param("position")  String position,@Param("scope")  String scope);
 }

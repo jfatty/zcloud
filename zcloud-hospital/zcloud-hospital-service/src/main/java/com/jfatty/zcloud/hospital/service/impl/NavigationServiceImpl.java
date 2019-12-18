@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -25,5 +27,10 @@ public class NavigationServiceImpl extends BaseHospitalServiceImpl<Navigation, N
     public void setNavigationMapper(NavigationMapper navigationMapper) {
         super.setBaseMapper(navigationMapper);
         this.navigationMapper = navigationMapper;
+    }
+
+    @Override
+    public List<Navigation> getDiffNavigations(String appId, String version, String position, String scope) {
+        return navigationMapper.getDiffNavigations(version,position,scope);
     }
 }

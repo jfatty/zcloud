@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ComplexPatientMapper">
+
+
+
+    <!--调用存储过程-->
+    <!--获取已经绑定病人信息列表-->
+    <select id="getWebRegPatientList" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map" >
+		exec dbo.pro_web_reg_list #{openId},#{openIdType}
+	</select>
+
+    <!--调用存储过程 添加就诊人-->
+    <select id="webRegPatient" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map"  >
+		exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{openId},#{openIdType}
+	</select>
+
+    <!--调用存储过程 添加就诊人 携带就诊卡号 -->
+    <select id="webRegOtherPatient" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map"  >
+        exec dbo.pro_web_reg_other #{idCard},#{name},#{tel},#{Type},#{No},#{openId},#{openIdType}
+    </select>
+
+    <!--通过HIS系统中的病人ID 查询单个就诊人详情-->
+    <select id="getNumoPatientInfo" resultType="com.jfatty.zcloud.hospital.vo.NumoPatientInfo">
+		select
+			id,
+			name,
+			age,
+			gender,
+			tel,
+			idCard,
+			address,
+			patId,
+			hisCardNo,
+			hisCardType,
+			hisCardTypeCode,
+			relationship,
+			nation
+			from
+			numo.t_patient where patId = #{brid}
+    </select>
+
+
+
+    <!--操作numo库 添加就诊人 以用户身份证为依据判断——若就诊人在系统中已经存在，则更新就诊人信息，若不存在，则新增就诊人信息。 -->
+    <update id="addNumoPatientInfo">
+        BEGIN
+        DECLARE @v_count int;
+        DECLARE @v_userId int;
+        DECLARE @v_patientId int;
+        select @v_count = count(0) from numo.t_patient where ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
+        IF (@v_count <![CDATA[>]]> 0)<!-- 已经存在，则修改 -->
+        BEGIN
+        update numo.t_patient set
+        name        = #{numoPatientInfo.name},
+        gender      = #{numoPatientInfo.gender},
+        tel         = #{numoPatientInfo.tel},
+        address     = #{numoPatientInfo.address},
+        updatedBy   = #{openId},
+        updatedTime = getDate(),
+        patId       = #{numoPatientInfo.patId},
+        hisCardNo   = #{numoPatientInfo.hisCardNo},
+        hisCardType = #{numoPatientInfo.hisCardType},
+        hisCardTypeCode = #{numoPatientInfo.hisCardTypeCode}
+        where
+        ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
+        END;
+        ELSE<!-- 不存在，则新增 -->
+        BEGIN
+        insert into numo.t_patient(
+        name,
+        gender,
+        tel,
+        idCard,
+        address,
+        createdBy,
+        createdTime,
+        updatedBy,
+        updatedTime,
+        patId,
+        hisCardNo,
+        hisCardType,
+        hisCardTypeCode
+        )values(
+        #{numoPatientInfo.name},
+        #{numoPatientInfo.gender},
+        #{numoPatientInfo.tel},
+        #{numoPatientInfo.idCard},
+        #{numoPatientInfo.address},
+        #{openId},
+        getDate(),
+        #{openId},
+        getDate(),
+        #{numoPatientInfo.patId},
+        #{numoPatientInfo.hisCardNo},
+        #{numoPatientInfo.hisCardType},
+        #{numoPatientInfo.hisCardTypeCode}
+        );
+        END;
+        select @v_userId = id from numo.t_user where openId = #{openId} and userType = #{openIdType};
+        select @v_patientId = id from numo.t_patient where ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
+        select @v_count = count(0) from numo.t_user_patient where userId = @v_userId and patientId = @v_patientId;
+        if(@v_count <![CDATA[<]]> 1)
+        BEGIN
+        insert into numo.t_user_patient (userId, patientId, createdBy, createdTime)values(@v_userId, @v_patientId, #{openId}, getDate());
+        END;
+        END;
+    </update>
+
+    <!--删除就诊人-->
+    <select id="webUnReg" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient">
+        exec dbo.pro_web_unreg #{idCard},#{name},#{openId},#{openIdType}
+    </select>
+
+    <!--解绑用户和就诊人-->
+    <!--解除用户与病人之间的绑定关系-->
+    <delete id="localUnBind" >
+		delete from numo.t_user_patient where patientId=#{pid} and userId = ( select id from numo.t_user where openId=#{openId} and userType=#{openIdType} )
+	</delete>
+
+
+</mapper>
