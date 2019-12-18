@@ -3,6 +3,8 @@ package com.jfatty.zcloud.hospital.interfaces;
 
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.hospital.entity.Menu;
+import com.jfatty.zcloud.hospital.req.MenuReq;
+import com.jfatty.zcloud.hospital.res.MenuRes;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -12,6 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 @RequestMapping(value={"/menu"})
-public interface IMenu extends BInterface<Menu> {
+public interface IMenu extends BInterface<Menu,MenuReq,MenuRes> {
 
 }

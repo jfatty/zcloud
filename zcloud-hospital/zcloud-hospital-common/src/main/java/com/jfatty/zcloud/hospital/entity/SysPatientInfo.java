@@ -25,4 +25,8 @@ public class SysPatientInfo  extends Model<SysPatientInfo> {
 
     private String idCard ;
 
+    private  String tel ;
+
+    private  String address ;
+
 }

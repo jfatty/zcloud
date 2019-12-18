@@ -33,6 +33,11 @@ public class Menu extends Model<Menu> {
     private String title;
 
     /**
+     * 所属导航ID没有的情况下可以为空
+     */
+    private String navId ;
+
+    /**
      * 模块 例如首页 个人中心
      */
     private String module;
@@ -126,6 +131,11 @@ public class Menu extends Model<Menu> {
      * 菜单版本
      */
     private String version;
+
+    /**
+     * 使用状态0表示正常使用-1表示维护中-2表示建设中...
+     */
+    private Integer status ;
 
     /**
      * 是否显示
