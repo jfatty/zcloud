@@ -21,7 +21,7 @@ public class RELResultUtils <T> implements Serializable {
     public static final String SUCCESS = "SUCCESS" ;
 
     // 响应业务状态
-    private Integer status;
+    private Integer code;
 
     // 响应消息
     private String msg;
@@ -38,8 +38,17 @@ public class RELResultUtils <T> implements Serializable {
 
     }
 
-    public RELResultUtils(Integer status, String msg, List<T> list) {
-        this.status = status;
+    public static RELResultUtils success() {
+        return new RELResultUtils(200, SUCCESS, null);
+    }
+
+    public static RELResultUtils success(String msg) {
+        return new RELResultUtils(200, msg, null);
+    }
+
+
+    public RELResultUtils(Integer code, String msg, List<T> list) {
+        this.code = code;
         this.msg = msg;
         this.list = list;
         if (list != null) {
@@ -52,11 +61,11 @@ public class RELResultUtils <T> implements Serializable {
 
     }
 
-    public RELResultUtils(Integer status, String msg, List<T> list, Integer count) {
-        this.status = status;
+    public RELResultUtils(Integer code, String msg, List<T> list, Integer count) {
+        this.code = code;
         this.msg = msg;
         this.list = list;
-        this.count = count==null?0:count;
+        this.count = count == null?0:count;
         if (list != null) {
             this.rel = (count > 0);
         } else {
@@ -66,21 +75,21 @@ public class RELResultUtils <T> implements Serializable {
     }
 
     public RELResultUtils(List<T> list) {
-        this.status = 200;
+        this.code = 200;
         this.msg = "OK";
         this.list = list;
     }
 
     public Boolean isOK() {
-        return this.status == 200;
+        return this.code == 200;
     }
 
-    public Integer getStatus() {
-        return status;
+    public Integer getCode() {
+        return code;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setCode(Integer code) {
+        this.code = code;
     }
 
     public String getMsg() {

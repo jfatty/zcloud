@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.base.api;
 
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.jfatty.zcloud.base.dto.BaseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ import java.util.UUID;
  * @email jfatty@163.com
  */
 @Slf4j
-public class ApiBaseFileController<T extends Model> extends ApiBaseController<T> {
+public class ApiBaseFileController<T extends Model,P extends BaseDTO,R extends BaseDTO > extends ApiBaseController<T,P,R> {
 
 
     /**
