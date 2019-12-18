@@ -1,5 +1,7 @@
 package com.jfatty.zcloud.base.controller;
 
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.jfatty.zcloud.base.dto.BaseDTO;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +17,17 @@ import java.util.Map;
  * @author jfatty on 2019/12/4
  * @email jfatty@163.com
  */
-public interface IBaseController<T> {
+public interface IBaseController<T extends Model,P extends BaseDTO,R extends BaseDTO > {
 
 
     //列表 增删改查 其余接口子类自定义
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<T> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<R> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<T> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<R> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -34,16 +36,16 @@ public interface IBaseController<T> {
     Object  list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<T> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v) ;
+    List<R> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v) ;
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    Object save(@RequestBody T entity) ;
+    Object save(@RequestBody P entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     Object view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    Object edit(@RequestBody T entity) ;
+    Object edit(@RequestBody P entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     Object delete(@RequestBody Map<String,Object> params) ;
