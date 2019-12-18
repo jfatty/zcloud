@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.hospital.entity.Protocol;
+import com.jfatty.zcloud.hospital.req.ProtocolReq;
+import com.jfatty.zcloud.hospital.res.ProtocolRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +22,15 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-hospital-service" , path = "/api/protocol" )
-public interface ProtocolFeignClient extends BInterface<Protocol> {
+public interface ProtocolFeignClient extends BInterface<Protocol,ProtocolReq,ProtocolRes> {
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<Protocol> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<ProtocolRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<Protocol> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<ProtocolRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                                      @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                                      @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -36,16 +38,16 @@ public interface ProtocolFeignClient extends BInterface<Protocol> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<Protocol> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<ProtocolRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody Protocol entity) ;
+    ResultUtils save(@RequestBody ProtocolReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody Protocol entity) ;
+    ResultUtils edit(@RequestBody ProtocolReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;
