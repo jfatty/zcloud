@@ -1,12 +1,11 @@
 package com.jfatty.zcloud.wechat.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.wechat.entity.TplMsgText;
 import com.jfatty.zcloud.wechat.entity.UserTag;
 import com.jfatty.zcloud.wechat.feign.UserTagFeignClient;
-import com.jfatty.zcloud.wechat.interfaces.IUserTag;
+import com.jfatty.zcloud.wechat.req.UserTagReq;
+import com.jfatty.zcloud.wechat.res.UserTagRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/userTag"})
-public class UserTagController implements IBaseController<UserTag> {
+public class UserTagController implements IBaseController<UserTag,UserTagReq,UserTagRes> {
 
     @Autowired
     private UserTagFeignClient userTagFeignClient ;
 
     @Override
-    public RELResultUtils<UserTag> table(Map<String, Object> params) {
+    public RELResultUtils<UserTagRes> table(Map<String, Object> params) {
         return userTagFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<UserTag> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<UserTagRes> table(String v, Integer pageIndex, Integer pageSize) {
         return userTagFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -45,12 +44,12 @@ public class UserTagController implements IBaseController<UserTag> {
     }
 
     @Override
-    public List<UserTag> list(Long v) {
+    public List<UserTagRes> list(Long v) {
         return userTagFeignClient.list(v);
     }
 
     @Override
-    public Object save(UserTag entity) {
+    public Object save(UserTagReq entity) {
         return userTagFeignClient.save(entity);
     }
 
@@ -60,7 +59,7 @@ public class UserTagController implements IBaseController<UserTag> {
     }
 
     @Override
-    public Object edit(UserTag entity) {
+    public Object edit(UserTagReq entity) {
         return userTagFeignClient.edit(entity);
     }
 

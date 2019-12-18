@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.PageConfig;
 import com.jfatty.zcloud.system.feign.PageConfigFeignClient;
+import com.jfatty.zcloud.system.req.PageConfigReq;
+import com.jfatty.zcloud.system.res.PageConfigRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/pageConfig")
-public class PageConfigController  implements IBaseController<PageConfig> {
+public class PageConfigController  implements IBaseController<PageConfig,PageConfigReq,PageConfigRes> {
 
     @Autowired
     private PageConfigFeignClient pageConfigFeignClient;
 
     @Override
-    public RELResultUtils<PageConfig> table(Map<String, Object> params) {
+    public RELResultUtils<PageConfigRes> table(Map<String, Object> params) {
         return pageConfigFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<PageConfig> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<PageConfigRes> table(String v, Integer pageIndex, Integer pageSize) {
         return pageConfigFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -46,12 +48,12 @@ public class PageConfigController  implements IBaseController<PageConfig> {
     }
 
     @Override
-    public List<PageConfig> list(Long v) {
+    public List<PageConfigRes> list(Long v) {
         return pageConfigFeignClient.list(v);
     }
 
     @Override
-    public Object save(PageConfig entity) {
+    public Object save(PageConfigReq entity) {
         return pageConfigFeignClient.save(entity);
     }
 
@@ -61,7 +63,7 @@ public class PageConfigController  implements IBaseController<PageConfig> {
     }
 
     @Override
-    public Object edit(PageConfig entity) {
+    public Object edit(PageConfigReq entity) {
         return pageConfigFeignClient.edit(entity);
     }
 

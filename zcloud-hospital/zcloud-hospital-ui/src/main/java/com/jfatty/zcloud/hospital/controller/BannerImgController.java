@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.hospital.entity.BannerImg;
 import com.jfatty.zcloud.hospital.feign.BannerImgFeignClient;
+import com.jfatty.zcloud.hospital.req.BannerImgReq;
+import com.jfatty.zcloud.hospital.res.BannerImgRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +28,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/bannerImg")
-public class BannerImgController implements IBaseController<BannerImg> {
+public class BannerImgController implements IBaseController<BannerImg,BannerImgReq,BannerImgRes> {
 
     @Autowired
     private BannerImgFeignClient bannerImgFeignClient ;
 
     @Override
-    public RELResultUtils<BannerImg> table(Map<String, Object> params) {
+    public RELResultUtils<BannerImgRes> table(Map<String, Object> params) {
         return bannerImgFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<BannerImg> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<BannerImgRes> table(String v, Integer pageIndex, Integer pageSize) {
         return bannerImgFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -47,12 +49,12 @@ public class BannerImgController implements IBaseController<BannerImg> {
     }
 
     @Override
-    public List<BannerImg> list(Long v) {
+    public List<BannerImgRes> list(Long v) {
         return bannerImgFeignClient.list(v);
     }
 
     @Override
-    public Object save(BannerImg entity) {
+    public Object save(BannerImgReq entity) {
         return bannerImgFeignClient.save(entity);
     }
 
@@ -62,7 +64,7 @@ public class BannerImgController implements IBaseController<BannerImg> {
     }
 
     @Override
-    public Object edit(BannerImg entity) {
+    public Object edit(BannerImgReq entity) {
         return bannerImgFeignClient.edit(entity);
     }
 

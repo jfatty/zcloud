@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.hospital.entity.Protocol;
 import com.jfatty.zcloud.hospital.feign.ProtocolFeignClient;
+import com.jfatty.zcloud.hospital.req.ProtocolReq;
+import com.jfatty.zcloud.hospital.res.ProtocolRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/protocol")
-public class ProtocolController implements IBaseController<Protocol> {
+public class ProtocolController implements IBaseController<Protocol,ProtocolReq,ProtocolRes> {
 
     @Autowired
     private ProtocolFeignClient protocolFeignClient ;
 
     @Override
-    public RELResultUtils<Protocol> table(Map<String, Object> params) {
+    public RELResultUtils<ProtocolRes> table(Map<String, Object> params) {
         return protocolFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Protocol> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<ProtocolRes> table(String v, Integer pageIndex, Integer pageSize) {
         return protocolFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -46,12 +48,12 @@ public class ProtocolController implements IBaseController<Protocol> {
     }
 
     @Override
-    public List<Protocol> list(Long v) {
+    public List<ProtocolRes> list(Long v) {
         return protocolFeignClient.list(v);
     }
 
     @Override
-    public Object save(Protocol entity) {
+    public Object save(ProtocolReq entity) {
         return protocolFeignClient.save(entity);
     }
 
@@ -61,7 +63,7 @@ public class ProtocolController implements IBaseController<Protocol> {
     }
 
     @Override
-    public Object edit(Protocol entity) {
+    public Object edit(ProtocolReq entity) {
         return protocolFeignClient.edit(entity);
     }
 

@@ -1,8 +1,12 @@
 package com.jfatty.zcloud.system.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfatty.zcloud.base.dto.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 /**
  * 描述
@@ -18,4 +22,93 @@ public class AddressDTO<T extends BaseDTO> extends BaseDTO {
      */
     @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
     private String id ;
+
+    /**
+     * 所属人ID
+     */
+    private String belongId;
+
+    /**
+     * 国家
+     */
+    private String country;
+
+    /**
+     * 省
+     */
+    private String province;
+
+    /**
+     * 市州
+     */
+    private String city;
+
+    /**
+     * 区县
+     */
+    private String area;
+
+    /**
+     * 乡
+     */
+    private String ownship;
+
+    /**
+     * 村
+     */
+    private String village;
+
+    /**
+     * 户籍
+     */
+    private String household;
+
+    /**
+     * 邮编
+     */
+    private String postcode;
+
+    /**
+     * 地址类型
+     */
+    private String addrType;
+
+    /**
+     * 描述备注
+     */
+    private String description;
+
+    /**
+     * 域值
+     */
+    private String realm;
+
+    /**
+     * 使用状态
+     */
+    private Integer state;
+
+    /**
+     * 创建人
+     */
+    private String createOperator;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新人
+     */
+    private String updateOperator;
+
+    /**
+     * 更新时间
+     */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 }

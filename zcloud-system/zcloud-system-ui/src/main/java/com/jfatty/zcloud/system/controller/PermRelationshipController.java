@@ -1,13 +1,12 @@
 package com.jfatty.zcloud.system.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
-import com.jfatty.zcloud.system.entity.Org;
 import com.jfatty.zcloud.system.entity.PermRelationship;
 import com.jfatty.zcloud.system.feign.PermRelationshipClient;
+import com.jfatty.zcloud.system.req.PermRelationshipReq;
+import com.jfatty.zcloud.system.res.PermRelationshipRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,18 +28,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/perm"})
-public class PermRelationshipController implements IBaseController<PermRelationship> {
+public class PermRelationshipController implements IBaseController<PermRelationship,PermRelationshipReq,PermRelationshipRes> {
 
     @Autowired
     private PermRelationshipClient permRelationshipClient ;
 
     @Override
-    public RELResultUtils<PermRelationship> table(Map<String, Object> params) {
+    public RELResultUtils<PermRelationshipRes> table(Map<String, Object> params) {
         return permRelationshipClient.table(params);
     }
 
     @Override
-    public RELResultUtils<PermRelationship> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<PermRelationshipRes> table(String v, Integer pageIndex, Integer pageSize) {
         return permRelationshipClient.table(v, pageIndex, pageSize);
     }
 
@@ -50,12 +49,12 @@ public class PermRelationshipController implements IBaseController<PermRelations
     }
 
     @Override
-    public List<PermRelationship> list(Long v) {
+    public List<PermRelationshipRes> list(Long v) {
         return permRelationshipClient.list(v);
     }
 
     @Override
-    public Object save(PermRelationship entity) {
+    public Object save(PermRelationshipReq entity) {
         return permRelationshipClient.save(entity);
     }
 
@@ -65,7 +64,7 @@ public class PermRelationshipController implements IBaseController<PermRelations
     }
 
     @Override
-    public Object edit(PermRelationship entity) {
+    public Object edit(PermRelationshipReq entity) {
         return permRelationshipClient.edit(entity);
     }
 

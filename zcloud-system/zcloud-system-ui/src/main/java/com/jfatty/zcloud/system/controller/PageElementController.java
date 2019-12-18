@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.PageElement;
 import com.jfatty.zcloud.system.feign.PageElementFeignClient;
+import com.jfatty.zcloud.system.req.PageElementReq;
+import com.jfatty.zcloud.system.res.PageElementRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +28,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/pageElement")
-public class PageElementController  implements IBaseController<PageElement> {
+public class PageElementController  implements IBaseController<PageElement,PageElementReq,PageElementRes> {
 
     @Autowired
     private PageElementFeignClient pageElementFeignClient;
 
     @Override
-    public RELResultUtils<PageElement> table(Map<String, Object> params) {
+    public RELResultUtils<PageElementRes> table(Map<String, Object> params) {
         return pageElementFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<PageElement> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<PageElementRes> table(String v, Integer pageIndex, Integer pageSize) {
         return pageElementFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -47,12 +49,12 @@ public class PageElementController  implements IBaseController<PageElement> {
     }
 
     @Override
-    public List<PageElement> list(Long v) {
+    public List<PageElementRes> list(Long v) {
         return pageElementFeignClient.list(v);
     }
 
     @Override
-    public Object save(PageElement entity) {
+    public Object save(PageElementReq entity) {
         return pageElementFeignClient.save(entity);
     }
 
@@ -62,7 +64,7 @@ public class PageElementController  implements IBaseController<PageElement> {
     }
 
     @Override
-    public Object edit(PageElement entity) {
+    public Object edit(PageElementReq entity) {
         return pageElementFeignClient.edit(entity);
     }
 

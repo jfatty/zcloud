@@ -3,12 +3,11 @@ package com.jfatty.zcloud.system.controller;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.PrivilegeMenu;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.base.utils.UUIDGenerator;
-import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Privilege;
 import com.jfatty.zcloud.system.feign.PrivilegeFeignClient;
+import com.jfatty.zcloud.system.req.PrivilegeReq;
+import com.jfatty.zcloud.system.res.PrivilegeRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,18 +26,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/privilege"})
-public class PrivilegeController implements IBaseController<Privilege>{
+public class PrivilegeController implements IBaseController<Privilege,PrivilegeReq,PrivilegeRes>{
 
     @Autowired
     private PrivilegeFeignClient privilegeFeignClient ;
 
     @Override
-    public RELResultUtils<Privilege> table(Map<String, Object> params) {
+    public RELResultUtils<PrivilegeRes> table(Map<String, Object> params) {
         return privilegeFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Privilege> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<PrivilegeRes> table(String v, Integer pageIndex, Integer pageSize) {
         log.error("v ==> " + v + "   ====>" + pageIndex + "   =====>" + pageSize);
         return privilegeFeignClient.table(v, pageIndex, pageSize);
     }
@@ -49,12 +48,12 @@ public class PrivilegeController implements IBaseController<Privilege>{
     }
 
     @Override
-    public List<Privilege> list(Long v) {
+    public List<PrivilegeRes> list(Long v) {
         return null;
     }
 
     @Override
-    public Object save(Privilege entity) {
+    public Object save(PrivilegeReq entity) {
         return privilegeFeignClient.save(entity);
     }
 
@@ -64,7 +63,7 @@ public class PrivilegeController implements IBaseController<Privilege>{
     }
 
     @Override
-    public Object edit(Privilege entity) {
+    public Object edit(PrivilegeReq entity) {
         return privilegeFeignClient.edit(entity);
     }
 

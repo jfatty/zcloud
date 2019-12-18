@@ -2,11 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Dictionary;
 import com.jfatty.zcloud.system.feign.DictionaryFeignClient;
-import com.jfatty.zcloud.system.interfaces.IDictionary;
+import com.jfatty.zcloud.system.req.DictionaryReq;
+import com.jfatty.zcloud.system.res.DictionaryRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,19 +23,19 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/dictionary"})
-public class DictionaryController implements IBaseController<Dictionary> {
+public class DictionaryController implements IBaseController<Dictionary,DictionaryReq,DictionaryRes> {
 
     @Autowired
     private DictionaryFeignClient dictionaryFeignClient ;
 
 
     @Override
-    public RELResultUtils<Dictionary> table(Map<String, Object> params) {
+    public RELResultUtils<DictionaryRes> table(Map<String, Object> params) {
         return dictionaryFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Dictionary> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<DictionaryRes> table(String v, Integer pageIndex, Integer pageSize) {
         return dictionaryFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -46,12 +45,12 @@ public class DictionaryController implements IBaseController<Dictionary> {
     }
 
     @Override
-    public List<Dictionary> list(Long v) {
+    public List<DictionaryRes> list(Long v) {
         return dictionaryFeignClient.list(v);
     }
 
     @Override
-    public Object save(Dictionary entity) {
+    public Object save(DictionaryReq entity) {
         return dictionaryFeignClient.save(entity);
     }
 
@@ -61,7 +60,7 @@ public class DictionaryController implements IBaseController<Dictionary> {
     }
 
     @Override
-    public Object edit(Dictionary entity) {
+    public Object edit(DictionaryReq entity) {
         return dictionaryFeignClient.edit(entity);
     }
 

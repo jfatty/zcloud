@@ -91,11 +91,6 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>commons-collections</groupId>
@@ -133,18 +128,6 @@
             <version>${ehcache.version}</version>
         </dependency>
 
-        <!-- mail quartz data 构建Restful API -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-        <!-- mail quartz data 构建Restful API -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

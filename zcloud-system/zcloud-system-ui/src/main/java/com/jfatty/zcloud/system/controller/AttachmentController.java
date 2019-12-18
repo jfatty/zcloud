@@ -2,11 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Attachment;
 import com.jfatty.zcloud.system.feign.AttachmentFeignClient;
-import com.jfatty.zcloud.system.interfaces.IAttachment;
+import com.jfatty.zcloud.system.req.AttachmentReq;
+import com.jfatty.zcloud.system.res.AttachmentRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/attachment"})
-public class AttachmentController implements IBaseController<Attachment> {
+public class AttachmentController implements IBaseController<Attachment,AttachmentReq,AttachmentRes> {
 
     @Autowired
     private AttachmentFeignClient attachmentFeignClient ;
 
     @Override
-    public RELResultUtils<Attachment> table(Map<String, Object> params) {
+    public RELResultUtils<AttachmentRes> table(Map<String, Object> params) {
         return attachmentFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Attachment> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AttachmentRes> table(String v, Integer pageIndex, Integer pageSize) {
         return attachmentFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -45,12 +44,12 @@ public class AttachmentController implements IBaseController<Attachment> {
     }
 
     @Override
-    public List<Attachment> list(Long v) {
+    public List<AttachmentRes> list(Long v) {
         return attachmentFeignClient.list(v);
     }
 
     @Override
-    public Object save(Attachment entity) {
+    public Object save(AttachmentReq entity) {
         return attachmentFeignClient.save(entity);
     }
 
@@ -60,7 +59,7 @@ public class AttachmentController implements IBaseController<Attachment> {
     }
 
     @Override
-    public Object edit(Attachment entity) {
+    public Object edit(AttachmentReq entity) {
         return attachmentFeignClient.edit(entity);
     }
 

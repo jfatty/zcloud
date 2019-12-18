@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.hospital.entity.SysPatientInfo;
 import com.jfatty.zcloud.hospital.feign.SysPatientInfoFeignClient;
+import com.jfatty.zcloud.hospital.req.SysPatientInfoReq;
+import com.jfatty.zcloud.hospital.res.SysPatientInfoRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,19 +23,19 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/sysPatientInfo")
-public class SysPatientInfoController implements IBaseController<SysPatientInfo> {
+public class SysPatientInfoController implements IBaseController<SysPatientInfo,SysPatientInfoReq,SysPatientInfoRes> {
 
 
     @Autowired
     private SysPatientInfoFeignClient sysPatientInfoFeignClient ;
 
     @Override
-    public RELResultUtils<SysPatientInfo> table(Map<String, Object> params) {
+    public RELResultUtils<SysPatientInfoRes> table(Map<String, Object> params) {
         return sysPatientInfoFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<SysPatientInfo> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<SysPatientInfoRes> table(String v, Integer pageIndex, Integer pageSize) {
         return sysPatientInfoFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -43,12 +45,12 @@ public class SysPatientInfoController implements IBaseController<SysPatientInfo>
     }
 
     @Override
-    public List<SysPatientInfo> list(Long v) {
+    public List<SysPatientInfoRes> list(Long v) {
         return sysPatientInfoFeignClient.list(v);
     }
 
     @Override
-    public Object save(SysPatientInfo entity) {
+    public Object save(SysPatientInfoReq entity) {
         return sysPatientInfoFeignClient.save(entity);
     }
 
@@ -58,7 +60,7 @@ public class SysPatientInfoController implements IBaseController<SysPatientInfo>
     }
 
     @Override
-    public Object edit(SysPatientInfo entity) {
+    public Object edit(SysPatientInfoReq entity) {
         return sysPatientInfoFeignClient.edit(entity);
     }
 

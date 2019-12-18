@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.Address;
 import com.jfatty.zcloud.system.feign.AddressFeignClient;
+import com.jfatty.zcloud.system.req.AddressReq;
+import com.jfatty.zcloud.system.res.AddressRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/address"})
-public class AddressController implements IBaseController<Address> {
+public class AddressController implements IBaseController<Address,AddressReq,AddressRes> {
 
     @Autowired
     private AddressFeignClient addressFeignClient ;
 
     @Override
-    public RELResultUtils<Address> table(Map<String, Object> params) {
+    public RELResultUtils<AddressRes> table(Map<String, Object> params) {
         return addressFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Address> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AddressRes> table(String v, Integer pageIndex, Integer pageSize) {
         return addressFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -46,12 +48,12 @@ public class AddressController implements IBaseController<Address> {
     }
 
     @Override
-    public List<Address> list(Long v) {
+    public List<AddressRes> list(Long v) {
         return addressFeignClient.list(v);
     }
 
     @Override
-    public Object save(Address entity) {
+    public Object save(AddressReq entity) {
         return addressFeignClient.save(entity);
     }
 
@@ -61,7 +63,7 @@ public class AddressController implements IBaseController<Address> {
     }
 
     @Override
-    public Object edit(Address entity) {
+    public Object edit(AddressReq entity) {
         return addressFeignClient.edit(entity);
     }
 

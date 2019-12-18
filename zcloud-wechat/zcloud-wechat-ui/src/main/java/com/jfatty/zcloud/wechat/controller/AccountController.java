@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.feign.AccountFeignClient;
-import com.jfatty.zcloud.wechat.interfaces.IAccount;
+import com.jfatty.zcloud.wechat.req.AccountReq;
+import com.jfatty.zcloud.wechat.res.AccountRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +26,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/account"})
-public class AccountController implements IBaseController<Account> {
+public class AccountController implements IBaseController<Account,AccountReq,AccountRes> {
 
     @Autowired
     private AccountFeignClient accountFeignClient ;
 
     @Override
-    public RELResultUtils<Account> table(Map<String, Object> params) {
+    public RELResultUtils<AccountRes> table(Map<String, Object> params) {
         return accountFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Account> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountRes> table(String v, Integer pageIndex, Integer pageSize) {
         return accountFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -47,12 +47,12 @@ public class AccountController implements IBaseController<Account> {
     }
 
     @Override
-    public List<Account> list(Long v) {
+    public List<AccountRes> list(Long v) {
         return accountFeignClient.list(v);
     }
 
     @Override
-    public Object save(Account entity) {
+    public Object save(AccountReq entity) {
         return accountFeignClient.save(entity);
     }
 
@@ -66,7 +66,7 @@ public class AccountController implements IBaseController<Account> {
     }
 
     @Override
-    public Object edit(Account entity) {
+    public Object edit(AccountReq entity) {
         return accountFeignClient.edit(entity);
     }
 

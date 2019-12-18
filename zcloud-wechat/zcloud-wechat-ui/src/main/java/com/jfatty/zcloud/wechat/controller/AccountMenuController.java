@@ -1,13 +1,11 @@
 package com.jfatty.zcloud.wechat.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.wechat.entity.AccountFans;
 import com.jfatty.zcloud.wechat.entity.AccountMenu;
 import com.jfatty.zcloud.wechat.feign.AccountMenuFeignClient;
-import com.jfatty.zcloud.wechat.interfaces.IAccountMenu;
+import com.jfatty.zcloud.wechat.req.AccountMenuReq;
+import com.jfatty.zcloud.wechat.res.AccountMenuRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +24,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/accountMenu"})
-public class AccountMenuController  implements IBaseController<AccountMenu> {
+public class AccountMenuController  implements IBaseController<AccountMenu,AccountMenuReq,AccountMenuRes> {
 
     @Autowired
     private AccountMenuFeignClient accountMenuFeignClient ;
 
     @Override
-    public RELResultUtils<AccountMenu> table(Map<String, Object> params) {
+    public RELResultUtils<AccountMenuRes> table(Map<String, Object> params) {
         return accountMenuFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<AccountMenu> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountMenuRes> table(String v, Integer pageIndex, Integer pageSize) {
         return accountMenuFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -47,12 +45,12 @@ public class AccountMenuController  implements IBaseController<AccountMenu> {
     }
 
     @Override
-    public List<AccountMenu> list(Long v) {
+    public List<AccountMenuRes> list(Long v) {
         return accountMenuFeignClient.list(v);
     }
 
     @Override
-    public Object save(AccountMenu entity) {
+    public Object save(AccountMenuReq entity) {
         return accountMenuFeignClient.save(entity);
     }
 
@@ -67,7 +65,7 @@ public class AccountMenuController  implements IBaseController<AccountMenu> {
     }
 
     @Override
-    public Object edit(AccountMenu entity) {
+    public Object edit(AccountMenuReq entity) {
         return accountMenuFeignClient.edit(entity);
     }
 

@@ -1,9 +1,6 @@
 package com.jfatty.zcloud.wechat.controller;
 
-import com.alibaba.fastjson.JSONObject;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.wechat.entity.Account;
-import com.jfatty.zcloud.wechat.feign.AccountFeignClient;
+
 import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

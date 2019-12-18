@@ -2,12 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
-import com.jfatty.zcloud.system.entity.Dictionary;
 import com.jfatty.zcloud.system.entity.DictionaryMenu;
 import com.jfatty.zcloud.system.feign.DictionaryMenuFeignClient;
-import com.jfatty.zcloud.system.interfaces.IDictionaryMenu;
+import com.jfatty.zcloud.system.req.DictionaryMenuReq;
+import com.jfatty.zcloud.system.res.DictionaryMenuRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/dictionaryMenu"})
-public class DictionaryMenuController implements IBaseController<DictionaryMenu> {
+public class DictionaryMenuController implements IBaseController<DictionaryMenu,DictionaryMenuReq,DictionaryMenuRes> {
 
     @Autowired
     private DictionaryMenuFeignClient dictionaryMenuFeignClient ;
 
     @Override
-    public RELResultUtils<DictionaryMenu> table(Map<String, Object> params) {
+    public RELResultUtils<DictionaryMenuRes> table(Map<String, Object> params) {
         return dictionaryMenuFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<DictionaryMenu> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<DictionaryMenuRes> table(String v, Integer pageIndex, Integer pageSize) {
         return dictionaryMenuFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -46,12 +44,12 @@ public class DictionaryMenuController implements IBaseController<DictionaryMenu>
     }
 
     @Override
-    public List<DictionaryMenu> list(Long v) {
+    public List<DictionaryMenuRes> list(Long v) {
         return dictionaryMenuFeignClient.list(v);
     }
 
     @Override
-    public Object save(DictionaryMenu entity) {
+    public Object save(DictionaryMenuReq entity) {
         return dictionaryMenuFeignClient.save(entity);
     }
 
@@ -61,7 +59,7 @@ public class DictionaryMenuController implements IBaseController<DictionaryMenu>
     }
 
     @Override
-    public Object edit(DictionaryMenu entity) {
+    public Object edit(DictionaryMenuReq entity) {
         return dictionaryMenuFeignClient.edit(entity);
     }
 

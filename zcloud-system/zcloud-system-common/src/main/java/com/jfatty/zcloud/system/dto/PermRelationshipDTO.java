@@ -14,8 +14,12 @@ import lombok.Data;
 public class PermRelationshipDTO<T extends BaseDTO> extends BaseDTO {
 
     /**
-     * 主键ID页面页面标识唯一
+     * 权限ID
      */
-    @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
-    private String id ;
+    private String privilegeId;
+
+    /**
+     * 授权对象id
+     */
+    private String authId;
 }

@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.IdentityFile;
 import com.jfatty.zcloud.system.feign.IdentityFileFeignClient;
+import com.jfatty.zcloud.system.req.IdentityFileReq;
+import com.jfatty.zcloud.system.res.IdentityFileRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/identityFile")
-public class IdentityFileController implements IBaseController<IdentityFile> {
+public class IdentityFileController implements IBaseController<IdentityFile,IdentityFileReq,IdentityFileRes> {
 
     @Autowired
     private IdentityFileFeignClient identityFileFeignClient;
 
     @Override
-    public RELResultUtils<IdentityFile> table(Map<String, Object> params) {
+    public RELResultUtils<IdentityFileRes> table(Map<String, Object> params) {
         return identityFileFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<IdentityFile> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<IdentityFileRes> table(String v, Integer pageIndex, Integer pageSize) {
         return identityFileFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -46,12 +48,12 @@ public class IdentityFileController implements IBaseController<IdentityFile> {
     }
 
     @Override
-    public List<IdentityFile> list(Long v) {
+    public List<IdentityFileRes> list(Long v) {
         return identityFileFeignClient.list(v);
     }
 
     @Override
-    public Object save(IdentityFile entity) {
+    public Object save(IdentityFileReq entity) {
         return identityFileFeignClient.save(entity);
     }
 
@@ -61,7 +63,7 @@ public class IdentityFileController implements IBaseController<IdentityFile> {
     }
 
     @Override
-    public Object edit(IdentityFile entity) {
+    public Object edit(IdentityFileReq entity) {
         return identityFileFeignClient.edit(entity);
     }
 

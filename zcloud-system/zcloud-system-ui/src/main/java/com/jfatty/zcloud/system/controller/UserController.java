@@ -5,7 +5,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.User;
 import com.jfatty.zcloud.system.feign.UserFeignClient;
-import com.jfatty.zcloud.system.interfaces.IUser;
+import com.jfatty.zcloud.system.req.UserReq;
+import com.jfatty.zcloud.system.res.UserRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/user"})
-public class UserController implements IBaseController<User> {
+public class UserController implements IBaseController<User,UserReq,UserRes> {
 
     @Autowired
     private UserFeignClient userFeignClient ;
 
     @Override
-    public RELResultUtils<User> table(Map<String, Object> params) {
+    public RELResultUtils<UserRes> table(Map<String, Object> params) {
         return userFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<User> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<UserRes> table(String v, Integer pageIndex, Integer pageSize) {
         return userFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -47,12 +48,12 @@ public class UserController implements IBaseController<User> {
     }
 
     @Override
-    public List<User> list(Long v) {
+    public List<UserRes> list(Long v) {
         return userFeignClient.list(v);
     }
 
     @Override
-    public Object save(User entity) {
+    public Object save(UserReq entity) {
         return userFeignClient.save(entity);
     }
 
@@ -62,7 +63,7 @@ public class UserController implements IBaseController<User> {
     }
 
     @Override
-    public Object edit(User entity) {
+    public Object edit(UserReq entity) {
         return userFeignClient.edit(entity);
     }
 

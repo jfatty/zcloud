@@ -2,10 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.feign.AccountUniqueFeignClient;
-import com.jfatty.zcloud.system.interfaces.IAccountUnique;
+import com.jfatty.zcloud.system.req.AccountUniqueReq;
+import com.jfatty.zcloud.system.res.AccountUniqueRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/accountUnique"})
-public class AccountUniqueController implements IBaseController<AccountUnique> {
+public class AccountUniqueController implements IBaseController<AccountUnique,AccountUniqueReq,AccountUniqueRes> {
 
     @Autowired
     private AccountUniqueFeignClient accountUniqueFeignClient ;
 
     @Override
-    public RELResultUtils<AccountUnique> table(Map<String, Object> params) {
+    public RELResultUtils<AccountUniqueRes> table(Map<String, Object> params) {
         return accountUniqueFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<AccountUnique> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountUniqueRes> table(String v, Integer pageIndex, Integer pageSize) {
         return accountUniqueFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -44,12 +44,12 @@ public class AccountUniqueController implements IBaseController<AccountUnique> {
     }
 
     @Override
-    public List<AccountUnique> list(Long v) {
+    public List<AccountUniqueRes> list(Long v) {
         return accountUniqueFeignClient.list(v);
     }
 
     @Override
-    public Object save(AccountUnique entity) {
+    public Object save(AccountUniqueReq entity) {
         return accountUniqueFeignClient.save(entity);
     }
 
@@ -59,7 +59,7 @@ public class AccountUniqueController implements IBaseController<AccountUnique> {
     }
 
     @Override
-    public Object edit(AccountUnique entity) {
+    public Object edit(AccountUniqueReq entity) {
         return accountUniqueFeignClient.edit(entity);
     }
 

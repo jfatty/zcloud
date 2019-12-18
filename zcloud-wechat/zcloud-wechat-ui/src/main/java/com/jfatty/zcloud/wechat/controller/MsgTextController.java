@@ -1,12 +1,11 @@
 package com.jfatty.zcloud.wechat.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.wechat.entity.AccountMenu;
 import com.jfatty.zcloud.wechat.entity.MsgText;
 import com.jfatty.zcloud.wechat.feign.MsgTextFeignClient;
-import com.jfatty.zcloud.wechat.interfaces.IMsgText;
+import com.jfatty.zcloud.wechat.req.MsgTextReq;
+import com.jfatty.zcloud.wechat.res.MsgTextRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/msgText"})
-public class MsgTextController implements IBaseController<MsgText> {
+public class MsgTextController implements IBaseController<MsgText,MsgTextReq,MsgTextRes> {
 
     @Autowired
     private MsgTextFeignClient msgTextFeignClient ;
 
     @Override
-    public RELResultUtils<MsgText> table(Map<String, Object> params) {
+    public RELResultUtils<MsgTextRes> table(Map<String, Object> params) {
         return msgTextFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<MsgText> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<MsgTextRes> table(String v, Integer pageIndex, Integer pageSize) {
         return msgTextFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -45,12 +44,12 @@ public class MsgTextController implements IBaseController<MsgText> {
     }
 
     @Override
-    public List<MsgText> list(Long v) {
+    public List<MsgTextRes> list(Long v) {
         return msgTextFeignClient.list(v);
     }
 
     @Override
-    public Object save(MsgText entity) {
+    public Object save(MsgTextReq entity) {
         return msgTextFeignClient.save(entity);
     }
 
@@ -60,7 +59,7 @@ public class MsgTextController implements IBaseController<MsgText> {
     }
 
     @Override
-    public Object edit(MsgText entity) {
+    public Object edit(MsgTextReq entity) {
         return msgTextFeignClient.edit(entity);
     }
 

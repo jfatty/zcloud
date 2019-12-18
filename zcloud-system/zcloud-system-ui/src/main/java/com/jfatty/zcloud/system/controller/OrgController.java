@@ -2,11 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Org;
 import com.jfatty.zcloud.system.feign.OrgFeignClient;
-import com.jfatty.zcloud.system.interfaces.IOrg;
+import com.jfatty.zcloud.system.req.OrgReq;
+import com.jfatty.zcloud.system.res.OrgRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,19 +23,19 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/org"})
-public class OrgController implements IBaseController<Org> {
+public class OrgController implements IBaseController<Org,OrgReq,OrgRes> {
 
     @Autowired
     private OrgFeignClient orgFeignClient ;
 
 
     @Override
-    public RELResultUtils<Org> table(Map<String, Object> params) {
+    public RELResultUtils<OrgRes> table(Map<String, Object> params) {
         return orgFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Org> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<OrgRes> table(String v, Integer pageIndex, Integer pageSize) {
         return orgFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -46,12 +45,12 @@ public class OrgController implements IBaseController<Org> {
     }
 
     @Override
-    public List<Org> list(Long v) {
+    public List<OrgRes> list(Long v) {
         return orgFeignClient.list(v);
     }
 
     @Override
-    public Object save(Org entity) {
+    public Object save(OrgReq entity) {
         return orgFeignClient.save(entity);
     }
 
@@ -61,7 +60,7 @@ public class OrgController implements IBaseController<Org> {
     }
 
     @Override
-    public Object edit(Org entity) {
+    public Object edit(OrgReq entity) {
         return orgFeignClient.edit(entity);
     }
 

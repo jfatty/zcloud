@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.entity.AccountFans;
 import com.jfatty.zcloud.wechat.feign.AccountFansFeignClient;
-import com.jfatty.zcloud.wechat.interfaces.IAccountFans;
+import com.jfatty.zcloud.wechat.req.AccountFansReq;
+import com.jfatty.zcloud.wechat.res.AccountFansRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,37 +26,37 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/accountFans"})
-public class AccountFansController implements IBaseController<AccountFans> {
+public class AccountFansController implements IBaseController<AccountFans,AccountFansReq,AccountFansRes> {
 
     @Autowired
     private AccountFansFeignClient accountFansFeignClient ;
 
     @Override
-    public RELResultUtils<AccountFans> table(Map<String, Object> params) {
+    public RELResultUtils<AccountFansRes> table(Map<String, Object> params) {
         return accountFansFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<AccountFans> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountFansRes> table(String v, Integer pageIndex, Integer pageSize) {
         return accountFansFeignClient.table(v, pageIndex, pageSize);
     }
 
     @Override
     public Object list() {
         Long v = System.currentTimeMillis();
-        List<AccountFans> list = accountFansFeignClient.list(v);
+        List<AccountFansRes> list = accountFansFeignClient.list(v);
         if(CollectionUtils.isNotEmpty(list))
             return ResultUtils.ok(list);
         return ResultUtils.build(400, "没有查询到数据");
     }
 
     @Override
-    public List<AccountFans> list(Long v) {
+    public List<AccountFansRes> list(Long v) {
         return accountFansFeignClient.list(v);
     }
 
     @Override
-    public Object save(AccountFans entity) {
+    public Object save(AccountFansReq entity) {
         return accountFansFeignClient.save(entity);
     }
 
@@ -67,7 +67,7 @@ public class AccountFansController implements IBaseController<AccountFans> {
     }
 
     @Override
-    public Object edit(AccountFans entity) {
+    public Object edit(AccountFansReq entity) {
         return accountFansFeignClient.edit(entity);
     }
 

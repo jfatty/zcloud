@@ -2,11 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Office;
 import com.jfatty.zcloud.system.feign.OfficeFeignClient;
-import com.jfatty.zcloud.system.interfaces.IOffice;
+import com.jfatty.zcloud.system.req.OfficeReq;
+import com.jfatty.zcloud.system.res.OfficeRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,18 +23,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/office"})
-public class OfficeController implements IBaseController<Office> {
+public class OfficeController implements IBaseController<Office,OfficeReq,OfficeRes> {
 
     @Autowired
     private OfficeFeignClient officeFeignClient ;
 
     @Override
-    public RELResultUtils<Office> table(Map<String, Object> params) {
+    public RELResultUtils<OfficeRes> table(Map<String, Object> params) {
         return officeFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Office> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<OfficeRes> table(String v, Integer pageIndex, Integer pageSize) {
         return officeFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -45,12 +44,12 @@ public class OfficeController implements IBaseController<Office> {
     }
 
     @Override
-    public List<Office> list(Long v) {
+    public List<OfficeRes> list(Long v) {
         return officeFeignClient.list(v);
     }
 
     @Override
-    public Object save(Office entity) {
+    public Object save(OfficeReq entity) {
         return officeFeignClient.save(entity);
     }
 
@@ -60,7 +59,7 @@ public class OfficeController implements IBaseController<Office> {
     }
 
     @Override
-    public Object edit(Office entity) {
+    public Object edit(OfficeReq entity) {
         return officeFeignClient.edit(entity);
     }
 

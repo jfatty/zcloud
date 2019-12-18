@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.hospital.entity.Menu;
 import com.jfatty.zcloud.hospital.feign.MenuFeignClient;
+import com.jfatty.zcloud.hospital.req.MenuReq;
+import com.jfatty.zcloud.hospital.res.MenuRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,18 +27,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/menu")
-public class MenuController implements IBaseController<Menu> {
+public class MenuController implements IBaseController<Menu,MenuReq,MenuRes> {
 
     @Autowired
     private MenuFeignClient menuFeignClient ;
 
     @Override
-    public RELResultUtils<Menu> table(Map<String, Object> params) {
+    public RELResultUtils<MenuRes> table(Map<String, Object> params) {
         return menuFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Menu> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<MenuRes> table(String v, Integer pageIndex, Integer pageSize) {
         return menuFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -46,12 +48,12 @@ public class MenuController implements IBaseController<Menu> {
     }
 
     @Override
-    public List<Menu> list(Long v) {
+    public List<MenuRes> list(Long v) {
         return menuFeignClient.list(v);
     }
 
     @Override
-    public Object save(Menu entity) {
+    public Object save(MenuReq entity) {
         return menuFeignClient.save(entity);
     }
 
@@ -61,7 +63,7 @@ public class MenuController implements IBaseController<Menu> {
     }
 
     @Override
-    public Object edit(Menu entity) {
+    public Object edit(MenuReq entity) {
         return menuFeignClient.edit(entity);
     }
 

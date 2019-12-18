@@ -2,11 +2,10 @@ package com.jfatty.zcloud.system.controller;
 
 import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.UserGroup;
 import com.jfatty.zcloud.system.feign.UserGroupFeignClient;
-import com.jfatty.zcloud.system.interfaces.IUserGroup;
+import com.jfatty.zcloud.system.req.UserGroupReq;
+import com.jfatty.zcloud.system.res.UserGroupRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,18 +26,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/userGroup"})
-public class UserGroupController implements IBaseController<UserGroup> {
+public class UserGroupController implements IBaseController<UserGroup,UserGroupReq,UserGroupRes> {
 
     @Autowired
     private UserGroupFeignClient userGroupFeignClient ;
 
     @Override
-    public RELResultUtils<UserGroup> table(Map<String, Object> params) {
+    public RELResultUtils<UserGroupRes> table(Map<String, Object> params) {
         return userGroupFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<UserGroup> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<UserGroupRes> table(String v, Integer pageIndex, Integer pageSize) {
         return userGroupFeignClient.table(v, pageIndex, pageSize);
     }
 
@@ -48,12 +47,12 @@ public class UserGroupController implements IBaseController<UserGroup> {
     }
 
     @Override
-    public List<UserGroup> list(Long v) {
+    public List<UserGroupRes> list(Long v) {
         return userGroupFeignClient.list(v);
     }
 
     @Override
-    public Object save(UserGroup entity) {
+    public Object save(UserGroupReq entity) {
         return userGroupFeignClient.save(entity);
     }
 
@@ -63,7 +62,7 @@ public class UserGroupController implements IBaseController<UserGroup> {
     }
 
     @Override
-    public Object edit(UserGroup entity) {
+    public Object edit(UserGroupReq entity) {
         System.out.println("UserGroupController.edit====>" + entity);
         return userGroupFeignClient.edit(entity);
     }

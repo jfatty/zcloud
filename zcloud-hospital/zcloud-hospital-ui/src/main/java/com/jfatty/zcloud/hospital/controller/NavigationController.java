@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.controller.IBaseController;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.hospital.entity.Navigation;
 import com.jfatty.zcloud.hospital.feign.NavigationFeignClient;
+import com.jfatty.zcloud.hospital.req.NavigationReq;
+import com.jfatty.zcloud.hospital.res.NavigationRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +28,18 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/navigation")
-public class NavigationController implements IBaseController<Navigation> {
+public class NavigationController implements IBaseController<Navigation,NavigationReq,NavigationRes> {
 
     @Autowired
     private NavigationFeignClient navigationFeignClient ;
 
     @Override
-    public RELResultUtils<Navigation> table(Map<String, Object> params) {
+    public RELResultUtils<NavigationRes> table(Map<String, Object> params) {
         return navigationFeignClient.table(params);
     }
 
     @Override
-    public RELResultUtils<Navigation> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<NavigationRes> table(String v, Integer pageIndex, Integer pageSize) {
         return navigationFeignClient.table(v,pageIndex,pageSize);
     }
 
@@ -47,12 +49,12 @@ public class NavigationController implements IBaseController<Navigation> {
     }
 
     @Override
-    public List<Navigation> list(Long v) {
+    public List<NavigationRes> list(Long v) {
         return navigationFeignClient.list(v);
     }
 
     @Override
-    public Object save(Navigation entity) {
+    public Object save(NavigationReq entity) {
         return navigationFeignClient.save(entity);
     }
 
@@ -62,7 +64,7 @@ public class NavigationController implements IBaseController<Navigation> {
     }
 
     @Override
-    public Object edit(Navigation entity) {
+    public Object edit(NavigationReq entity) {
         return navigationFeignClient.edit(entity);
     }
 

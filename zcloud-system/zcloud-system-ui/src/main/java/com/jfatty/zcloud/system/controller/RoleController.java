@@ -7,6 +7,8 @@ import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Role;
 import com.jfatty.zcloud.system.feign.RoleFeignClient;
 import com.jfatty.zcloud.system.interfaces.IRole;
+import com.jfatty.zcloud.system.req.RoleReq;
+import com.jfatty.zcloud.system.res.RoleRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,14 +30,14 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/role"})
-public class RoleController implements IBaseController<Role> {
+public class RoleController implements IBaseController<Role,RoleReq,RoleRes> {
 
 
     @Autowired
     private RoleFeignClient roleFeignClient ;
 
     @Override
-    public RELResultUtils<Role> table(Map<String, Object> params) {
+    public RELResultUtils<RoleRes> table(Map<String, Object> params) {
         return roleFeignClient.table(params);
     }
 
@@ -46,17 +48,17 @@ public class RoleController implements IBaseController<Role> {
     }
 
     @Override
-    public List<Role> list(Long v) {
+    public List<RoleRes> list(Long v) {
         return roleFeignClient.list(v);
     }
 
     @Override
-    public RELResultUtils<Role> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<RoleRes> table(String v, Integer pageIndex, Integer pageSize) {
         return roleFeignClient.table(v, pageIndex, pageSize);
     }
 
     @Override
-    public Object save(Role entity) {
+    public Object save(RoleReq entity) {
         return roleFeignClient.save(entity);
     }
 
@@ -67,7 +69,7 @@ public class RoleController implements IBaseController<Role> {
     }
 
     @Override
-    public Object edit(Role entity) {
+    public Object edit(RoleReq entity) {
         return roleFeignClient.edit(entity);
     }
 
