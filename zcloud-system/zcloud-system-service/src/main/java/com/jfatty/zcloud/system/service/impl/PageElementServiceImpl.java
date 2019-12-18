@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 界面标签元素开发配置 服务实现类
@@ -26,5 +28,10 @@ public class PageElementServiceImpl extends BaseSystemServiceImpl<PageElement, P
     public void setPageElementMapper(PageElementMapper pageElementMapper) {
         super.setBaseMapper(pageElementMapper);
         this.pageElementMapper = pageElementMapper;
+    }
+
+    @Override
+    public List<PageElement> getElementsByPageId(String pageId) {
+        return pageElementMapper.getElementsByPageId(pageId);
     }
 }

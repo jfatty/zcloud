@@ -3,8 +3,9 @@ package com.jfatty.zcloud.system.feign;
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.Department;
 import com.jfatty.zcloud.system.entity.Dictionary;
+import com.jfatty.zcloud.system.req.DictionaryReq;
+import com.jfatty.zcloud.system.res.DictionaryRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +23,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/dictionary")
-public interface DictionaryFeignClient extends BInterface<Dictionary> {
+public interface DictionaryFeignClient extends BInterface<Dictionary,DictionaryReq,DictionaryRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<Dictionary> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<DictionaryRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<Dictionary> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<DictionaryRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -37,16 +38,16 @@ public interface DictionaryFeignClient extends BInterface<Dictionary> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<Dictionary> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<DictionaryRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody Dictionary entity) ;
+    ResultUtils save(@RequestBody DictionaryReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody Dictionary entity) ;
+    ResultUtils edit(@RequestBody DictionaryReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

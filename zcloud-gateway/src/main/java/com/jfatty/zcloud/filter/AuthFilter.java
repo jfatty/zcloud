@@ -24,17 +24,17 @@ public class AuthFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String token = exchange.getRequest().getQueryParams().getFirst("authToken");
-        log.error(" =====================> 重定向(redirect)到登录页面 ");
-        //重定向(redirect)到登录页面
-        if (StringUtils.isBlank(token)) {
-            String url = "https://www.baidu.com/";
-            ServerHttpResponse response = exchange.getResponse();
-            //303状态码表示由于请求对应的资源存在着另一个URI，应使用GET方法定向获取请求的资源
-            response.setStatusCode(HttpStatus.SEE_OTHER);
-            response.getHeaders().set(HttpHeaders.LOCATION, url);
-            return response.setComplete();
-        }
+//        String token = exchange.getRequest().getQueryParams().getFirst("authToken");
+//        log.error(" =====================> 重定向(redirect)到登录页面 ");
+//        //重定向(redirect)到登录页面
+//        if (StringUtils.isBlank(token)) {
+//            String url = "https://www.baidu.com/";
+//            ServerHttpResponse response = exchange.getResponse();
+//            //303状态码表示由于请求对应的资源存在着另一个URI，应使用GET方法定向获取请求的资源
+//            response.setStatusCode(HttpStatus.SEE_OTHER);
+//            response.getHeaders().set(HttpHeaders.LOCATION, url);
+//            return response.setComplete();
+//        }
         return chain.filter(exchange);
     }
 

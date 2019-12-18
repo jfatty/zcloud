@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.entity.MsgText;
+import com.jfatty.zcloud.wechat.req.MsgTextReq;
+import com.jfatty.zcloud.wechat.res.MsgTextRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,14 +23,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-wechat-service" , path = "/api/msgText")
-public interface MsgTextFeignClient extends BInterface<MsgText> {
+public interface MsgTextFeignClient extends BInterface<MsgText,MsgTextReq,MsgTextRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<MsgText> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<MsgTextRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<MsgText> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<MsgTextRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -36,16 +38,16 @@ public interface MsgTextFeignClient extends BInterface<MsgText> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<MsgText> list(Long v);
+    List<MsgTextRes> list(Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody MsgText entity) ;
+    ResultUtils save(@RequestBody MsgTextReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody MsgText entity) ;
+    ResultUtils edit(@RequestBody MsgTextReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

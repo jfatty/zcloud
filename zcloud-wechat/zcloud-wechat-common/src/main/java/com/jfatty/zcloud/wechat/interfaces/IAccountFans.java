@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.interfaces;
 
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.wechat.entity.AccountFans;
+import com.jfatty.zcloud.wechat.req.AccountFansReq;
+import com.jfatty.zcloud.wechat.res.AccountFansRes;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 @RequestMapping(value={"/accountFans"})
-public interface IAccountFans extends BInterface<AccountFans> {
+public interface IAccountFans extends BInterface<AccountFans,AccountFansReq,AccountFansRes> {
 }

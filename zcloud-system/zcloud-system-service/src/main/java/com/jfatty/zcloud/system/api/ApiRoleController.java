@@ -6,6 +6,8 @@ import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Role;
 import com.jfatty.zcloud.system.interfaces.IRole;
+import com.jfatty.zcloud.system.req.RoleReq;
+import com.jfatty.zcloud.system.res.RoleRes;
 import com.jfatty.zcloud.system.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/role"})
-public class ApiRoleController extends ApiBaseSystemController<Role>  implements IRole {
+public class ApiRoleController extends ApiBaseSystemController<Role,RoleReq,RoleRes>  implements IRole {
 
 
     private RoleService roleService ;

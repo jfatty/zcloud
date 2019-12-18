@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.TplMsgText;
+import com.jfatty.zcloud.wechat.req.TplMsgTextReq;
+import com.jfatty.zcloud.wechat.res.TplMsgTextRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +22,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-wechat-service" , path = "/api/tplMsgText")
-public interface TplMsgTextFeignClient extends BInterface<TplMsgText> {
+public interface TplMsgTextFeignClient extends BInterface<TplMsgText,TplMsgTextReq,TplMsgTextRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<TplMsgText> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<TplMsgTextRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<TplMsgText> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<TplMsgTextRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -35,16 +37,16 @@ public interface TplMsgTextFeignClient extends BInterface<TplMsgText> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<TplMsgText> list(Long v);
+    List<TplMsgTextRes> list(Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody TplMsgText entity) ;
+    ResultUtils save(@RequestBody TplMsgTextReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody TplMsgText entity) ;
+    ResultUtils edit(@RequestBody TplMsgTextReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

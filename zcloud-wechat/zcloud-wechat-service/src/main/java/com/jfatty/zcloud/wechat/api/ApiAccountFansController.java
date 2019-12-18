@@ -6,6 +6,8 @@ import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.entity.AccountFans;
 import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.interfaces.IAccountFans;
+import com.jfatty.zcloud.wechat.req.AccountFansReq;
+import com.jfatty.zcloud.wechat.res.AccountFansRes;
 import com.jfatty.zcloud.wechat.service.AccountFansService;
 import com.jfatty.zcloud.wechat.service.WxService;
 import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
@@ -31,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/accountFans")
-public class ApiAccountFansController extends ApiBaseWechatController<AccountFans>  implements IAccountFans {
+public class ApiAccountFansController extends ApiBaseWechatController<AccountFans,AccountFansReq,AccountFansRes>  implements IAccountFans {
 
 
     @Autowired
@@ -59,7 +61,7 @@ public class ApiAccountFansController extends ApiBaseWechatController<AccountFan
             @ApiImplicitParam(name = "nickname", value = "搜索昵称采用GET方式传送通过URL两次编码后台解码",dataType = "String")
     })
     @Override
-    public RELResultUtils<AccountFans> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountFansRes> table(String v, Integer pageIndex, Integer pageSize) {
         return super.table(v, pageIndex, pageSize);
     }
 

@@ -3,8 +3,9 @@ package com.jfatty.zcloud.system.feign;
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.Attachment;
 import com.jfatty.zcloud.system.entity.Department;
+import com.jfatty.zcloud.system.req.DepartmentReq;
+import com.jfatty.zcloud.system.res.DepartmentRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +23,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/department")
-public interface DepartmentFeignClient extends BInterface<Department> {
+public interface DepartmentFeignClient extends BInterface<Department,DepartmentReq,DepartmentRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<Department> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<DepartmentRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<Department> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<DepartmentRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -37,16 +38,16 @@ public interface DepartmentFeignClient extends BInterface<Department> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<Department> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<DepartmentRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody Department entity) ;
+    ResultUtils save(@RequestBody DepartmentReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody Department entity) ;
+    ResultUtils edit(@RequestBody DepartmentReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

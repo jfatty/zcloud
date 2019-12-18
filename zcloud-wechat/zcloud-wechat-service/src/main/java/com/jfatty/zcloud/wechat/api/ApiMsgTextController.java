@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.api;
 
 import com.jfatty.zcloud.wechat.entity.MsgText;
 import com.jfatty.zcloud.wechat.interfaces.IMsgText;
+import com.jfatty.zcloud.wechat.req.MsgTextReq;
+import com.jfatty.zcloud.wechat.res.MsgTextRes;
 import com.jfatty.zcloud.wechat.service.MsgTextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/msgText")
-public class ApiMsgTextController extends ApiBaseWechatController<MsgText>  implements IMsgText {
+public class ApiMsgTextController extends ApiBaseWechatController<MsgText,MsgTextReq,MsgTextRes>  implements IMsgText {
 
     private MsgTextService msgTextService ;
 

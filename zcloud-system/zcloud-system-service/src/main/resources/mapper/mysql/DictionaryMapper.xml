@@ -100,4 +100,15 @@
         </if>
     </select>
 
+
+    <select id="getByDictionaryMenu" resultMap="BaseResultMap">
+        select
+          *
+        from sys_dictionary
+        where 1 = 1
+        <if test="dictionaryMenuId != null" >
+            and dictionary_menu = #{dictionaryMenuId}
+        </if>
+    </select>
+
 </mapper>

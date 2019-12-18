@@ -6,6 +6,8 @@ import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.User;
 import com.jfatty.zcloud.system.interfaces.IUser;
+import com.jfatty.zcloud.system.req.UserReq;
+import com.jfatty.zcloud.system.res.UserRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.UserService;
 import com.jfatty.zcloud.system.utils.AccountValidatorUtil;
@@ -32,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/user"})
-public class ApiUserController extends ApiBaseSystemController<User>  implements IUser {
+public class ApiUserController extends ApiBaseSystemController<User,UserReq,UserRes>  implements IUser {
 
     @Autowired
     private AccountUniqueService accountUniqueService ;

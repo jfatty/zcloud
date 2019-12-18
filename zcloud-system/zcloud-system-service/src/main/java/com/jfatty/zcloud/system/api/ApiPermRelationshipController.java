@@ -6,6 +6,8 @@ import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.PermRelationship;
 import com.jfatty.zcloud.system.interfaces.IPermRelationship;
+import com.jfatty.zcloud.system.req.PermRelationshipReq;
+import com.jfatty.zcloud.system.res.PermRelationshipRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.PermRelationshipService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +32,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/perm"})
-public class ApiPermRelationshipController extends ApiBaseSystemController<PermRelationship>  implements IPermRelationship {
+public class ApiPermRelationshipController extends ApiBaseSystemController<PermRelationship,PermRelationshipReq,PermRelationshipRes>  implements IPermRelationship {
 
     @Autowired
     private PermRelationshipService permRelationshipService ;

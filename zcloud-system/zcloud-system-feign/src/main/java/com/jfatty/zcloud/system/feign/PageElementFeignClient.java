@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.PageElement;
+import com.jfatty.zcloud.system.req.PageElementReq;
+import com.jfatty.zcloud.system.res.PageElementRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +22,15 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/pageElement")
-public interface PageElementFeignClient  extends BInterface<PageElement> {
+public interface PageElementFeignClient  extends BInterface<PageElement,PageElementReq,PageElementRes> {
 
 
     @RequestMapping(value = {"/table/list"}, method = RequestMethod.POST)
-    RELResultUtils<PageElement> table(@RequestBody Map<String, Object> params);
+    RELResultUtils<PageElementRes> table(@RequestBody Map<String, Object> params);
 
 
     @RequestMapping(value = {"/table/list"}, method = RequestMethod.GET)
-    RELResultUtils<PageElement> table(@RequestParam(value = "v", defaultValue = "20191101") String v,
+    RELResultUtils<PageElementRes> table(@RequestParam(value = "v", defaultValue = "20191101") String v,
                                       @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize);
 
@@ -36,16 +38,16 @@ public interface PageElementFeignClient  extends BInterface<PageElement> {
     ResultUtils list();
 
     @RequestMapping(value = {"/list"}, method = RequestMethod.POST)
-    List<PageElement> list(@RequestParam(value = "v", defaultValue = "20191101") Long v);
+    List<PageElementRes> list(@RequestParam(value = "v", defaultValue = "20191101") Long v);
 
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
-    ResultUtils save(@RequestBody PageElement entity);
+    ResultUtils save(@RequestBody PageElementReq entity);
 
     @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id", defaultValue = "AQAQAQ") String id);
 
     @RequestMapping(value = {"/edit"}, method = RequestMethod.POST)
-    ResultUtils edit(@RequestBody PageElement entity);
+    ResultUtils edit(@RequestBody PageElementReq entity);
 
     @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String, Object> params);

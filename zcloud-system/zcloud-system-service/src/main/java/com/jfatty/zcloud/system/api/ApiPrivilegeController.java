@@ -6,6 +6,8 @@ import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.Privilege;
 import com.jfatty.zcloud.system.interfaces.IPrivilege;
+import com.jfatty.zcloud.system.req.PrivilegeReq;
+import com.jfatty.zcloud.system.res.PrivilegeRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.PrivilegeService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/privilege"})
-public class ApiPrivilegeController extends ApiBaseSystemController<Privilege>  implements IPrivilege {
+public class ApiPrivilegeController extends ApiBaseSystemController<Privilege,PrivilegeReq,PrivilegeRes>  implements IPrivilege {
 
     private PrivilegeService privilegeService;
 
@@ -42,23 +44,23 @@ public class ApiPrivilegeController extends ApiBaseSystemController<Privilege>  
         this.privilegeService = privilegeService;
     }
 
-    @Override
-    public RELResultUtils<Privilege> table(Map<String, Object> params) {
-        String key = "name" ;
-        String name = (String) params.get(key);
-        if(!StringUtils.isEmptyOrBlank(name)){
-            params.put(key,"%"+name+"%");
-        } else {
-            params.remove(key);
-        }
-        return super.table(params);
-    }
+//    @Override
+//    public RELResultUtils<Privilege> table(Map<String, Object> params) {
+//        String key = "name" ;
+//        String name = (String) params.get(key);
+//        if(!StringUtils.isEmptyOrBlank(name)){
+//            params.put(key,"%"+name+"%");
+//        } else {
+//            params.remove(key);
+//        }
+//        return super.table(params);
+//    }
 
-    @Override
-    public RELResultUtils<Privilege> table(String v, Integer pageIndex, Integer pageSize) {
-        log.error("v ==> " + v + "   ====>" + pageIndex + "   =====>" + pageSize);
-        return super.table(v, pageIndex, pageSize);
-    }
+//    @Override
+//    public RELResultUtils<Privilege> table(String v, Integer pageIndex, Integer pageSize) {
+//        log.error("v ==> " + v + "   ====>" + pageIndex + "   =====>" + pageSize);
+//        return super.table(v, pageIndex, pageSize);
+//    }
 
     @RequestMapping(value={"/getMenu"},method=RequestMethod.POST)
     public List<PrivilegeMenu> getMenu(HttpServletRequest request, HttpSession session , @RequestBody AccountUnique user) {

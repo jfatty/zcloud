@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.Address;
+import com.jfatty.zcloud.system.req.AddressReq;
+import com.jfatty.zcloud.system.res.AddressRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +22,15 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/address")
-public interface AddressFeignClient  extends BInterface<Address> {
+public interface AddressFeignClient  extends BInterface<Address,AddressReq,AddressRes> {
 
 
     @RequestMapping(value = {"/table/list"}, method = RequestMethod.POST)
-    RELResultUtils<Address> table(@RequestBody Map<String, Object> params);
+    RELResultUtils<AddressRes> table(@RequestBody Map<String, Object> params);
 
 
     @RequestMapping(value = {"/table/list"}, method = RequestMethod.GET)
-    RELResultUtils<Address> table(@RequestParam(value = "v", defaultValue = "20191101") String v,
+    RELResultUtils<AddressRes> table(@RequestParam(value = "v", defaultValue = "20191101") String v,
                                   @RequestParam(value = "pageIndex", defaultValue = "1") Integer pageIndex,
                                   @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize);
 
@@ -36,16 +38,16 @@ public interface AddressFeignClient  extends BInterface<Address> {
     ResultUtils list();
 
     @RequestMapping(value = {"/list"}, method = RequestMethod.POST)
-    List<Address> list(@RequestParam(value = "v", defaultValue = "20191101") Long v);
+    List<AddressRes> list(@RequestParam(value = "v", defaultValue = "20191101") Long v);
 
     @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
-    ResultUtils save(@RequestBody Address entity);
+    ResultUtils save(@RequestBody AddressReq entity);
 
     @RequestMapping(value = {"/edit"}, method = RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id", defaultValue = "AQAQAQ") String id);
 
     @RequestMapping(value = {"/edit"}, method = RequestMethod.POST)
-    ResultUtils edit(@RequestBody Address entity);
+    ResultUtils edit(@RequestBody AddressReq entity);
 
     @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String, Object> params);

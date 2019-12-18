@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.fallback.AccountUniqueFallbackFactory;
+import com.jfatty.zcloud.system.req.AccountUniqueReq;
+import com.jfatty.zcloud.system.res.AccountUniqueRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +24,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/accountUnique" ,fallbackFactory = AccountUniqueFallbackFactory.class )
-public interface AccountUniqueFeignClient extends BInterface<AccountUnique> {
+public interface AccountUniqueFeignClient extends BInterface<AccountUnique,AccountUniqueReq,AccountUniqueRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<AccountUnique> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<AccountUniqueRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<AccountUnique> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<AccountUniqueRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -37,16 +39,16 @@ public interface AccountUniqueFeignClient extends BInterface<AccountUnique> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<AccountUnique> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<AccountUniqueRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody AccountUnique entity) ;
+    ResultUtils save(@RequestBody AccountUniqueReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody AccountUnique entity) ;
+    ResultUtils edit(@RequestBody AccountUniqueReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

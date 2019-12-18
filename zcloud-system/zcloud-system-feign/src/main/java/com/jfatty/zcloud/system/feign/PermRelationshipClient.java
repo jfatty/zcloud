@@ -3,6 +3,8 @@ package com.jfatty.zcloud.system.feign;
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.PermRelationship;
+import com.jfatty.zcloud.system.req.PermRelationshipReq;
+import com.jfatty.zcloud.system.res.PermRelationshipRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/perm")
-public interface PermRelationshipClient extends BInterface<PermRelationship> {
+public interface PermRelationshipClient extends BInterface<PermRelationship,PermRelationshipReq,PermRelationshipRes> {
 
 
     @RequestMapping(value={"/auth"},method=RequestMethod.GET)

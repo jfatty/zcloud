@@ -9,7 +9,6 @@ import com.jfatty.zcloud.wechat.service.AccountService;
 import com.jfatty.zcloud.wechat.service.WxService;
 import com.jfatty.zcloud.wechat.utils.MsgXmlUtil;
 import com.jfatty.zcloud.wechat.utils.WxApiClient;
-import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
 import com.jfatty.zcloud.wechat.utils.wx.SignUtil;
 import com.jfatty.zcloud.wechat.utils.wx.WxApi;
 import com.jfatty.zcloud.wechat.vo.MsgRequest;
@@ -106,5 +105,11 @@ public class ApiWechatController {
         return ResultUtils.build(200, "SUCCESS",result) ;
     }
 
+    @RequestMapping(value="/wxOAuth", method=RequestMethod.GET)
+    public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
+                               @RequestParam(value = "appId" , defaultValue = "code" ) String appId ){
+
+        return ResultUtils.build(200, "SUCCESS") ;
+    }
 
 }

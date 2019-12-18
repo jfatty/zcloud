@@ -6,6 +6,8 @@ import com.jfatty.zcloud.base.vo.SystemTree;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.entity.UserGroup;
 import com.jfatty.zcloud.system.interfaces.IUserGroup;
+import com.jfatty.zcloud.system.req.UserGroupReq;
+import com.jfatty.zcloud.system.res.UserGroupRes;
 import com.jfatty.zcloud.system.service.UserGroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/userGroup"})
-public class ApiUserGroupController extends ApiBaseSystemController<UserGroup>  implements IUserGroup {
+public class ApiUserGroupController extends ApiBaseSystemController<UserGroup,UserGroupReq,UserGroupRes>  implements IUserGroup {
 
 
     private UserGroupService userGroupService ;

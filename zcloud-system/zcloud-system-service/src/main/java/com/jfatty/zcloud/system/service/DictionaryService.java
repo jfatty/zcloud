@@ -1,6 +1,10 @@
 package com.jfatty.zcloud.system.service;
 
 import com.jfatty.zcloud.system.entity.Dictionary;
+import com.jfatty.zcloud.system.res.DictionaryRes;
+import com.jfatty.zcloud.system.res.DictionarySimRes;
+
+import java.util.List;
 
 /**
  * 描述
@@ -10,4 +14,5 @@ import com.jfatty.zcloud.system.entity.Dictionary;
  */
 public interface DictionaryService extends BaseSystemService<Dictionary> {
 
+    List<DictionarySimRes> getByDictionaryMenu(String dictionaryMenuId);
 }

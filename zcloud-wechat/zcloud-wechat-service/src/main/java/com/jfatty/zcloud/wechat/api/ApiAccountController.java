@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.interfaces.IAccount;
+import com.jfatty.zcloud.wechat.req.AccountReq;
+import com.jfatty.zcloud.wechat.res.AccountRes;
 import com.jfatty.zcloud.wechat.service.AccountService;
 
 import io.swagger.annotations.ApiImplicitParam;
@@ -32,7 +34,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/api/account")
-public class ApiAccountController extends ApiBaseWechatController<Account>  implements IAccount {
+public class ApiAccountController extends ApiBaseWechatController<Account,AccountReq,AccountRes>  implements IAccount {
 
 
     private AccountService accountService;
@@ -55,12 +57,12 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "pageSize", value = "每页显示条数",dataType = "Integer")
     })
     @Override
-    public RELResultUtils<Account> table(String v, Integer pageIndex, Integer pageSize) {
+    public RELResultUtils<AccountRes> table(String v, Integer pageIndex, Integer pageSize) {
         return super.table(v, pageIndex, pageSize);
     }
 
     @Override
-    public List<Account> list(Long v) {
+    public List<AccountRes> list(Long v) {
         return super.list(v);
     }
 
@@ -79,7 +81,7 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "json包微信数据数据", value = "account",dataType = "json")
     })
     @Override
-    public ResultUtils save(Account entity) {
+    public ResultUtils save(AccountReq entity) {
         String url =  "/api/wx/" + entity.getAccount() + "/message";
         if(entity.getId() == null) {//新增
             entity.setUrl(url);
@@ -124,7 +126,7 @@ public class ApiAccountController extends ApiBaseWechatController<Account>  impl
             @ApiImplicitParam(name = "json包微信账号数据", value = "account",dataType = "json")
     })
     @Override
-    public ResultUtils edit(Account entity) {
+    public ResultUtils edit(AccountReq entity) {
         entity.setUpdateTime(LocalDateTime.now());
         return super.edit(entity);
     }

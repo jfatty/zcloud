@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.UserGroup;
+import com.jfatty.zcloud.system.req.UserGroupReq;
+import com.jfatty.zcloud.system.res.UserGroupRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,15 +23,15 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/userGroup")
-public interface UserGroupFeignClient extends BInterface<UserGroup> {
+public interface UserGroupFeignClient extends BInterface<UserGroup,UserGroupReq,UserGroupRes> {
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<UserGroup> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<UserGroupRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<UserGroup> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<UserGroupRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                                     @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                                     @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -37,16 +39,16 @@ public interface UserGroupFeignClient extends BInterface<UserGroup> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<UserGroup> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<UserGroupRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody UserGroup entity) ;
+    ResultUtils save(@RequestBody UserGroupReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody UserGroup entity) ;
+    ResultUtils edit(@RequestBody UserGroupReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

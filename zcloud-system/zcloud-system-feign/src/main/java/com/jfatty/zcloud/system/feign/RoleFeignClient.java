@@ -5,6 +5,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.Privilege;
 import com.jfatty.zcloud.system.entity.Role;
+import com.jfatty.zcloud.system.req.RoleReq;
+import com.jfatty.zcloud.system.res.RoleRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,14 +24,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/role")
-public interface RoleFeignClient extends BInterface<Role> {
+public interface RoleFeignClient extends BInterface<Role,RoleReq,RoleRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<Role> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<RoleRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<Role> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<RoleRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -37,16 +39,16 @@ public interface RoleFeignClient extends BInterface<Role> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<Role> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<RoleRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody Role entity) ;
+    ResultUtils save(@RequestBody RoleReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody Role entity) ;
+    ResultUtils edit(@RequestBody RoleReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.api;
 
 import com.jfatty.zcloud.wechat.entity.UserTag;
 import com.jfatty.zcloud.wechat.interfaces.IUserTag;
+import com.jfatty.zcloud.wechat.req.UserTagReq;
+import com.jfatty.zcloud.wechat.res.UserTagRes;
 import com.jfatty.zcloud.wechat.service.UserTagService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/userTag")
-public class ApiUserTagController extends ApiBaseWechatController<UserTag>  implements IUserTag {
+public class ApiUserTagController extends ApiBaseWechatController<UserTag,UserTagReq,UserTagRes>  implements IUserTag {
 
     private UserTagService userTagService ;
 

@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.AccountUnique;
 import com.jfatty.zcloud.system.feign.AccountUniqueFeignClient;
+import com.jfatty.zcloud.system.req.AccountUniqueReq;
+import com.jfatty.zcloud.system.res.AccountUniqueRes;
 import feign.hystrix.FallbackFactory;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +28,12 @@ public class AccountUniqueFallbackFactory implements FallbackFactory<AccountUniq
     public AccountUniqueFeignClient create(Throwable cause) {
         return new AccountUniqueFeignClient() {
             @Override
-            public RELResultUtils<AccountUnique> table(Map<String, Object> params) {
+            public RELResultUtils<AccountUniqueRes> table(Map<String, Object> params) {
                 return null;
             }
 
             @Override
-            public RELResultUtils<AccountUnique> table(String v, Integer pageIndex, Integer pageSize) {
+            public RELResultUtils<AccountUniqueRes> table(String v, Integer pageIndex, Integer pageSize) {
                 return null;
             }
 
@@ -41,12 +43,12 @@ public class AccountUniqueFallbackFactory implements FallbackFactory<AccountUniq
             }
 
             @Override
-            public List<AccountUnique> list(Long v) {
+            public List<AccountUniqueRes> list(Long v) {
                 return null;
             }
 
             @Override
-            public ResultUtils save(AccountUnique entity) {
+            public ResultUtils save(AccountUniqueReq entity) {
                 return null;
             }
 
@@ -60,7 +62,7 @@ public class AccountUniqueFallbackFactory implements FallbackFactory<AccountUniq
             }
 
             @Override
-            public ResultUtils edit(AccountUnique entity) {
+            public ResultUtils edit(AccountUniqueReq entity) {
                 return null;
             }
 
@@ -68,6 +70,6 @@ public class AccountUniqueFallbackFactory implements FallbackFactory<AccountUniq
             public ResultUtils delete(Map<String, Object> params) {
                 return null;
             }
-        } ;
+        };
     }
 }

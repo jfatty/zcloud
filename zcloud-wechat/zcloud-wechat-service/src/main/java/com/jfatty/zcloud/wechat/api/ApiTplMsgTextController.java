@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.api;
 
 import com.jfatty.zcloud.wechat.entity.TplMsgText;
 import com.jfatty.zcloud.wechat.interfaces.ITplMsgText;
+import com.jfatty.zcloud.wechat.req.TplMsgTextReq;
+import com.jfatty.zcloud.wechat.res.TplMsgTextRes;
 import com.jfatty.zcloud.wechat.service.TplMsgTextService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/tplMsgText")
-public class ApiTplMsgTextController extends ApiBaseWechatController<TplMsgText>  implements ITplMsgText {
+public class ApiTplMsgTextController extends ApiBaseWechatController<TplMsgText,TplMsgTextReq,TplMsgTextRes>  implements ITplMsgText {
 
     private TplMsgTextService tplMsgTextService ;
 

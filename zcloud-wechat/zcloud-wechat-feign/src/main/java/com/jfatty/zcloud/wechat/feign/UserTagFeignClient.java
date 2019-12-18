@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.wechat.entity.UserTag;
+import com.jfatty.zcloud.wechat.req.UserTagReq;
+import com.jfatty.zcloud.wechat.res.UserTagRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,14 +22,14 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-wechat-service" , path = "/api/userTag")
-public interface UserTagFeignClient extends BInterface<UserTag> {
+public interface UserTagFeignClient extends BInterface<UserTag,UserTagReq,UserTagRes> {
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<UserTag> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<UserTagRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<UserTag> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<UserTagRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                             @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                             @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -35,16 +37,16 @@ public interface UserTagFeignClient extends BInterface<UserTag> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<UserTag> list(Long v);
+    List<UserTagRes> list(Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody UserTag entity) ;
+    ResultUtils save(@RequestBody UserTagReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody UserTag entity) ;
+    ResultUtils edit(@RequestBody UserTagReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

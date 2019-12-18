@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.system.entity.User;
+import com.jfatty.zcloud.system.req.UserReq;
+import com.jfatty.zcloud.system.res.UserRes;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +23,7 @@ import java.util.Map;
  * @email jfatty@163.com
  */
 @FeignClient(value = "zcloud-system-service" , path = "/api/user")
-public interface UserFeignClient extends BInterface<User> {
+public interface UserFeignClient extends BInterface<User,UserReq,UserRes> {
 
 
     /**
@@ -33,11 +35,11 @@ public interface UserFeignClient extends BInterface<User> {
     User  getUserInfoById(@RequestParam(value = "id" , defaultValue = "AQAQAQ")String id) ;
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.POST)
-    RELResultUtils<User> table(@RequestBody Map<String,Object> params) ;
+    RELResultUtils<UserRes> table(@RequestBody Map<String,Object> params) ;
 
 
     @RequestMapping(value={"/table/list"},method = RequestMethod.GET )
-    RELResultUtils<User> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
+    RELResultUtils<UserRes> table(@RequestParam(value = "v" , defaultValue = "20191101") String v ,
                                @RequestParam(value = "pageIndex" , defaultValue = "1" ) Integer pageIndex ,
                                @RequestParam(value = "pageSize" , defaultValue = "10") Integer pageSize) ;
 
@@ -45,16 +47,16 @@ public interface UserFeignClient extends BInterface<User> {
     ResultUtils list() ;
 
     @RequestMapping(value={"/list"},method=RequestMethod.POST)
-    List<User> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
+    List<UserRes> list(@RequestParam(value = "v" , defaultValue = "20191101") Long v);
 
     @RequestMapping(value={"/save"},method=RequestMethod.POST)
-    ResultUtils save(@RequestBody User entity) ;
+    ResultUtils save(@RequestBody UserReq entity) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.GET)
     ResultUtils view(@RequestParam(value = "id" , defaultValue = "AQAQAQ") String id ) ;
 
     @RequestMapping(value={"/edit"},method=RequestMethod.POST)
-    ResultUtils edit(@RequestBody User entity) ;
+    ResultUtils edit(@RequestBody UserReq entity) ;
 
     @RequestMapping(value={"/delete"},method=RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String,Object> params) ;

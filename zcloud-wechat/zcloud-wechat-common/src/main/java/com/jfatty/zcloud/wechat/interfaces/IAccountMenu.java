@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.interfaces;
 
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.wechat.entity.AccountMenu;
+import com.jfatty.zcloud.wechat.req.AccountMenuReq;
+import com.jfatty.zcloud.wechat.res.AccountMenuRes;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 @RequestMapping(value={"/accountMenu"})
-public interface IAccountMenu  extends BInterface<AccountMenu> {
+public interface IAccountMenu  extends BInterface<AccountMenu,AccountMenuReq,AccountMenuRes> {
 }

@@ -8,6 +8,8 @@ import com.jfatty.zcloud.wechat.constants.Constants;
 import com.jfatty.zcloud.wechat.entity.*;
 import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.interfaces.IAccountMenu;
+import com.jfatty.zcloud.wechat.req.AccountMenuReq;
+import com.jfatty.zcloud.wechat.res.AccountMenuRes;
 import com.jfatty.zcloud.wechat.service.*;
 import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
 import com.jfatty.zcloud.wechat.utils.wx.ErrCode;
@@ -34,7 +36,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/accountMenu")
-public class ApiAccountMenuController extends ApiBaseWechatController<AccountMenu>  implements IAccountMenu {
+public class ApiAccountMenuController extends ApiBaseWechatController<AccountMenu,AccountMenuReq,AccountMenuRes>  implements IAccountMenu {
 
     @Autowired
     private WxService wxService ;

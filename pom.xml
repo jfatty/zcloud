@@ -77,9 +77,13 @@
         <module>zcloud-system</module>
         <module>zcloud-ui</module>
         <module>zcloud-gateway</module>
+        <module>zcloud-auth</module>
+        <module>zcloud-hospital</module>
+        <module>zcloud-ui-admin</module>
     </modules>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

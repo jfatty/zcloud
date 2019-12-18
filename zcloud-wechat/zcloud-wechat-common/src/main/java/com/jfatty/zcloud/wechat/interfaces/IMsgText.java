@@ -2,6 +2,8 @@ package com.jfatty.zcloud.wechat.interfaces;
 
 import com.jfatty.zcloud.base.interfaces.BInterface;
 import com.jfatty.zcloud.wechat.entity.MsgText;
+import com.jfatty.zcloud.wechat.req.MsgTextReq;
+import com.jfatty.zcloud.wechat.res.MsgTextRes;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -11,5 +13,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 @RequestMapping(value={"/msgText"})
-public interface IMsgText   extends BInterface<MsgText> {
+public interface IMsgText   extends BInterface<MsgText,MsgTextReq,MsgTextRes> {
 }

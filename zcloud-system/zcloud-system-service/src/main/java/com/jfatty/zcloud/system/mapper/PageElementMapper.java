@@ -2,6 +2,9 @@ package com.jfatty.zcloud.system.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.system.entity.PageElement;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.jfatty.zcloud.system.entity.PageElement;
  */
 public interface PageElementMapper extends IBaseMapper<PageElement> {
 
+    List<PageElement> getElementsByPageId(@Param("pageId") String pageId);
 }

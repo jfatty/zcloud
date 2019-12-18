@@ -19,11 +19,13 @@
     <modules>
         <module>zcloud-alipay-common</module>
         <module>zcloud-alipay-service</module>
+        <module>zcloud-alipay-feign</module>
         <module>zcloud-alipay-ui</module>
     </modules>
 
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
