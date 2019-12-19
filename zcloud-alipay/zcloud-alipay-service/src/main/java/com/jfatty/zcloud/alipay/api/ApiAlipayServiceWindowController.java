@@ -101,7 +101,7 @@ public class ApiAlipayServiceWindowController {
                     System.out.println("获取用户信息失败");
                 }
                 log.debug("accessToken  ====>" + oauthTokenResponse.getAccessToken());
-                log.debug("alipayOpenId 存入当前会话 ====>"+oauthTokenResponse.getUserId());
+                log.error(" alipayOpenId 存入当前会话 ====>"+oauthTokenResponse.getUserId());
                 session.setAttribute("alipayOpenId", oauthTokenResponse.getUserId());
                 log.debug("支付宝认证之后重定向页面路径====>"+page);
                 response.sendRedirect(page);
