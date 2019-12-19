@@ -31,9 +31,17 @@ public class ShiroConfig {
         Map<String, String> map = new LinkedHashMap<String, String>();
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         map.put("/api/login", "anon");//API接口
+        map.put("/api/kaptcha", "anon");//API接口
         map.put("/api/logout", "anon");//API接口
         // 其他的
         //map.put("/**", "anon");
+        // swagger接口文档
+        map.put("/swagger-resources/**", "anon");
+        map.put("/v2/api-docs", "anon");
+        map.put("/v2/api-docs-ext", "anon");
+        map.put("/doc.html", "anon");
+        map.put("/webjars/** ", "anon");
+
         map.put("/**", "authc");
         return map ;
     }
