@@ -13,4 +13,7 @@ import lombok.Data;
 @Data
 @ApiModel(description = "项目管理实体")
 public class UserRes extends UserDTO<UserRes> {
+
+
+
 }
