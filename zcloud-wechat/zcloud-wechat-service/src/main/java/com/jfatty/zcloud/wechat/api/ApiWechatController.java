@@ -9,6 +9,7 @@ import com.jfatty.zcloud.wechat.service.AccountService;
 import com.jfatty.zcloud.wechat.service.WxService;
 import com.jfatty.zcloud.wechat.utils.MsgXmlUtil;
 import com.jfatty.zcloud.wechat.utils.WxApiClient;
+import com.jfatty.zcloud.wechat.utils.wx.OAuthAccessToken;
 import com.jfatty.zcloud.wechat.utils.wx.SignUtil;
 import com.jfatty.zcloud.wechat.utils.wx.WxApi;
 import com.jfatty.zcloud.wechat.vo.MsgRequest;
@@ -107,9 +108,18 @@ public class ApiWechatController {
 
     @RequestMapping(value="/wxOAuth", method=RequestMethod.GET)
     public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
-                               @RequestParam(value = "appId" , defaultValue = "code" ) String appId ){
-
-        return ResultUtils.build(200, "SUCCESS") ;
+                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
+        log.error(" ====>  当前微信公众 appId [{}] ",appId);
+        Account mpAccount = accountService.getByAppId(appId);
+        try {
+            //获取OAuthAccessToken
+            OAuthAccessToken token = WxApiClient.getDirectOAuthAccessToken(mpAccount,code) ;
+            log.error(" ====>  通过当前微信公众号 appId 获取到的 wcOpenId [{}]",token.getOpenid());
+            return ResultUtils.build(200, "SUCCESS",token.getOpenid()) ;
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            return ResultUtils.build(500, e.getMessage()) ;
+        }
     }
 
 }

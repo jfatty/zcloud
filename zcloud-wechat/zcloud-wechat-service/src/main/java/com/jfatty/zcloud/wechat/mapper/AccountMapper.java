@@ -3,6 +3,7 @@ package com.jfatty.zcloud.wechat.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.wechat.entity.Account;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -26,4 +27,11 @@ public interface AccountMapper extends IBaseMapper<Account> {
      * @return
      */
     Account getActiveAccount();
+
+    /**
+     * 根据微信账号信息进行查询
+     * @param appId
+     * @return
+     */
+    Account getByAppId(@Param("appId") String appId);
 }

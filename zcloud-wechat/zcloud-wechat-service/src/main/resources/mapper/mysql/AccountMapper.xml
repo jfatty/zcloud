@@ -34,6 +34,10 @@
 		SELECT * FROM wxcms_account WHERE account = #{account} ORDER BY ID DESC limit 1
 	</select>
 
+    <select id="getByAppId" resultMap="BaseResultMap">
+		SELECT * FROM wxcms_account WHERE appid = #{appId} ORDER BY ID DESC limit 1
+	</select>
+
     <sql id="Base_Column_List" >
       id, name, account, create_time, create_operator, update_operator,
       update_time, state, appid, appsecret, url, token,

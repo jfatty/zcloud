@@ -25,4 +25,11 @@ public interface AccountService extends BaseWechatService<Account> {
      * @return
      */
     Account getActiveAccount();
+
+    /**
+     * 根据微信账号信息进行查询
+     * @param appId appId
+     * @return
+     */
+    Account getByAppId(String appId);
 }
