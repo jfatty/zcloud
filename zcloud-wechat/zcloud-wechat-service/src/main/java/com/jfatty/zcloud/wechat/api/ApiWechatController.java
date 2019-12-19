@@ -3,6 +3,7 @@ package com.jfatty.zcloud.wechat.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.service.AccountService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -108,12 +110,19 @@ public class ApiWechatController {
 
     @RequestMapping(value="/wx/OAuth", method= { RequestMethod.GET,RequestMethod.POST } )
     public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
-                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
+                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ,HttpServletRequest request){
         log.error(" ====>  当前微信公众 appId [{}] ",appId);
+        HttpSession session = request.getSession();
+        String openId =(String) session.getAttribute("openId");
+        if(StringUtils.isNotEmptyAndBlank(openId)){
+            return ResultUtils.build(200, "SUCCESS",openId) ;
+        }
         Account mpAccount = accountService.getByAppId(appId);
         try {
             //获取OAuthAccessToken
             OAuthAccessToken token = WxApiClient.getDirectOAuthAccessToken(mpAccount,code) ;
+            session.setAttribute("openId", token.getOpenid());
+            session.setAttribute("accessToken", token.getAccessToken());            //网页授权的access_token
             log.error(" ====>  通过当前微信公众号 appId 获取到的 wcOpenId [{}]",token.getOpenid());
             return ResultUtils.build(200, "SUCCESS",token.getOpenid()) ;
         } catch (WxErrorException e) {
