@@ -106,7 +106,7 @@ public class ApiWechatController {
         return ResultUtils.build(200, "SUCCESS",result) ;
     }
 
-    @RequestMapping(value="/wxOAuth", method=RequestMethod.GET)
+    @RequestMapping(value="/wx/OAuth", method= { RequestMethod.GET,RequestMethod.POST } )
     public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
                                @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
         log.error(" ====>  当前微信公众 appId [{}] ",appId);
