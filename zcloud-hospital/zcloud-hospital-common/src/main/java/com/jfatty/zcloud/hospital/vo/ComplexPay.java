@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.hospital.vo;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * @author jfatty on 2019/12/17
  * @email jfatty@163.com
  */
+@Accessors(chain = true)
 @Data
 public class ComplexPay implements Serializable {
 
@@ -97,5 +99,53 @@ public class ComplexPay implements Serializable {
      * 支付状态，已经退款（医院向用户退款）
      */
     public final static int PAY_STATE_REFIND = 4;
+
+    /***************支付方式**********************************************************/
+    /**
+     * 支付方式， 微信支付
+     */
+    public final static int PAY_WAY_WECHAT = 2; // PAY_WAY_WECHAT = 19;
+
+    /**
+     * 支付方式，支付宝支付
+     */
+    public final static int PAY_WAY_ZFB = 1;//  PAY_WAY_ZFB =20;
+
+    /**
+     * 支付方式， 三方APP支付 建行
+     */
+    public final static int PAY_WAY_APP = 3;
+
+    /***************与HIS系统同步状态********************************************************/
+    /**
+     * 支付结果没有和HIS系统同步
+     */
+    public final static int HIS_SYNC_NO = 0;
+
+    /**
+     * 支付结果已经与HIS系统同步
+     */
+    public final static int HIS_SYNC_YES = 1;
+
+    /***************支付同步状态********************************************************/
+    /**
+     * 支付同步状态， 未异步回调修改支付状态
+     */
+    public final static int PAY_SYNC_NO = 0;
+
+    /**
+     * 支付同步状态， 已经异步回调修改支付状态
+     */
+    public final static int PAY_SYNC_YES = 1;
+    /***************支付方向**********************************************************/
+    /**
+     * 支付方向， 用户向医院付款
+     */
+    public final static int PAY_ORIENTATION_FRONT = 1;
+
+    /**
+     * 支付方向， 医院向用户退款
+     */
+    public final static int PAY_ORIENTATION_BACK = 2;
 
 }
