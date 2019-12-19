@@ -9,18 +9,18 @@ import com.alipay.api.request.AlipaySystemOauthTokenRequest;
 import com.alipay.api.request.AlipayUserInfoShareRequest;
 import com.alipay.api.response.AlipaySystemOauthTokenResponse;
 import com.alipay.api.response.AlipayUserInfoShareResponse;
+import com.jfatty.zcloud.alipay.entity.AlipayAuthCode;
 import com.jfatty.zcloud.alipay.entity.AlipayConfig;
+import com.jfatty.zcloud.alipay.service.AlipayAuthCodeService;
 import com.jfatty.zcloud.alipay.service.AlipayConfigService;
 import com.jfatty.zcloud.alipay.service.AlipayCoreService;
 import com.jfatty.zcloud.alipay.utils.RequestUtil;
+import com.jfatty.zcloud.base.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +46,24 @@ public class ApiAlipayServiceWindowController {
 
     @Autowired
     private AlipayConfigService alipayConfigService ;
+
+    @Autowired
+    private AlipayAuthCodeService alipayAuthCodeService ;
+
+    @RequestMapping(value="/alipay/OAuth", method= { RequestMethod.GET,RequestMethod.POST } )
+    @ResponseBody
+    public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
+                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
+        log.error(" ====>  当前支付宝生活号 appId [{}] ",appId);
+        try {
+            AlipayAuthCode alipayAuthCode = alipayAuthCodeService.getByAuthCode(code,appId);
+            log.error(" ====>  通过当支付宝生活号 appId 获取到的 alipayOpenId [{}]",alipayAuthCode.getId());
+            return ResultUtils.build(200, "SUCCESS",alipayAuthCode.getId()) ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultUtils.build(500, e.getMessage()) ;
+        }
+    }
 
     /**
      * basepath /ZFBOauth/alipayOauth.action
@@ -100,10 +118,17 @@ public class ApiAlipayServiceWindowController {
                     //这里仅是简单打印， 请开发者按实际情况自行进行处理
                     System.out.println("获取用户信息失败");
                 }
+
+                AlipayAuthCode alipayAuthCode = new AlipayAuthCode();
+                alipayAuthCode.setId(oauthTokenResponse.getUserId());
+                alipayAuthCode.setAuthCode(auth_code);
+                alipayAuthCode.setAppid(app_id);
+                alipayAuthCodeService.saveOrUpdate(alipayAuthCode);
                 log.debug("accessToken  ====>" + oauthTokenResponse.getAccessToken());
                 log.error(" alipayOpenId 存入当前会话 ====>"+oauthTokenResponse.getUserId());
                 session.setAttribute("alipayOpenId", oauthTokenResponse.getUserId());
-                log.debug("支付宝认证之后重定向页面路径====>"+page);
+                log.error("支付宝认证之后重定向页面路径====>"+page);
+                page = page + "?code=" + auth_code ;
                 response.sendRedirect(page);
             }else {
                 /**
