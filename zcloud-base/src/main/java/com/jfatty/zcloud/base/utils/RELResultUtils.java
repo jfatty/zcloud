@@ -34,6 +34,35 @@ public class RELResultUtils <T> implements Serializable {
     // 响应中的数据
     private List<T> list;
 
+
+    public static RELResultUtils  faild(String msg) {
+        return new RELResultUtils(500, msg, null);
+    }
+
+    /**
+     * 506表示业务流程操作成功 回显有效提示信息
+     * @param msg
+     * @return
+     */
+    public static RELResultUtils  _506(String msg) {
+        return new RELResultUtils(506, msg, null);
+    }
+
+    /**
+     * 509 表示客户端 请求参数不合规 并携带提示信息
+     * @param msg
+     * @return
+     */
+    public static RELResultUtils  _509(String msg) {
+        return new RELResultUtils(509, msg, null);
+    }
+
+    public static RELResultUtils  faild(Integer code,String msg) {
+        return new RELResultUtils(code, msg, null);
+    }
+
+
+
     public RELResultUtils() {
 
     }

@@ -43,6 +43,32 @@ public class ResultUtils implements Serializable {
     // 响应中的数据
     private Object data;
 
+    public static ResultUtils  faild(String msg) {
+        return new ResultUtils(500, msg, null);
+    }
+
+    /**
+     * 506表示业务流程操作成功 回显有效提示信息
+     * @param msg
+     * @return
+     */
+    public static ResultUtils  _506(String msg) {
+        return new ResultUtils(506, msg, null);
+    }
+
+    /**
+     * 509 表示客户端 请求参数不合规 并携带提示信息
+     * @param msg
+     * @return
+     */
+    public static ResultUtils  _509(String msg) {
+        return new ResultUtils(509, msg, null);
+    }
+
+    public static ResultUtils  faild(Integer code,String msg) {
+        return new ResultUtils(code, msg, null);
+    }
+
     public static ResultUtils _500() {
         return new ResultUtils(500, "服务器错误!", null);
     }
