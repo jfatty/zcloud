@@ -1,7 +1,7 @@
 package com.jfatty.zcloud.hospital.service;
 
-import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.vo.ElectronicCard;
+import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 
 import java.util.List;
 
@@ -18,6 +18,6 @@ public interface ElectronicCardService {
      * @param list
      * @return
      */
-    List<ElectronicCard> getECards(List<WebRegPatientRes> list);
+    List<ElectronicCard> getECards(List<WebRegPatient> list);
 
 }

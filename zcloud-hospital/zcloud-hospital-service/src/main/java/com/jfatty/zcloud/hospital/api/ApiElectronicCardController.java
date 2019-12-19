@@ -1,13 +1,12 @@
 package com.jfatty.zcloud.hospital.api;
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.hospital.req.ElectronicCardReq;
 import com.jfatty.zcloud.hospital.res.ElectronicCardRes;
-import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.service.ElectronicCardService;
 import com.jfatty.zcloud.hospital.vo.ElectronicCard;
+import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +42,7 @@ public class ApiElectronicCardController {
     @ApiOperation(value="001****获取电子就诊卡信息列表")
     @RequestMapping(value = {"/getWebPriceinfo"} ,method = RequestMethod.POST)
     public RELResultUtils<ElectronicCardRes> getElectronicCards(@RequestBody ElectronicCardReq electronicCardReq){
-        List<WebRegPatientRes> list = complexPatientService.getWebRegList(electronicCardReq.getOpenId(),electronicCardReq.getOpenIdType());
+        List<WebRegPatient> list = complexPatientService.getWebRegList(electronicCardReq.getOpenId(),electronicCardReq.getOpenIdType());
         List<ElectronicCard>  eCards = electronicCardService.getECards(list);
         if( !CollectionUtils.isEmpty(eCards)){
             List<ElectronicCardRes> results = new ArrayList<ElectronicCardRes>();

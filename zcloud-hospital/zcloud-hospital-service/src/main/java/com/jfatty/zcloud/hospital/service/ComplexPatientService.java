@@ -3,6 +3,7 @@ package com.jfatty.zcloud.hospital.service;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
+import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface ComplexPatientService {
      * @param openIdType
      * @return
      */
-    List<WebRegPatientRes> getWebRegList(String openId, Integer openIdType);
+    List<WebRegPatient> getWebRegList(String openId, Integer openIdType);
     /**
      * 查询微信/支付宝用户绑定的就诊人的信息
      * @param openId
@@ -29,7 +30,7 @@ public interface ComplexPatientService {
      * @param pageSize
      * @return
      */
-    List<WebRegPatientRes> getWebRegList(String openId, Integer openIdType, Integer pageIndex, Integer pageSize);
+    List<WebRegPatient> getWebRegList(String openId, Integer openIdType, Integer pageIndex, Integer pageSize);
 
     /**
      *

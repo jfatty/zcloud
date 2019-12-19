@@ -2,9 +2,9 @@ package com.jfatty.zcloud.hospital.service.impl;
 
 import com.jfatty.zcloud.hospital.datasource.TargetDataSource;
 import com.jfatty.zcloud.hospital.mapper.ElectronicCardMapper;
-import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ElectronicCardService;
 import com.jfatty.zcloud.hospital.vo.ElectronicCard;
+import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class ElectronicCardServiceImpl implements ElectronicCardService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public List<ElectronicCard> getECards(List<WebRegPatientRes> list) {
+    public List<ElectronicCard> getECards(List<WebRegPatient> list) {
         return electronicCardMapper.getECards(list);
     }
 }

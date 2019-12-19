@@ -39,7 +39,7 @@ public class ApiReportViewController {
     @Autowired
     private ReportViewService reportViewService ;
 
-    @ApiOperation(value="获取报告任务")
+    @ApiOperation(value="001********获取报告任务")
     @RequestMapping(value = {"/getWebReportMission"} ,method = RequestMethod.POST)
     public RELResultUtils<WebReportMissionRes> getWebReportMission(@RequestBody WebReportMissionReq webReportMissionReq){
         List<WebReportMission> list = reportViewService.getWebReportMission(webReportMissionReq.getOpenId(),webReportMissionReq.getOpenIdType());
@@ -59,7 +59,7 @@ public class ApiReportViewController {
         return RELResultUtils.success("医院系统中没有查询到数据");
     }
 
-    @ApiOperation(value="检验/检查报告列表 返回结果是列表")
+    @ApiOperation(value="002*******检验/检查报告列表 返回结果是列表")
     @RequestMapping(value = {"/getWebReportList"} ,method = RequestMethod.POST)
     public RELResultUtils<WebReportListRes> getWebReportList(@RequestBody WebReportListReq webReportListReq){
         List<WebReportList> list = reportViewService.getWebReportList(webReportListReq.getOpenId(), webReportListReq.getOpenIdType(),webReportListReq.getBglx(),webReportListReq.getBrbh());
@@ -84,7 +84,7 @@ public class ApiReportViewController {
      * @author jfatty
      * 创建时间：2018年11月06日
      */
-    @ApiOperation(value="检查报告内容 一条信息")
+    @ApiOperation(value="003*****检查报告内容 一条信息")
     @RequestMapping(value="/getWebPacsReport", method=RequestMethod.POST)
     public RETResultUtils<WebPacsReportRes> getWebPacsReport(@RequestBody WebPacsReportReq webPacsReportReq){
         WebPacsReport webPacsReport = reportViewService.getWebPacsReport(webPacsReportReq.getOpenId(), webPacsReportReq.getOpenIdType(),webPacsReportReq.getDjh());
@@ -100,7 +100,7 @@ public class ApiReportViewController {
      * @author jfatty
      * 创建时间：2018年11月06日
      */
-    @ApiOperation(value="获取检验报告内容包括头部信息以及详情")
+    @ApiOperation(value="004******获取检验报告内容包括头部信息以及详情")
     @RequestMapping(value="/getWebReportListContent", method=RequestMethod.POST)
     public ResultUtils getWebReportListContent(@RequestBody WebReportListContentReq webReportListContentReq){
         Map<String,Object> map = new HashMap<String,Object>();

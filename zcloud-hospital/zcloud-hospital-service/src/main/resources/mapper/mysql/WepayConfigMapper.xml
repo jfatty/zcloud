@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.WepayConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.WepayConfig">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="mch_id" property="mchId" />
+        <result column="sign_type" property="signType" />
+        <result column="trade_type" property="tradeType" />
+        <result column="fee_fype" property="feeFype" />
+        <result column="pay_key" property="payKey" />
+        <result column="pay_notify_url" property="payNotifyUrl" />
+        <result column="gate_way" property="gateWay" />
+        <result column="cert_path" property="certPath" />
+        <result column="cert_passwd" property="certPasswd" />
+        <result column="pay_success_tpl_url" property="paySuccessTplUrl" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <select id="getByAppId" resultMap="BaseResultMap">
+        SELECT  * FROM pay_wepay_config WHERE appid = #{appId} LIMIT 1
+    </select>
+
+</mapper>

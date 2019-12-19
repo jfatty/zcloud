@@ -34,29 +34,18 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public List<WebRegPatientRes> getWebRegList(String openId, Integer openIdType) {
+    public List<WebRegPatient> getWebRegList(String openId, Integer openIdType) {
         return getWebRegList(openId,openIdType,1,10);
     }
 
     @TargetDataSource(name="mssql")
     @Override
-    public List<WebRegPatientRes> getWebRegList(String openId, Integer openIdType, Integer pageIndex, Integer pageSize) {
+    public List<WebRegPatient> getWebRegList(String openId, Integer openIdType, Integer pageIndex, Integer pageSize) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openId", openId);
         map.put("openIdType", openIdType);
         List<WebRegPatient> list = complexPatientMapper.getWebRegPatientList(map);
-        if(CollectionUtils.isNotEmpty(list)){
-            List<WebRegPatientRes> results = new ArrayList<WebRegPatientRes>();
-            list.forEach(
-                    webRegPatient -> {
-                        WebRegPatientRes webRegPatientRes = new WebRegPatientRes();
-                        BeanUtils.copyProperties(webRegPatient,webRegPatientRes);
-                        results.add(webRegPatientRes);
-                    }
-            );
-            return results ;
-        }
-        return null;
+        return list;
     }
 
     @TargetDataSource(name="mssql")

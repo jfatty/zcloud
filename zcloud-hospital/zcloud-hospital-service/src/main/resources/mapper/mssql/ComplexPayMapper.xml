@@ -2,8 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jfatty.zcloud.hospital.mapper.ComplexPayMapper">
 
+	<!--
+	 * 记录HIS系统对账返回的情况  jfatty 2017-11-19
+	 * @param outTradeNo  本地系统唯一订单号
+	 * @param hisSync     同步情况
+	 -->
+	<update id="syncHisFeeBack">
+		update numo.t_pay set hisAsync = #{hisSync},hisNo = #{hisNo},hisAsyncTime = getDate() where outTradeNo  = #{outTradeNo}
+	</update>
 
-    <!--查询住院预交与门诊缴费人员名单-->
+
+	<!--
+     * 记录HIS系统对账(住院预缴)返回的情况  jfatty 2017-11-19
+     * @param outTradeNo   支付宝、微信订单号
+     * @param hisSync      同步标志
+     * @param yjh          预缴号
+     -->
+	<update id="syncHisInHospitalFeeBack">
+		update numo.t_pay set hisNo=#{yjh}, hisAsync=#{hisSync}, hisAsyncTime=getDate() where outTradeNo=#{outTradeNo}
+	</update>
+
+	<!--查询住院预交与门诊缴费人员名单-->
     <select id="getWebMissionList" resultType="com.jfatty.zcloud.hospital.vo.WebMission">
         exec dbo.pro_web_mission #{openId},#{openIdType}
     </select>
@@ -36,5 +55,136 @@
     <select id="getPayRecordByOutTradeNo" resultType="com.jfatty.zcloud.hospital.vo.ComplexPay">
 		select * from numo.t_pay where outTradeNo = #{outTradeNo}
 	</select>
+
+
+    <!--
+	 * 根据 HIS系统中的 '唯一订单号' 和 支付类型 和 病人id  查询 最新的那一条支付记录
+	 * @param hisNo   HIS系统中的 '唯一订单号'
+	 * @param feeType 支付类型
+	 * @param id      病人id
+	 * @param payWay  支付方式
+	 *ltrim(rtrim(hisNo)) = ltrim(rtrim(#{param1})) and
+			feeType = #{param2} and
+			patientId = #{param3} and
+			payWay = #{param4}
+			String hisNo, int feeType, Long id, int payWay
+	 -->
+    <select id="getLatestPayRecord" resultType="com.jfatty.zcloud.hospital.vo.ComplexPay">
+		select
+			top 1 *
+		from
+			numo.t_pay
+		where
+			ltrim(rtrim(djh)) = ltrim(rtrim(#{hisNo})) and
+			feeType = #{feeType} and
+			patientId = #{brid} and
+			payWay = #{payWay}
+		order by id desc
+	</select>
+
+	<!--
+		 * 描述  本地系统支付系统数据存储成功之后调用存储过程通知his系统
+		 * @author jfatty
+		 * 创建时间：2018年3月27日
+		 * @param   openId 支付宝微信openId
+		 * @param   openIdType  openId类型 1表示支付宝2表示微信 openId
+		 * @param   outTradeNo  交易订单号
+		 * @param   brid  病人ID
+		 * @param   fydh  费用订单列表 传入时 用逗号拼接   HIS系统中的费用单号
+		 * @param   fkfs  付款方式
+		 * @param   ssje  实收金额
+		 * @param   ext1  扩展字段
+		 * @param   ext2  扩展字段
+		 * @param   ext3  扩展字段
+	  -->
+    <select id="syncMZPay" resultType="com.jfatty.zcloud.hospital.vo.SyncMZPay">
+		exec dbo.pro_web_mzsf #{openId},#{openIdType},#{outTradeNo},#{brid},#{fydh},#{fkfs},#{ssje},#{ext1},#{ext2},#{ext3}
+	</select>
+
+	<!--
+		 * 描述  住院预缴 本地系统支付系统数据存储成功之后调用存储过程通知his系统
+		 * @author jfatty
+		 * 创建时间：2018年3月28日
+		 * @param   openId 支付宝微信openId
+		 * @param   openIdType  openId类型 1表示支付宝2表示微信 openId
+		 * @param   outTradeNo  交易订单号
+		 * @param   brid  病人ID
+		 * @param   zybh  住院编号   HIS系统中的住院编号
+		 * @param   fkfs  付款方式
+		 * @param   yjje  预缴金额
+		 * @param   ext1  扩展字段
+		 * @param   ext2  扩展字段
+		 * @param   ext3  扩展字段
+	  -->
+	<select id="syncZYPay" resultType="com.jfatty.zcloud.hospital.vo.SyncZYPay" >
+		exec dbo.pro_web_zyyj #{openId},#{openIdType},#{outTradeNo},#{brid},#{zybh},#{fkfs},#{yjje},#{ext1},#{ext2},#{ext3}
+	</select>
+
+
+	<!--
+	 * @Description 异步通知，改变状态
+	 * @author jfatty 2017年10月31日
+	 * @param payVO
+	 -->
+	<update id="payAsync" parameterType="com.jfatty.zcloud.hospital.vo.ComplexPay"  >
+		update numo.t_pay set
+			tradeNo   = #{tradeNo,   jdbcType=VARCHAR},
+			async     = #{async,     jdbcType=NUMERIC},
+			asyncTime = #{asyncTime, jdbcType=DATE},
+			payState  = #{payState,  jdbcType=NUMERIC}
+		where
+			outTradeNo = #{outTradeNo}
+	</update>
+
+
+    <!--向数据库订单表中插入订单信息-->
+	<insert id="saveOrderRecord" parameterType="com.jfatty.zcloud.hospital.vo.ComplexPay"  >
+		insert into numo.t_pay(
+			openId,
+			patientId,
+			hisNo,
+			feeName,
+			feeType,
+			feeAmount,
+			payWay,
+			outTradeNo,
+			tradeNo,
+			payOrientation,
+			async,
+			hisAsync,
+			payState,
+			remark,
+			payParam,
+			createdBy,
+			updatedBy,
+			createdTime,
+			updatedTime,
+			djh,
+			jzh
+		)values(
+			#{openId,     jdbcType=VARCHAR},
+			#{patientId,  jdbcType=NUMERIC},
+			#{hisNo,      jdbcType=VARCHAR},
+			#{feeName,    jdbcType=VARCHAR},
+			#{feeType,    jdbcType=NUMERIC},
+			#{feeAmount,  jdbcType=VARCHAR},
+			#{payWay,     jdbcType=NUMERIC},
+			#{outTradeNo, jdbcType=VARCHAR},
+			#{tradeNo,    jdbcType=VARCHAR},
+			#{payOrientation, jdbcType=NUMERIC},
+			#{async,      jdbcType=NUMERIC},
+			#{hisAsync,   jdbcType=NUMERIC},
+			#{payState,   jdbcType=NUMERIC},
+			#{remark,     jdbcType=VARCHAR},
+			#{payParam,   jdbcType=VARCHAR},
+			#{openId,     jdbcType=VARCHAR},
+			#{openId,     jdbcType=VARCHAR},
+			getDate(),
+			getDate(),
+			#{djh,     jdbcType=VARCHAR},
+			#{jzh,     jdbcType=VARCHAR}
+		)
+	</insert>
+
 
 </mapper>
