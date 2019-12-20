@@ -50,7 +50,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation, String hisCardNo, String hisCardType) throws Exception {
+    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation,Integer hasCard, String hisCardNo, String hisCardType) throws Exception {
         String regMSg = "" ;
         List<WebRegPatient> list = null ;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -60,10 +60,10 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         map.put("tel", tel);
         map.put("openId", openId);
         map.put("openIdType", openIdType);
-        if(StringUtils.isEmptyOrBlank(hisCardNo)) {
+        if(StringUtils.isEmptyOrBlank(hisCardNo) && hasCard == 0 ) {
             regMSg = "通过 姓名 身份证号绑定 " ;
             list = complexPatientMapper.webRegPatient(map);
-        } else {
+        } else if (StringUtils.isNotEmptyAndBlank(hisCardNo) && hasCard == 1){
             regMSg = "通过绑定就诊卡号绑定 就诊卡号:" + hisCardNo + " 就诊卡类型:" + hisCardType  ;
             String [] tmps = hisCardType.split(":::");
             System.out.println(tmps.length);
@@ -74,6 +74,8 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
             numoPatientInfo.setHisCardNo(hisCardNo);
             numoPatientInfo.setHisCardType(hisCardType);
             list = complexPatientMapper.webRegOtherPatient(map);
+        } else {
+            throw new RuntimeException("就诊人数据有误!");
         }
         if (CollectionUtils.isNotEmpty(list)){
             if( list.size() == 1 && list.get(0).success() ){ //成绑定

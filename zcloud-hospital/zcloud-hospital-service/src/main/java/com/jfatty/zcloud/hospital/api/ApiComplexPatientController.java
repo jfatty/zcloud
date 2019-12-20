@@ -68,6 +68,7 @@ public class ApiComplexPatientController {
             res = complexPatientService.saveComplexPatient(numoPatientInfoReq.getOpenId(),numoPatientInfoReq.getOpenIdType(),numoPatientInfoReq.getName(),//
                     numoPatientInfoReq.getIdCard(),numoPatientInfoReq.getTel(),//
                     numoPatientInfoReq.getAddress(),numoPatientInfoReq.getNation(),//
+                    numoPatientInfoReq.getHasCard(),//
                     numoPatientInfoReq.getHisCardNo(),numoPatientInfoReq.getHisCardType());
             if(res)
                 return RETResultUtils.success("绑定成功");

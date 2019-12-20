@@ -45,7 +45,7 @@ public interface ComplexPatientService {
      * @param hisCardType
      * @return
      */
-    boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation, String hisCardNo, String hisCardType) throws Exception ;
+    boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
 
     //查看就诊人详情 身份证加星操作
     /**

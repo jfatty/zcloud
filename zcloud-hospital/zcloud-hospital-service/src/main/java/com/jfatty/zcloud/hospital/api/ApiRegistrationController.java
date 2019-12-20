@@ -110,7 +110,7 @@ public class ApiRegistrationController {
             if( !CollectionUtils.isEmpty(registeredInfos) ){
                 String dateTime = registeredInfos.get(0).getPreTreatTime() ;
                 dateTime = dateTime.substring(0,10);
-                return new RETResultUtils(600,"就诊人"+numoPatientInfo.getName()+"已预约于"+dateTime+"在本院就诊") ;
+                return RETResultUtils._506("就诊人"+numoPatientInfo.getName()+"已预约于"+dateTime+"在本院就诊");
             }
             PreRegistered preRegistered = registrationService.preRegistered(preRegisteredReq.getOpenId(),//
                     preRegisteredReq.getOpenIdType(),preRegisteredReq.getBrid(),//
@@ -118,7 +118,7 @@ public class ApiRegistrationController {
                     numoPatientInfo.getTel(),preRegisteredReq.getKsid(),//
                     preRegisteredReq.getPreDate(),preRegisteredReq.getPreTime());
             if(preRegistered != null && !preRegistered.success() )
-                return RETResultUtils.success(preRegistered.getMsg());
+                return RETResultUtils._509(preRegistered.getMsg());
             PreRegisteredRes preRegisteredRes = new PreRegisteredRes();
             BeanUtils.copyProperties(preRegistered,preRegisteredRes);
             preRegisteredRes.setName(numoPatientInfo.getName());
