@@ -55,7 +55,7 @@ public abstract class ApiBaseController<T extends Model,P extends BaseDTO,R exte
         Integer pageSize = (Integer) params.get("pageSize");
         RELResultUtils<T> resultT = baseService.getTable("",pageIndex,pageSize,params);
         List<R> listR = new ArrayList<R>();
-        resultT.getList().forEach(
+        resultT.getData().forEach(
                 lit -> {
                     R r = null;
                     try {
@@ -71,7 +71,7 @@ public abstract class ApiBaseController<T extends Model,P extends BaseDTO,R exte
         );
         RELResultUtils<R> resultR = new RELResultUtils<R>();
         BeanUtils.copyProperties(resultT,resultR);
-        resultR.setList(listR);
+        resultR.setData(listR);
         return resultR ;
     }
 

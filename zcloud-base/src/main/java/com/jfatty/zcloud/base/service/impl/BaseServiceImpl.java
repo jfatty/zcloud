@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.base.service.impl;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jfatty.zcloud.base.mapper.IBaseMapper;

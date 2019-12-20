@@ -19,7 +19,7 @@ public class RETResultUtils<T> implements Serializable {
     private String msg;
 
     // 响应中的数据
-    private T obj ;
+    private T data ;
 
     public RETResultUtils() {
 
@@ -65,17 +65,17 @@ public class RETResultUtils<T> implements Serializable {
         return new RETResultUtils(code, msg, null);
     }
 
-    public RETResultUtils(Integer code, String msg, T obj) {
+    public RETResultUtils(Integer code, String msg, T data) {
         this.code = code;
         this.msg = msg;
-        this.obj = obj;
+        this.data = data;
 
     }
 
-    public RETResultUtils(T obj) {
+    public RETResultUtils(T data) {
         this.code = 200;
         this.msg = "OK";
-        this.obj = obj;
+        this.data = data;
     }
 
     public Boolean isOK() {
@@ -98,11 +98,12 @@ public class RETResultUtils<T> implements Serializable {
         this.msg = msg;
     }
 
-    public T getObj() {
-        return obj;
+    public T getData() {
+        return data;
     }
 
-    public void setObj(T obj) {
-        this.obj = obj;
+    public void setData(T data) {
+        this.data = data;
     }
+
 }

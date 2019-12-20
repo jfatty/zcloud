@@ -32,7 +32,7 @@ public class RELResultUtils <T> implements Serializable {
     private Integer count ;
 
     // 响应中的数据
-    private List<T> list;
+    private List<T> data;
 
 
     public static RELResultUtils  faild(String msg) {
@@ -76,13 +76,13 @@ public class RELResultUtils <T> implements Serializable {
     }
 
 
-    public RELResultUtils(Integer code, String msg, List<T> list) {
+    public RELResultUtils(Integer code, String msg, List<T> data) {
         this.code = code;
         this.msg = msg;
-        this.list = list;
-        if (list != null) {
-            this.count = list.size();
-            this.rel = (list.size() > 0);
+        this.data = data;
+        if (data != null) {
+            this.count = data.size();
+            this.rel = (data.size() > 0);
         } else {
             this.count = 0;
             this.rel = false;
@@ -90,12 +90,12 @@ public class RELResultUtils <T> implements Serializable {
 
     }
 
-    public RELResultUtils(Integer code, String msg, List<T> list, Integer count) {
+    public RELResultUtils(Integer code, String msg, List<T> data, Integer count) {
         this.code = code;
         this.msg = msg;
-        this.list = list;
+        this.data = data;
         this.count = count == null?0:count;
-        if (list != null) {
+        if (data != null) {
             this.rel = (count > 0);
         } else {
             this.rel = false;
@@ -103,10 +103,10 @@ public class RELResultUtils <T> implements Serializable {
 
     }
 
-    public RELResultUtils(List<T> list) {
+    public RELResultUtils(List<T> data) {
         this.code = 200;
         this.msg = "OK";
-        this.list = list;
+        this.data = data;
     }
 
     public Boolean isOK() {
@@ -145,12 +145,11 @@ public class RELResultUtils <T> implements Serializable {
         this.count = count;
     }
 
-    public List<T> getList() {
-        return list;
+    public List<T> getData() {
+        return data;
     }
 
-    public void setList(List<T> list) {
-        this.list = list;
+    public void setData(List<T> data) {
+        this.data = data;
     }
-
 }
