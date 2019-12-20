@@ -122,7 +122,7 @@ public class ApiRegistrationController {
             PreRegisteredRes preRegisteredRes = new PreRegisteredRes();
             BeanUtils.copyProperties(preRegistered,preRegisteredRes);
             preRegisteredRes.setName(numoPatientInfo.getName());
-            preRegisteredRes.setYyghsj(LocalDateTime.now().toString());
+            preRegisteredRes.setYyghsj(LocalDateTime.now());
             preRegisteredRes.setStatus("预约成功");
             return new RETResultUtils("预约成功!",preRegisteredRes);
         } catch (Exception e) {
