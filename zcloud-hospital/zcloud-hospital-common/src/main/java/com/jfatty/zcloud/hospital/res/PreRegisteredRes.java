@@ -1,9 +1,13 @@
 package com.jfatty.zcloud.hospital.res;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfatty.zcloud.hospital.dto.PreRegisteredDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 /**
  * 描述
@@ -58,6 +62,8 @@ public class PreRegisteredRes extends PreRegisteredDTO<PreRegisteredRes> {
      * 预约挂号时间
      */
     @ApiModelProperty(name = "name", position = 0,required = true, value = "预约挂号时间" ,example = "yyyy-MM-dd HH:mm:ss")
-    private String yyghsj ;
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime yyghsj ;
 
 }
