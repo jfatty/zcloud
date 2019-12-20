@@ -88,7 +88,9 @@ public class ApiReportViewController {
     @RequestMapping(value="/getWebPacsReport", method=RequestMethod.POST)
     public RETResultUtils<WebPacsReportRes> getWebPacsReport(@RequestBody WebPacsReportReq webPacsReportReq){
         WebPacsReport webPacsReport = reportViewService.getWebPacsReport(webPacsReportReq.getOpenId(), webPacsReportReq.getOpenIdType(),webPacsReportReq.getDjh());
-        if(webPacsReport == null || !webPacsReport.success())
+        if(webPacsReport == null )
+            return RETResultUtils._506("没有查询到检查报告数据");
+        if(webPacsReport != null && !webPacsReport.success())
             return RETResultUtils.success(webPacsReport.getMsg());
         WebPacsReportRes webPacsReportRes = new WebPacsReportRes();
         BeanUtils.copyProperties(webPacsReport,webPacsReportRes);
