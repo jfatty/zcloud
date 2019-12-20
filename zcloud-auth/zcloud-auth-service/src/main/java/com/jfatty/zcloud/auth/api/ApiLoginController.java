@@ -1,7 +1,9 @@
 package com.jfatty.zcloud.auth.api;
 
 import com.jfatty.zcloud.auth.req.LoginVoReq;
+import com.jfatty.zcloud.auth.utils.PhoneNumUtil;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,11 @@ public class ApiLoginController {
         //subject.login(upToken);
         //subject.login(token);
         //登录成功就不会报异常
+        String msg = PhoneNumUtil.isPhone(loginVo.getAccount()) ;
+        if(StringUtils.isNotEmptyAndBlank(msg))
+            return RETResultUtils._509(msg) ;
+        if(StringUtils.isEmptyOrBlank(loginVo.getPassword()))
+            return RETResultUtils._509("验证码不能为空") ;
         return new RETResultUtils("TOKENACDX"+System.currentTimeMillis()) ;
     }
 
