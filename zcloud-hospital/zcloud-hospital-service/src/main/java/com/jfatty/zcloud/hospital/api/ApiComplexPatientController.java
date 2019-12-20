@@ -46,8 +46,12 @@ public class ApiComplexPatientController {
     public RELResultUtils<WebRegPatientRes> getComplexPatients(@RequestBody ComplexPatientReq complexPatientReq){
         List<WebRegPatient> list = complexPatientService.getWebRegList(complexPatientReq.getOpenId(), complexPatientReq.getOpenIdType(),complexPatientReq.getPageIndex(),complexPatientReq.getPageSize());
         if(CollectionUtils.isNotEmpty(list)){
-            if ( !(list.get(0).success()) )
-                return RELResultUtils._506(list.get(0).getMsg());
+            if ( !(list.get(0).success()) ){
+                String msg = list.get(0).getMsg() ;
+                if (msg.contains("未找到有效"))
+                    return RELResultUtils._506("请先添加就诊人!") ;
+                return RELResultUtils._506(msg);
+            }
             List<WebRegPatientRes> results = new ArrayList<WebRegPatientRes>();
             list.forEach(
                     webRegPatient -> {
@@ -58,7 +62,7 @@ public class ApiComplexPatientController {
             );
             return new RELResultUtils(results) ;
         }
-        return RELResultUtils._506("请先绑定就诊人!") ;
+        return RELResultUtils._506("请先添加就诊人!") ;
     }
 
 
