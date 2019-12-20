@@ -72,6 +72,12 @@ public class RETResultUtils<T> implements Serializable {
 
     }
 
+    public RETResultUtils(String msg,T data) {
+        this.code = 200;
+        this.msg = msg ;
+        this.data = data;
+    }
+
     public RETResultUtils(T data) {
         this.code = 200;
         this.msg = "OK";
