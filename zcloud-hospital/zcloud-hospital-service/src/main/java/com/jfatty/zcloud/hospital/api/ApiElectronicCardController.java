@@ -43,19 +43,24 @@ public class ApiElectronicCardController {
     @RequestMapping(value = {"/getWebPriceinfo"} ,method = RequestMethod.POST)
     public RELResultUtils<ElectronicCardRes> getElectronicCards(@RequestBody ElectronicCardReq electronicCardReq){
         List<WebRegPatient> list = complexPatientService.getWebRegList(electronicCardReq.getOpenId(),electronicCardReq.getOpenIdType());
-        List<ElectronicCard>  eCards = electronicCardService.getECards(list);
-        if( !CollectionUtils.isEmpty(eCards)){
-            List<ElectronicCardRes> results = new ArrayList<ElectronicCardRes>();
-            eCards.forEach(
-                    eCard ->  {
-                        ElectronicCardRes electronicCardRes = new ElectronicCardRes();
-                        BeanUtils.copyProperties(eCard,electronicCardRes);
-                        results.add(electronicCardRes);
-                    }
-            );
-            return new RELResultUtils(results);
+        if( !CollectionUtils.isEmpty(list) ){
+            if ( !(list.get(0).success()) )
+                return RELResultUtils._506("请先绑定就诊人!");
+                //return RELResultUtils._506(list.get(0).getMsg());
+            List<ElectronicCard>  eCards = electronicCardService.getECards(list);
+            if( !CollectionUtils.isEmpty(eCards)){
+                List<ElectronicCardRes> results = new ArrayList<ElectronicCardRes>();
+                eCards.forEach(
+                        eCard ->  {
+                            ElectronicCardRes electronicCardRes = new ElectronicCardRes();
+                            BeanUtils.copyProperties(eCard,electronicCardRes);
+                            results.add(electronicCardRes);
+                        }
+                );
+                return new RELResultUtils(results);
+            }
         }
-        return RELResultUtils.success("请先绑定就诊人!");
+        return RELResultUtils._506("请先绑定就诊人!");
     }
 
 

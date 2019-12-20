@@ -57,7 +57,7 @@ public class ApiRegistrationController {
         List<HosDept> list = registrationService.getHosDepts(hosDeptReq.getOpenId(),hosDeptReq.getOpenIdType()) ;
         if( !CollectionUtils.isEmpty(list) ){
             if ( !(list.get(0).success()) )
-                return RELResultUtils.success(list.get(0).getMsg());
+                return RELResultUtils._506(list.get(0).getMsg());
             List<HosDeptRes> hosDeptReses = new ArrayList<HosDeptRes>();
             list.forEach(
                     hosDept -> {
@@ -68,7 +68,7 @@ public class ApiRegistrationController {
             );
             return new RELResultUtils(hosDeptReses);
         }
-        return RELResultUtils.success("暂无可预约挂号科室信息");
+        return RELResultUtils._506("暂无可预约挂号科室信息");
     }
 
     @ApiOperation(value="002****获取医院 值班班次 信息")
@@ -77,7 +77,7 @@ public class ApiRegistrationController {
         List<HosClazz> list = registrationService.getHosClazzs(hosClazzReq.getOpenId(),hosClazzReq.getOpenIdType()) ;
         if( !CollectionUtils.isEmpty(list) ){
             if ( !(list.get(0).success()) )
-                return RELResultUtils.success(list.get(0).getMsg());
+                return RELResultUtils._506(list.get(0).getMsg());
             List<HosClazzRes> hosClazzReses = new ArrayList<HosClazzRes>();
             list.forEach(
                     hosClazz -> {
@@ -88,7 +88,7 @@ public class ApiRegistrationController {
             );
             return new RELResultUtils(hosClazzReses);
         }
-        return RELResultUtils.success("暂无值班班次信息");
+        return RELResultUtils._506("暂无值班班次信息");
     }
 
     @ApiOperation(value="003****检验用户选择的日期是否为节假日")

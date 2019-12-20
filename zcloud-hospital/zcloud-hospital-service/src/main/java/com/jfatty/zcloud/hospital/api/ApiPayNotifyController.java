@@ -120,7 +120,6 @@ public class ApiPayNotifyController {
                 return xml;
             }
         } catch (Exception e) {
-            e.printStackTrace();
             log.error("====> 微信支付回调 出现异常: " + e.getMessage());
             Map<String, String> resMap = new HashMap<String, String>();
             resMap.put("return_code", "FAIL");

@@ -3,12 +3,14 @@ package com.jfatty.zcloud.hospital.api;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
 import com.jfatty.zcloud.hospital.req.NumoPatientDeatilReq;
 import com.jfatty.zcloud.hospital.req.NumoPatientInfoReq;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
+import com.jfatty.zcloud.hospital.utils.IdCardUtil;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,13 +84,18 @@ public class ApiComplexPatientController {
     @ApiOperation(value=" 003****查询单个就诊人详情")
     @RequestMapping(value="/getNumoPatientInfo", method=RequestMethod.POST)
     public RETResultUtils<NumoPatientDeatilRes> getNumoPatientInfo(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
+        if( StringUtils.isEmptyOrBlank(numoPatientDeatilReq.getBrid()) )
+            return RETResultUtils._509("病人ID不能为空");
         NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(numoPatientDeatilReq.getBrid());
+        numoPatientDeatilRes.setIdCard(IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),6,14));
         return new RETResultUtils(numoPatientDeatilRes);
     }
 
     @ApiOperation(value=" 004****删除就诊人，即将就诊人与用户解绑")
     @RequestMapping(value="/delComplexPatient", method=RequestMethod.POST)
     public RETResultUtils<String> deleteComplexPatient(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
+        if( StringUtils.isEmptyOrBlank(numoPatientDeatilReq.getBrid()) )
+            return RETResultUtils._509("病人ID不能为空");
         NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(numoPatientDeatilReq.getBrid());
         try {
             if( complexPatientService.deleteComplexPatient(numoPatientDeatilRes.getId(),numoPatientDeatilRes.getIdCard(),numoPatientDeatilRes.getName(),numoPatientDeatilReq.getOpenId(),numoPatientDeatilReq.getOpenIdType()) )

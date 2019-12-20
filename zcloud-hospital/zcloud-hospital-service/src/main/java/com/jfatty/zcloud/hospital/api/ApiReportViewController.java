@@ -45,7 +45,7 @@ public class ApiReportViewController {
         List<WebReportMission> list = reportViewService.getWebReportMission(webReportMissionReq.getOpenId(),webReportMissionReq.getOpenIdType());
         if( !CollectionUtils.isEmpty(list) ){
             if( !((list.get(0)).success() ))
-                return RELResultUtils.success(((list.get(0)).getMsg()));
+                return RELResultUtils._506(((list.get(0)).getMsg()));
             List<WebReportMissionRes> results = new ArrayList<WebReportMissionRes>();
             list.forEach(
                     webReportMission -> {
@@ -56,7 +56,7 @@ public class ApiReportViewController {
             );
             return new RELResultUtils(results);
         }
-        return RELResultUtils.success("医院系统中没有查询到数据");
+        return RELResultUtils._506("医院系统中没有查询到数据");
     }
 
     @ApiOperation(value="002*******检验/检查报告列表 返回结果是列表")
@@ -65,7 +65,7 @@ public class ApiReportViewController {
         List<WebReportList> list = reportViewService.getWebReportList(webReportListReq.getOpenId(), webReportListReq.getOpenIdType(),webReportListReq.getBglx(),webReportListReq.getBrbh());
         if( !CollectionUtils.isEmpty(list) ){
             if( !((list.get(0)).success() ))
-                return RELResultUtils.success(((list.get(0)).getMsg()));
+                return RELResultUtils._506(((list.get(0)).getMsg()));
             List<WebReportListRes> results = new ArrayList<WebReportListRes>();
             list.forEach(
                     webReportList -> {
@@ -76,7 +76,7 @@ public class ApiReportViewController {
             );
             return new RELResultUtils(results);
         }
-        return RELResultUtils.success("医院系统中没有查询到数据");
+        return RELResultUtils._506("医院系统中没有查询到数据");
     }
 
     /**
@@ -91,7 +91,7 @@ public class ApiReportViewController {
         if(webPacsReport == null )
             return RETResultUtils._506("没有查询到检查报告数据");
         if(webPacsReport != null && !webPacsReport.success())
-            return RETResultUtils.success(webPacsReport.getMsg());
+            return RETResultUtils._506(webPacsReport.getMsg());
         WebPacsReportRes webPacsReportRes = new WebPacsReportRes();
         BeanUtils.copyProperties(webPacsReport,webPacsReportRes);
         return new RETResultUtils(webPacsReportRes);
@@ -108,8 +108,10 @@ public class ApiReportViewController {
         Map<String,Object> map = new HashMap<String,Object>();
         //头部数据
         WebReportLisHead webReportLisHead =  reportViewService.getWebReportListHead(webReportListContentReq.getOpenId(), webReportListContentReq.getOpenIdType(),webReportListContentReq.getSn());
-        if(webReportLisHead == null || !webReportLisHead.success())
-            return ResultUtils.success(webReportLisHead == null ? "没有查询到检验报告数据":webReportLisHead.getMsg() );
+        if (webReportLisHead == null)
+            return ResultUtils._506( "没有查询到检验报告数据" );
+        if(webReportLisHead != null && !webReportLisHead.success())
+            return ResultUtils._506(webReportLisHead == null ? "没有查询到检验报告数据":webReportLisHead.getMsg() );
         WebReportLisHeadRes webReportLisHeadRes = new WebReportLisHeadRes();
         BeanUtils.copyProperties(webReportLisHead,webReportLisHeadRes);
         map.put("lisHead",webReportLisHeadRes);
@@ -117,7 +119,7 @@ public class ApiReportViewController {
         List<WebReportLisDetail> list = reportViewService.getWebReportListDetail(webReportListContentReq.getOpenId(), webReportListContentReq.getOpenIdType(),webReportListContentReq.getSn());
         if( !CollectionUtils.isEmpty(list) ){
             if( !(list.get(0).success()))
-                return ResultUtils.success(list.get(0).getMsg() );
+                return ResultUtils._506(list.get(0).getMsg() );
             List<WebReportLisDetailRes> webReportLisDetailReses = new ArrayList<WebReportLisDetailRes>();
             list.forEach(
                     webReportLisDetail -> {

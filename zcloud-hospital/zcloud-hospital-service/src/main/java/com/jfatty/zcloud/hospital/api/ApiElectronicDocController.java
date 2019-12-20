@@ -3,7 +3,6 @@ package com.jfatty.zcloud.hospital.api;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
-import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.hospital.req.ElectronicDocDetailReq;
 import com.jfatty.zcloud.hospital.req.ElectronicDocReq;
 import com.jfatty.zcloud.hospital.res.ElectronicDocDetailExtRes;
@@ -46,7 +45,7 @@ public class ApiElectronicDocController {
         List<ElectronicDoc> list = electronicDocService.getElectronicDocList(electronicDocReq.getOpenId(),electronicDocReq.getOpenIdType(),electronicDocReq.getStartTime(),electronicDocReq.getEndTime());
         if(CollectionUtils.isNotEmpty(list)){
             if(!(list.get(0)).success())
-                return RELResultUtils.success((list.get(0)).getMsg());
+                return RELResultUtils._509((list.get(0)).getMsg());
             List<ElectronicDocRes> result = new ArrayList<ElectronicDocRes>();
             list.forEach(
                  electronicDoc -> {
@@ -57,7 +56,7 @@ public class ApiElectronicDocController {
             );
             return new RELResultUtils(result);
         }
-        return RELResultUtils.success("没有查询到信息");
+        return RELResultUtils._506("没有查询到信息");
     }
 
 
@@ -66,7 +65,6 @@ public class ApiElectronicDocController {
     public RETResultUtils<ElectronicDocDetailExtRes> getElectronicDocDetail(@RequestBody ElectronicDocDetailReq electronicDocDetailReq){
         List<ElectronicDocDetail> list = electronicDocService.getElectronicDocDetail(electronicDocDetailReq.getOpenId(),electronicDocDetailReq.getOpenIdType(),electronicDocDetailReq.getBrbh(),electronicDocDetailReq.getSfh());
         if(CollectionUtils.isNotEmpty(list)){
-            System.out.println(list.get(0).success());
             if(!list.get(0).success())
                 return RETResultUtils.success((list.get(0)).getMsg());
             ElectronicDocDetailExtRes electronicDocDetailExtRes = new ElectronicDocDetailExtRes();
@@ -82,7 +80,7 @@ public class ApiElectronicDocController {
             electronicDocDetailExtRes.setElecDocs(elecDocs);
             return new RETResultUtils(electronicDocDetailExtRes );
         }
-        return RETResultUtils.success("没有查询到信息");
+        return RETResultUtils._506("没有查询到信息");
     }
 
 }

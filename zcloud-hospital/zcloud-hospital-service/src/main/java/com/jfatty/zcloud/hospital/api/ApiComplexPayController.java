@@ -48,13 +48,13 @@ public class ApiComplexPayController {
      * @author jfatty
      * 创建时间：2018年3月26日
      */
-    @ApiOperation(value="001*******查询微信用户绑定的有门诊缴费信息的病人以及待缴费信息")
+    @ApiOperation(value="001*******查询微信用户绑定的 有门诊/住院 缴费信息的病人以及待缴费信息")
     @RequestMapping(value="/getPendingPayList", method=RequestMethod.POST)
     public RELResultUtils<WebMissionRes> getPendingPayList(@RequestBody WebMissionReq webMissionReq){
         List<WebMission> list = complexPayService.getWebMissionList(webMissionReq.getOpenId(), webMissionReq.getOpenIdType());
         if ( !CollectionUtils.isEmpty(list) ){
             if ( !(list.get(0).success()) )
-                return RELResultUtils.success(list.get(0).getMsg());
+                return RELResultUtils._506(list.get(0).getMsg());
             Integer feeType = webMissionReq.getFeeType() ;
             List<WebMissionRes> webMissionReses = new ArrayList<WebMissionRes>();
             for (WebMission webMission : list) {
@@ -73,7 +73,7 @@ public class ApiComplexPayController {
             }
             return  new RELResultUtils(webMissionReses);
         }
-        return RELResultUtils.success("医院系统中没有查询到数据");
+        return RELResultUtils._506("医院系统中没有查询到数据");
     }
 
     @ApiOperation(value="002*******查询就诊人待缴费单信息")
@@ -82,7 +82,7 @@ public class ApiComplexPayController {
         List<WebmzList> list = complexPayService.getWebmzList(unPayOutpatientReq.getOpenId(), unPayOutpatientReq.getOpenIdType(),unPayOutpatientReq.getDjh());
         if( !CollectionUtils.isEmpty(list) ){
             if( !(list.get(0)).success() )
-                return RETResultUtils.success((list.get(0)).getMsg());
+                return RETResultUtils._506((list.get(0)).getMsg());
             List<UnPayOutpatientRes> unPayOutpatientReses = new ArrayList<UnPayOutpatientRes>();
             list.forEach(
                     webmzList -> {
@@ -98,15 +98,17 @@ public class ApiComplexPayController {
                     .setUnPays(unPayOutpatientReses);
             return new RETResultUtils(webmzListRes);
         }
-        return RETResultUtils.success("医院系统中没有查询到数据");
+        return RETResultUtils._506("医院系统中没有查询到数据");
     }
 
     @ApiOperation(value="003******通过费用单号查询单笔门诊缴费详情")
     @RequestMapping(value="/getOutpatientDetail", method=RequestMethod.POST)
     public RETResultUtils<OutpatientDetailRes> getOutpatientDetail(@RequestBody OutpatientDetailReq outpatientDetailReq ){
         OutpatientDetail outpatientDetail = complexPayService.getWebmzDetail(outpatientDetailReq.getOpenId(),outpatientDetailReq.getOpenIdType(),outpatientDetailReq.getFydh());
-        if(outpatientDetail == null || !outpatientDetail.success())
-            return RETResultUtils.success(outpatientDetail.getMsg());
+        if(outpatientDetail == null )
+            return RETResultUtils._506("系统未查询到门诊缴费详情");
+        if(outpatientDetail != null && !outpatientDetail.success())
+            return RETResultUtils._506(outpatientDetail.getMsg());
         OutpatientDetailRes outpatientDetailRes = new OutpatientDetailRes();
         BeanUtils.copyProperties(outpatientDetail,outpatientDetailRes);
         return new RETResultUtils(outpatientDetailRes);
@@ -117,7 +119,7 @@ public class ApiComplexPayController {
     public RETResultUtils<TotalUnPayOutpatientRes> getTotalUnPayOutpatient(@RequestBody TotalUnPayOutpatientReq totalUnPayOutpatientReq ){
         TotalUnPayOutpatient totalUnPayOutpatient = complexPayService.getMZPay(totalUnPayOutpatientReq.getOpenId(), totalUnPayOutpatientReq.getOpenIdType(),totalUnPayOutpatientReq.getDjh(),totalUnPayOutpatientReq.getBrid());
         if(totalUnPayOutpatient == null )
-            return RETResultUtils.success("没有查询到缴费单详情数据!");
+            return RETResultUtils._506("没有查询到缴费单详情数据!");
         //身份证加星号操作
         NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(totalUnPayOutpatientReq.getBrid());
         TotalUnPayOutpatientRes totalUnPayOutpatientRes = new TotalUnPayOutpatientRes();
@@ -138,8 +140,10 @@ public class ApiComplexPayController {
     public RETResultUtils<InHospitalInfoRes> findPatientInHospitalInfoNow(@RequestBody InHospitalInfoReq inHospitalInfoReq){
         String djh = inHospitalInfoReq.getDjh() ;
         InHospitalInfo inHospitalInfo = complexPayService.getZYPre(inHospitalInfoReq.getOpenId(),inHospitalInfoReq.getOpenIdType(),djh);
-        if(inHospitalInfo == null || !inHospitalInfo.success())
-            return RETResultUtils.success(inHospitalInfo.getMsg());
+        if(inHospitalInfo == null)
+            return RETResultUtils._506("系统未查询到就诊人当前住院详情");
+        if(inHospitalInfo != null && !inHospitalInfo.success())
+            return RETResultUtils._506(inHospitalInfo.getMsg());
         InHospitalInfoRes inHospitalInfoRes = new InHospitalInfoRes();
         BeanUtils.copyProperties(inHospitalInfo,inHospitalInfoRes);
         inHospitalInfoRes.setDjh(djh);
@@ -155,17 +159,17 @@ public class ApiComplexPayController {
     @RequestMapping(value="/getPaySucessRecordInfoByOutTradeNo", method=RequestMethod.GET)
     public RETResultUtils<OutTradeNoOrderRes> getPaySucessRecordInfoByOutTradeNo(@RequestParam(value = "outTradeNo" , defaultValue = "WC201909216150360002") String outTradeNo ){
         if(StringUtils.isEmptyOrBlank(outTradeNo))
-            return RETResultUtils.success("交易订单号不能为空!");
+            return RETResultUtils._509("交易订单号不能为空!");
         ComplexPay pay = complexPayService.getPayRecordByOutTradeNo(outTradeNo);
         if (pay != null){
-            NumoPatientDeatilRes patient = complexPatientService.getNumoPatientInfo(pay.getPatientId()+"");
+            NumoPatientDeatilRes patient = complexPatientService.getNumoPatientInfo(String.valueOf(pay.getPatientId()));
             OutTradeNoOrderRes outTradeNoOrderRes = new OutTradeNoOrderRes();
             BeanUtils.copyProperties(pay,outTradeNoOrderRes);
             outTradeNoOrderRes.setName(patient.getName());
             outTradeNoOrderRes.setIdCard(IdCardUtil.coverStarts(patient.getIdCard(),6,14));
             return new RETResultUtils(outTradeNoOrderRes);
         }
-        return RETResultUtils.success("系统中不存在该笔交易!");
+        return RETResultUtils._506("系统中不存在该笔交易!");
     }
 
 

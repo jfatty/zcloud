@@ -34,11 +34,11 @@ public class ApiWebPriceinfoController {
     @RequestMapping(value = {"/getWebPriceinfo"} ,method = RequestMethod.POST)
     public RELResultUtils<WebPriceinfoRes> getWebPriceinfo(@RequestBody WebPriceinfoReq webPriceinfoReq){
         if(StringUtils.isEmptyOrBlank(webPriceinfoReq.getXmmc()))
-            return RELResultUtils.success("请输入查询信息") ;
+            return RELResultUtils._509("请输入查询信息") ;
         List<WebPriceinfoRes> list = webPriceinfoService.getWebPriceinfo(webPriceinfoReq.getOpenId(),webPriceinfoReq.getOpenIdType(),webPriceinfoReq.getPageIndex(),webPriceinfoReq.getPageSize(),webPriceinfoReq.getXmmc(),webPriceinfoReq.getCxlb());
         if(CollectionUtils.isNotEmpty(list))
-            return new RELResultUtils<WebPriceinfoRes>(list);
-        return RELResultUtils.success("没有查询到相关物价信息") ;
+            return new RELResultUtils(list);
+        return RELResultUtils._506("没有查询到相关物价信息") ;
     }
 
 }

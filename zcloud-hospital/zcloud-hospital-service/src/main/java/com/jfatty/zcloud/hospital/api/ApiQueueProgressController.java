@@ -40,7 +40,7 @@ public class ApiQueueProgressController {
         List<QueueProgress> list = queueProgressService.getQueueProgressStatus(queueProgressReq.getOpenId(),queueProgressReq.getOpenIdType());
         if( !CollectionUtils.isEmpty(list) ){
             if(!list.get(0).success())
-                return RELResultUtils.success((list.get(0)).getMsg());
+                return RELResultUtils._506((list.get(0)).getMsg());
             List<QueueProgressRes> results = new ArrayList<QueueProgressRes>();
             list.forEach(
                     queueProgress -> {
@@ -51,7 +51,7 @@ public class ApiQueueProgressController {
             );
             return new RELResultUtils(results);
         }
-        return RELResultUtils.success("没有查询到排队信息!");
+        return RELResultUtils._506("没有查询到排队信息!");
     }
 
 }
