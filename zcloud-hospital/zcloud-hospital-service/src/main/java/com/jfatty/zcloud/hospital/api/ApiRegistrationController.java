@@ -97,7 +97,7 @@ public class ApiRegistrationController {
         HosHoliday hosHoliday = registrationService.checkHoliday(hosHolidayReq.getOpenId(),hosHolidayReq.getOpenIdType(),hosHolidayReq.getCheckTime()) ;
         if(hosHoliday != null && hosHoliday.success() )
             return ResultUtils.success(hosHoliday.getMsg());
-        return ResultUtils.success(hosHoliday.getMsg());
+        return ResultUtils._509(hosHoliday.getMsg());
     }
 
     @ApiOperation(value="004****预约挂号*****")
