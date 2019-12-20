@@ -37,5 +37,7 @@ public class NumoPatientInfoReq extends NumoPatientInfoDTO<NumoPatientInfoReq> {
     private String hisCardNo ;                                                       //就诊卡号
     @ApiModelProperty(name = "hisCardType", position = 10, value = "就诊卡类型 dicValue:::dicCode:::id " , example = "门诊号:::HIS_MZH:::693c54a870da44029aa03864659ee055")
     private String hisCardType ;                                                     //就诊卡类型
+    @ApiModelProperty(name = "hasCard", position = 11,required = true, value = "勾选有就诊卡 值为1 未勾选有就诊卡 值为0" , example = "0" ,allowableValues = "1,0")
+    private Integer hasCard ;
 
 }
