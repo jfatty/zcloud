@@ -114,6 +114,16 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         BeanUtils.copyProperties(numoPatientInfo,numoPatientDeatilRes);
         int count = complexPatientMapper.checkDefaultPatByBrid(openId, openIdType, brid);                      //查询此就诊人和对应用户是否为绑定默认就诊人关系
         numoPatientDeatilRes.setDefaultPat( count>0?1:0 );
+        String nation  = numoPatientInfo.getNation() ;                                                      //民族
+        String relationship = numoPatientInfo.getRelationship() ;
+        if(StringUtils.isNotEmptyAndBlank(nation)){
+            String [] tmps = nation.split(":::");
+            numoPatientDeatilRes.setNation(tmps[0]);
+        }
+        if(StringUtils.isNotEmptyAndBlank(relationship)){
+            String [] tmps = relationship.split(":::");
+            numoPatientDeatilRes.setRelationship(tmps[0]);
+        }
         return numoPatientDeatilRes;
     }
 
