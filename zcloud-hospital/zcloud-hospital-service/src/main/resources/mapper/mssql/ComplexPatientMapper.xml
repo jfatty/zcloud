@@ -139,7 +139,10 @@
 
     <!--绑定默认就诊人-->
     <select id="bindDefaultPat" resultType="java.lang.Integer">
-        UPDATE  numo.t_user  SET default_pat = #{brid} WHERE openId = #{openId} AND userType = #{openIdType}
+        BEGIN
+          UPDATE  numo.t_user  SET default_pat = #{brid} WHERE openId = #{openId} AND userType = #{openIdType} ;
+          SELECT COUNT(0) from numo.t_user WHERE openId = #{openId} AND userType = #{openIdType}  AND default_pat = #{brid} ;
+        END;
     </select>
 
 

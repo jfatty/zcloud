@@ -107,7 +107,9 @@ public class ApiComplexPatientController {
             return RETResultUtils._509("openId不能为空");
         if( StringUtils.isEmptyOrBlank( brid ) )
             return RETResultUtils._509("病人ID不能为空");
-        boolean bl = complexPatientService.checkRightByBrid(openId, openIdType, brid);                    //查询用户有无操作就诊人的权限
+        boolean b = complexPatientService.checkRightByBrid(openId, openIdType, brid);                      //查询用户有无操作就诊人的权限
+        if ( !b )
+            return RETResultUtils._509("此病人不在本系统中");//没有操作数据的权限
         NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(openId,openIdType,brid);
         numoPatientDeatilRes.setIdCard(IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),6,14));
         return new RETResultUtils(numoPatientDeatilRes);
@@ -123,6 +125,9 @@ public class ApiComplexPatientController {
             return RETResultUtils._509("openId不能为空");
         if( StringUtils.isEmptyOrBlank( brid ) )
             return RETResultUtils._509("病人ID不能为空");
+        boolean b = complexPatientService.checkRightByBrid(openId, openIdType, brid);                      //查询用户有无操作就诊人的权限
+        if ( !b )
+            return RETResultUtils._509("此病人不在本系统中");//没有操作数据的权限
         boolean result = complexPatientService.bindDefaultPat(openId, openIdType, brid);
         if(result)
             return new RETResultUtils("默认就诊人设置成功");

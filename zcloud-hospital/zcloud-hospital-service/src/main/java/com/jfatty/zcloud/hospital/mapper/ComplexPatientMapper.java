@@ -49,7 +49,7 @@ public interface ComplexPatientMapper {
      * @param openId 微信支付宝openId
      * @param openIdType 微信支付宝openId类型
      */
-    int addNumoPatientInfo(@Param("numoPatientInfo") NumoPatientInfo numoPatientInfo, @Param("openId") String openId, @Param("openIdType")Integer openIdType);
+    Integer addNumoPatientInfo(@Param("numoPatientInfo") NumoPatientInfo numoPatientInfo, @Param("openId") String openId, @Param("openIdType")Integer openIdType);
 
     /**
      * 通过HIS系统中的病人ID 查询单个就诊人详情
@@ -77,14 +77,14 @@ public interface ComplexPatientMapper {
      * @param
      * @return
      */
-    int checkDefaultPatByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+    Integer checkDefaultPatByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
 
     /**
      * 查询用户有无操作就诊人的权限
      * @param
      * @return
      */
-    int checkRightByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+    Integer checkRightByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
 
     /**
      * 绑定默认就诊人
@@ -93,5 +93,5 @@ public interface ComplexPatientMapper {
      * @param brid
      * @return
      */
-    int bindDefaultPat(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+    Integer bindDefaultPat(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
 }
