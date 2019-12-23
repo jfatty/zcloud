@@ -43,5 +43,7 @@ public class NumoPatientDeatilRes extends NumoPatientInfoDTO<NumoPatientDeatilRe
     private String nation;                                                           //民族
     @ApiModelProperty(name = "relationship", position = 2,required = true, value = "与就诊人关系 " , example = "本人")
     private String relationship ;                                                    //与就诊人关系
+    @ApiModelProperty(name = "defaultPat", position = 12,required = true, value = "是否为默认就诊人 1表示是默认 0表示否" , example = "0",allowableValues = "1,0")
+    private Integer defaultPat;
 
 }
