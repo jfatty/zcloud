@@ -91,7 +91,7 @@ public class ApiComplexPayController {
                         unPayOutpatientReses.add(unPayOutpatientRes);
                     }
             );
-            NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(unPayOutpatientReq.getBrid());
+            NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(unPayOutpatientReq.getOpenId(),unPayOutpatientReq.getOpenIdType(),unPayOutpatientReq.getBrid());
             WebmzListRes webmzListRes = new WebmzListRes()//
                     .setName(numoPatientDeatilRes.getName())//
                     .setIdCard(numoPatientDeatilRes.getIdCard())//
@@ -121,7 +121,7 @@ public class ApiComplexPayController {
         if(totalUnPayOutpatient == null )
             return RETResultUtils._506("没有查询到缴费单详情数据!");
         //身份证加星号操作
-        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(totalUnPayOutpatientReq.getBrid());
+        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(totalUnPayOutpatientReq.getOpenId(),totalUnPayOutpatientReq.getOpenIdType(),totalUnPayOutpatientReq.getBrid());
         TotalUnPayOutpatientRes totalUnPayOutpatientRes = new TotalUnPayOutpatientRes();
         BeanUtils.copyProperties(totalUnPayOutpatient,totalUnPayOutpatientRes);
         totalUnPayOutpatientRes.setXm(numoPatientDeatilRes.getName());
@@ -162,7 +162,7 @@ public class ApiComplexPayController {
             return RETResultUtils._509("交易订单号不能为空!");
         ComplexPay pay = complexPayService.getPayRecordByOutTradeNo(outTradeNo);
         if (pay != null){
-            NumoPatientDeatilRes patient = complexPatientService.getNumoPatientInfo(String.valueOf(pay.getPatientId()));
+            NumoPatientDeatilRes patient = complexPatientService.getNumoPatientInfo(pay.getOpenId(),String.valueOf(pay.getPatientId()));
             OutTradeNoOrderRes outTradeNoOrderRes = new OutTradeNoOrderRes();
             BeanUtils.copyProperties(pay,outTradeNoOrderRes);
             outTradeNoOrderRes.setName(patient.getName());

@@ -101,6 +101,15 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
+    public NumoPatientDeatilRes getNumoPatientInfo(String openId, String brid) {
+        NumoPatientDeatilRes numoPatientDeatilRes = new NumoPatientDeatilRes();
+        NumoPatientInfo numoPatientInfo  = complexPatientMapper.getNumoPatientInfo(brid);
+        BeanUtils.copyProperties(numoPatientInfo,numoPatientDeatilRes);
+        return numoPatientDeatilRes;
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
     public NumoPatientDeatilRes getNumoPatientInfo(String openId, Integer openIdType, String brid) {
         NumoPatientDeatilRes numoPatientDeatilRes = new NumoPatientDeatilRes();
         NumoPatientInfo numoPatientInfo  = complexPatientMapper.getNumoPatientInfo(brid);

@@ -47,6 +47,8 @@ public interface ComplexPatientService {
      */
     boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender,String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
 
+
+    NumoPatientDeatilRes getNumoPatientInfo(String openId, String brid);
     //查看就诊人详情 身份证加星操作
     /**
      * 查询单个就诊人详情  jfatty 2017-10-24
