@@ -86,4 +86,22 @@ public class AlipayConfigReq extends AlipayConfigDTO<AlipayConfigReq> {
      */
     @ApiModelProperty(name = "payNotifyUrl", position = 0,required = true, value = "服务器异步通知页面路径 需http://或者https://格式的完整路径，不能加?id=123这类自定义参数，必须外网可以正常访问" ,example = "http://weixin.jfatty.cn/hfnumo/Alipay/notifyUrl")
     private String payNotifyUrl;
+
+    /**
+     * 支付成功跳转详情地址
+     */
+    @ApiModelProperty(name = "paySuccessTplUrl", position = 0,required = true, value = "支付成功跳转详情地址" ,example = "http://weixin.jfatty.cn/hfnumo/view/pay/success.html")
+    private String paySuccessTplUrl;
+
+    /**
+     * 授权失败后跳转页面
+     */
+    @ApiModelProperty(name = "authFailUrl", position = 0,required = true, value = "授权失败后跳转页面" ,example = "http://weixin.jfatty.cn/hfnumo/view/pay/authFailed.html")
+    private String authFailUrl;
+
+    /**
+     * 支付宝网关
+     */
+    @ApiModelProperty(name = "gateWay", position = 0,required = true, value = "支付宝网关" ,example = "https://openapi.alipay.com/gateway.do")
+    private String gateWay;
 }
