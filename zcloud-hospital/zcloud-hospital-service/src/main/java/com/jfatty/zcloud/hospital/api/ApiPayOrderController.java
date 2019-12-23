@@ -28,9 +28,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import net.sf.json.xml.XMLSerializer;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DecimalFormat;
@@ -173,10 +170,8 @@ public class ApiPayOrderController {
         //调用成功，则处理业务逻辑
         if( !response.isSuccess() )
             return RETResultUtils.faild("获取支付宝支付订单错误!");
-        // 将XML转化成json对象
-        net.sf.json.JSONObject bizContentJson = (net.sf.json.JSONObject) new XMLSerializer().read(response.toString());
         // 1.获取支付宝交易号
-        trade_no = bizContentJson.getString("trade_no");
+        trade_no = response.getTradeNo() ;
         /**==========================生成页面支付信息完成================================*/
         ComplexPay newComplexPayOrder = new ComplexPay().setOpenId(openId).setPatientId(Long.valueOf(brid)).setJzh(jzh).setHisNo(sfh)//
                 .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
