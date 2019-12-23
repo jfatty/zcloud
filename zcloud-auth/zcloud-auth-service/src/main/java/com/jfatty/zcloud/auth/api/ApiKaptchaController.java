@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +29,11 @@ import java.util.Random;
 @RequestMapping(value={"/api"})
 public class ApiKaptchaController {
 
+    @Autowired
+    private RedisTemplate redisTemplate ;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate ;
 
     @Autowired
     private SmsService smsService ;
@@ -50,6 +57,7 @@ public class ApiKaptchaController {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
         try {
             smsService.sendSms(phone,code);
+            redisTemplate.opsForValue().set(phone,code);
             return new RETResultUtils("验证码发送成功,请注意查收") ;
         } catch (Exception e) {
             e.printStackTrace();

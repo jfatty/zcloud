@@ -7,6 +7,9 @@ import com.jfatty.zcloud.base.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +28,11 @@ import javax.servlet.http.HttpServletRequest;
 public class ApiLoginController {
 
 
+    @Autowired
+    private RedisTemplate redisTemplate ;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate ;
 
     @ApiOperation(value="001******登录")
     @RequestMapping(value = {"/login"} ,method = RequestMethod.POST)
@@ -40,7 +48,16 @@ public class ApiLoginController {
             return RETResultUtils._509(msg) ;
         if(StringUtils.isEmptyOrBlank(loginVo.getPassword()))
             return RETResultUtils._509("验证码不能为空") ;
-        return new RETResultUtils("TOKENACDX"+System.currentTimeMillis()) ;
+        String code = (String) redisTemplate.opsForValue().get(loginVo.getAccount());
+        if(StringUtils.isEmptyOrBlank(code))
+            return RETResultUtils._506("验证码已经失效") ;
+        if(!code.equalsIgnoreCase(loginVo.getPassword()))
+            return RETResultUtils._509("验证码错误") ;
+        String token = "TOKEN"+System.currentTimeMillis() ;
+        redisTemplate.opsForValue().set(token,loginVo);
+        LoginVoReq login = (LoginVoReq) redisTemplate.opsForValue().get(token);
+        log.error("login [{}]",login);
+        return new RETResultUtils(token) ;
     }
 
 
