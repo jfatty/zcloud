@@ -58,7 +58,7 @@ public class ApiPayOrderController {
         String long_djh = "" ;                                                                  //本地拼接的流水号 存在逗号拼接的情况 费用单号
         if(feeType == ComplexPay.FEE_TYPE_MZ){
             log.debug("====> getPrepareId 门诊缴费!");
-            TotalUnPayOutpatient totalUnPayOutpatient = complexPayService.getMZPay(openId, openIdType,djh,brid);
+            TotalUnPayOutpatient totalUnPayOutpatient = complexPayService.getMZPay(openId, openIdType,jzh,brid);
             log.error("====> 查询订单信息! brid = " + brid + " 流水号djh=" + djh + "msg=his系统中未查到该订单");
             if(totalUnPayOutpatient == null )
                 return RETResultUtils._506("his系统中未查到该订单");
