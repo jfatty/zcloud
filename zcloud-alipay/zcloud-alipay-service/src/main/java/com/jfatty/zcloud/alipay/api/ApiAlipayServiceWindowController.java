@@ -57,7 +57,7 @@ public class ApiAlipayServiceWindowController {
         log.error(" ====>  当前支付宝生活号 appId [{}] ",appId);
         try {
             AlipayAuthCode alipayAuthCode = alipayAuthCodeService.getByAuthCode(code,appId);
-            log.error(" ====>  通过当支付宝生活号 appId 获取到的 alipayOpenId [{}]",alipayAuthCode.getId());
+            log.error(" ====>  通过当支付宝生活号 appId  [{}] 获取到的 alipayOpenId [{}]",appId,alipayAuthCode.getId());
             return ResultUtils.build(200, "SUCCESS",alipayAuthCode.getId()) ;
         } catch (Exception e) {
             e.printStackTrace();
@@ -127,8 +127,8 @@ public class ApiAlipayServiceWindowController {
                 log.debug("accessToken  ====>" + oauthTokenResponse.getAccessToken());
                 log.error(" alipayOpenId 存入当前会话 ====>"+oauthTokenResponse.getUserId());
                 session.setAttribute("alipayOpenId", oauthTokenResponse.getUserId());
-                log.error("支付宝认证之后重定向页面路径====>"+page);
                 page = page + "?code=" + auth_code + "&version=1.0.0" ;
+                log.error("支付宝认证成功之后重定向页面路径====>"+page);
                 response.sendRedirect(page);
             }else {
                 /**
