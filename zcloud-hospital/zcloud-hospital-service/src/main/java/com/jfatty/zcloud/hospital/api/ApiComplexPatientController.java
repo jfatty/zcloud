@@ -114,7 +114,7 @@ public class ApiComplexPatientController {
     }
 
     @ApiOperation(value=" 004****设置默认就诊人")
-    @RequestMapping(value="/getNumoPatientInfo", method=RequestMethod.POST)
+    @RequestMapping(value="/setDefaultPat", method=RequestMethod.POST)
     public RETResultUtils<String> setDefaultPat(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
         String openId = numoPatientDeatilReq.getOpenId() ;
         Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
