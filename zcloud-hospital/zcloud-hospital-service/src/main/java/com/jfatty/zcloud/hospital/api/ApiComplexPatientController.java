@@ -75,7 +75,7 @@ public class ApiComplexPatientController {
         String idCard = null;
         String gender = null;
         try {
-            numoPatientInfoReq.getIdCard() ;
+            idCard = numoPatientInfoReq.getIdCard() ;
             IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
             gender = idCardUtil.getGender();
             System.out.println(idCardUtil);
