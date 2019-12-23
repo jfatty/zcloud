@@ -61,7 +61,9 @@
         patId       = #{numoPatientInfo.patId},
         hisCardNo   = #{numoPatientInfo.hisCardNo},
         hisCardType = #{numoPatientInfo.hisCardType},
-        hisCardTypeCode = #{numoPatientInfo.hisCardTypeCode}
+        hisCardTypeCode = #{numoPatientInfo.hisCardTypeCode},
+        nation = #{numoPatientInfo.nation},
+        relationship = #{numoPatientInfo.relationship}
         where
         ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
         END;
@@ -80,7 +82,9 @@
         patId,
         hisCardNo,
         hisCardType,
-        hisCardTypeCode
+        hisCardTypeCode,
+        relationship,
+        nation
         )values(
         #{numoPatientInfo.name},
         #{numoPatientInfo.gender},
@@ -94,7 +98,9 @@
         #{numoPatientInfo.patId},
         #{numoPatientInfo.hisCardNo},
         #{numoPatientInfo.hisCardType},
-        #{numoPatientInfo.hisCardTypeCode}
+        #{numoPatientInfo.hisCardTypeCode},
+        #{numoPatientInfo.relationship},
+        #{numoPatientInfo.nation}
         );
         END;
         select @v_userId = id from numo.t_user where openId = #{openId} and userType = #{openIdType};
@@ -112,11 +118,29 @@
         exec dbo.pro_web_unreg #{idCard},#{name},#{openId},#{openIdType}
     </select>
 
+
     <!--解绑用户和就诊人-->
     <!--解除用户与病人之间的绑定关系-->
     <delete id="localUnBind" >
 		delete from numo.t_user_patient where patientId=#{pid} and userId = ( select id from numo.t_user where openId=#{openId} and userType=#{openIdType} )
 	</delete>
+
+    <!--查询此就诊人和对应用户是否为绑定默认就诊人关系-->
+    <select id="checkDefaultPatByBrid" resultType="java.lang.Integer">
+        SELECT COUNT(0) from numo.t_user WHERE openId = #{openId} AND userType = #{openIdType}  AND default_pat = #{brid}
+    </select>
+
+    <!--查询用户有无操作就诊人的权限-->
+    <select id="checkRightByBrid" resultType="java.lang.Integer">
+        select count(0) from (
+		     SELECT t1.id,t1.patId,t2.userId FROM numo.t_patient t1 LEFT JOIN numo.t_user_patient t2 ON t2.patientId = t1.id
+		) t3 LEFT JOIN numo.t_user t4 ON t4.id = t3.userId  WHERE t4.openId=#{openId} and t4.userType=#{openIdType} and t3.patId=#{brid}
+    </select>
+
+    <!--绑定默认就诊人-->
+    <select id="bindDefaultPat" resultType="java.lang.Integer">
+        UPDATE  numo.t_user  SET default_pat = #{brid} WHERE openId = #{openId} AND userType = #{openIdType}
+    </select>
 
 
 </mapper>

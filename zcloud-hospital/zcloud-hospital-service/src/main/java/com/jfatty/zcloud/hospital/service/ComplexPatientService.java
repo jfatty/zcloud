@@ -45,7 +45,7 @@ public interface ComplexPatientService {
      * @param hisCardType
      * @return
      */
-    boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
+    boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender,String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
 
     //查看就诊人详情 身份证加星操作
     /**
@@ -53,7 +53,7 @@ public interface ComplexPatientService {
      * @param brid 病人ID
      * @return
      */
-    NumoPatientDeatilRes getNumoPatientInfo(String brid);
+    NumoPatientDeatilRes getNumoPatientInfo(String openId, Integer openIdType, String brid);
 
     //删除就诊人  抛出异常
     /**
@@ -68,4 +68,22 @@ public interface ComplexPatientService {
     boolean deleteComplexPatient(Long pid, String idCard, String name, String openId, Integer openIdType) throws Exception ;
 
     NumoPatientInfo getNumoPatientInfoByBrid(String brid);
+
+    /**
+     * 查询用户有无操作就诊人的权限
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
+     * @param brid 病人ID
+     * @return
+     */
+    boolean checkRightByBrid(String openId, Integer openIdType, String brid);
+
+    /**
+     * 绑定默认就诊人
+     * @param openId
+     * @param openIdType
+     * @param brid
+     * @return
+     */
+    boolean bindDefaultPat(String openId, Integer openIdType, String brid);
 }

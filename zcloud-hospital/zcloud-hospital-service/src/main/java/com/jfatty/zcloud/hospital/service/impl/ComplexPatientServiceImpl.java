@@ -50,11 +50,11 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String idCard, String tel, String address, String nation,Integer hasCard, String hisCardNo, String hisCardType) throws Exception {
+    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender, String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception {
         String regMSg = "" ;
         List<WebRegPatient> list = null ;
         Map<String, Object> map = new HashMap<String, Object>();
-        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setAddress(address);
+        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setAddress(address).setNation(nation).setRelationship(relationship);
         map.put("idCard", idCard);
         map.put("name", name);
         map.put("tel", tel);
@@ -66,7 +66,6 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         } else if (StringUtils.isNotEmptyAndBlank(hisCardNo) && hasCard == 1){
             regMSg = "通过绑定就诊卡号绑定 就诊卡号:" + hisCardNo + " 就诊卡类型:" + hisCardType  ;
             String [] tmps = hisCardType.split(":::");
-            System.out.println(tmps.length);
             if (tmps.length != 3)
                 throw new RuntimeException("就诊卡类型数据格式错误!");
             map.put("Type", tmps[1]);
@@ -96,16 +95,18 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
             }
             throw new RuntimeException(list.get(0).getMsg()) ;
         }
-        log.error("绑定就诊人 失败  病人姓名 [{}] 身份证号码 [{}] 电话 [{}] openId [{}] openIdType [{}] 绑定方式[{}]",name,idCard,tel,openId,openIdType,regMSg);
+        log.error("绑定就诊人 失败  病人姓名 [{}] 性别 [{}] 身份证号码 [{}] 电话 [{}] openId [{}] openIdType [{}] 绑定方式[{}]",name,gender,idCard,tel,openId,openIdType,regMSg);
         return false;
     }
 
     @TargetDataSource(name="mssql")
     @Override
-    public NumoPatientDeatilRes getNumoPatientInfo(String brid) {
+    public NumoPatientDeatilRes getNumoPatientInfo(String openId, Integer openIdType, String brid) {
         NumoPatientDeatilRes numoPatientDeatilRes = new NumoPatientDeatilRes();
         NumoPatientInfo numoPatientInfo  = complexPatientMapper.getNumoPatientInfo(brid);
         BeanUtils.copyProperties(numoPatientInfo,numoPatientDeatilRes);
+        int count = complexPatientMapper.checkDefaultPatByBrid(openId, openIdType, brid);                      //查询此就诊人和对应用户是否为绑定默认就诊人关系
+        numoPatientDeatilRes.setDefaultPat( count>0?1:0 );
         return numoPatientDeatilRes;
     }
 
@@ -125,5 +126,19 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
     @Override
     public NumoPatientInfo getNumoPatientInfoByBrid(String brid) {
         return complexPatientMapper.getNumoPatientInfo(brid);
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public boolean checkRightByBrid(String openId, Integer openIdType, String brid) {
+        int count = complexPatientMapper.checkRightByBrid(openId,openIdType,brid);
+        return (count > 0);
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public boolean bindDefaultPat(String openId, Integer openIdType, String brid) {
+        int count = complexPatientMapper.bindDefaultPat(openId,openIdType,brid);
+        return (count > 0);
     }
 }

@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.hospital.api;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.jfatty.zcloud.base.utils.IDCardUtil;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
@@ -70,11 +71,22 @@ public class ApiComplexPatientController {
     @RequestMapping(value="/addComplexPatient", method=RequestMethod.POST)
     public RETResultUtils<String> AddComplexPatient(@RequestBody NumoPatientInfoReq numoPatientInfoReq){
         boolean res = false;
+        String idCard = null;
+        String gender = null;
+        try {
+            numoPatientInfoReq.getIdCard() ;
+            IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
+            gender = idCardUtil.getGender();
+            System.out.println(idCardUtil);
+        } catch (Exception e) {
+            log.error("程序绑定就诊人信息时出现异常 就诊人身份证号[{}]不合法:",idCard);
+            return RETResultUtils._509("请输入合法的就诊人身份证号");
+        }
         try {
             res = complexPatientService.saveComplexPatient(numoPatientInfoReq.getOpenId(),numoPatientInfoReq.getOpenIdType(),numoPatientInfoReq.getName(),//
-                    numoPatientInfoReq.getIdCard(),numoPatientInfoReq.getTel(),//
+                    gender,idCard,numoPatientInfoReq.getTel(),//
                     numoPatientInfoReq.getAddress(),numoPatientInfoReq.getNation(),//
-                    numoPatientInfoReq.getHasCard(),//
+                    numoPatientInfoReq.getRelationship(),numoPatientInfoReq.getHasCard(),//
                     numoPatientInfoReq.getHisCardNo(),numoPatientInfoReq.getHisCardType());
             if(res)
                 return RETResultUtils.success("绑定成功");
@@ -88,19 +100,46 @@ public class ApiComplexPatientController {
     @ApiOperation(value=" 003****查询单个就诊人详情")
     @RequestMapping(value="/getNumoPatientInfo", method=RequestMethod.POST)
     public RETResultUtils<NumoPatientDeatilRes> getNumoPatientInfo(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
-        if( StringUtils.isEmptyOrBlank(numoPatientDeatilReq.getBrid()) )
+        String openId = numoPatientDeatilReq.getOpenId() ;
+        Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
+        String brid = numoPatientDeatilReq.getBrid();
+        if( StringUtils.isEmptyOrBlank( openId ) )
+            return RETResultUtils._509("openId不能为空");
+        if( StringUtils.isEmptyOrBlank( brid ) )
             return RETResultUtils._509("病人ID不能为空");
-        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(numoPatientDeatilReq.getBrid());
+        boolean bl = complexPatientService.checkRightByBrid(openId, openIdType, brid);                    //查询用户有无操作就诊人的权限
+        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(openId,openIdType,brid);
         numoPatientDeatilRes.setIdCard(IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),6,14));
         return new RETResultUtils(numoPatientDeatilRes);
     }
 
-    @ApiOperation(value=" 004****删除就诊人，即将就诊人与用户解绑")
+    @ApiOperation(value=" 004****设置默认就诊人")
+    @RequestMapping(value="/getNumoPatientInfo", method=RequestMethod.POST)
+    public RETResultUtils<String> setDefaultPat(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
+        String openId = numoPatientDeatilReq.getOpenId() ;
+        Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
+        String brid = numoPatientDeatilReq.getBrid();
+        if( StringUtils.isEmptyOrBlank( openId ) )
+            return RETResultUtils._509("openId不能为空");
+        if( StringUtils.isEmptyOrBlank( brid ) )
+            return RETResultUtils._509("病人ID不能为空");
+        boolean result = complexPatientService.bindDefaultPat(openId, openIdType, brid);
+        if(result)
+            return new RETResultUtils("默认就诊人设置成功");
+        return RETResultUtils.faild("网络延时,请稍后重试");
+    }
+
+    @ApiOperation(value=" 005****删除就诊人，即将就诊人与用户解绑")
     @RequestMapping(value="/delComplexPatient", method=RequestMethod.POST)
     public RETResultUtils<String> deleteComplexPatient(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
-        if( StringUtils.isEmptyOrBlank(numoPatientDeatilReq.getBrid()) )
+        String openId = numoPatientDeatilReq.getOpenId() ;
+        Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
+        String brid = numoPatientDeatilReq.getBrid();
+        if( StringUtils.isEmptyOrBlank( openId ) )
+            return RETResultUtils._509("openId不能为空");
+        if( StringUtils.isEmptyOrBlank( brid ) )
             return RETResultUtils._509("病人ID不能为空");
-        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(numoPatientDeatilReq.getBrid());
+        NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(openId,openIdType,brid);
         try {
             if( complexPatientService.deleteComplexPatient(numoPatientDeatilRes.getId(),numoPatientDeatilRes.getIdCard(),numoPatientDeatilRes.getName(),numoPatientDeatilReq.getOpenId(),numoPatientDeatilReq.getOpenIdType()) )
                 return RETResultUtils.success("就诊人解绑成功");

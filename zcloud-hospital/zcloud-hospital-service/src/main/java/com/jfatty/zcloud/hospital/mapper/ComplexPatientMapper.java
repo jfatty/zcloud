@@ -71,4 +71,27 @@ public interface ComplexPatientMapper {
      * @param pid
      */
     void localUnBind(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("pid")  Long pid);
+
+    /**
+     * 查询此就诊人和对应用户是否为绑定默认就诊人关系
+     * @param
+     * @return
+     */
+    int checkDefaultPatByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+
+    /**
+     * 查询用户有无操作就诊人的权限
+     * @param
+     * @return
+     */
+    int checkRightByBrid(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+
+    /**
+     * 绑定默认就诊人
+     * @param openId
+     * @param openIdType
+     * @param brid
+     * @return
+     */
+    int bindDefaultPat(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
 }
