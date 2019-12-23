@@ -169,11 +169,10 @@ public class ApiPayOrderController {
             log.error("获取支付宝支付订单错误![{}]",e.getMessage());
             return RETResultUtils.faild("网络延时,请稍后重试COEROZ");
         }
+        log.error("支付宝参返回数据[{}]",response.toString());
         //调用成功，则处理业务逻辑
         if( !response.isSuccess() )
             return RETResultUtils.faild("获取支付宝支付订单错误!");
-
-        log.error("支付宝参返回数据[{}]",response.toString());
         // 将XML转化成json对象
         net.sf.json.JSONObject bizContentJson = (net.sf.json.JSONObject) new XMLSerializer().read(response.toString());
         // 1.获取支付宝交易号
