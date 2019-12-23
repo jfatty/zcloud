@@ -157,7 +157,7 @@ public class ApiPayOrderController {
         json.put("subject", feeName);
         json.put("out_trade_no", outTradeNo);
         json.put("total_amount", feeAmountStr);
-        json.put("timeout_express", feeAmountStr);
+        json.put("timeout_express", alipayConfig.getTimeoutExpress());
         json.put("buyer_id", openId);
         log.error("支付宝参数构造json数据[{}]",json.toJSONString());
         request.setBizContent(json.toJSONString());
