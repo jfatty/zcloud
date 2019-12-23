@@ -1,10 +1,17 @@
 package com.jfatty.zcloud.hospital.api;
 
+import com.alipay.api.AlipayApiException;
+import com.alipay.api.AlipayClient;
+import com.alipay.api.DefaultAlipayClient;
+import com.alipay.api.request.*;
+import com.alipay.api.response.*;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.base.utils.WePayUtil;
+import com.jfatty.zcloud.hospital.entity.AlipayConfig;
 import com.jfatty.zcloud.hospital.entity.WepayConfig;
 import com.jfatty.zcloud.hospital.req.PayOrderCreateReq;
+import com.jfatty.zcloud.hospital.service.AlipayConfigService;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
 import com.jfatty.zcloud.hospital.service.WepayConfigService;
 import com.jfatty.zcloud.hospital.utils.IPUtil;
@@ -20,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+
+import net.sf.json.xml.XMLSerializer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +48,154 @@ public class ApiPayOrderController {
     @Autowired
     private WepayConfigService wepayConfigService ;
 
+    @Autowired
+    private AlipayConfigService alipayConfigService ;
+
+    private  RETResultUtils<Map<String,Object>> wepayMap(ComplexPay lastPayOrder,String openId,Integer openIdType,String long_djh,int feeType,String brid,String feeAmountStr,String appId,String feeName,String jzh,String sfh, HttpServletRequest request , HttpServletResponse response){
+        if(lastPayOrder != null){
+            String createdTime = lastPayOrder.getCreatedTime();                                //该订单生成的时间
+            if(WePayUtil.orderLessThan10min(createdTime)){                                     //如果订单生成的时间小于10分钟，则可以用该订单号继续支付
+                try {
+                    Map<String, String> payParamMap = WePayUtil.jsonStringToMap(lastPayOrder.getPayParam());
+                    Map<String,Object> data = new HashMap<String, Object>();
+                    data.put("payData",payParamMap);
+                    data.put("outTradeNo",lastPayOrder.getOutTradeNo());
+                    log.debug("====>  订单map包含的相关信息====> [{}]" ,payParamMap.toString());
+                    if(lastPayOrder.getFeeType() == ComplexPay.FEE_TYPE_MZ)                     //是门诊缴费的情况下才返回到H5进行支付
+                        return new RETResultUtils(data);                                        //返回订单支付信息
+                } catch (Exception e) {
+                    log.error("====>  订单生成的时间小于10分钟, 且转成Map的过程中出现异常! [{}]",e.getMessage());
+                    return RETResultUtils.faild("网络延时,请稍后重试!");
+                }
+            }
+        }
+
+        /**=====根据His系统中的费用单号 和 费用类型查询本地记录的支付状态 完成======================*/
+        /**=============================生成订单号====================================*/
+        String outTradeNo = WePayUtil.getOutTradeNo("WC");  //生成商户订单号
+        String nonceStr = WePayUtil.getNonceStr();
+        log.error("====> 支付 元转分之前金额为 = " + feeAmountStr );
+        Integer feeAmountFen = WePayUtil.yuan2fen(feeAmountStr);                   //商品金额， 元转换为 分
+        log.error("====> 支付 元转分之后金额为 = " + feeAmountFen );
+
+        WepayConfig wepayConfig = wepayConfigService.getByAppId(appId);
+        SortedMap<String, String> sortedMap = createMap(wepayConfig,openId,nonceStr,outTradeNo,feeName,feeAmountFen,request,response);
+        String xmlBody = WePayUtil.mapToXml(sortedMap);
+        String prepayid = null;                                                     //获取prepayId
+        try {
+            prepayid = WePayUtil.getPrepayId(wepayConfig.getGateWay(), xmlBody);
+        } catch (JDOMException e) {
+            log.error("====> 支付 获取支付 prepayid 错误! [{}] " , e.getMessage());
+        }
+        if(StringUtils.isEmptyOrBlank(prepayid))//如果没有获取到订单
+            return RETResultUtils.faild("获取微信支付订单错误!");
+        /**===============================生成订单号完成==============================*/
+        /**===============================生成页面支付信息============================*/
+        SortedMap<String, String> sMap = createPageOrderInfo(wepayConfig,nonceStr,prepayid,request,response);
+        /**==========================生成页面支付信息完成================================*/
+        ComplexPay newComplexPayOrder = new ComplexPay().setOpenId(openId).setPatientId(Long.valueOf(brid)).setJzh(jzh).setHisNo(sfh)//
+                .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
+                .setPayWay(ComplexPay.PAY_WAY_WECHAT).setOutTradeNo(outTradeNo).setPayOrientation(ComplexPay.PAY_ORIENTATION_FRONT)//
+                .setAsync(ComplexPay.PAY_SYNC_NO).setHisAsync(ComplexPay.HIS_SYNC_NO).setPayState(ComplexPay.PAY_STATE_UNNKNOWN).setRemark("prepay_id=" + prepayid)//
+                .setPayParam(WePayUtil.objectToString(sMap));
+        try {
+            complexPayService.saveOrderRecord(newComplexPayOrder);         //将订单信息保存到数据库中
+        } catch (Exception e) {
+            log.error("将订单信息保存到数据库中出现异常 异常信息为:[{}]" , e.getMessage());
+            return RETResultUtils.faild("网络延时,请稍后重试COEROW");
+        }
+        Map<String,Object> data = new HashMap<String, Object>();
+        data.put("payData",sMap);
+        data.put("outTradeNo",outTradeNo);
+        return  new RETResultUtils(data);
+    }
+
+
+    private RETResultUtils<Map<String,Object>> alipayMap(ComplexPay lastPayOrder,String openId,Integer openIdType,String long_djh,int feeType,String brid,String feeAmountStr,String appId,String feeName,String jzh,String sfh){
+        String trade_no = "" ;                                                                 //支付宝交易号
+        if(lastPayOrder != null){
+            String createdTime = lastPayOrder.getCreatedTime();                                //该订单生成的时间
+            if(WePayUtil.orderLessThan10min(createdTime)){                                     //如果订单生成的时间小于10分钟，则可以用该订单号继续支付
+                try {
+                    Map<String,Object> data = new HashMap<String, Object>();
+                    trade_no = lastPayOrder.getPayParam() ;
+                    data.put("payData",trade_no);
+                    data.put("outTradeNo",lastPayOrder.getOutTradeNo());
+                    log.debug("====>  订单 trade_no 的相关信息====> [{}]" ,trade_no);
+                    if(lastPayOrder.getFeeType() == ComplexPay.FEE_TYPE_MZ)                     //是门诊缴费的情况下才返回到H5进行支付
+                        return new RETResultUtils(data);                                        //返回订单支付信息
+                } catch (Exception e) {
+                    log.error("====>  订单生成的时间小于10分钟, 且转成String的过程中出现异常! [{}]",e.getMessage());
+                    return RETResultUtils.faild("网络延时,请稍后重试!");
+                }
+            }
+        }
+        /**=====根据His系统中的费用单号 和 费用类型查询本地记录的支付状态 完成======================*/
+        /**=============================生成订单号====================================*/
+        String outTradeNo = WePayUtil.getOutTradeNo("ZFB");  //生成商户订单号
+
+        /**===============================生成订单号完成==============================*/
+        /**===============================生成页面支付信息============================*/
+        AlipayConfig alipayConfig = alipayConfigService.getByAppId(appId);
+        //实例化客户端
+        AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGateWay(),//
+                alipayConfig.getAppid() ,//
+                alipayConfig.getPrivateKey(),//
+                alipayConfig.getDataFormat(),//
+                alipayConfig.getPayCharset(),//
+                alipayConfig.getAlipayPublicKey(),//
+                alipayConfig.getSignType());
+        //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.open.public.template.message.industry.modify
+        AlipayTradeCreateRequest request = new AlipayTradeCreateRequest();
+        //request.setApiVersion("1.0");
+        //request.setProdCode("QUICK_WAP_PAY");
+        //设置异步通知地址
+        request.setNotifyUrl(alipayConfig.getPayNotifyUrl());
+        // 设置同步地址
+        request.setReturnUrl(alipayConfig.getPayReturnUrl());
+        com.alibaba.fastjson.JSONObject json = new com.alibaba.fastjson.JSONObject();
+        json.put("subject", feeName);
+        json.put("out_trade_no", outTradeNo);
+        json.put("total_amount", feeAmountStr);
+        json.put("timeout_express", feeAmountStr);
+        json.put("buyer_id", openId);
+        log.error("支付宝参数构造json数据[{}]",json.toJSONString());
+        request.setBizContent(json.toJSONString());
+
+        AlipayTradeCreateResponse response = null;
+        try {
+            response = alipayClient.execute(request);
+        } catch (AlipayApiException e) {
+            log.error("获取支付宝支付订单错误![{}]",e.getMessage());
+            return RETResultUtils.faild("网络延时,请稍后重试COEROZ");
+        }
+        //调用成功，则处理业务逻辑
+        if( !response.isSuccess() )
+            return RETResultUtils.faild("获取支付宝支付订单错误!");
+
+        log.error("支付宝参返回数据[{}]",response.toString());
+        // 将XML转化成json对象
+        net.sf.json.JSONObject bizContentJson = (net.sf.json.JSONObject) new XMLSerializer().read(response.toString());
+        // 1.获取支付宝交易号
+        trade_no = bizContentJson.getString("trade_no");
+        /**==========================生成页面支付信息完成================================*/
+        ComplexPay newComplexPayOrder = new ComplexPay().setOpenId(openId).setPatientId(Long.valueOf(brid)).setJzh(jzh).setHisNo(sfh)//
+                .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
+                .setPayWay(ComplexPay.PAY_WAY_ZFB).setOutTradeNo(outTradeNo).setPayOrientation(ComplexPay.PAY_ORIENTATION_FRONT)//
+                .setAsync(ComplexPay.PAY_SYNC_NO).setHisAsync(ComplexPay.HIS_SYNC_NO).setPayState(ComplexPay.PAY_STATE_UNNKNOWN).setRemark("out_trade_no=" + outTradeNo)//
+                .setPayParam(trade_no).setTradeNo(trade_no);
+        try {
+            complexPayService.saveOrderRecord(newComplexPayOrder);         //将订单信息保存到数据库中
+        } catch (Exception e) {
+            log.error("将订单信息保存到数据库中出现异常 异常信息为:[{}]" , e.getMessage());
+            return RETResultUtils.faild("网络延时,请稍后重试COEROZ");
+        }
+        Map<String,Object> data = new HashMap<String, Object>();
+        data.put("payData",trade_no);
+        data.put("outTradeNo",outTradeNo);
+        return  new RETResultUtils(data);
+
+    }
 
     //创建支付订单
     @ApiOperation(value="001******创建支付订单")
@@ -111,62 +269,13 @@ public class ApiPayOrderController {
             if(lastPayOrder.getFeeType() == ComplexPay.FEE_TYPE_MZ)
                 return RETResultUtils._506("该订单已支付!");
         }
-        if(lastPayOrder != null){
-            String createdTime = lastPayOrder.getCreatedTime();                                //该订单生成的时间
-            if(WePayUtil.orderLessThan10min(createdTime)){                                     //如果订单生成的时间小于10分钟，则可以用该订单号继续支付
-                try {
-                    Map<String, String> payParamMap = WePayUtil.jsonStringToMap(lastPayOrder.getPayParam());
-                    Map<String,Object> data = new HashMap<String, Object>();
-                    data.put("payData",payParamMap);
-                    data.put("outTradeNo",lastPayOrder.getOutTradeNo());
-                    log.debug("====>  订单map包含的相关信息====> [{}]" ,payParamMap.toString());
-                    if(lastPayOrder.getFeeType() == ComplexPay.FEE_TYPE_MZ)                     //是门诊缴费的情况下才返回到H5进行支付
-                        return new RETResultUtils(data);                                        //返回订单支付信息
-                } catch (Exception e) {
-                    log.error("====>  订单生成的时间小于10分钟, 且转成Map的过程中出现异常! [{}]",e.getMessage());
-                    return RETResultUtils.faild("网络延时,请稍后重试!");
-                }
-            }
+        if( openIdType == 2 ){  //微信支付
+            return wepayMap(lastPayOrder,openId, openIdType, long_djh, feeType, brid, feeAmountStr, appId, feeName, jzh, sfh,request,response);
+        } else if (openIdType == 1){//支付宝支付
+            return alipayMap(lastPayOrder,openId, openIdType, long_djh, feeType, brid, feeAmountStr, appId, feeName, jzh, sfh);
+        } else {
+            return RETResultUtils._509("支付类型不存在");
         }
-
-        /**=====根据His系统中的费用单号 和 费用类型查询本地记录的支付状态 完成======================*/
-        /**=============================生成订单号====================================*/
-        String outTradeNo = WePayUtil.getOutTradeNo("WC");  //生成商户订单号
-        String nonceStr = WePayUtil.getNonceStr();
-        log.error("====> 支付 元转分之前金额为 = " + feeAmountStr );
-        Integer feeAmountFen = WePayUtil.yuan2fen(feeAmountStr);                   //商品金额， 元转换为 分
-        log.error("====> 支付 元转分之后金额为 = " + feeAmountFen );
-
-        WepayConfig wepayConfig = wepayConfigService.getByAppId(appId);
-        SortedMap<String, String> sortedMap = createMap(wepayConfig,openId,nonceStr,outTradeNo,feeName,feeAmountFen,request,response);
-        String xmlBody = WePayUtil.mapToXml(sortedMap);
-        String prepayid = null;                                                     //获取prepayId
-        try {
-            prepayid = WePayUtil.getPrepayId(wepayConfig.getGateWay(), xmlBody);
-        } catch (JDOMException e) {
-            log.error("====> 支付 获取支付 prepayid 错误! " + e.getMessage());
-        }
-        if(StringUtils.isEmptyOrBlank(prepayid))//如果没有获取到订单
-            return RETResultUtils.faild("获取微信支付订单错误!");
-        /**===============================生成订单号完成==============================*/
-        /**===============================生成页面支付信息============================*/
-        SortedMap<String, String> sMap = createPageOrderInfo(wepayConfig,nonceStr,prepayid,request,response);
-        /**==========================生成页面支付信息完成================================*/
-        ComplexPay newComplexPayOrder = new ComplexPay().setOpenId(openId).setPatientId(Long.valueOf(brid)).setJzh(jzh).setHisNo(sfh)//
-                .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
-                .setPayWay(ComplexPay.PAY_WAY_WECHAT).setOutTradeNo(outTradeNo).setPayOrientation(ComplexPay.PAY_ORIENTATION_FRONT)//
-                .setAsync(ComplexPay.PAY_SYNC_NO).setHisAsync(ComplexPay.HIS_SYNC_NO).setPayState(ComplexPay.PAY_STATE_UNNKNOWN).setRemark("prepay_id=" + prepayid)//
-                .setPayParam(WePayUtil.objectToString(sMap));
-        try {
-            complexPayService.saveOrderRecord(newComplexPayOrder);         //将订单信息保存到数据库中
-        } catch (Exception e) {
-            log.error("将订单信息保存到数据库中出现异常 异常信息为:[{}]" , e.getMessage());
-            return RETResultUtils.faild("网络延时,请稍后重试COERO");
-        }
-        Map<String,Object> data = new HashMap<String, Object>();
-        data.put("payData",sMap);
-        data.put("outTradeNo",outTradeNo);
-        return  new RETResultUtils(data);
 
     }
 

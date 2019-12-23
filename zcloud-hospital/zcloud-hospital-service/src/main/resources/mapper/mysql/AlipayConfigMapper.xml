@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.AlipayConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.AlipayConfig">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="mch_id" property="mchId" />
+        <result column="alipay_public_key" property="alipayPublicKey" />
+        <result column="private_key" property="privateKey" />
+        <result column="public_key" property="publicKey" />
+        <result column="data_format" property="dataFormat" />
+        <result column="sign_type" property="signType" />
+        <result column="pay_charset" property="payCharset" />
+        <result column="timeout_express" property="timeoutExpress" />
+        <result column="product_code" property="productCode" />
+        <result column="pay_return_url" property="payReturnUrl" />
+        <result column="pay_notify_url" property="payNotifyUrl" />
+        <result column="pay_success_tpl_url" property="paySuccessTplUrl" />
+        <result column="auth_fail_url" property="authFailUrl" />
+        <result column="gate_way" property="gateWay" />
+        <result column="cert_path" property="certPath" />
+        <result column="cert_passwd" property="certPasswd" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from pay_alipay_config
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from pay_alipay_config
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+    <select id="getByAppId" resultMap="BaseResultMap">
+        SELECT  * FROM pay_alipay_config WHERE appid = #{appId} LIMIT 1
+    </select>
+
+</mapper>

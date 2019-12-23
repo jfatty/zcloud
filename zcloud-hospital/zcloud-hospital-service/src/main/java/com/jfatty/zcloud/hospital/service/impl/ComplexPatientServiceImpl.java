@@ -5,7 +5,6 @@ import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.hospital.datasource.TargetDataSource;
 import com.jfatty.zcloud.hospital.mapper.ComplexPatientMapper;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
-import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
@@ -14,7 +13,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +145,8 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
     @TargetDataSource(name="mssql")
     @Override
     public boolean bindDefaultPat(String openId, Integer openIdType, String brid,Integer bindStatus) throws Exception {
+        if (bindStatus == 0)
+            brid = "" ;
         int count = complexPatientMapper.bindDefaultPat(openId,openIdType,brid);
         return (count > 0);
     }
