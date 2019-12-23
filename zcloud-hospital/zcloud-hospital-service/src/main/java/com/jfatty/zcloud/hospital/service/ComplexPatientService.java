@@ -87,5 +87,5 @@ public interface ComplexPatientService {
      * @param brid
      * @return
      */
-    boolean bindDefaultPat(String openId, Integer openIdType, String brid);
+    boolean bindDefaultPat(String openId, Integer openIdType, String brid,Integer bindStatus) throws Exception ;
 }

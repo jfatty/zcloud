@@ -6,6 +6,7 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
+import com.jfatty.zcloud.hospital.req.NumoDefaultPatientReq;
 import com.jfatty.zcloud.hospital.req.NumoPatientDeatilReq;
 import com.jfatty.zcloud.hospital.req.NumoPatientInfoReq;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
@@ -115,12 +116,12 @@ public class ApiComplexPatientController {
         return new RETResultUtils(numoPatientDeatilRes);
     }
 
-    @ApiOperation(value=" 004****设置默认就诊人")
+    @ApiOperation(value=" 004****开关设置默认就诊人")
     @RequestMapping(value="/setDefaultPat", method=RequestMethod.POST)
-    public RETResultUtils<String> setDefaultPat(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
-        String openId = numoPatientDeatilReq.getOpenId() ;
-        Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
-        String brid = numoPatientDeatilReq.getBrid();
+    public RETResultUtils<String> setDefaultPat(@RequestBody NumoDefaultPatientReq numoDefaultPatientReq){
+        String openId = numoDefaultPatientReq.getOpenId() ;
+        Integer openIdType = numoDefaultPatientReq.getOpenIdType() ;
+        String brid = numoDefaultPatientReq.getBrid();
         if( StringUtils.isEmptyOrBlank( openId ) )
             return RETResultUtils._509("openId不能为空");
         if( StringUtils.isEmptyOrBlank( brid ) )
@@ -128,9 +129,17 @@ public class ApiComplexPatientController {
         boolean b = complexPatientService.checkRightByBrid(openId, openIdType, brid);                      //查询用户有无操作就诊人的权限
         if ( !b )
             return RETResultUtils._509("此病人不在本系统中");//没有操作数据的权限
-        boolean result = complexPatientService.bindDefaultPat(openId, openIdType, brid);
-        if(result)
-            return new RETResultUtils("默认就诊人设置成功");
+        Integer bindStatus = numoDefaultPatientReq.getBindStatus() ;
+        boolean result = false;
+        try {
+            result = complexPatientService.bindDefaultPat(openId, openIdType, brid,bindStatus);
+            String msg = bindStatus == 1 ? "":"取消" ;
+            if(result)
+                return new RETResultUtils("默认就诊人"+msg+"绑定成功");
+        } catch (Exception e) {
+            log.error("设置默认就诊人出现异常 [{}]",e.getMessage());
+            return RETResultUtils.faild("网络崩溃了,请联系运维小哥哥");
+        }
         return RETResultUtils.faild("网络延时,请稍后重试");
     }
 

@@ -146,7 +146,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public boolean bindDefaultPat(String openId, Integer openIdType, String brid) {
+    public boolean bindDefaultPat(String openId, Integer openIdType, String brid,Integer bindStatus) throws Exception {
         int count = complexPatientMapper.bindDefaultPat(openId,openIdType,brid);
         return (count > 0);
     }
