@@ -39,4 +39,5 @@ public class NumoPatientInfo implements Serializable {
 
     private String nation;                                                           //民族
     private String relationship ;                                                    //与就诊人关系
+    private Integer hasCard ;                                                        //勾选有就诊卡 值为1 未勾选有就诊卡 值为0
 }
