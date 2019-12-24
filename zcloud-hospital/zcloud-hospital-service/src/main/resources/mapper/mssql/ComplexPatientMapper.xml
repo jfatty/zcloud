@@ -48,6 +48,7 @@
         DECLARE @v_count int;
         DECLARE @v_userId int;
         DECLARE @v_patientId int;
+        DECLARE @v_tem_count int;
         select @v_count = count(0) from numo.t_patient where ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
         IF (@v_count <![CDATA[>]]> 0)<!-- 已经存在，则修改 -->
         BEGIN
