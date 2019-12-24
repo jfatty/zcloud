@@ -130,7 +130,12 @@
     <!--解绑用户和就诊人-->
     <!--解除用户与病人之间的绑定关系-->
     <delete id="localUnBind" >
-		delete from numo.t_user_patient where patientId=#{pid} and userId = ( select id from numo.t_user where openId=#{openId} and userType=#{openIdType} )
+		BEGIN
+		DECLARE @v_tem_count int;
+		select @v_tem_count = isnull(bindNum,0)  from numo.t_user where openId = #{openId} and userType = #{openIdType};
+		update numo.t_user set bindNum = (@v_tem_count - 1) where openId = #{openId} and userType = #{openIdType};
+		delete from numo.t_user_patient where patientId=#{pid} and userId = ( select id from numo.t_user where openId=#{openId} and userType=#{openIdType} );
+		END;
 	</delete>
 
     <!--查询此就诊人和对应用户是否为绑定默认就诊人关系-->
