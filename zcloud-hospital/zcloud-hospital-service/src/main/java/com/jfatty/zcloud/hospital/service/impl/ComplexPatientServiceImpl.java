@@ -52,7 +52,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         String regMSg = "" ;
         List<WebRegPatient> list = null ;
         Map<String, Object> map = new HashMap<String, Object>();
-        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setTel(tel).setNation(nation).setRelationship(relationship);
+        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setTel(tel).setNation(nation).setRelationship(relationship).setHasCard(hasCard);
         map.put("idCard", idCard);
         map.put("name", name);
         map.put("tel", tel);
@@ -70,6 +70,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
             map.put("No", hisCardNo);
             numoPatientInfo.setHisCardNo(hisCardNo);
             numoPatientInfo.setHisCardType(hisCardType);
+            numoPatientInfo.setHisCardTypeCode(tmps[1]);
             list = complexPatientMapper.webRegOtherPatient(map);
         } else {
             throw new RuntimeException("就诊人数据有误!");
