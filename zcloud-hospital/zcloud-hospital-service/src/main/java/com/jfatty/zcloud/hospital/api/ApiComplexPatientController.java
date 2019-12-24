@@ -78,7 +78,6 @@ public class ApiComplexPatientController {
             idCard = numoPatientInfoReq.getIdCard() ;
             IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
             gender = idCardUtil.getGender();
-            System.out.println(idCardUtil);
         } catch (Exception e) {
             log.error("程序绑定就诊人信息时出现异常 就诊人身份证号[{}]不合法:",idCard);
             return RETResultUtils._509("请输入合法的就诊人身份证号");

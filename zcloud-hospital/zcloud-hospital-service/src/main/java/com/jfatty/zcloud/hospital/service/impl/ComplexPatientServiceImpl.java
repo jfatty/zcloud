@@ -52,7 +52,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         String regMSg = "" ;
         List<WebRegPatient> list = null ;
         Map<String, Object> map = new HashMap<String, Object>();
-        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setAddress(address).setNation(nation).setRelationship(relationship);
+        NumoPatientInfo numoPatientInfo  = new NumoPatientInfo().setName(name).setIdCard(idCard).setTel(tel).setNation(nation).setRelationship(relationship);
         map.put("idCard", idCard);
         map.put("name", name);
         map.put("tel", tel);
@@ -87,6 +87,8 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
                     numoPatientInfo.setPatId(webRegPatient.getBrid());                           //病人在HIS中的唯一码
                 if(StringUtils.isNotEmptyAndBlank(webRegPatient.getDz()))
                     numoPatientInfo.setAddress(webRegPatient.getDz());
+                if(StringUtils.isEmptyOrBlank(webRegPatient.getDz()) && StringUtils.isNotEmptyAndBlank(address))
+                    numoPatientInfo.setAddress(address);
                 int affect = complexPatientMapper.addNumoPatientInfo(numoPatientInfo,openId,openIdType);
                 log.error("绑定就诊人 数据库受影响行数: [{}]",affect);
                 return true ;
