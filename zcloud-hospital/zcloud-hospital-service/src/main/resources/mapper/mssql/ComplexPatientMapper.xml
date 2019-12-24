@@ -64,8 +64,7 @@
         hisCardType = #{numoPatientInfo.hisCardType},
         hisCardTypeCode = #{numoPatientInfo.hisCardTypeCode},
         nation = #{numoPatientInfo.nation},
-        relationship = #{numoPatientInfo.relationship},
-        hasCard = #{numoPatientInfo.hasCard}
+        relationship = #{numoPatientInfo.relationship}
         where
         ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
         END;
@@ -86,8 +85,7 @@
         hisCardType,
         hisCardTypeCode,
         relationship,
-        nation,
-        hasCard
+        nation
         )values(
         #{numoPatientInfo.name},
         #{numoPatientInfo.gender},
@@ -103,8 +101,7 @@
         #{numoPatientInfo.hisCardType},
         #{numoPatientInfo.hisCardTypeCode},
         #{numoPatientInfo.relationship},
-        #{numoPatientInfo.nation},
-        #{numoPatientInfo.hasCard}
+        #{numoPatientInfo.nation}
         );
 
         END;
