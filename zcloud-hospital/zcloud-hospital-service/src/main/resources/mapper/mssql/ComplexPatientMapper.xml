@@ -63,8 +63,9 @@
         hisCardNo   = #{numoPatientInfo.hisCardNo},
         hisCardType = #{numoPatientInfo.hisCardType},
         hisCardTypeCode = #{numoPatientInfo.hisCardTypeCode},
+        relationship = #{numoPatientInfo.relationship},
         nation = #{numoPatientInfo.nation},
-        relationship = #{numoPatientInfo.relationship}
+        hasCard = #{numoPatientInfo.hasCard}
         where
         ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
         END;
@@ -85,7 +86,8 @@
         hisCardType,
         hisCardTypeCode,
         relationship,
-        nation
+        nation,
+        hasCard
         )values(
         #{numoPatientInfo.name},
         #{numoPatientInfo.gender},
@@ -101,9 +103,13 @@
         #{numoPatientInfo.hisCardType},
         #{numoPatientInfo.hisCardTypeCode},
         #{numoPatientInfo.relationship},
-        #{numoPatientInfo.nation}
+        #{numoPatientInfo.nation},
+        #{numoPatientInfo.hasCard}
         );
-
+        END;
+        BEGIN
+        select @v_tem_count = isnull(bindNum,0)  from numo.t_user where openId = #{openId} and userType = #{openIdType};
+        update numo.t_user set bindNum = (@v_tem_count + 1) where openId = #{openId} and userType = #{openIdType};
         END;
         select @v_userId = id from numo.t_user where openId = #{openId} and userType = #{openIdType};
         select @v_patientId = id from numo.t_patient where ltrim(rtrim(idCard)) = ltrim(rtrim(#{numoPatientInfo.idCard}));
