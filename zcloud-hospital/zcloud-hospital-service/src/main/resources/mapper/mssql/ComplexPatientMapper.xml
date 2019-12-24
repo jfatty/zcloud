@@ -5,8 +5,8 @@
 
     <!--关注公众号事件,添加用户信息-->
     <insert id="subscribeEvent" >
-		update numo.t_user set type=#{type}, updatedTime=getDate() where openId=#{openId} and userType=#{userType};
-		insert into numo.t_user(openId,createdTime,type,userType) select #{openId}, getDate(), #{type}, #{userType}
+		update numo.t_user set type=#{attention}, updatedTime=getDate() where openId=#{openId} and userType=#{userType};
+		insert into numo.t_user(openId,createdTime,type,userType) select #{openId}, getDate(), #{attention}, #{userType}
 		where not exists (select id from numo.t_user where openId=#{openId} and userType=#{userType});
 	</insert>
 
