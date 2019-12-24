@@ -94,4 +94,21 @@ public interface ComplexPatientMapper {
      * @return
      */
     Integer bindDefaultPat(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("brid")  String brid);
+
+    /**
+     * 查询用户是否存在
+     * @param openId
+     * @param openIdType
+     * @param attention
+     * @return
+     */
+    Integer isExist(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("attention") int attention);
+
+    /**
+     * 关注公众号事件,添加用户信息
+     * @param openId
+     * @param openIdType
+     * @param attention
+     */
+    void subscribeEvent(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("attention") int attention);
 }

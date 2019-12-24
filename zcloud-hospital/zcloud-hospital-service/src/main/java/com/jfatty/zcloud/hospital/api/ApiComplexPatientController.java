@@ -13,6 +13,7 @@ import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.utils.IdCardUtil;
+import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -72,6 +73,8 @@ public class ApiComplexPatientController {
     @RequestMapping(value="/addComplexPatient", method=RequestMethod.POST)
     public RETResultUtils<String> AddComplexPatient(@RequestBody NumoPatientInfoReq numoPatientInfoReq){
         boolean res = false;
+        String openId = numoPatientInfoReq.getOpenId() ;
+        Integer openIdType = numoPatientInfoReq.getOpenIdType() ;
         String idCard = null;
         String gender = null;
         try {
@@ -83,7 +86,15 @@ public class ApiComplexPatientController {
             return RETResultUtils._509("请输入合法的就诊人身份证号");
         }
         try {
-            res = complexPatientService.saveComplexPatient(numoPatientInfoReq.getOpenId(),numoPatientInfoReq.getOpenIdType(),numoPatientInfoReq.getName(),//
+            boolean b = complexPatientService.isExist(openId, openIdType, NumoPatientInfo.ATTENTION);
+            if ( !b )
+                complexPatientService.subscribeEvent(openId, openIdType, NumoPatientInfo.ATTENTION);
+        } catch (Exception e) {
+            log.error("====> 关注公众号事件,添加用户信息 处理异常 openId= [{}] openIdType= [{}] 异常信息=[{}]" , openId , openIdType ,e.getMessage() );
+        }
+        try {
+
+            res = complexPatientService.saveComplexPatient(openId,openIdType,numoPatientInfoReq.getName(),//
                     gender,idCard,numoPatientInfoReq.getTel(),//
                     numoPatientInfoReq.getAddress(),numoPatientInfoReq.getNation(),//
                     numoPatientInfoReq.getRelationship(),numoPatientInfoReq.getHasCard(),//
@@ -107,6 +118,13 @@ public class ApiComplexPatientController {
             return RETResultUtils._509("openId不能为空");
         if( StringUtils.isEmptyOrBlank( brid ) )
             return RETResultUtils._509("病人ID不能为空");
+        try {
+            boolean b = complexPatientService.isExist(openId, openIdType, NumoPatientInfo.ATTENTION);
+            if ( !b )
+                complexPatientService.subscribeEvent(openId, openIdType, NumoPatientInfo.ATTENTION);
+        } catch (Exception e) {
+            log.error("====> 关注公众号事件,添加用户信息 处理异常 openId= [{}] openIdType= [{}] 异常信息=[{}]" , openId , openIdType ,e.getMessage() );
+        }
         boolean b = complexPatientService.checkRightByBrid(openId, openIdType, brid);                      //查询用户有无操作就诊人的权限
         if ( !b )
             return RETResultUtils._509("此病人不在本系统中");//没有操作数据的权限

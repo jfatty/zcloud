@@ -88,4 +88,24 @@ public interface ComplexPatientService {
      * @return
      */
     boolean bindDefaultPat(String openId, Integer openIdType, String brid,Integer bindStatus) throws Exception ;
+
+    /**
+     * 查询用户是否存在
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
+     * @param attention 用户关注或者取消关注状态
+     * @return
+     */
+    boolean isExist(String openId, Integer openIdType, int attention);
+
+    /**
+     * 关注公众号事件,添加用户信息  jfatty  2017-10-24
+     * 存在则修改时间，不存在则新增用户
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
+     * @param attention 用户关注或者取消关注状态
+     */
+    void subscribeEvent(String openId, Integer openIdType, int attention) throws Exception ;
+
+
 }

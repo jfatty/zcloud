@@ -163,4 +163,17 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         int count = complexPatientMapper.bindDefaultPat(openId,openIdType,brid);
         return (count > 0);
     }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public boolean isExist(String openId, Integer openIdType, int attention) {
+        int count = complexPatientMapper.isExist(openId, openIdType, attention);
+        return (count > 0);
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public void subscribeEvent(String openId, Integer openIdType, int attention) throws Exception {
+        complexPatientMapper.subscribeEvent(openId, openIdType, attention);
+    }
 }
