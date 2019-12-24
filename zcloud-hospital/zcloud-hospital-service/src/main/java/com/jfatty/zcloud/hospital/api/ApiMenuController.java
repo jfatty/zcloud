@@ -2,6 +2,8 @@ package com.jfatty.zcloud.hospital.api;
 
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.hospital.entity.Menu;
 import com.jfatty.zcloud.hospital.interfaces.IMenu;
 import com.jfatty.zcloud.hospital.req.MenuReq;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -60,7 +64,7 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
                              @RequestParam(value = "position" , defaultValue = "index" ) String position ){
         List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
         if(CollectionUtils.isEmpty(menus))
-            return RELResultUtils.success("未查询到对应菜单") ;
+            return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
         menus.forEach(
                 menu -> {
@@ -85,7 +89,7 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
                                      @RequestParam(value = "navId" , defaultValue = "402881906F12FFF9016F12FFF9D50000" ) String navId ){
         List<Menu> menus = menuService.getDiffMenus(appId,version,null,navId);
         if(CollectionUtils.isEmpty(menus))
-            return RELResultUtils.success("未查询到对应菜单") ;
+            return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
         menus.forEach(
                 menu -> {
@@ -98,7 +102,7 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
     }
 
 
-    @ApiOperation(value="003****V4.0.0版本菜单首页")
+    @ApiOperation(value="003****V4.0.0版本首页菜单")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "4.0.0"),
@@ -110,7 +114,7 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
                                              @RequestParam(value = "position" , defaultValue = "top_one" ) String position  ){
         List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
         if(CollectionUtils.isEmpty(menus))
-            return RELResultUtils.success("未查询到对应菜单") ;
+            return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
         menus.forEach(
                 menu -> {
@@ -120,6 +124,35 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
                 }
         );
         return new RELResultUtils(menuReses);
+    }
+
+    @ApiOperation(value="004****V4.0.0版本首页菜单一次接口调用")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "4.0.0"),
+            @ApiImplicitParam(name = "position", value = "定位(可选参数)为空表示获取首页所有菜单",dataType = "String",defaultValue = "") //,allowableValues ="top_one,top_two,middle,bottom"
+    })
+    @RequestMapping(value={"/indexFourAll"},method=RequestMethod.GET)
+    public RETResultUtils<Map<String, List<MenuRes>>> indexFourAll(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
+                                                                   @RequestParam(value = "version" , defaultValue = "4.0.0") String version ,
+                                                                   @RequestParam(value = "position" , defaultValue = "" ) String position  ){
+        if (StringUtils.isEmptyOrBlank(position))
+            position = null ;
+        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
+        if(CollectionUtils.isEmpty(menus))
+            return RETResultUtils._506("未查询到对应菜单") ;
+        List<MenuRes> menuReses = new ArrayList<MenuRes>();
+        menus.forEach(
+                menu -> {
+                    MenuRes menuRes = new MenuRes();
+                    BeanUtils.copyProperties(menu,menuRes);
+                    menuReses.add(menuRes);
+                }
+        );
+        Map<String, List<MenuRes>> resultList = menuReses.stream().collect(
+                Collectors.groupingBy(MenuRes::getPos));
+
+        return new RETResultUtils(resultList);
     }
 
 

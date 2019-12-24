@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Menu">
         <id column="id" property="id" />
         <result column="title" property="title" />
+        <result column="pos" property="pos" />
         <result column="nav_id" property="navId" />
         <result column="module" property="module" />
         <result column="route" property="route" />
