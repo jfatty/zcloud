@@ -106,7 +106,7 @@
         #{numoPatientInfo.nation},
         #{numoPatientInfo.hasCard}
         );
-        select @v_tem_count = bindNum  from numo.t_user where openId = #{openId} and userType = #{openIdType};
+        select @v_tem_count = isnull(bindNum,0)  from numo.t_user where openId = #{openId} and userType = #{openIdType};
         update numo.t_user set bindNum = (@v_tem_count + 1) where openId = #{openId} and userType = #{openIdType};
         END;
         select @v_userId = id from numo.t_user where openId = #{openId} and userType = #{openIdType};
