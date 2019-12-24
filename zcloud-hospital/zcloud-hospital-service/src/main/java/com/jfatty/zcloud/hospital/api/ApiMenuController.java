@@ -96,5 +96,32 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
         );
         return new RELResultUtils(menuReses);
     }
+
+
+    @ApiOperation(value="003****V4.0.0版本菜单首页")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "4.0.0"),
+            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "top_one",allowableValues ="top_one,top_two,middle,bottom" )
+    })
+    @RequestMapping(value={"/indexFour"},method=RequestMethod.GET)
+    public RELResultUtils<MenuRes> indexFour(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
+                                             @RequestParam(value = "version" , defaultValue = "4.0.0") String version ,
+                                             @RequestParam(value = "position" , defaultValue = "top_one" ) String position  ){
+        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
+        if(CollectionUtils.isEmpty(menus))
+            return RELResultUtils.success("未查询到对应菜单") ;
+        List<MenuRes> menuReses = new ArrayList<MenuRes>();
+        menus.forEach(
+                menu -> {
+                    MenuRes menuRes = new MenuRes();
+                    BeanUtils.copyProperties(menu,menuRes);
+                    menuReses.add(menuRes);
+                }
+        );
+        return new RELResultUtils(menuReses);
+    }
+
+
 }
 

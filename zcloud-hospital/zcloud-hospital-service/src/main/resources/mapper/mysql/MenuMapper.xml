@@ -14,7 +14,9 @@
         <result column="parent_id" property="parentId" />
         <result column="description" property="description" />
         <result column="icon" property="icon" />
+        <result column="act_icon" property="actIcon" />
         <result column="icon_img" property="iconImg" />
+        <result column="act_icon_img" property="actIconImg" />
         <result column="icon_type" property="iconType" />
         <result column="page_index" property="pageIndex" />
         <result column="plass" property="plass" />
