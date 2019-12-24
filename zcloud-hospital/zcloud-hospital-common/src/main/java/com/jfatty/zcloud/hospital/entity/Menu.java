@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Blob;
 import java.time.LocalDateTime;
 
 /**
@@ -67,15 +68,26 @@ public class Menu extends Model<Menu> {
      */
     private String description;
 
+
     /**
      * 菜单图标样式
      */
     private String icon;
 
     /**
+     * 导航激活状态图标路径
+     */
+    private String actIcon;
+
+    /**
      * icon图标二进制文件
      */
     private byte[]  iconImg;
+
+    /**
+     * 导航图标激活状态二进制文件
+     */
+    private byte[] actIconImg;
 
     /**
      * 图标 类型 0 表示图片地址 1 表示二进制文件

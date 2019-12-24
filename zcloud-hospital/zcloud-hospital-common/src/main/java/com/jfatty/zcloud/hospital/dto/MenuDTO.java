@@ -74,6 +74,12 @@ public class MenuDTO<T extends BaseDTO> extends BaseDTO {
     private String icon;
 
     /**
+     * 菜单图标状激活态图标路径
+     */
+    @ApiModelProperty(name = "actIcon", position = 1 , value = "菜单图标状激活态图标路径" ,example = "菜单图标状激活态图标路径")
+    private String actIcon;
+
+    /**
      * 图标 类型 0 表示图片地址 1 表示二进制文件
      */
     @ApiModelProperty(name = "iconType", position = 1 , value = "图标 类型 0 表示图片地址 1 表示二进制文件" ,example = "0" , allowableValues = "1,0")

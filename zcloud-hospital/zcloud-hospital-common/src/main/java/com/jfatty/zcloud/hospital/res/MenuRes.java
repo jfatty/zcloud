@@ -25,6 +25,12 @@ public class MenuRes extends MenuDTO<MenuRes> {
     @ApiModelProperty(name = "iconImg", position = 2,required = true, value = "icon图标二进制文件" , example = "二进制文件")
     private byte[]  iconImg;
 
+    /**
+     * icon图标二进制文件
+     */
+    @ApiModelProperty(name = "actIconImg", position = 2,required = true, value = "菜单图标激活状态二进制文件" , example = "二进制文件")
+    private byte[]  actIconImg;
+
 
     /**
      * 域值

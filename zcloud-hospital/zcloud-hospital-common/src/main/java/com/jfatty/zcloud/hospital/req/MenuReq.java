@@ -19,4 +19,10 @@ public class MenuReq extends MenuDTO<MenuReq> {
      * icon图标二进制文件
      */
     //private MultipartFile iconImg;
+
+
+    /**
+     * 导航图标激活状态二进制文件
+     */
+    //private MultipartFile actIconImg;
 }
