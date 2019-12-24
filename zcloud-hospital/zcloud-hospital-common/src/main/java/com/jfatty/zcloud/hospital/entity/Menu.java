@@ -34,6 +34,11 @@ public class Menu extends Model<Menu> {
     private String title;
 
     /**
+     * 菜单定位
+     */
+    private String pos;
+
+    /**
      * 所属导航ID没有的情况下可以为空
      */
     private String navId ;

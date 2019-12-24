@@ -26,6 +26,12 @@ public class MenuDTO<T extends BaseDTO> extends BaseDTO {
     private String title;
 
     /**
+     * 菜单定位
+     */
+    @ApiModelProperty(name = "pos", position = 2 ,required = true, value = "菜单定位" ,example = "top")
+    private String pos;
+
+    /**
      * 所属导航ID没有的情况下可以为空
      */
     @ApiModelProperty(name = "navId", position = 1 ,value = "所属导航ID没有的情况下可以为空" ,example = "402881906F12FFF9016F130045C40005")
