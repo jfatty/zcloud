@@ -53,6 +53,7 @@ public class ApiLoginController {
             return RETResultUtils._506("验证码已经失效") ;
         if(!code.equalsIgnoreCase(loginVo.getPassword()))
             return RETResultUtils._509("验证码错误") ;
+        redisTemplate.delete(loginVo.getAccount());
         String token = "TOKEN"+System.currentTimeMillis() ;
         redisTemplate.opsForValue().set(token,loginVo);
         LoginVoReq login = (LoginVoReq) redisTemplate.opsForValue().get(token);

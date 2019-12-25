@@ -95,11 +95,11 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- logback 推送日志文件到logstash -->
-        <!--<dependency>-->
-        <!--<groupId>net.logstash.logback</groupId>-->
-        <!--<artifactId>logstash-logback-encoder</artifactId>-->
-        <!--<version>4.11</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.11</version>
+        </dependency>
 
         <dependency>
             <groupId>de.codecentric</groupId>

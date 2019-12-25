@@ -51,6 +51,13 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
+        <!-- logback 推送日志文件到logstash -->
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>4.11</version>
+        </dependency>
+
         <!-- 云应用系统状态管理 -->
         <dependency>
             <groupId>de.codecentric</groupId>
