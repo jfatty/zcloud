@@ -2,9 +2,12 @@ package com.jfatty.zcloud.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -21,6 +24,13 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @Component
 public class AuthFilter implements GlobalFilter, Ordered {
+
+    @Autowired
+    private RedisTemplate redisTemplate ;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate ;
+
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

@@ -3,10 +3,14 @@ package com.jfatty.zcloud.filter;
 import com.alibaba.fastjson.JSONObject;
 import com.jfatty.zcloud.msg.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.cloud.gateway.support.ServerWebExchangeUtils;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -16,8 +20,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 /**
  * 描述
@@ -30,10 +33,16 @@ import java.util.LinkedHashSet;
 public class AccessGatewayFilter  implements GlobalFilter {
 
 
-    private static final String startWith = "/login";
+    private static final String startWith = "/login,/logout,/kaptcha";
 
     private static final String GATE_WAY_PREFIX = "/api";
 
+
+    @Autowired
+    private RedisTemplate redisTemplate ;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate ;
 
     /**
      * URI是否以什么打头
@@ -74,12 +83,26 @@ public class AccessGatewayFilter  implements GlobalFilter {
             ServerHttpRequest build = mutate.build();
             return chain.filter(exchange.mutate().request(build).build());
         }
+        listRequest(request);
         //其他情况下 校验是否登录
         if ( requestUri.contains("error") ) {
             return getVoidMono(exchange, new BaseResponse(40301,"User Token Forbidden or Expired! " + method));
         }
         ServerHttpRequest build = mutate.build();
         return chain.filter(exchange.mutate().request(build).build());
+    }
+
+    private void listRequest(ServerHttpRequest request) {
+        HttpHeaders headers = request.getHeaders();
+        Set<Map.Entry<String, List<String>>> stes =  headers.entrySet();
+        for (Map.Entry<String, List<String>> entry : stes) {
+            entry.getValue().forEach(
+                    strValue -> {
+                        log.error("key: [{}]  value: [{}]" ,entry.getKey(),strValue );
+                    }
+            );
+
+        }
     }
 
     /**

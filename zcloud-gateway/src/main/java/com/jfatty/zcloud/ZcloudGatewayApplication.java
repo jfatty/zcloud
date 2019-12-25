@@ -2,6 +2,7 @@ package com.jfatty.zcloud;
 
 import com.jfatty.zcloud.gateway.RequestBodyRoutePredicateFactory;
 import com.jfatty.zcloud.gateway.RequestTimeGatewayFilterFactory;
+import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableDiscoveryClient
+@EnableAdminServer
 public class ZcloudGatewayApplication {
 
     public static void main(String[] args) {

@@ -13,12 +13,12 @@ import java.io.Serializable;
 @Data
 public class BaseResponse implements Serializable {
 
-    private int status = 200;
-    private String message;
+    private int code = 200;
+    private String msg;
 
-    public BaseResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
+    public BaseResponse(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
     }
 
     public BaseResponse() {
