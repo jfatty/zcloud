@@ -7,6 +7,7 @@ import com.jfatty.zcloud.hospital.mapper.ComplexPatientMapper;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
+import com.jfatty.zcloud.hospital.vo.NumoUserInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -175,5 +176,11 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
     @Override
     public void subscribeEvent(String openId, Integer openIdType, int attention) throws Exception {
         complexPatientMapper.subscribeEvent(openId, openIdType, attention);
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public NumoUserInfo getNumoUserInfo(String openId, Integer openIdType) {
+        return complexPatientMapper.getNumoUserInfo(openId, openIdType);
     }
 }

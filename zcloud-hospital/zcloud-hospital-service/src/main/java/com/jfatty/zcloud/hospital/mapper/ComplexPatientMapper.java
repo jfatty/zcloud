@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.hospital.mapper;
 
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
+import com.jfatty.zcloud.hospital.vo.NumoUserInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import org.apache.ibatis.annotations.Param;
 
@@ -66,8 +67,8 @@ public interface ComplexPatientMapper {
 
     /**
      * 解绑用户和就诊人
-     * @param openId
-     * @param openIdType
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
      * @param pid
      */
     void localUnBind(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("pid")  Long pid);
@@ -88,8 +89,8 @@ public interface ComplexPatientMapper {
 
     /**
      * 绑定默认就诊人
-     * @param openId
-     * @param openIdType
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
      * @param brid
      * @return
      */
@@ -97,8 +98,8 @@ public interface ComplexPatientMapper {
 
     /**
      * 查询用户是否存在
-     * @param openId
-     * @param openIdType
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
      * @param attention
      * @return
      */
@@ -106,9 +107,17 @@ public interface ComplexPatientMapper {
 
     /**
      * 关注公众号事件,添加用户信息
-     * @param openId
-     * @param openIdType
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
      * @param attention
      */
     void subscribeEvent(@Param("openId") String openId,@Param("openIdType")  Integer openIdType,@Param("attention") int attention);
+
+    /**
+     *
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
+     * @return
+     */
+    NumoUserInfo getNumoUserInfo(String openId, Integer openIdType);
 }

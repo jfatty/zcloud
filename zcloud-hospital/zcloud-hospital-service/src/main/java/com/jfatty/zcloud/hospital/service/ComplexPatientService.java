@@ -3,6 +3,7 @@ package com.jfatty.zcloud.hospital.service;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
+import com.jfatty.zcloud.hospital.vo.NumoUserInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 
 import java.util.List;
@@ -107,5 +108,11 @@ public interface ComplexPatientService {
      */
     void subscribeEvent(String openId, Integer openIdType, int attention) throws Exception ;
 
-
+    /**
+     *
+     * @param openId 微信支付宝openId
+     * @param openIdType 微信支付宝openId类型
+     * @return
+     */
+    NumoUserInfo getNumoUserInfo(String openId, Integer openIdType);
 }

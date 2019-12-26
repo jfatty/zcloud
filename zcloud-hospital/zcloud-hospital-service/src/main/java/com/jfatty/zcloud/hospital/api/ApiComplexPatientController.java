@@ -14,6 +14,7 @@ import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.utils.IdCardUtil;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
+import com.jfatty.zcloud.hospital.vo.NumoUserInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,10 +47,12 @@ public class ApiComplexPatientController {
     private ComplexPatientService complexPatientService ;
 
 
-    @ApiOperation(value=" 001**** POST 参数 查询微信/支付宝 ... 用户绑定的就诊人的信息")
+    @ApiOperation(value=" 001**** POST 参数 查询微信/支付宝 ... 用户绑定的就诊人列表信息")
     @RequestMapping(value="/getComplexPatients", method=RequestMethod.POST)
     public RELResultUtils<WebRegPatientRes> getComplexPatients(@RequestBody ComplexPatientReq complexPatientReq){
-        List<WebRegPatient> list = complexPatientService.getWebRegList(complexPatientReq.getOpenId(), complexPatientReq.getOpenIdType(),complexPatientReq.getPageIndex(),complexPatientReq.getPageSize());
+        String openId = complexPatientReq.getOpenId() ;
+        Integer openIdType = complexPatientReq.getOpenIdType() ;
+        List<WebRegPatient> list = complexPatientService.getWebRegList(openId, openIdType,complexPatientReq.getPageIndex(),complexPatientReq.getPageSize());
         if(CollectionUtils.isNotEmpty(list)){
             if ( !(list.get(0).success()) ){
                 String msg = list.get(0).getMsg() ;
@@ -57,11 +60,27 @@ public class ApiComplexPatientController {
                     return RELResultUtils._506("请先添加就诊人!") ;
                 return RELResultUtils._506(msg);
             }
+            String defaultPat = "" ;
+            NumoUserInfo userInfo = complexPatientService.getNumoUserInfo(openId,openIdType);
+            if (userInfo == null) {
+                try {
+                    complexPatientService.subscribeEvent(openId, openIdType, NumoPatientInfo.ATTENTION);
+                } catch (Exception e) {
+                    log.error("====> POST 参数 查询微信/支付宝 ... 用户绑定的就诊人列表信息,添加用户信息 处理异常 openId= [{}] openIdType= [{}] 异常信息=[{}]" , openId , openIdType ,e.getMessage() );
+                }
+            }
+            if (userInfo != null && StringUtils.isNotEmptyAndBlank(userInfo.getDefaultPat()))
+                defaultPat = userInfo.getDefaultPat();
+
             List<WebRegPatientRes> results = new ArrayList<WebRegPatientRes>();
+
+            String finalDefaultPat = defaultPat;
             list.forEach(
                     webRegPatient -> {
                         WebRegPatientRes webRegPatientRes = new WebRegPatientRes();
                         BeanUtils.copyProperties(webRegPatient,webRegPatientRes);
+                        if(webRegPatient.getBrid().equalsIgnoreCase(finalDefaultPat))
+                            webRegPatientRes.setDefaultPat(true);
                         results.add(webRegPatientRes);
                     }
             );

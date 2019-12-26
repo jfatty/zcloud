@@ -174,4 +174,9 @@
     </select>
 
 
+    <select id="getNumoUserInfo" resultType="com.jfatty.zcloud.hospital.vo.NumoUserInfo">
+        SELECT id , openId , createdTime , updatedTime  , type , userType , bindMax , bindNum , default_pat AS defaultPat FROM numo.t_user WHERE openId=#{openId} and userType=#{openIdType}
+    </select>
+
+
 </mapper>
