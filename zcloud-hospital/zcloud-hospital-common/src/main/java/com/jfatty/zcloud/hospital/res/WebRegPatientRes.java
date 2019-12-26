@@ -54,4 +54,9 @@ public class WebRegPatientRes extends WebRegPatientDTO<WebRegPatientRes> {
     @ApiModelProperty(name = "brid", position = 2 ,required = true, value = "病人ID " , example = "125")
     private String brid ;
 
+    @ApiModelProperty(name = "defaultPat", position = 11,required = true, value = "是否为默认就诊人 是true 否false " , example = "false" ,allowableValues = "true,false")
+    private boolean defaultPat ;
+
+
+
 }
