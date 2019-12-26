@@ -79,8 +79,11 @@ public class ApiComplexPatientController {
                     webRegPatient -> {
                         WebRegPatientRes webRegPatientRes = new WebRegPatientRes();
                         BeanUtils.copyProperties(webRegPatient,webRegPatientRes);
-                        if(webRegPatient.getBrid().equalsIgnoreCase(finalDefaultPat))
-                            webRegPatientRes.setDefaultPat(true);
+                        if(webRegPatient.getBrid().equalsIgnoreCase(finalDefaultPat)){
+                            webRegPatientRes.setDefaultPat(1);
+                        }else {
+                            webRegPatientRes.setDefaultPat(0);
+                        }
                         results.add(webRegPatientRes);
                     }
             );
