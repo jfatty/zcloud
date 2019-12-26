@@ -119,5 +119,5 @@ public interface ComplexPatientMapper {
      * @param openIdType 微信支付宝openId类型
      * @return
      */
-    NumoUserInfo getNumoUserInfo(String openId, Integer openIdType);
+    NumoUserInfo getNumoUserInfo(@Param("openId") String openId,@Param("openIdType")  Integer openIdType);
 }
