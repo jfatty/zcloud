@@ -26,4 +26,9 @@ public class HCSHealthCardInfoServiceImpl extends BaseHealthServiceImpl<HCSHealt
         super.setBaseMapper(hcsHealthCardInfoMapper);
         this.hcsHealthCardInfoMapper = hcsHealthCardInfoMapper;
     }
+
+    @Override
+    public HCSHealthCardInfo getByIdCardNumber(String idNumber) {
+        return hcsHealthCardInfoMapper.getByIdCardNumber(idNumber);
+    }
 }

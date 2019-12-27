@@ -12,4 +12,5 @@ import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
  */
 public interface HCSHealthCardInfoService extends BaseHealthService<HCSHealthCardInfo> {
 
+    HCSHealthCardInfo getByIdCardNumber(String idNumber);
 }

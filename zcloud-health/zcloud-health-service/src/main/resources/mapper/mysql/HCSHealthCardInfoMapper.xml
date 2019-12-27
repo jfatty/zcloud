@@ -54,4 +54,8 @@
         </if>
     </select>
 
+    <select id="getByIdCardNumber" resultMap="BaseResultMap" >
+        SELECT * FROM hcs_health_card_info WHERE id_number = #{idNumber} LIMIT 1
+    </select>
+
 </mapper>

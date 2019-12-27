@@ -52,11 +52,17 @@ public class ApiHealthCardStationController {
         try {
             HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
             BeanUtils.copyProperties(hcsHealthCardInfoReq,hcsHealthCardInfo);
-            String CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+
+            HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(hcsHealthCardInfoReq.getIdNumber());
+            String CID = "" ;
+            if (db_HCSHealthCardInfo != null){
+                CID = db_HCSHealthCardInfo.getId();
+            }else {
+                CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+            }
             RegHealthCardInfoRes regHealthCardInfoRes = new RegHealthCardInfoRes();
             HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(appId,hcsHealthCardInfoReq);
             BeanUtils.copyProperties(healthCardInfoVO,regHealthCardInfoRes);
-
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
             hcsHealthCardInfo.setId(CID);
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);

@@ -102,8 +102,10 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         healthCardInfoR.setWechatCode(settings.getWechatCode());
         /************************************************************/
         HealthCardInfo hInfo = healthCard.registerHealthCard(commonIn,healthCardInfoR);
+        System.out.println("腾讯返回===================>"+hInfo.getPhid());
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
+        System.out.println("属性拷贝后===================>"+healthCardInfoVO.getPhid());
         return healthCardInfoVO;
     }
 
