@@ -17,6 +17,8 @@
 
 
     <modules>
+        <module>zcloud-health-common</module>
+        <module>zcloud-health-feign</module>
         <module>zcloud-health-service</module>
     </modules>
 

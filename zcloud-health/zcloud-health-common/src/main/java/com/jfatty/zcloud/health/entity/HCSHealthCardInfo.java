@@ -1,6 +1,5 @@
 package com.jfatty.zcloud.health.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -8,50 +7,96 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 /**
- * <p>
- * 电子健康卡平台配置信息表
- * </p>
+ * 描述
  *
- * @author jfatty
- * @since 2019-12-26
+ * @author jfatty on 2019/12/26
+ * @email jfatty@163.com
  */
 @Data
-@TableName("hcs_health_card_settings")
-public class HealthCardSettings extends Model<HealthCardSettings> {
+@TableName("hcs_health_card_info")
+public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
 
-    private static final long serialVersionUID = 1L;
-
+    /**
+     * 主键ID
+     */
     private String id;
 
     /**
-     * 开放平台官网分配的appId
+     * 姓名
      */
-    private String appid;
-
-    private String hospitalId;
-
-    private String appSecret;
+    private String name;
 
     /**
-     * 其他所有接口的调用凭证
+     * 性别
      */
-    private String appToken = "";
+    private String gender;
 
     /**
-     * appToken有效时间，默认为7200秒
+     * 证件号码
      */
-    private Integer expiresIn;
+    private String idNumber;
 
+    /**
+     * 证件类型
+     */
+    private String idType;
+
+    /**
+     * 民族
+     */
+    private String nation;
+
+    /**
+     * 出生年月日
+     */
+    private String birthday;
+
+    /**
+     * 地址
+     */
+    private String address;
+
+    /**
+     * 联系方式1
+     */
+    private String phone1;
+
+    /**
+     * 联系方式2
+     */
+    private String phone2;
+
+    /**
+     * 院内ID
+     */
+    private String patid;
+
+    /**
+     * 微信身份码
+     */
     private String wechatCode;
 
-    private String description;
+    /**
+     * 健康卡主索引
+     */
+    private String phid;
 
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime expireTime;
+    /**
+     * 二维码文本
+     */
+    private String qrCodeText;
+
+    /**
+     * 健康卡ID
+     */
+    private String healthCardId;
+
+    /**
+     * 扩展字段
+     */
+    private String adminExt;
 
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
@@ -108,8 +153,5 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
      * 删除操作者
      */
     private String deleteOperator;
-
-    @TableField(exist = false)
-    private String requestId = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
 
 }

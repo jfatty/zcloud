@@ -79,6 +79,7 @@
         <module>zcloud-gateway</module>
         <module>zcloud-auth</module>
         <module>zcloud-hospital</module>
+        <module>zcloud-health</module>
         <module>zcloud-ui-admin</module>
     </modules>
 

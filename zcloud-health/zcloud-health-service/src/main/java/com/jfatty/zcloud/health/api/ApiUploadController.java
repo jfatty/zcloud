@@ -62,7 +62,10 @@ public class ApiUploadController {
                 //String imageContent = new String(files[0].getBytes());
                 //System.out.println(imageContent);
                 String imageContent = encoder.encode(file.getBytes());
+                imageContent = imageContent.replaceAll("\r|\n","");
+                System.out.println(imageContent);
                 HCSIDCardInfoVO hcsidCardInfoVO = healthCardStationService.ocrInfo(appId,imageContent);
+
                 return  hcsidCardInfoVO ;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -80,5 +83,7 @@ public class ApiUploadController {
 
         return "" ;
     }
+
+
 
 }
