@@ -68,6 +68,15 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
         return super.save(entity);
     }
 
+    @Override
+    public String saveId(T entity) throws Exception {
+        /**
+         * 首先判断id是否存在
+         */
+        entity = this.setId(entity) ;
+        super.save(entity);
+        return getId(entity);
+    }
 
     @Override
     public RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize) {

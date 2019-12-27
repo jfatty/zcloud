@@ -17,6 +17,8 @@ public interface BaseService<T  extends Model> extends IService<T> {
 
     boolean save(T entity, Map<String,Object> params) throws Exception ;
 
+    String saveId(T entity) throws Exception ;
+
     RELResultUtils<T> getTable(String v, Integer pageIndex, Integer pageSize);
 
     /**
