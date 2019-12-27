@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @author jfatty
  * @since 2019-12-26
  */
-
 @Api(tags = "健康卡信息API" ,value = "健康卡信息")
 @Slf4j
 @RestController

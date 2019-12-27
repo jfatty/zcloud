@@ -133,10 +133,10 @@
         <!--</dependency>-->
 
         <!-- 系统状态查询 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-actuator</artifactId>-->
+        <!--</dependency>-->
         <!-- logback 推送日志文件到logstash -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -144,11 +144,11 @@
             <version>4.11</version>
         </dependency>
 
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>2.1.0</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>de.codecentric</groupId>-->
+            <!--<artifactId>spring-boot-admin-starter-client</artifactId>-->
+            <!--<version>2.1.0</version>-->
+        <!--</dependency>-->
 
 
     </dependencies>
