@@ -65,7 +65,9 @@ public class ApiHealthCardStationController {
             BeanUtils.copyProperties(healthCardInfoVO,regHealthCardInfoRes);
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
             hcsHealthCardInfo.setId(CID);
+            log.error("==============================开始=========================================");
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
+            log.error("==============================结束=========================================");
             return new RETResultUtils(regHealthCardInfoRes) ;
         } catch (Exception e) {
             e.printStackTrace();
