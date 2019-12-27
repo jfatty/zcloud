@@ -191,7 +191,7 @@
         <logger name="com.jfatty.zcloud" level="DEBUG" >
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="DEBUG_FILE"/>
-            <appender-ref ref="LOGSTASH"/>
+            <!--<appender-ref ref="LOGSTASH"/>-->
         </logger>
     </springProfile>
 
@@ -205,7 +205,7 @@
         <logger name="com.jfatty.zcloud" level="WARN" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="DEBUG_FILE"/>
-            <appender-ref ref="LOGSTASH"/>
+            <!--<appender-ref ref="LOGSTASH"/>-->
         </logger>
     </springProfile>
 
@@ -222,7 +222,7 @@
         <!-- 错误日志 -->
         <appender-ref ref="ERROR_FILE" />
 
-        <appender-ref ref="LOGSTASH"/>
+        <!--<appender-ref ref="LOGSTASH"/>-->
 
     </root>
 
