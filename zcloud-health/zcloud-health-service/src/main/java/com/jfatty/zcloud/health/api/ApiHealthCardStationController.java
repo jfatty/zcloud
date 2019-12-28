@@ -43,6 +43,27 @@ public class ApiHealthCardStationController {
     private HCSHealthCardInfoService hcsHealthCardInfoService ;
 
 
+    @ApiOperation(value=" 009**** 测试 通过健康卡授权码获取接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "healthCode", value = "健康卡授权码",dataType = "String",defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094")
+    })
+    @RequestMapping(value="/getHealthCardByHealthCodeTest", method=RequestMethod.GET)
+    public  RETResultUtils<HCSHealthCardInfoRes> getHealthCardByHealthCodeTest( @RequestParam(value = "healthCode" , defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094") String healthCode){
+        try {
+            log.error("健康平台回传healthCode======>[{}]",healthCode);
+            String appId = "b9b77d6b9ba46db83a7dbb158c4740c4" ;
+            HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+            HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(appId,healthCode);
+            BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
+            return new RETResultUtils(hcsHealthCardInfoRes) ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4")

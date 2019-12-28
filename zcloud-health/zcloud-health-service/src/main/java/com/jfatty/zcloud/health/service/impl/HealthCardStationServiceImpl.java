@@ -18,9 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +47,13 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
 
     private HealthCardSettings getAppTokenHealthCardSettings(String appId){
         HealthCardSettings settings =  healthCardSettingsMapper.getByAppId(appId);
-        //获取秒数
-        Long second = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
-        Long expireTimeSecond = settings.getExpireTime().toEpochSecond(ZoneOffset.of("+8"));
-        Long dis = second - expireTimeSecond ;
+        //获取秒数 second
+        //Long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
+        //Long expireTimeSecond = settings.getExpireTime().toEpochSecond(ZoneOffset.of("+8"));
+        Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        Long expireTimeSecond = settings.getExpireTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        Long dis = timestamp - expireTimeSecond - 60000;
+        log.error("判断appToken是否超时===>[{}]",dis);
         if ( StringUtils.isEmptyOrBlank(settings.getAppToken()) || dis > 0  ){ //或者超时
             //创建健康卡实例，传入appSecret
             HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
@@ -65,9 +66,11 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
             settings.setExpiresIn(appTokenInfo.getExpiresIn());
             settings.setUpdateTime(LocalDateTime.now());
             //
-            Long expiresIn = second +  new Long((long)appTokenInfo.getExpiresIn());
-            Instant instant = Instant.ofEpochMilli(expiresIn);
-            settings.setExpireTime(LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Shanghai")));
+            Long expiresIn = timestamp +  new Long((long)appTokenInfo.getExpiresIn()) - 60000;
+            LocalDateTime expireTime =LocalDateTime.ofEpochSecond(expiresIn/1000,0,ZoneOffset.ofHours(8));
+            settings.setExpireTime(expireTime);
+            //Instant instant = Instant.ofEpochMilli(expiresIn);
+            //settings.setExpireTime(LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Shanghai")));
             healthCardSettingsMapper.updateById(settings);
         }
         return settings ;
