@@ -55,6 +55,18 @@ public class ApiHealthCardStationController {
             HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
             HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(appId,healthCode);
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
+
+            HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
+
+            HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
+
+            BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+
+            if (db_HCSHealthCardInfo != null){
+                hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
+            }else {
+                hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+            }
             return new RETResultUtils(hcsHealthCardInfoRes) ;
         } catch (Exception e) {
             e.printStackTrace();
