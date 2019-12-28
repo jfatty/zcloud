@@ -94,7 +94,9 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public HealthCardInfoVO registerHealthCard(String appId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         HealthCardInfo healthCardInfoR = new HealthCardInfo();
         BeanUtils.copyProperties(hcsHealthCardInfoReq,healthCardInfoR);
