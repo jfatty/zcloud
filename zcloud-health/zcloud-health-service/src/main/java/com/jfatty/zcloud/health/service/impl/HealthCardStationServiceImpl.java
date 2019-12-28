@@ -66,7 +66,7 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
             settings.setExpiresIn(appTokenInfo.getExpiresIn());
             settings.setUpdateTime(LocalDateTime.now());
             //
-            Long expiresIn = timestamp +  new Long((long)appTokenInfo.getExpiresIn()) - 60000;
+            Long expiresIn = timestamp +  new Long((long)appTokenInfo.getExpiresIn() * 1000) - 60000;
             LocalDateTime expireTime =LocalDateTime.ofEpochSecond(expiresIn/1000,0,ZoneOffset.ofHours(8));
             settings.setExpireTime(expireTime);
             //Instant instant = Instant.ofEpochMilli(expiresIn);
