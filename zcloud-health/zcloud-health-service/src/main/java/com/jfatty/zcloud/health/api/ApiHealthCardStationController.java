@@ -43,6 +43,40 @@ public class ApiHealthCardStationController {
     private HCSHealthCardInfoService hcsHealthCardInfoService ;
 
 
+
+
+    @ApiOperation(value=" 010**** 测试 通过健康卡授权码获取接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4"),
+            @ApiImplicitParam(name = "healthCode", value = "健康卡授权码",dataType = "String",defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094")
+    })
+    @RequestMapping(value="/{appId}/getHealthCardByHealthCodePath", method=RequestMethod.GET)
+    public  RETResultUtils<HCSHealthCardInfoRes> getHealthCardByHealthCodePath(@PathVariable("appId") String appId , @RequestParam(value = "healthCode" , defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094") String healthCode){
+        try {
+            log.error("appId======>[{}]健康平台回传healthCode======>[{}]",appId,healthCode);
+            HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+            HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(appId,healthCode);
+            BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
+
+            HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
+
+            HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
+
+            BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+
+            if (db_HCSHealthCardInfo != null){
+                hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
+            }else {
+                hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+            }
+            return new RETResultUtils(hcsHealthCardInfoRes) ;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
     @ApiOperation(value=" 009**** 测试 通过健康卡授权码获取接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "healthCode", value = "健康卡授权码",dataType = "String",defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094")
@@ -134,10 +168,10 @@ public class ApiHealthCardStationController {
     @ApiOperation(value=" 003**** 3.2.4 通过健康卡二维码获取接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4"),
-            @ApiImplicitParam(name = "qrCodeText", value = "二维码文本",dataType = "String",defaultValue = "C7DA29345B6DF90A6F5BBEBD73EBE2EDA26F341A6CFEEEB121XXX:1")
+            @ApiImplicitParam(name = "qrCodeText", value = "二维码文本",dataType = "String",defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58:1")
     })
     @RequestMapping(value="/getHealthCardByQRCode", method=RequestMethod.POST)
-    public RETResultUtils<HCSHealthCardInfoRes>  getHealthCardByQRCode(@RequestParam(value = "appId" , defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4" ) String appId , @RequestParam(value = "qrCodeText" , defaultValue = "C7DA29345B6DF90A6F5BBEBD73EBE2EDA26F341A6CFEEEB121XXX:1") String qrCodeText ){
+    public RETResultUtils<HCSHealthCardInfoRes>  getHealthCardByQRCode(@RequestParam(value = "appId" , defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4" ) String appId , @RequestParam(value = "qrCodeText" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58:1") String qrCodeText ){
 
         try {
             HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
@@ -230,13 +264,13 @@ public class ApiHealthCardStationController {
     @ApiOperation(value=" 008**** 3.2.10 获取动态二维码接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4"),
-            @ApiImplicitParam(name = "healthCardId", value = "健康卡ID",dataType = "String",defaultValue = "D109C4C340995DFC13262A55699FBDAD8S564E8B65796FA1"),
+            @ApiImplicitParam(name = "healthCardId", value = "健康卡ID",dataType = "String",defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58"),
             @ApiImplicitParam(name = "idType", value = "证件类型",dataType = "String",defaultValue = "01"),
-            @ApiImplicitParam(name = "idNumber", value = "证件号码",dataType = "String",defaultValue = "432901198810228888")
+            @ApiImplicitParam(name = "idNumber", value = "证件号码",dataType = "String",defaultValue = "422801199509094611")
     })
     @RequestMapping(value="/getDynamicQRCode", method=RequestMethod.GET)
-    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "appId" , defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4" ) String appId , @RequestParam(value = "healthCardId" , defaultValue = "D109C4C340995DFC13262A55699FBDAD8S564E8B65796FA1") String healthCardId ,
-                                                              @RequestParam(value = "idType" , defaultValue = "01") String idType , @RequestParam(value = "idNumber" , defaultValue = "432901198810228888") String idNumber ){
+    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "appId" , defaultValue = "b9b77d6b9ba46db83a7dbb158c4740c4" ) String appId , @RequestParam(value = "healthCardId" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58") String healthCardId ,
+                                                              @RequestParam(value = "idType" , defaultValue = "01") String idType , @RequestParam(value = "idNumber" , defaultValue = "422801199509094611") String idNumber ){
         try {
             DynamicQRCodeRes dynamicQRCodeRes = new DynamicQRCodeRes();
             DynamicQRCodeVO dynamicQRCodeVO =  healthCardStationService.getDynamicQRCode(appId,healthCardId,idType,idNumber);

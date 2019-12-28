@@ -122,6 +122,9 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
+        /************************************************************/
+        healthCardInfoVO.setWechatCode(settings.getWechatCode());
+        /************************************************************/
         return healthCardInfoVO;
     }
 
@@ -133,6 +136,9 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
+        /************************************************************/
+        healthCardInfoVO.setWechatCode(settings.getWechatCode());
+        /************************************************************/
         return healthCardInfoVO;
     }
 
@@ -196,6 +202,9 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber);
         DynamicQRCodeVO dynamicQRCodeVO = new DynamicQRCodeVO();
         BeanUtils.copyProperties(dynamicQRCode,dynamicQRCodeVO);
+        System.out.println("**************************QrCodeImg**********************************");
+        System.out.println(dynamicQRCode.getQrCodeImg());
+        System.out.println("**************************QrCodeImg**********************************");
         return dynamicQRCodeVO;
     }
 }
