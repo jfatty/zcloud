@@ -17,4 +17,5 @@ public interface HealthCardSettingsMapper extends IBaseMapper<HealthCardSettings
 
     HealthCardSettings getByAppId( @Param("appId") String appId);
 
+    HealthCardSettings getByHospitalId( @Param("hospitalId") String hospitalId);
 }

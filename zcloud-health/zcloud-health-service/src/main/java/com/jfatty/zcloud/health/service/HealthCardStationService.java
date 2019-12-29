@@ -19,86 +19,86 @@ public interface HealthCardStationService extends BaseHealthService<HealthCardSe
 
     /**
      * 3.2.2 注册健康卡接口
-     * @param appId
+     * @param hospitalId
      * @param hcsHealthCardInfoReq
      * @return
      * @throws Exception
      */
-    HealthCardInfoVO registerHealthCard(String appId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception ;
+    HealthCardInfoVO registerHealthCard(String hospitalId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception ;
 
     /**
      * 3.2.3 通过健康卡授权码获取接口
-     * @param appId
+     * @param hospitalId
      * @param healthCode
      * @return
      * @throws Exception
      */
-    HealthCardInfoVO getHealthCardByHealthCode(String appId, String healthCode) throws Exception ;
+    HealthCardInfoVO getHealthCardByHealthCode(String hospitalId, String healthCode) throws Exception ;
 
     /**
      * 3.2.4 通过健康卡二维码获取接口
-     * @param appId
+     * @param hospitalId
      * @param qrCodeText
      * @return
      * @throws Exception
      */
-    HealthCardInfoVO getHealthCardByQRCode(String appId, String qrCodeText) throws Exception ;
+    HealthCardInfoVO getHealthCardByQRCode(String hospitalId, String qrCodeText) throws Exception ;
 
     /**
      * 3.2.5 OCROCR 接口
-     * @param appId
+     * @param hospitalId
      * @param imageContent
      * @return
      * @throws Exception
      */
-    HCSIDCardInfoVO ocrInfo(String appId,String imageContent) throws Exception ;
+    HCSIDCardInfoVO ocrInfo(String hospitalId,String imageContent) throws Exception ;
 
     /**
      * 3.2.6 绑定健康卡和院内 ID 关系接口
-     * @param appId
+     * @param hospitalId
      * @param patId
      * @param qrCodeText
      * @return
      * @throws Exception
      */
-    Boolean bindCardRelation(String appId, String patId, String qrCodeText) throws Exception ;
+    Boolean bindCardRelation(String hospitalId, String patId, String qrCodeText) throws Exception ;
 
     /**
      * 3.2.7 用卡数据监测接口
-     * @param appId
+     * @param hospitalId
      * @param reportHISData
      * @throws Exception
      */
-    void reportHISData(String appId, ReportHISDataVO reportHISData) throws Exception ;
+    void reportHISData(String hospitalId, ReportHISDataVO reportHISData) throws Exception ;
 
     /**
      * 3.2.8 获取卡包订单  ID接口
-     * @param appId
+     * @param hospitalId
      * @param qrCodeText
      * @return
      * @throws Exception
      */
-    String getOrderIdByOutAppId(String appId, String qrCodeText) throws Exception ;
+    String getOrderIdByOutAppId(String hospitalId, String qrCodeText) throws Exception ;
 
     /**
      * 3.2.9 注册批量健康卡接口
-     * @param appId
+     * @param hospitalId
      * @param healthCardInfos
      * @return
      * @throws Exception
      */
-    List<HealthCardInfoVO> registerBatchHealthCard(String appId, List<HealthCardInfoVO> healthCardInfos) throws Exception ;
+    List<HealthCardInfoVO> registerBatchHealthCard(String hospitalId, List<HealthCardInfoVO> healthCardInfos) throws Exception ;
 
     /**
      * 3.2.10 获取动态二维码接口
-     * @param appId
+     * @param hospitalId
      * @param healthCardId
      * @param idType
      * @param idNumber
      * @return
      * @throws Exception
      */
-    DynamicQRCodeVO getDynamicQRCode(String appId, String healthCardId, String idType, String idNumber) throws Exception ;
+    DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber) throws Exception ;
 
 
 }

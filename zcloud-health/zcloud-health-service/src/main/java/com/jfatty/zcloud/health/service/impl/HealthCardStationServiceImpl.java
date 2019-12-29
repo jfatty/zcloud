@@ -45,11 +45,12 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
 
-    private HealthCardSettings getAppTokenHealthCardSettings(String appId){
-        HealthCardSettings settings =  healthCardSettingsMapper.getByAppId(appId);
+    private HealthCardSettings getAppTokenHealthCardSettings(String hospitalId){
+        HealthCardSettings settings =  healthCardSettingsMapper.getByHospitalId(hospitalId);
         //获取秒数 second
         //Long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.of("+8"));
         //Long expireTimeSecond = settings.getExpireTime().toEpochSecond(ZoneOffset.of("+8"));
+        String appId = settings.getAppid();
         Long timestamp = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         Long expireTimeSecond = settings.getExpireTime().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         Long dis = timestamp - expireTimeSecond - 60000;
@@ -61,7 +62,6 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
             //调用接口appId
             AppTokenInfo appTokenInfo = healthCard.getAppToken(commonIn,appId);
             //打印响应
-            System.out.println(appTokenInfo.getAppToken());
             settings.setAppToken(appTokenInfo.getAppToken());
             settings.setExpiresIn(appTokenInfo.getExpiresIn());
             settings.setUpdateTime(LocalDateTime.now());
@@ -77,8 +77,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public HCSIDCardInfoVO ocrInfo(String appId,String imageContent) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public HCSIDCardInfoVO ocrInfo(String hospitalId,String imageContent) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         //创建健康卡实例，传入appSecret
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         //创建【公共输入参数commonIn】实例
@@ -95,8 +95,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
 
 
     @Override
-    public HealthCardInfoVO registerHealthCard(String appId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public HealthCardInfoVO registerHealthCard(String hospitalId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
 
         HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
@@ -115,8 +115,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public HealthCardInfoVO getHealthCardByHealthCode(String appId, String healthCode) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public HealthCardInfoVO getHealthCardByHealthCode(String hospitalId, String healthCode) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode);
@@ -129,8 +129,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public HealthCardInfoVO getHealthCardByQRCode(String appId, String qrCodeText) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public HealthCardInfoVO getHealthCardByQRCode(String hospitalId, String qrCodeText) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText);
@@ -143,16 +143,16 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public Boolean bindCardRelation(String appId, String patId, String qrCodeText) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public Boolean bindCardRelation(String hospitalId, String patId, String qrCodeText) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.bindCardRelation(commonIn,patId,qrCodeText);
     }
 
     @Override
-    public void reportHISData(String appId, ReportHISDataVO reportHISData) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public void reportHISData(String hospitalId, ReportHISDataVO reportHISData) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         ReportHISData reportHIS = new ReportHISData();
@@ -161,16 +161,17 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public String getOrderIdByOutAppId(String appId, String qrCodeText) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public String getOrderIdByOutAppId(String hospitalId, String qrCodeText) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
+        String appId = settings.getAppid();
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.getOrderIdByOutAppId(commonIn,appId,qrCodeText);
     }
 
     @Override
-    public List<HealthCardInfoVO> registerBatchHealthCard(String appId, List<HealthCardInfoVO> healthCardInfos) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public List<HealthCardInfoVO> registerBatchHealthCard(String hospitalId, List<HealthCardInfoVO> healthCardInfos) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
 
@@ -195,8 +196,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public DynamicQRCodeVO getDynamicQRCode(String appId, String healthCardId, String idType, String idNumber) throws Exception {
-        HealthCardSettings settings =  getAppTokenHealthCardSettings(appId);
+    public DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber);

@@ -50,4 +50,10 @@
     <select id="getByAppId" resultMap="BaseResultMap">
         SELECT  * FROM hcs_health_card_settings WHERE appid = #{appId} LIMIT 1
     </select>
+
+    <select id="getByHospitalId" resultMap="BaseResultMap">
+        SELECT  * FROM hcs_health_card_settings WHERE hospital_id = #{hospitalId} LIMIT 1
+    </select>
+
+
 </mapper>
