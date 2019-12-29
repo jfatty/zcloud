@@ -31,6 +31,9 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
      */
     private String appid;
 
+    /**
+     * 医院ID
+     */
     private String hospitalId;
 
     private String appSecret;

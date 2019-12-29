@@ -30,6 +30,8 @@ public class HCSIDCardInfo extends Model<HCSIDCardInfo> {
 
     private String name;
 
+    private String idCard ;
+
     private String gender;
 
     private String nation;
@@ -104,4 +106,7 @@ public class HCSIDCardInfo extends Model<HCSIDCardInfo> {
      */
     private String deleteOperator;
 
+    public String getIdCard() {
+        return this.id;
+    }
 }
