@@ -118,7 +118,10 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServer {
         Map<String, Object> param = new TreeMap();
         param.put("healthCardInfos", healthCardInfos);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
-        List<HealthCardInfo> infoList = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/registerBatchHealthCard", reqJson).getJSONArray("rspItems").toJavaList(HealthCardInfo.class);
+
+        JSONObject obj = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/registerBatchHealthCard", reqJson);
+        System.out.println(obj.toJSONString());
+        List<HealthCardInfo> infoList = obj.getJSONArray("rspItems").toJavaList(HealthCardInfo.class);
         Map<String, HealthCardInfo> infoMap = new HashMap();
         Iterator iterator = infoList.iterator();
 

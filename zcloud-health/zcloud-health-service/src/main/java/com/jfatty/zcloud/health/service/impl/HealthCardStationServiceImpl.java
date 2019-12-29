@@ -171,7 +171,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public List<HealthCardInfo> registerBatchHealthCard(String hospitalId, List<HealthCardInfo> healthCardInfos) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.registerBatchHealthCard(commonIn,healthCardInfos);
     }
