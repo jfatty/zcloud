@@ -284,6 +284,7 @@ public class ApiHealthCardStationController {
                 healthCardInfoItem.setIdType("01");
                 healthCardInfoItem.setPhone2("");
                 String phone1 = item.getYddh() ;
+                healthCardInfoItem.setPatid("");
                 if(StringUtils.isEmptyOrBlank(phone1)){
                     healthCardInfoItem.setPhone1("18062158054");
                 }else {
