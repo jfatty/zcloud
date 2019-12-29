@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 
 
 /**
@@ -70,7 +71,11 @@ public class ApiHealthCardStationViewController {
                     hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                 }
                 String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
-                path = path + "?" + getPostParams(hcsHealthCardInfoRes);
+
+                String params = getPostParams(hcsHealthCardInfoRes);
+                params = URLEncoder.encode(params,"UTF-8");
+                log.error("编码后的URL参数[{}]",params);
+                path = path + "?" + params ;
                 //去健康卡详情页面
                 response.sendRedirect(path);
             }
