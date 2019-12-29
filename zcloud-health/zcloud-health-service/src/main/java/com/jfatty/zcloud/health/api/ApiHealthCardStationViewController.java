@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.health.api;
 
+import com.jfatty.zcloud.base.utils.IDCardUtil;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import com.jfatty.zcloud.health.res.HCSHealthCardInfoRes;
 import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
@@ -70,8 +71,9 @@ public class ApiHealthCardStationViewController {
                 }else {
                     hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                 }
-                String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
 
+                hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),9,14));
+                String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
                 String params = getPostParams(hcsHealthCardInfoRes);
                 params = URLEncoder.encode(params,"UTF-8");
                 log.error("编码后的URL参数[{}]",params);
