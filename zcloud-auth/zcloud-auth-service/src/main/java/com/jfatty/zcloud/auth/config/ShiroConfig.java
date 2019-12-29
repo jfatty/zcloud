@@ -32,7 +32,7 @@ public class ShiroConfig {
         // 配置退出过滤器,其中的具体的退出代码Shiro已经替我们实现了
         map.put("/api/login", "anon");//API接口
         map.put("/api/kaptcha", "anon");//API接口
-        map.put("/api/kaptcha/**", "anon");//API接口
+        map.put("/api/**/kaptcha", "anon");//API接口
         map.put("/api/logout", "anon");//API接口
         map.put("/api/authSmsLog/**", "anon");//API接口
         map.put("/api/authSmsConfig/**", "anon");//API接口
