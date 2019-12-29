@@ -193,6 +193,11 @@
             <appender-ref ref="DEBUG_FILE"/>
             <!--<appender-ref ref="LOGSTASH"/>-->
         </logger>
+        <logger name="com.tencent.healthcard" level="DEBUG" >
+            <!--<appender-ref ref="CONSOLE"/>-->
+            <appender-ref ref="DEBUG_FILE"/>
+            <!--<appender-ref ref="LOGSTASH"/>-->
+        </logger>
     </springProfile>
 
     <!--测试环境:打印控制台-->
