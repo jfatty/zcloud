@@ -17,6 +17,9 @@ import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.health.vo.ReportHISDataVO;
+import com.jfatty.zcloud.hospital.feign.ComplexPatientFeignClient;
+import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
+import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -61,6 +64,9 @@ public class ApiHealthCardStationController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate ;
+
+    @Autowired
+    private ComplexPatientFeignClient complexPatientFeignClient ;
 
 
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
@@ -161,8 +167,8 @@ public class ApiHealthCardStationController {
 
     @ApiOperation(value=" 003**** 3.2.5 OCR接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
-            @ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "MultipartFile")
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646",required = true),
+            @ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "file",required = true)
     })
     @RequestMapping(value="/ocrInfo", method=RequestMethod.POST)
     public RETResultUtils<HCSIDCardInfoRes> ocrInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,@RequestPart(value = "IDCardFile") MultipartFile IDCardFile ){
@@ -246,19 +252,27 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646")
     })
     @RequestMapping(value="/registerBatchHealthCard", method=RequestMethod.POST)
-    public RELResultUtils<RegBatHealthCardInfoRes> registerBatchHealthCard(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ){
+    public RELResultUtils<RegBatHealthCardInfoRes> registerBatchHealthCard(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,@RequestBody ComplexPatientReq complexPatientReq ){
         try {
-            List<HealthCardInfoVO> healthCardInfos = new ArrayList<HealthCardInfoVO>();
-            List<HealthCardInfoVO> list = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
-            List<RegBatHealthCardInfoRes> regBatHealthCardInfos = new ArrayList<RegBatHealthCardInfoRes>();
-            list.forEach(
-                    healthCardInfo -> {
-                        RegBatHealthCardInfoRes info = new RegBatHealthCardInfoRes();
-                        BeanUtils.copyProperties(healthCardInfo,info);
-                        regBatHealthCardInfos.add(info);
+
+            RELResultUtils<WebRegPatientRes> resultUtils = complexPatientFeignClient.getComplexPatients(complexPatientReq);
+            resultUtils.getData().forEach(
+                    item -> {
+                        System.out.println(item);
                     }
             );
-            return new RELResultUtils(regBatHealthCardInfos);
+            //List<HealthCardInfoVO> healthCardInfos = new ArrayList<HealthCardInfoVO>();
+            //List<HealthCardInfoVO> list = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
+            //List<RegBatHealthCardInfoRes> regBatHealthCardInfos = new ArrayList<RegBatHealthCardInfoRes>();
+//            list.forEach(
+//                    healthCardInfo -> {
+//                        RegBatHealthCardInfoRes info = new RegBatHealthCardInfoRes();
+//                        BeanUtils.copyProperties(healthCardInfo,info);
+//                        regBatHealthCardInfos.add(info);
+//                    }
+//            );
+//            return new RELResultUtils(regBatHealthCardInfos);
+            return RELResultUtils._506("ss");
         } catch (Exception e) {
             e.printStackTrace();
         }

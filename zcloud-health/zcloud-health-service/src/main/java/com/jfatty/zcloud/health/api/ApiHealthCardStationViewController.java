@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 
 /**
@@ -68,26 +66,17 @@ public class ApiHealthCardStationViewController {
                 HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
                 HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
 
-                String birth = healthCardInfoVO.getBirthday();
-                DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//对日期进行格式化
-                birth = df.format(format.parse(birth));
-                healthCardInfoVO.setBirthday(birth);
-
-                //改变名族为字典
-                String nation = healthCardInfoVO.getNation();
-                String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
-                healthCardInfoVO.setNation(nationDic);
-
                 BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
                 if (db_HCSHealthCardInfo != null){
                     hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
                 }else {
                     hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                 }
-
+                //改变名族为字典
+                String nation = hcsHealthCardInfoRes.getNation();
+                String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
                 hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
-
+                hcsHealthCardInfoRes.setNation(nationDic);
 
                 String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
                 String params = getPostParams(hcsHealthCardInfoRes);
