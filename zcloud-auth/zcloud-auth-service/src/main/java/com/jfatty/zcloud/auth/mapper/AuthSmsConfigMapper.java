@@ -2,6 +2,7 @@ package com.jfatty.zcloud.auth.mapper;
 
 import com.jfatty.zcloud.auth.entity.AuthSmsConfig;
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.jfatty.zcloud.base.mapper.IBaseMapper;
  */
 public interface AuthSmsConfigMapper extends IBaseMapper<AuthSmsConfig> {
 
+    AuthSmsConfig getByAppId(@Param("appId") String appId);
 }

@@ -72,7 +72,7 @@ public class ApiKaptchaController {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
         AuthSmsLog authSmsLog = new AuthSmsLog();
         try {
-            AuthSmsConfig authSmsConfig = authSmsConfigService.getById(appId);
+            AuthSmsConfig authSmsConfig = authSmsConfigService.getByAppId(appId);
             if("aliyun".equalsIgnoreCase(authSmsConfig.getServiceName())){
                 aliyunSmsService.sendSms(authSmsConfig,phone,code);
             }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){
@@ -121,7 +121,7 @@ public class ApiKaptchaController {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
         AuthSmsLog authSmsLog = new AuthSmsLog();
         try {
-            AuthSmsConfig authSmsConfig = authSmsConfigService.getById(appId);
+            AuthSmsConfig authSmsConfig = authSmsConfigService.getByAppId(appId);
             if("aliyun".equalsIgnoreCase(authSmsConfig.getServiceName())){
                 aliyunSmsService.sendSms(authSmsConfig,phone,code);
             }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){
@@ -172,7 +172,7 @@ public class ApiKaptchaController {
         String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
         AuthSmsLog authSmsLog = new AuthSmsLog();
         try {
-            AuthSmsConfig authSmsConfig = authSmsConfigService.getById(appId);
+            AuthSmsConfig authSmsConfig = authSmsConfigService.getByAppId(appId);
             if("aliyun".equalsIgnoreCase(authSmsConfig.getServiceName())){
                 aliyunSmsService.sendSms(authSmsConfig,phone,code);
             }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){

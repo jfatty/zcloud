@@ -27,4 +27,9 @@ public class AuthSmsConfigServiceImpl extends BaseAuthServiceImpl<AuthSmsConfig,
         super.setBaseMapper(authSmsConfigMapper);
         this.authSmsConfigMapper = authSmsConfigMapper;
     }
+
+    @Override
+    public AuthSmsConfig getByAppId(String appId) {
+        return authSmsConfigMapper.getByAppId(appId);
+    }
 }

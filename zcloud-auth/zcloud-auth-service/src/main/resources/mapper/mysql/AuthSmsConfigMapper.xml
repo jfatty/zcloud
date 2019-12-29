@@ -50,4 +50,9 @@
         </if>
     </select>
 
+    <select id="getByAppId" resultMap="BaseResultMap">
+        SELECT * FROM auth_sms_config WHERE appid = #{appId} LIMIT 1
+
+    </select>
+
 </mapper>

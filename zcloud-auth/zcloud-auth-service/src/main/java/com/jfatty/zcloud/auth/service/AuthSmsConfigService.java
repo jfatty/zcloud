@@ -12,4 +12,5 @@ import com.jfatty.zcloud.auth.entity.AuthSmsConfig;
  */
 public interface AuthSmsConfigService extends BaseAuthService<AuthSmsConfig> {
 
+    AuthSmsConfig getByAppId(String appId);
 }
