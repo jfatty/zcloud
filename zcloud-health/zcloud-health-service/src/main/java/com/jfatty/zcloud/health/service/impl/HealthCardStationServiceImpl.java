@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -170,29 +169,11 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     }
 
     @Override
-    public List<HealthCardInfoVO> registerBatchHealthCard(String hospitalId, List<HealthCardInfoVO> healthCardInfos) throws Exception {
+    public List<HealthCardInfo> registerBatchHealthCard(String hospitalId, List<HealthCardInfo> healthCardInfos) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
-
-        List<HealthCardInfo> cardInfos = new ArrayList<HealthCardInfo>();
-        healthCardInfos.forEach(
-                inInfo -> {
-                    HealthCardInfo cInfo = new HealthCardInfo();
-                    BeanUtils.copyProperties(inInfo,cInfo);
-                    cardInfos.add(cInfo);
-                }
-        );
-        List<HealthCardInfo> hInfos = healthCard.registerBatchHealthCard(commonIn,cardInfos);
-        List<HealthCardInfoVO> hInfosReses = new ArrayList<HealthCardInfoVO>();
-        hInfos.forEach(
-                info -> {
-                    HealthCardInfoVO eInfo = new HealthCardInfoVO();
-                    BeanUtils.copyProperties(info,eInfo);
-                    hInfosReses.add(eInfo);
-                }
-        );
-        return hInfosReses;
+        return healthCard.registerBatchHealthCard(commonIn,healthCardInfos);
     }
 
     @Override

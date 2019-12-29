@@ -12,4 +12,5 @@ import com.jfatty.zcloud.health.entity.HealthCardSettings;
  */
 public interface HealthCardSettingsService extends BaseHealthService<HealthCardSettings> {
 
+    HealthCardSettings getByHospitalId(String hospitalId);
 }

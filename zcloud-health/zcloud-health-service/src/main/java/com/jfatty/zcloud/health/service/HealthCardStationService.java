@@ -6,6 +6,7 @@ import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.health.vo.ReportHISDataVO;
+import com.tencent.healthcard.model.HealthCardInfo;
 
 import java.util.List;
 
@@ -87,7 +88,7 @@ public interface HealthCardStationService extends BaseHealthService<HealthCardSe
      * @return
      * @throws Exception
      */
-    List<HealthCardInfoVO> registerBatchHealthCard(String hospitalId, List<HealthCardInfoVO> healthCardInfos) throws Exception ;
+    List<HealthCardInfo> registerBatchHealthCard(String hospitalId, List<HealthCardInfo> healthCardInfos) throws Exception ;
 
     /**
      * 3.2.10 获取动态二维码接口

@@ -28,4 +28,8 @@ public class HealthCardSettingsServiceImpl extends BaseHealthServiceImpl<HealthC
         this.healthCardSettingsMapper = healthCardSettingsMapper;
     }
 
+    @Override
+    public HealthCardSettings getByHospitalId(String hospitalId) {
+        return healthCardSettingsMapper.getByHospitalId(hospitalId);
+    }
 }

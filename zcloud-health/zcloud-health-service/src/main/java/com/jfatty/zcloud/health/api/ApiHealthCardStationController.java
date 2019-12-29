@@ -6,12 +6,14 @@ import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import com.jfatty.zcloud.health.entity.HCSIDCardInfo;
+import com.jfatty.zcloud.health.entity.HealthCardSettings;
 import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.RegHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.SimpleHealthCardInfoReq;
 import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
 import com.jfatty.zcloud.health.service.HCSIDCardInfoService;
+import com.jfatty.zcloud.health.service.HealthCardSettingsService;
 import com.jfatty.zcloud.health.service.HealthCardStationService;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
@@ -20,6 +22,7 @@ import com.jfatty.zcloud.health.vo.ReportHISDataVO;
 import com.jfatty.zcloud.hospital.feign.ComplexPatientFeignClient;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
+import com.tencent.healthcard.model.HealthCardInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -58,6 +61,9 @@ public class ApiHealthCardStationController {
 
     @Autowired
     private HCSIDCardInfoService hcsidCardInfoService ;
+
+    @Autowired
+    private HealthCardSettingsService healthCardSettingsService;
 
     @Autowired
     private RedisTemplate redisTemplate ;
@@ -256,23 +262,67 @@ public class ApiHealthCardStationController {
         try {
 
             RELResultUtils<WebRegPatientRes> resultUtils = complexPatientFeignClient.getComplexPatients(complexPatientReq);
-            resultUtils.getData().forEach(
-                    item -> {
-                        System.out.println(item);
-                    }
-            );
             //List<HealthCardInfoVO> healthCardInfos = new ArrayList<HealthCardInfoVO>();
-            //List<HealthCardInfoVO> list = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
-            //List<RegBatHealthCardInfoRes> regBatHealthCardInfos = new ArrayList<RegBatHealthCardInfoRes>();
-//            list.forEach(
-//                    healthCardInfo -> {
-//                        RegBatHealthCardInfoRes info = new RegBatHealthCardInfoRes();
-//                        BeanUtils.copyProperties(healthCardInfo,info);
-//                        regBatHealthCardInfos.add(info);
-//                    }
-//            );
-//            return new RELResultUtils(regBatHealthCardInfos);
-            return RELResultUtils._506("ss");
+
+            HealthCardSettings settings =  healthCardSettingsService.getByHospitalId(hospitalId);
+
+            List<WebRegPatientRes> webRegPatientList = resultUtils.getData();
+
+            List<HealthCardInfo> healthCardInfos = new ArrayList<HealthCardInfo>();
+            for (WebRegPatientRes item : webRegPatientList) {
+                HealthCardInfo healthCardInfoItem = new HealthCardInfo();
+                String idCard = item.getSfzh() ;
+                IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
+                String gender = idCardUtil.getGender() ;
+                String birthday = idCardUtil.getBirthdayStr();
+                healthCardInfoItem.setWechatCode(settings.getWechatCode());
+                healthCardInfoItem.setName(item.getXm());
+                healthCardInfoItem.setIdNumber(idCard);
+                healthCardInfoItem.setGender(gender);
+                healthCardInfoItem.setBirthday(birthday);
+                healthCardInfoItem.setNation("未知");
+                healthCardInfoItem.setIdType("01");
+                healthCardInfoItem.setPhone2("");
+                String phone1 = item.getYddh() ;
+                if(StringUtils.isEmptyOrBlank(phone1)){
+                    healthCardInfoItem.setPhone1("18062158054");
+                }else {
+                    healthCardInfoItem.setPhone1(phone1);
+                }
+                String address = item.getDz() ;
+                if(StringUtils.isEmptyOrBlank(address)){
+                    healthCardInfoItem.setAddress("");
+                }else {
+                    healthCardInfoItem.setAddress(address);
+                }
+                healthCardInfos.add(healthCardInfoItem);
+            }
+
+            healthCardInfos = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
+            List<RegBatHealthCardInfoRes> regBatHealthCardInfos = new ArrayList<RegBatHealthCardInfoRes>();
+
+            for ( HealthCardInfo healthCardInfo :  healthCardInfos ){
+                RegBatHealthCardInfoRes info = new RegBatHealthCardInfoRes();
+                BeanUtils.copyProperties(healthCardInfo,info);
+                regBatHealthCardInfos.add(info);
+
+                HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfo.getIdNumber());
+                if (db_HCSHealthCardInfo != null){
+                    BeanUtils.copyProperties(healthCardInfo,db_HCSHealthCardInfo);
+                    hcsHealthCardInfoService.updateById(db_HCSHealthCardInfo);
+                }else {
+                    try {
+                        BeanUtils.copyProperties(healthCardInfo,db_HCSHealthCardInfo);
+                        hcsHealthCardInfoService.saveId(db_HCSHealthCardInfo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println(healthCardInfo);
+            }
+
+            return new RELResultUtils(regBatHealthCardInfos);
         } catch (Exception e) {
             e.printStackTrace();
         }
