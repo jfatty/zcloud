@@ -72,7 +72,7 @@ public class ApiHealthCardStationViewController {
                     hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                 }
 
-                hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),9,14));
+                hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
                 String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
                 String params = getPostParams(hcsHealthCardInfoRes);
                 params = URLEncoder.encode(params,"UTF-8");
