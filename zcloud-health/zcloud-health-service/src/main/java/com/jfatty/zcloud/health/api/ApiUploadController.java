@@ -54,7 +54,7 @@ public class ApiUploadController {
             //HealthCardServerImpl healthCard = new HealthCardServerImpl(secret);
 
             try {
-                String appId = "b9b77d6b9ba46db83a7dbb158c4740c4" ;
+                String hospitalId = "30646" ;
                 BASE64Encoder encoder = new BASE64Encoder();
                 //String imgData = encoder.encode(file.getBytes());
                 //System.out.println(imgData);
@@ -64,8 +64,7 @@ public class ApiUploadController {
                 String imageContent = encoder.encode(file.getBytes());
                 imageContent = imageContent.replaceAll("\r|\n","");
                 System.out.println(imageContent);
-                HCSIDCardInfoVO hcsidCardInfoVO = healthCardStationService.ocrInfo(appId,imageContent);
-
+                HCSIDCardInfoVO hcsidCardInfoVO = healthCardStationService.ocrInfo(hospitalId,imageContent);
                 return  hcsidCardInfoVO ;
             } catch (Exception e) {
                 e.printStackTrace();
