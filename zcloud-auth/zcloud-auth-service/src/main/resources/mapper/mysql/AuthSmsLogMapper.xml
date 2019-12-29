@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.auth.mapper.AuthSmsLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.auth.entity.AuthSmsLog">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="sms_phone" property="smsPhone" />
+        <result column="sms_content" property="smsContent" />
+        <result column="sms_status" property="smsStatus" />
+        <result column="access_key_id" property="accessKeyId" />
+        <result column="provider_name" property="providerName" />
+        <result column="template_id" property="templateId" />
+        <result column="sign_name" property="signName" />
+        <result column="err_msg" property="errMsg" />
+        <result column="status" property="status" />
+        <result column="state" property="state" />
+        <result column="realm" property="realm" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from auth_sms_log
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from auth_sms_log
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+</mapper>

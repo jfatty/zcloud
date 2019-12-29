@@ -3,10 +3,10 @@ package com.jfatty.zcloud.auth.service.impl;
 
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
-import com.github.qcloudsms.httpclient.HTTPException;
+import com.jfatty.zcloud.auth.entity.AuthSmsConfig;
 import com.jfatty.zcloud.auth.service.SmsService;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONException;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
@@ -17,6 +17,7 @@ import java.io.IOException;
  * @email jfatty@163.com
  */
 @Slf4j
+@Service("tencentSmsService")
 public class TencentSmsServiceImpl implements SmsService {
 
     // 短信应用SDK AppID
@@ -53,4 +54,25 @@ public class TencentSmsServiceImpl implements SmsService {
         return "";
     }
 
+    @Override
+    public String sendSms(AuthSmsConfig authSmsConfig, String phone, String code) throws Exception {
+        //静态初始化数组：方法一
+        //String params[] = new String[] {code};
+        //静态初始化数组：方法二
+        String params[] = {code};
+        //动态初始化数据
+//            String books[] = new String[2];
+//            books[0] = "Thinking in Java";
+//            books[1] = "Effective Java";
+
+        SmsSingleSender ssender = new SmsSingleSender( Integer.parseInt(authSmsConfig.getAccessKeyId()), authSmsConfig.getAccessKeySecret());
+        SmsSingleSenderResult result = ssender.sendWithParam("86", phone, Integer.parseInt(authSmsConfig.getTemplateId()), params, authSmsConfig.getSignName(), "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
+        log.error("========>  调用腾讯云短信平台  短信发送结果日志记录 " + result);
+        log.error("========>  调用腾讯云短信平台  返回状态码 " + result.getResponse().statusCode + " 以及原因 " + result.getResponse().reason);
+        int statusCode = result.getResponse().statusCode;
+        if (statusCode == 200)
+            return code;
+        log.error("========>  调用腾讯云短信平台  短信发送失败 返回状态码 " + result.getResponse().statusCode + " 以及原因 " + result.getResponse().reason);
+        return "";
+    }
 }

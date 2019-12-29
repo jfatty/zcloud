@@ -3,7 +3,6 @@ package com.jfatty.zcloud.auth.service.impl;
 import com.jfatty.zcloud.auth.entity.UserPasswd;
 import com.jfatty.zcloud.auth.mapper.UserPasswdMapper;
 import com.jfatty.zcloud.auth.service.UserPasswdService;
-import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class UserPasswdServiceImpl extends BaseServiceImpl<UserPasswd,UserPasswdMapper> implements UserPasswdService {
+public class UserPasswdServiceImpl extends BaseAuthServiceImpl<UserPasswd,UserPasswdMapper> implements UserPasswdService {
 
     private UserPasswdMapper userPasswdMapper ;
 
