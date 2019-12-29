@@ -159,17 +159,17 @@ public class ApiHealthCardStationViewController {
     }
 
 
-    public static void main(String[] args) {
-        HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
-        hcsHealthCardInfoRes.setAddress("湖北");
-        hcsHealthCardInfoRes.setBirthday("1994-11-10");
-        hcsHealthCardInfoRes.setGender("男");
-        hcsHealthCardInfoRes.setHealthCardId("225585828");
-        hcsHealthCardInfoRes.setNation("土家族");
-        hcsHealthCardInfoRes.setName("杨三");
-        hcsHealthCardInfoRes.setIdNumber("2585858588");
-        String url = getPostParams(hcsHealthCardInfoRes);
-        System.out.println(url);
-    }
+//    public static void main(String[] args) {
+//        HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+//        hcsHealthCardInfoRes.setAddress("湖北");
+//        hcsHealthCardInfoRes.setBirthday("1994-11-10");
+//        hcsHealthCardInfoRes.setGender("男");
+//        hcsHealthCardInfoRes.setHealthCardId("225585828");
+//        hcsHealthCardInfoRes.setNation("土家族");
+//        hcsHealthCardInfoRes.setName("杨三");
+//        hcsHealthCardInfoRes.setIdNumber("2585858588");
+//        String url = getPostParams(hcsHealthCardInfoRes);
+//        System.out.println(url);
+//    }
 
 }
