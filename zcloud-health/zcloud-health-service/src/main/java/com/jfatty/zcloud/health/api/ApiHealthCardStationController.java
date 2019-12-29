@@ -1,15 +1,20 @@
 package com.jfatty.zcloud.health.api;
 
+import com.jfatty.zcloud.base.utils.IDCardUtil;
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
+import com.jfatty.zcloud.health.entity.HCSIDCardInfo;
 import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
-import com.jfatty.zcloud.health.res.DynamicQRCodeRes;
-import com.jfatty.zcloud.health.res.HCSHealthCardInfoRes;
-import com.jfatty.zcloud.health.res.RegBatHealthCardInfoRes;
-import com.jfatty.zcloud.health.res.RegHealthCardInfoRes;
+import com.jfatty.zcloud.health.req.RegHealthCardInfoReq;
+import com.jfatty.zcloud.health.req.SimpleHealthCardInfoReq;
+import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
+import com.jfatty.zcloud.health.service.HCSIDCardInfoService;
 import com.jfatty.zcloud.health.service.HealthCardStationService;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
+import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.health.vo.ReportHISDataVO;
 import io.swagger.annotations.Api;
@@ -19,8 +24,14 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,18 +53,43 @@ public class ApiHealthCardStationController {
     @Autowired
     private HCSHealthCardInfoService hcsHealthCardInfoService ;
 
+    @Autowired
+    private HCSIDCardInfoService hcsidCardInfoService ;
+
+    @Autowired
+    private RedisTemplate redisTemplate ;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate ;
+
 
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646")
-    })
     @RequestMapping(value="/registerHealthCard", method=RequestMethod.POST)
-    public RETResultUtils<RegHealthCardInfoRes> registerHealthCard(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId, @RequestBody HCSHealthCardInfoReq hcsHealthCardInfoReq){
+    public RETResultUtils<RegHealthCardInfoRes> registerHealthCard(@RequestBody RegHealthCardInfoReq regHealthCardInfoReq){
         try {
             HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
-            BeanUtils.copyProperties(hcsHealthCardInfoReq,hcsHealthCardInfo);
+            BeanUtils.copyProperties(regHealthCardInfoReq,hcsHealthCardInfo);
 
-            HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(hcsHealthCardInfoReq.getIdNumber());
+            String phone1 = regHealthCardInfoReq.getPhone1();
+            String kaptcha = regHealthCardInfoReq.getKaptcha();
+            if(StringUtils.isEmptyOrBlank(phone1))
+                return RETResultUtils._509("请填入正确的手机号");
+            if(StringUtils.isEmptyOrBlank(kaptcha))
+                return RETResultUtils._509("验证码不能为空") ;
+            //验证手机验证码
+            String code = (String) redisTemplate.opsForValue().get(phone1);
+            if(StringUtils.isEmptyOrBlank(code))
+                return RETResultUtils._506("验证码已经失效") ;
+            if(!code.equalsIgnoreCase(kaptcha))
+                return RETResultUtils._509("验证码错误") ;
+            //删除缓存
+            redisTemplate.delete(phone1);
+            String idCard = regHealthCardInfoReq.getIdNumber();
+            IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
+            String gender = idCardUtil.getGender() ;
+            String birthday = idCardUtil.getBirthdayStr();
+            String nas[] = regHealthCardInfoReq.getNation().split(":::");
+            HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(regHealthCardInfoReq.getIdNumber());
             String CID = "" ;
             if (db_HCSHealthCardInfo != null){
                 CID = db_HCSHealthCardInfo.getId();
@@ -61,7 +97,13 @@ public class ApiHealthCardStationController {
                 CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
             }
             RegHealthCardInfoRes regHealthCardInfoRes = new RegHealthCardInfoRes();
-            HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(hospitalId,hcsHealthCardInfoReq);
+            HCSHealthCardInfoReq hcsHealthCardInfoReq = new HCSHealthCardInfoReq();
+            BeanUtils.copyProperties(regHealthCardInfoReq,hcsHealthCardInfoReq);
+            hcsHealthCardInfoReq.setGender(gender);
+            hcsHealthCardInfoReq.setBirthday(birthday);
+            hcsHealthCardInfoReq.setNation(nas[0]);
+            hcsHealthCardInfoReq.setPhone2("");
+            HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(regHealthCardInfoReq.getHospitalId(),hcsHealthCardInfoReq);
             BeanUtils.copyProperties(healthCardInfoVO,regHealthCardInfoRes);
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
             hcsHealthCardInfo.setId(CID);
@@ -98,14 +140,13 @@ public class ApiHealthCardStationController {
 //    }
 
 
-    @ApiOperation(value=" 003**** 3.2.4 通过健康卡二维码获取接口")
+    @ApiOperation(value=" 002**** 3.2.4 通过健康卡二维码获取接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
             @ApiImplicitParam(name = "qrCodeText", value = "二维码文本",dataType = "String",defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58:1")
     })
     @RequestMapping(value="/getHealthCardByQRCode", method=RequestMethod.POST)
     public RETResultUtils<HCSHealthCardInfoRes>  getHealthCardByQRCode(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,  @RequestParam(value = "qrCodeText" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58:1") String qrCodeText ){
-
         try {
             HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
             HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByQRCode(hospitalId,qrCodeText);
@@ -118,6 +159,39 @@ public class ApiHealthCardStationController {
 
     }
 
+    @ApiOperation(value=" 003**** 3.2.5 OCR接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "MultipartFile")
+    })
+    @RequestMapping(value="/ocrInfo", method=RequestMethod.POST)
+    public RETResultUtils<HCSIDCardInfoRes> ocrInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,@RequestPart(value = "IDCardFile") MultipartFile IDCardFile ){
+        try {
+            BASE64Encoder encoder = new BASE64Encoder();
+            String imageContent = encoder.encode(IDCardFile.getBytes());
+            imageContent = imageContent.replaceAll("\r|\n","");
+            HCSIDCardInfoVO hcsidCardInfoVO = healthCardStationService.ocrInfo(hospitalId,imageContent);
+            HCSIDCardInfo db_hcsidCardInfo = hcsidCardInfoService.getById(hcsidCardInfoVO.getId());
+            String birth = hcsidCardInfoVO.getBirth() ;
+            DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");//对日期进行格式化
+            birth = df.format(format.parse(birth));
+            hcsidCardInfoVO.setBirth(birth);
+            BeanUtils.copyProperties(hcsidCardInfoVO,db_hcsidCardInfo);
+            if( db_hcsidCardInfo == null){
+                hcsidCardInfoService.save(db_hcsidCardInfo);
+            }else {
+                hcsidCardInfoService.updateById(db_hcsidCardInfo);
+            }
+            HCSIDCardInfoRes hcsidCardInfoRes = new HCSIDCardInfoRes();
+            BeanUtils.copyProperties(hcsidCardInfoVO,hcsidCardInfoRes);
+            return new RETResultUtils(hcsidCardInfoRes) ;
+        } catch (Exception e) {
+            log.error("hospitalId==>[{}] 调用OCR接口异常[{}]",hospitalId,e.getMessage());
+        }
+        return RETResultUtils.faild("网络异常!请稍后重试");
+    }
+
     @ApiOperation(value=" 004**** 3.2.6 绑定健康卡和院内 ID 关系接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
@@ -127,7 +201,6 @@ public class ApiHealthCardStationController {
     @RequestMapping(value="/bindCardRelation", method=RequestMethod.POST)
     public RETResultUtils<Boolean> bindCardRelation(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,  @RequestParam(value = "patId" , defaultValue = "10086") String patId,//
                                                     @RequestParam(value = "qrCodeText" , defaultValue = "C7DA29345B6DF90A6F5BBEBD73EBE2EDA26F341A6CFEEEB121XXX:1") String qrCodeText ){
-
         try {
             return  new RETResultUtils(healthCardStationService.bindCardRelation(hospitalId,patId,qrCodeText)) ;
         } catch (Exception e) {
@@ -150,7 +223,6 @@ public class ApiHealthCardStationController {
             e.printStackTrace();
         }
         return null;
-
     }
 
     @ApiOperation(value=" 006**** 3.2.8 获取卡包订单  ID接口")
@@ -174,7 +246,7 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646")
     })
     @RequestMapping(value="/registerBatchHealthCard", method=RequestMethod.POST)
-    public RETResultUtils<List<RegBatHealthCardInfoRes>> registerBatchHealthCard(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ){
+    public RELResultUtils<RegBatHealthCardInfoRes> registerBatchHealthCard(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ){
         try {
             List<HealthCardInfoVO> healthCardInfos = new ArrayList<HealthCardInfoVO>();
             List<HealthCardInfoVO> list = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
@@ -186,13 +258,15 @@ public class ApiHealthCardStationController {
                         regBatHealthCardInfos.add(info);
                     }
             );
-            return new RETResultUtils(regBatHealthCardInfos);
+            return new RELResultUtils(regBatHealthCardInfos);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
 
     }
+
+
 
     @ApiOperation(value=" 008**** 3.2.10 获取动态二维码接口")
     @ApiImplicitParams({
@@ -202,8 +276,7 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "idNumber", value = "证件号码",dataType = "String",defaultValue = "422801199509094611")
     })
     @RequestMapping(value="/getDynamicQRCode", method=RequestMethod.GET)
-    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardId" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58") String healthCardId ,
-                                                              @RequestParam(value = "idType" , defaultValue = "01") String idType , @RequestParam(value = "idNumber" , defaultValue = "422801199509094611") String idNumber ){
+    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardId" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58") String healthCardId , @RequestParam(value = "idType" , defaultValue = "01") String idType , @RequestParam(value = "idNumber" , defaultValue = "422801199509094611") String idNumber ){
         try {
             DynamicQRCodeRes dynamicQRCodeRes = new DynamicQRCodeRes();
             DynamicQRCodeVO dynamicQRCodeVO =  healthCardStationService.getDynamicQRCode(hospitalId,healthCardId,idType,idNumber);
@@ -213,6 +286,21 @@ public class ApiHealthCardStationController {
             e.printStackTrace();
         }
         return null;
-
     }
+
+
+    @ApiOperation(value=" 009**** 电子健康卡列表获取 ")
+    @RequestMapping(value="/getHealthCardList", method=RequestMethod.POST)
+    public RELResultUtils<SimpleHealthCardInfoRes> getHealthCardList(@RequestBody SimpleHealthCardInfoReq simpleHealthCardInfoReq){
+        try {
+            List<SimpleHealthCardInfoRes> resList = new ArrayList<SimpleHealthCardInfoRes>();
+            return new RELResultUtils(resList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
 }

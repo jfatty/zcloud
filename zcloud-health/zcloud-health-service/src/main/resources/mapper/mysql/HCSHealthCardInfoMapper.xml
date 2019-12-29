@@ -58,4 +58,9 @@
         SELECT * FROM hcs_health_card_info WHERE id_number = #{idNumber} LIMIT 1
     </select>
 
+
+    <select id="getNationDicStr" resultType="java.lang.String">
+        select concat(concat( dic_value, ':::' , dic_code),':::' , id)  as nation from sys_dictionary WHERE dic_value = #{sourceNation} LIMIT 1
+    </select>
+
 </mapper>

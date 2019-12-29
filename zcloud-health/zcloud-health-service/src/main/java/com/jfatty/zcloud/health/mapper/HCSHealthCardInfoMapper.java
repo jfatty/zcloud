@@ -15,4 +15,6 @@ import org.apache.ibatis.annotations.Param;
 public interface HCSHealthCardInfoMapper extends IBaseMapper<HCSHealthCardInfo> {
 
     HCSHealthCardInfo getByIdCardNumber(@Param("idNumber") String idNumber);
+
+    String getNationDicStr(@Param("sourceNation") String sourceNation);
 }

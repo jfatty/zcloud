@@ -73,6 +73,11 @@ public class ApiHealthCardStationViewController {
                 }
 
                 hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
+                //改变名族为字典
+                String nation = hcsHealthCardInfoRes.getNation();
+                String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
+                hcsHealthCardInfoRes.setNation(nationDic);
+
                 String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
                 String params = getPostParams(hcsHealthCardInfoRes);
                 params = URLEncoder.encode(params,"UTF-8");
@@ -178,5 +183,7 @@ public class ApiHealthCardStationViewController {
 //        String url = getPostParams(hcsHealthCardInfoRes);
 //        System.out.println(url);
 //    }
+
+
 
 }

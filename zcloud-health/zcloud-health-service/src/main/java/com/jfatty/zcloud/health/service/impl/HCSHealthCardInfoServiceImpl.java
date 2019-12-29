@@ -31,4 +31,12 @@ public class HCSHealthCardInfoServiceImpl extends BaseHealthServiceImpl<HCSHealt
     public HCSHealthCardInfo getByIdCardNumber(String idNumber) {
         return hcsHealthCardInfoMapper.getByIdCardNumber(idNumber);
     }
+
+    @Override
+    public String getNationDicStr(String source) {
+        if (!source.endsWith("族"))
+            source += "族" ;
+        //select concat(concat( dic_value, ':::' , dic_code),':::' , id)  as nation from sys_dictionary WHERE dic_value = '土家族'
+        return hcsHealthCardInfoMapper.getNationDicStr(source);
+    }
 }

@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.health.entity.HCSIDCardInfo">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="id_card" property="idCard" />
         <result column="gender" property="gender" />
         <result column="nation" property="nation" />
         <result column="birth" property="birth" />

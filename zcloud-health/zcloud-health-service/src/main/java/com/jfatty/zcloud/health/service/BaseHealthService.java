@@ -12,6 +12,4 @@ import com.jfatty.zcloud.base.service.BaseService;
 
 public interface BaseHealthService<T  extends Model> extends BaseService<T> {
 
-
-
 }
