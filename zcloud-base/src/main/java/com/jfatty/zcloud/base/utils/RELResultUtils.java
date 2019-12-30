@@ -107,6 +107,8 @@ public class RELResultUtils <T> implements Serializable {
         this.code = 200;
         this.msg = "OK";
         this.data = data;
+        if (data != null)
+            this.count = data.size();
     }
 
     public Boolean isOK() {
