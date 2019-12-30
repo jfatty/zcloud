@@ -33,6 +33,9 @@ public class HCSAddressReq extends HCSAddressDTO<HCSAddressReq> {
     @ApiModelProperty(name = "area", position = 2, value = "区县 name:::areaCode:::id " , example = "业州镇:::422822100000:::448100")
     private String area;
 
+    @ApiModelProperty(name = "household", position = 3, value = "地址详情" , example = "红土乡茶店子村5组18号")
+    private String household;
+
 
 
 }
