@@ -56,10 +56,10 @@ public class ApiAreaCnController extends ApiBaseSystemController<AreaCn,AreaCnRe
             @ApiImplicitParam(name = "shortName", value = "行政地区 简称",dataType = "String",defaultValue = "湖北")
     })
     @RequestMapping(value={"/level/list"},method = RequestMethod.POST )
-    public RELResultUtils<AreaCnRes> levelList(@RequestParam(value = "parentId" , defaultValue = "748344") String parentId ,
+    public RELResultUtils<AreaCnRes> levelList(@RequestParam(value = "parentId" , defaultValue = "") String parentId ,
                             @RequestParam(value = "level" , defaultValue = "0" ) Integer level ,
-                            @RequestParam(value = "name" , defaultValue = "湖北省") String name ,
-                            @RequestParam(value = "shortName" , defaultValue = "湖北") String shortName) {
+                            @RequestParam(value = "name" , defaultValue = "") String name ,
+                            @RequestParam(value = "shortName" , defaultValue = "") String shortName) {
 
         if (StringUtils.isEmptyOrBlank(parentId))
             parentId = "0";
