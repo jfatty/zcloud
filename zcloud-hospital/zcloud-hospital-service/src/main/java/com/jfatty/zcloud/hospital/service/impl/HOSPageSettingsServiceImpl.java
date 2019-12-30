@@ -26,4 +26,10 @@ public class HOSPageSettingsServiceImpl extends BaseHospitalServiceImpl<HOSPageS
         super.setBaseMapper(hosPageSettingsMapper);
         this.hosPageSettingsMapper = hosPageSettingsMapper;
     }
+
+
+    @Override
+    public HOSPageSettings getByAppId(String appId, String version) {
+        return hosPageSettingsMapper.getByAppId(appId,version);
+    }
 }

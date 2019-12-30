@@ -56,4 +56,18 @@
         </if>
     </select>
 
+    <select id="getByAppId" resultMap="BaseResultMap" >
+        select
+          *
+        from hospital_page_settings
+        where 1 = 1
+        <if test="appId != null" >
+            and appid = #{appId}
+        </if>
+        <if test="version != null" >
+            and version = #{version}
+        </if>
+        LIMIT 1
+    </select>
+
 </mapper>

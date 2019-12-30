@@ -2,6 +2,7 @@ package com.jfatty.zcloud.hospital.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.hospital.entity.HOSPageSettings;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.jfatty.zcloud.hospital.entity.HOSPageSettings;
  */
 public interface HOSPageSettingsMapper extends IBaseMapper<HOSPageSettings> {
 
+    HOSPageSettings getByAppId(@Param("appId") String appId, @Param("version") String version);
 }

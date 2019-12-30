@@ -13,4 +13,5 @@ import com.jfatty.zcloud.hospital.entity.HOSPageSettings;
  */
 public interface HOSPageSettingsService extends BaseHospitalService<HOSPageSettings> {
 
+    HOSPageSettings getByAppId(String appId, String version);
 }
