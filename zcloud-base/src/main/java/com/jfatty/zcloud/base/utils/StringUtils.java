@@ -11,6 +11,27 @@ import java.io.Serializable;
 public class StringUtils implements Serializable {
 
 
+    public static String likeStrSQL(String source){
+        source = verifyStrSQL(source);
+        if (isNotEmptyAndBlank(source))
+            source = "%" + source + "%" ;
+        return source;
+    }
+    /**
+     * 校验查询语句中的SQL注入问题
+     * @param source
+     * @return
+     */
+    public static String  verifyStrSQL(String source){
+        if (isNotEmptyAndBlank(source)){
+            if (source.contains("#"))
+                source = source.replaceAll("#","");
+            if (source.contains("-"))
+                source = source.replaceAll("-","");
+        }
+        return source;
+    }
+
     /**
      * 为空或者是空字符串
      * @param cs
