@@ -45,7 +45,7 @@ public class ApiHOSPageSettingsController  extends ApiBaseHospitalController<HOS
 
     @ApiOperation(value="001****首页页面配置信息获取")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",required = true,defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",required = true,defaultValue = "wx656a00824f784088"),
             @ApiImplicitParam(name = "version", value = "版本号",required = true,dataType = "String",defaultValue = "4.0.0")
     })
     @RequestMapping(value={"/getPageSettings"},method=RequestMethod.GET)

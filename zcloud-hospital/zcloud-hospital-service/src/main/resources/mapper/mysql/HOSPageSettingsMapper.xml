@@ -16,10 +16,14 @@
         <result column="icon_type" property="iconType" />
         <result column="description" property="description" />
         <result column="address" property="address" />
+        <result column="act_address_icon_url" property="actAddressIconUrl" />
         <result column="address_icon_url" property="addressIconUrl" />
+        <result column="act_address_icon_img" property="actAddressIconImg" />
         <result column="address_icon_img" property="addressIconImg" />
         <result column="phone" property="phone" />
+        <result column="act_phone_icon_url" property="actPhoneIconUrl" />
         <result column="phone_icon_url" property="phoneIconUrl" />
+        <result column="act_phone_icon_img" property="actPhoneIconImg" />
         <result column="phone_icon_img" property="phoneIconImg" />
         <result column="version" property="version" />
         <result column="status" property="status" />
