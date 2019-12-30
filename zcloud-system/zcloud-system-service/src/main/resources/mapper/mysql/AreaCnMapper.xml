@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.system.mapper.AreaCnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.AreaCn">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="level" property="level" />
+        <result column="area_code" property="areaCode" />
+        <result column="zip_code" property="zipCode" />
+        <result column="city_code" property="cityCode" />
+        <result column="name" property="name" />
+        <result column="short_name" property="shortName" />
+        <result column="merger_name" property="mergerName" />
+        <result column="pinyin" property="pinyin" />
+        <result column="lng" property="lng" />
+        <result column="lat" property="lat" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from sys_area_cn
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from sys_area_cn
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+</mapper>

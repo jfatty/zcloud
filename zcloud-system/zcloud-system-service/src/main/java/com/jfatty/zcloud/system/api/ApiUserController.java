@@ -11,6 +11,7 @@ import com.jfatty.zcloud.system.res.UserRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.UserService;
 import com.jfatty.zcloud.system.utils.AccountValidatorUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import java.util.Map;
  * @author jfatty on 2019/11/1
  * @email jfatty@163.com
  */
+@Api(tags = "系统用户API" ,value = "系统用户")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/user"})

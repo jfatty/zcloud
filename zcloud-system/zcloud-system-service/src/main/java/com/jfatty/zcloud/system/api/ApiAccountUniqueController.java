@@ -5,6 +5,7 @@ import com.jfatty.zcloud.system.interfaces.IAccountUnique;
 import com.jfatty.zcloud.system.req.AccountUniqueReq;
 import com.jfatty.zcloud.system.res.AccountUniqueRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author jfatty on 2019/11/13
  * @email jfatty@163.com
  */
+@Api(tags = "系统唯一账号API" ,value = "系统唯一账号")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/accountUnique"})

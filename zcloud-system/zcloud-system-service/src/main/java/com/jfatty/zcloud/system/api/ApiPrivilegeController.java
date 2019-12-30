@@ -10,6 +10,7 @@ import com.jfatty.zcloud.system.req.PrivilegeReq;
 import com.jfatty.zcloud.system.res.PrivilegeRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.PrivilegeService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import java.util.Map;
  * @author jfatty on 2019/11/1
  * @email jfatty@163.com
  */
+@Api(tags = "系统权限API" ,value = "系统权限")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/privilege"})

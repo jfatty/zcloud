@@ -9,6 +9,7 @@ import com.jfatty.zcloud.system.interfaces.IUserGroup;
 import com.jfatty.zcloud.system.req.UserGroupReq;
 import com.jfatty.zcloud.system.res.UserGroupRes;
 import com.jfatty.zcloud.system.service.UserGroupService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,12 @@ import java.util.List;
 
 
 /**
- * 描述
+ * 描述系统用户组
  *
  * @author jfatty on 2019/11/1
  * @email jfatty@163.com
  */
+@Api(tags = "系统用户组API" ,value = "系统用户组")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/userGroup"})

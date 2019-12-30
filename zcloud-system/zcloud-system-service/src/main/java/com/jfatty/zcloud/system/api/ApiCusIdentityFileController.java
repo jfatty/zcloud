@@ -22,6 +22,7 @@ import java.util.List;
  * @author jfatty on 2019/12/16
  * @email jfatty@163.com
  */
+@Api(tags = "自定义系统身份证文件API" ,value = "自定义系统身份证文件")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/cusIdentityFile"})

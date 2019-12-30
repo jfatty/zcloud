@@ -9,6 +9,7 @@ import com.jfatty.zcloud.system.interfaces.IRole;
 import com.jfatty.zcloud.system.req.RoleReq;
 import com.jfatty.zcloud.system.res.RoleRes;
 import com.jfatty.zcloud.system.service.RoleService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +22,12 @@ import java.util.List;
 
 
 /**
- * 描述
+ * 描述 系统角色
  *
  * @author jfatty on 2019/11/1
  * @email jfatty@163.com
  */
+@Api(tags = "系统角色API" ,value = "系统角色")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/role"})

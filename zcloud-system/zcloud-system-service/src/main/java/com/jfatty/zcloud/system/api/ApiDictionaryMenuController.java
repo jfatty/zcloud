@@ -5,6 +5,7 @@ import com.jfatty.zcloud.system.interfaces.IDictionaryMenu;
 import com.jfatty.zcloud.system.req.DictionaryMenuReq;
 import com.jfatty.zcloud.system.res.DictionaryMenuRes;
 import com.jfatty.zcloud.system.service.DictionaryMenuService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author jfatty on 2019/11/13
  * @email jfatty@163.com
  */
+@Api(tags = "系统字典菜单(分类)API" ,value = "系统字典菜单(分类)")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/dictionaryMenu"})

@@ -10,6 +10,7 @@ import com.jfatty.zcloud.system.req.PermRelationshipReq;
 import com.jfatty.zcloud.system.res.PermRelationshipRes;
 import com.jfatty.zcloud.system.service.AccountUniqueService;
 import com.jfatty.zcloud.system.service.PermRelationshipService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 描述
+ * 描述 权限数据关联
  *
  * @author jfatty on 2019/12/4
  * @email jfatty@163.com
  */
+@Api(tags = "权限数据关联API" ,value = "权限数据关联")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/perm"})
