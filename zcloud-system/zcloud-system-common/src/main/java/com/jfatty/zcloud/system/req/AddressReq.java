@@ -12,6 +12,6 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "公用地址请求实体")
 public class AddressReq extends AddressDTO<AddressReq> {
 }

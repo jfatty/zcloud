@@ -4,7 +4,6 @@ import com.jfatty.zcloud.base.dto.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.math.BigDecimal;
 
 /**
  * 描述
@@ -24,56 +23,28 @@ public class AreaCnDTO<T extends BaseDTO> extends BaseDTO {
     /**
      * 父级ID
      */
+    @ApiModelProperty(name = "parentId", position = 0,required = true, value = "父级ID",example = "447268")
     private String parentId;
 
     /**
      * 层级
      */
+    @ApiModelProperty(name = "level", position = 0, required = true,value = "层级",example = "0",allowableValues = "1,2,3,4")
     private Integer level;
-
-    /**
-     * 行政代码
-     */
-    private Long areaCode;
-
-    /**
-     * 邮政编码
-     */
-    private Integer zipCode;
-
-    /**
-     * 区号
-     */
-    private String cityCode;
 
     /**
      * 名称
      */
+    @ApiModelProperty(name = "name", position = 0, required = true,value = "名称",example = "湖北省")
     private String name;
-
     /**
-     * 简称
+     * 行政代码
      */
-    private String shortName;
+    @ApiModelProperty(name = "areaCode", position = 0,required = true, value = "行政代码",example = "422802000000")
+    private Long areaCode;
 
-    /**
-     * 组合名
-     */
-    private String mergerName;
 
-    /**
-     * 拼音
-     */
-    private String pinyin;
 
-    /**
-     * 经度
-     */
-    private BigDecimal lng;
 
-    /**
-     * 维度
-     */
-    private BigDecimal lat;
 
 }
