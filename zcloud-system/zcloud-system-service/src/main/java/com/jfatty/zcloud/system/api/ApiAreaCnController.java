@@ -62,7 +62,7 @@ public class ApiAreaCnController extends ApiBaseSystemController<AreaCn,AreaCnRe
                             @RequestParam(value = "shortName" , defaultValue = "") String shortName) {
 
         if (StringUtils.isEmptyOrBlank(parentId))
-            parentId = "0";
+            parentId = null;
         name = StringUtils.likeStrSQL(name);
         shortName = StringUtils.likeStrSQL(shortName);
         List<AreaCn> areaCns = areaCnService.getLevelList(parentId,level,name,shortName);
