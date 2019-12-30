@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 系统科室
  * </p>
  *
  * @author jfatty

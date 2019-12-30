@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 系统字典菜单(分类)
  * </p>
  *
  * @author jfatty
