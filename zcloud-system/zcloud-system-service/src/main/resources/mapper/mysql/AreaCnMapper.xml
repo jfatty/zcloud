@@ -40,4 +40,28 @@
         </if>
     </select>
 
+
+    <select id="getLevelList" resultMap="BaseResultMap" >
+        select
+        *
+        from sys_area_cn
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        <if test="parentId != null" >
+            and parent_id = #{parentId}
+        </if>
+        <if test="level != null" >
+            and level = #{level}
+        </if>
+        <if test="name != null" >
+            and name LIKE #{name}
+        </if>
+        <if test="shortName != null" >
+            and short_name LIKE #{shortName}
+        </if>
+        order by create_time desc
+    </select>
+
 </mapper>

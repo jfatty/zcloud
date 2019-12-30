@@ -2,6 +2,9 @@ package com.jfatty.zcloud.system.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.system.entity.AreaCn;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.jfatty.zcloud.system.entity.AreaCn;
  */
 public interface AreaCnMapper extends IBaseMapper<AreaCn> {
 
+    List<AreaCn> getLevelList(@Param("parentId") String parentId,@Param("level")  Integer level,@Param("name")  String name,@Param("shortName")  String shortName);
 }
