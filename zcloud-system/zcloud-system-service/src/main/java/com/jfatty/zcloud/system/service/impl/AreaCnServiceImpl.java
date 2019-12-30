@@ -31,6 +31,6 @@ public class AreaCnServiceImpl extends BaseSystemServiceImpl<AreaCn,AreaCnMapper
 
     @Override
     public List<AreaCn> getLevelList(String parentId, Integer level, String name, String shortName) {
-        return areaCnMapper.getLevelList(parentId,level,name,shortName);
+        return areaCnMapper.getLevelList(parentId,level,name,shortName,null);
     }
 }

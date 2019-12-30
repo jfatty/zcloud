@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface AreaCnMapper extends IBaseMapper<AreaCn> {
 
-    List<AreaCn> getLevelList(@Param("parentId") String parentId,@Param("level")  Integer level,@Param("name")  String name,@Param("shortName")  String shortName);
+    List<AreaCn> getLevelList(@Param("parentId") String parentId,@Param("level")  Integer level,@Param("name")  String name,@Param("shortName")  String shortName,@Param("realm")  String realm);
 }
