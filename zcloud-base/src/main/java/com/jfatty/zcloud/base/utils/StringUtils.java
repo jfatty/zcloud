@@ -28,8 +28,11 @@ public class StringUtils implements Serializable {
                 source = source.replaceAll("#","");
             if (source.contains("-"))
                 source = source.replaceAll("-","");
+            return source;
+        } else {
+            return null ;
         }
-        return source;
+
     }
 
     /**
