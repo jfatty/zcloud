@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(description = "注册健康卡请求实体")
-public class RegHealthCardInfoReq  extends HCSHealthCardInfoDTO<RegHealthCardInfoReq> {
+public class  RegHealthCardInfoReq  extends HCSHealthCardInfoDTO<RegHealthCardInfoReq> {
 
 
     @ApiModelProperty(name = "openId", position = 0,required = true, value = "微信 openId" ,example = "oPGot0QAYXg-Y4OiTYUDn55sjRdo")
@@ -42,6 +42,9 @@ public class RegHealthCardInfoReq  extends HCSHealthCardInfoDTO<RegHealthCardInf
     private String relationship ;
     @ApiModelProperty(name = "feeType", position = 10, value = "费用类别 dicValue:::dicCode:::id " , example = "自费:::0100:::693c54a870da44029aa03864659ee055")
     private String feeType ;
+
+    @ApiModelProperty(name = "pubAddress", position = 0, value = "常驻地址信息")
+    private HCSAddressReq pubAddress ;
 
 
 }
