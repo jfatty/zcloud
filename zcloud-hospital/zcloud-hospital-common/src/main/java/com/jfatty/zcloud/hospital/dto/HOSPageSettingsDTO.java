@@ -81,6 +81,11 @@ public class HOSPageSettingsDTO<T extends BaseDTO> extends BaseDTO {
     private String address;
 
     /**
+     * 激活状态地址图标地址
+     */
+    @ApiModelProperty(name = "actAddressIconUrl", position = 1, required = true, value = "激活状态地址图标地址" , example = "http://dev.jfatty.com/4.0.0/hf_menu_icon/personal.png")
+    private String actAddressIconUrl;
+    /**
      * 地址图标地址
      */
     @ApiModelProperty(name = "addressIconUrl", position = 1, required = true, value = "地址图标地址" , example = "http://dev.jfatty.com/4.0.0/hf_menu_icon/personal.png")
@@ -94,9 +99,14 @@ public class HOSPageSettingsDTO<T extends BaseDTO> extends BaseDTO {
     private String phone;
 
     /**
+     * 激活状态电话图标地址
+     */
+    @ApiModelProperty(name = "actPhoneIconUrl", position = 1, value = "激活状态电话图标地址" , example = "http://dev.jfatty.com/4.0.0/hf_menu_icon/personal.png")
+    private String actPhoneIconUrl;
+    /**
      * 电话图标地址
      */
-    @ApiModelProperty(name = "phoneIconUrl", position = 1, required = true, value = "电话图标地址" , example = "http://dev.jfatty.com/4.0.0/hf_menu_icon/personal.png")
+    @ApiModelProperty(name = "phoneIconUrl", position = 1, value = "电话图标地址" , example = "http://dev.jfatty.com/4.0.0/hf_menu_icon/personal.png")
     private String phoneIconUrl;
 
     /**

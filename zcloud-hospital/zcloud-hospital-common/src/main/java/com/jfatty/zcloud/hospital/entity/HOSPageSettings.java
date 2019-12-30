@@ -84,10 +84,19 @@ public class HOSPageSettings extends Model<HOSPageSettings> {
     private String address;
 
     /**
+     * 激活状态地址图标地址
+     */
+    private String actAddressIconUrl;
+
+    /**
      * 地址图标地址
      */
     private String addressIconUrl;
 
+    /**
+     * 激活状态电话图标二进制文件
+     */
+    private byte[] actAddressIconImg;
     /**
      * 电话图标二进制文件
      */
@@ -99,10 +108,18 @@ public class HOSPageSettings extends Model<HOSPageSettings> {
     private String phone;
 
     /**
+     * 激活状态电话图标地址
+     */
+    private String actPhoneIconUrl;
+    /**
      * 电话图标地址
      */
     private String phoneIconUrl;
 
+    /**
+     * 激活状态电话图标二进制
+     */
+    private byte[] actPhoneIconImg;
     /**
      * 电话图标二进制
      */
