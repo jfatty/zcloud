@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Protocol">
         <id column="id" property="id" />
+        <result column="appid" property="appid" />
         <result column="title" property="title" />
         <result column="content" property="content" />
         <result column="signature" property="signature" />
