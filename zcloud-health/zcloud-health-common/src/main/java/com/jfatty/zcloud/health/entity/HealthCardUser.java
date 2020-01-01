@@ -9,14 +9,18 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 /**
- * 描述
+ * <p>
+ * 电子健康卡微信用户信息表
+ * </p>
  *
- * @author jfatty on 2019/12/26
- * @email jfatty@163.com
+ * @author jfatty
+ * @since 2019-12-31
  */
 @Data
-@TableName("hcs_health_card_info")
-public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
+@TableName("hcs_health_card_user")
+public class HealthCardUser extends Model<HealthCardUser> {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 主键ID
@@ -24,29 +28,39 @@ public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
     private String id;
 
     /**
-     * 姓名
+     * 应用ID APPID
+     */
+    private String appid;
+
+    /**
+     * 微信openId
+     */
+    private String openId;
+
+    /**
+     * openId类型1,2,3
+     */
+    private Integer openIdType;
+
+    /**
+     * 健康卡信息记录表ID
+     */
+    private String healthCardInfoId;
+
+    /**
+     * 微信用户姓名或者昵称
      */
     private String name;
 
     /**
-     * 性别
+     * 微信用户性别
      */
     private String gender;
 
     /**
-     * 证件号码
+     * 微信用户手机号码
      */
-    private String idNumber;
-
-    /**
-     * 证件类型
-     */
-    private String idType;
-
-    /**
-     * 民族
-     */
-    private String nation;
+    private String phone;
 
     /**
      * 出生年月日
@@ -57,50 +71,6 @@ public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
      * 地址
      */
     private String address;
-
-    /**
-     * 联系方式1
-     */
-    private String phone1;
-
-    /**
-     * 联系方式2
-     */
-    private String phone2;
-
-    /**
-     * 医院ID
-     */
-    private String hospitalId;
-    /**
-     * 院内ID
-     */
-    private String patid;
-
-    /**
-     * 微信身份码
-     */
-    private String wechatCode;
-
-    /**
-     * 健康卡主索引
-     */
-    private String phid;
-
-    /**
-     * 二维码文本
-     */
-    private String qrCodeText;
-
-    /**
-     * 健康卡ID
-     */
-    private String healthCardId;
-
-    /**
-     * 扩展字段
-     */
-    private String adminExt;
 
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
