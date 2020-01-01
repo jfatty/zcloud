@@ -380,7 +380,7 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
             @ApiImplicitParam(name = "healthCardInfoId", value = "健康卡信息记录ID(系统健康卡ID)",dataType = "String",defaultValue = "2C9580916F47F3AA016F47F3AA0F0000")
     })
-    @RequestMapping(value="/getDynamicQRCode", method=RequestMethod.GET)
+    @RequestMapping(value="/getHealthCardInfo", method=RequestMethod.GET)
     public RETResultUtils<HCSHealthCardInfoRes> getHealthCardInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000") String healthCardInfoId  ) {
         HCSHealthCardInfo hcsHealthCardInfo = hcsHealthCardInfoService.getById(healthCardInfoId);
         HCSHealthCardInfoRes hcsHealthCardInfoRes = new HCSHealthCardInfoRes();
