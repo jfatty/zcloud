@@ -11,10 +11,7 @@ import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.RegHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.SimpleHealthCardInfoReq;
 import com.jfatty.zcloud.health.res.*;
-import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
-import com.jfatty.zcloud.health.service.HCSIDCardInfoService;
-import com.jfatty.zcloud.health.service.HealthCardSettingsService;
-import com.jfatty.zcloud.health.service.HealthCardStationService;
+import com.jfatty.zcloud.health.service.*;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
@@ -32,6 +29,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
@@ -64,6 +62,9 @@ public class ApiHealthCardStationController {
 
     @Autowired
     private HealthCardSettingsService healthCardSettingsService;
+
+    @Autowired
+    private HealthCardUserService healthCardUserService ;
 
     @Autowired
     private RedisTemplate redisTemplate ;
@@ -124,10 +125,10 @@ public class ApiHealthCardStationController {
             log.error("==============================结束=========================================");
             return new RETResultUtils(regHealthCardInfoRes) ;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("001**** 3.2.2 注册健康卡接口 出现异常[{}]",e.getMessage());
         }
 
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
 
     }
 
@@ -165,9 +166,9 @@ public class ApiHealthCardStationController {
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
             return new RETResultUtils(hcsHealthCardInfoRes) ;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("002**** 3.2.4 通过健康卡二维码获取接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
 
     }
 
@@ -216,9 +217,9 @@ public class ApiHealthCardStationController {
         try {
             return  new RETResultUtils(healthCardStationService.bindCardRelation(hospitalId,patId,qrCodeText)) ;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("004**** 3.2.6 绑定健康卡和院内 ID 关系接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
 
     }
 
@@ -228,13 +229,13 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646")
     })
     @RequestMapping(value="/reportHISData", method=RequestMethod.POST)
-    public Object reportHISData(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,  @RequestBody ReportHISDataVO reportHISDataVO ){
+    public RETResultUtils<Boolean> reportHISData(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,  @RequestBody ReportHISDataVO reportHISDataVO ){
         try {
             healthCardStationService.reportHISData(hospitalId,reportHISDataVO);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("005**** 3.2.7 用卡数据监测接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
     }
 
     @ApiOperation(value=" 006**** 3.2.8 获取卡包订单  ID接口")
@@ -247,9 +248,9 @@ public class ApiHealthCardStationController {
         try {
             return new RETResultUtils(healthCardStationService.getOrderIdByOutAppId(hospitalId,qrCodeText));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("006**** 3.2.8 获取卡包订单  ID接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
 
     }
 
@@ -325,9 +326,9 @@ public class ApiHealthCardStationController {
 
             return new RELResultUtils(regBatHealthCardInfos);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("007**** 3.2.9 注册批量健康卡接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RELResultUtils.faild("网络异常!请稍后重试");
 
     }
 
@@ -348,9 +349,9 @@ public class ApiHealthCardStationController {
             BeanUtils.copyProperties(dynamicQRCodeVO,dynamicQRCodeRes);
             return new RETResultUtils(dynamicQRCodeRes);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("008**** 3.2.10 获取动态二维码接口 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RETResultUtils.faild("网络异常!请稍后重试");
     }
 
 
@@ -358,12 +359,17 @@ public class ApiHealthCardStationController {
     @RequestMapping(value="/getHealthCardList", method=RequestMethod.POST)
     public RELResultUtils<SimpleHealthCardInfoRes> getHealthCardList(@RequestBody SimpleHealthCardInfoReq simpleHealthCardInfoReq){
         try {
+            List<String> healthCardInfoIds = healthCardUserService.getByOpenId(simpleHealthCardInfoReq.getOpenId(),simpleHealthCardInfoReq.getOpenIdType());
+            if (CollectionUtils.isEmpty(healthCardInfoIds))
+                return RELResultUtils._506("您暂无电子健康卡");
+            List<HCSHealthCardInfo> hcsHealthCardInfos = hcsHealthCardInfoService.getBatchHealthCardByInfoIds(healthCardInfoIds,simpleHealthCardInfoReq.getHospitalId());
             List<SimpleHealthCardInfoRes> resList = new ArrayList<SimpleHealthCardInfoRes>();
+            BeanUtils.copyProperties(hcsHealthCardInfos,resList);
             return new RELResultUtils(resList);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("009**** 电子健康卡列表获取 出现异常[{}]",e.getMessage());
         }
-        return null;
+        return RELResultUtils.faild("网络异常!请稍后重试");
     }
 
 

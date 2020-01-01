@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jfatty.zcloud.health.mapper.HCSHealthCardInfoMapper">
+<mapper namespace="com.jfatty.zcloud.health.mapper.HealthCardUserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.health.entity.HCSHealthCardInfo">
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.health.entity.HealthCardUser">
         <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="open_id" property="openId" />
+        <result column="open_id_type" property="openIdType" />
+        <result column="health_card_info_id" property="healthCardInfoId" />
         <result column="name" property="name" />
         <result column="gender" property="gender" />
-        <result column="id_number" property="idNumber" />
-        <result column="id_type" property="idType" />
-        <result column="nation" property="nation" />
+        <result column="phone" property="phone" />
         <result column="birthday" property="birthday" />
         <result column="address" property="address" />
-        <result column="phone1" property="phone1" />
-        <result column="phone2" property="phone2" />
-        <result column="hospital_id" property="hospitalId" />
-        <result column="patid" property="patid" />
-        <result column="wechat_code" property="wechatCode" />
-        <result column="phid" property="phid" />
-        <result column="qr_code_text" property="qrCodeText" />
-        <result column="health_card_id" property="healthCardId" />
-        <result column="admin_ext" property="adminExt" />
         <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />
@@ -37,7 +30,7 @@
     <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
         select
         *
-        from hcs_health_card_info
+        from hcs_health_card_user
         where 1 = 1
         <if test="realm != null" >
             and realm = #{realm}
@@ -48,24 +41,25 @@
     <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
         select
         count(0)
-        from hcs_health_card_info
+        from hcs_health_card_user
         where 1 = 1
         <if test="realm != null" >
             and realm = #{realm}
         </if>
     </select>
 
-    <select id="getByIdCardNumber" resultMap="BaseResultMap" >
-        SELECT * FROM hcs_health_card_info WHERE id_number = #{idNumber} LIMIT 1
-    </select>
-
-
-    <select id="getNationDicStr" resultType="java.lang.String">
-        select concat(concat( dic_value, ':::' , dic_code),':::' , id)  as nation from sys_dictionary WHERE dic_value = #{sourceNation} LIMIT 1
-    </select>
-
-    <select id="getBatchHealthCardByInfoIds" resultMap="BaseResultMap" >
-        SELECT * FROM hcs_health_card_info WHERE 1 = 1 AND hospital_id = #{hospitalId} AND id IN <foreach collection="healthCardInfoIds" index="infoId" item="infoId" open="(" separator="," close=")" >#{infoId}</foreach>
+    <select id="getByOpenId" resultType="java.lang.String">
+        select
+         health_card_info_id
+        from hcs_health_card_user
+        where 1 = 1
+        <if test="openId != null" >
+            and open_id = #{openId}
+        </if>
+        <if test="openIdType != null" >
+            and open_id_type = #{openIdType}
+        </if>
+        order by create_time desc
     </select>
 
 </mapper>

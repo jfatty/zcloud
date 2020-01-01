@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -38,5 +40,10 @@ public class HCSHealthCardInfoServiceImpl extends BaseHealthServiceImpl<HCSHealt
             source += "族" ;
         //select concat(concat( dic_value, ':::' , dic_code),':::' , id)  as nation from sys_dictionary WHERE dic_value = '土家族'
         return hcsHealthCardInfoMapper.getNationDicStr(source);
+    }
+
+    @Override
+    public List<HCSHealthCardInfo> getBatchHealthCardByInfoIds(List<String> healthCardInfoIds, String hospitalId) {
+        return hcsHealthCardInfoMapper.getBatchHealthCardByInfoIds(healthCardInfoIds, hospitalId);
     }
 }

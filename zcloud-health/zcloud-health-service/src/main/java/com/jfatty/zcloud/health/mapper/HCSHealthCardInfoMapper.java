@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  *  Mapper 接口
@@ -17,4 +19,6 @@ public interface HCSHealthCardInfoMapper extends IBaseMapper<HCSHealthCardInfo> 
     HCSHealthCardInfo getByIdCardNumber(@Param("idNumber") String idNumber);
 
     String getNationDicStr(@Param("sourceNation") String sourceNation);
+
+    List<HCSHealthCardInfo> getBatchHealthCardByInfoIds(@Param("healthCardInfoIds") List<String> healthCardInfoIds,@Param("hospitalId")  String hospitalId);
 }
