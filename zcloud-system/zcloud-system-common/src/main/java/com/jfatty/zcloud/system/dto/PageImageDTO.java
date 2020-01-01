@@ -37,6 +37,10 @@ public class PageImageDTO<T extends BaseDTO> extends BaseDTO {
      * 图片标题
      */
     private String imgTitle;
+    /**
+     * 图片标题
+     */
+    private String subTitle;
 
     /**
      * 图片对应缺标题

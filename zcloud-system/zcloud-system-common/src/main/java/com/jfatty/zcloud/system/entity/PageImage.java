@@ -46,6 +46,10 @@ public class PageImage extends Model<PageImage> {
      * 图片标题
      */
     private String imgTitle;
+    /**
+     * 图片标题
+     */
+    private String subTitle;
 
     /**
      * 图片对应缺标题
