@@ -338,19 +338,17 @@ public class ApiHealthCardStationController {
     }
 
 
-
     @ApiOperation(value=" 008**** 3.2.10 获取动态二维码接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
-            @ApiImplicitParam(name = "healthCardId", value = "健康卡ID",dataType = "String",defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58"),
-            @ApiImplicitParam(name = "idType", value = "证件类型",dataType = "String",defaultValue = "01"),
-            @ApiImplicitParam(name = "idNumber", value = "证件号码",dataType = "String",defaultValue = "422801199509094611")
+            @ApiImplicitParam(name = "healthCardInfoId", value = "健康卡信息记录ID(系统健康卡ID)",dataType = "String",defaultValue = "2C9580916F47F3AA016F47F3AA0F0000")
     })
     @RequestMapping(value="/getDynamicQRCode", method=RequestMethod.GET)
-    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardId" , defaultValue = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58") String healthCardId , @RequestParam(value = "idType" , defaultValue = "01") String idType , @RequestParam(value = "idNumber" , defaultValue = "422801199509094611") String idNumber ){
+    public RETResultUtils<DynamicQRCodeRes>  getDynamicQRCode(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000") String healthCardInfoId  ){
         try {
+            HCSHealthCardInfo hcsHealthCardInfo = hcsHealthCardInfoService.getById(healthCardInfoId);
             DynamicQRCodeRes dynamicQRCodeRes = new DynamicQRCodeRes();
-            DynamicQRCodeVO dynamicQRCodeVO =  healthCardStationService.getDynamicQRCode(hospitalId,healthCardId,idType,idNumber);
+            DynamicQRCodeVO dynamicQRCodeVO =  healthCardStationService.getDynamicQRCode(hospitalId,hcsHealthCardInfo.getHealthCardId(),hcsHealthCardInfo.getIdType(),hcsHealthCardInfo.getIdNumber());
             BeanUtils.copyProperties(dynamicQRCodeVO,dynamicQRCodeRes);
             return new RETResultUtils(dynamicQRCodeRes);
         } catch (Exception e) {
@@ -377,6 +375,23 @@ public class ApiHealthCardStationController {
         return RELResultUtils.faild("网络异常!请稍后重试");
     }
 
+    @ApiOperation(value=" 010**** 获取电子电子健康卡详情信息 ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "healthCardInfoId", value = "健康卡信息记录ID(系统健康卡ID)",dataType = "String",defaultValue = "2C9580916F47F3AA016F47F3AA0F0000")
+    })
+    @RequestMapping(value="/getDynamicQRCode", method=RequestMethod.GET)
+    public RETResultUtils<HCSHealthCardInfoRes> getHealthCardInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000") String healthCardInfoId  ) {
+        HCSHealthCardInfo hcsHealthCardInfo = hcsHealthCardInfoService.getById(healthCardInfoId);
+        HCSHealthCardInfoRes hcsHealthCardInfoRes = new HCSHealthCardInfoRes();
+        BeanUtils.copyProperties(hcsHealthCardInfo,hcsHealthCardInfoRes);
+        //改变名族为字典
+        String nation = hcsHealthCardInfoRes.getNation();
+        String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
+        hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
+        hcsHealthCardInfoRes.setNation(nationDic);
+        return new RETResultUtils(hcsHealthCardInfoRes);
+    }
 
 
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 
@@ -61,8 +62,10 @@ public class ApiHealthCardStationViewController {
             }else {
 
                 HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+
                 HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(hospitalId,healthCode);
                 BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
+
                 HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
                 HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
 
@@ -90,6 +93,38 @@ public class ApiHealthCardStationViewController {
             e.printStackTrace();
         }
     }
+
+
+    @ApiOperation(value=" 002****通过医院ID与健康卡信息记录ID(系统健康卡ID)跳转至电子健康卡详情页面",tags = "注意：页面自动跳转,页面加载时获取URL路径中携带的参数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "healthCardInfoId", value = "健康卡信息记录ID(系统健康卡ID)",dataType = "String",defaultValue = "2C9580916F47F3AA016F47F3AA0F0000")
+    })
+    @RequestMapping(value="/{hospitalId}/getHealthCardByHealthCardInfoId", method=RequestMethod.GET)
+    public void getHealthCardByHealthCardInfoId(@PathVariable("hospitalId") String hospitalId , @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000") String healthCardInfoId, HttpServletResponse response){
+        try {
+            HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+            HCSHealthCardInfo hcsHealthCardInfo = hcsHealthCardInfoService.getById(healthCardInfoId);
+            BeanUtils.copyProperties(hcsHealthCardInfo,hcsHealthCardInfoRes);
+            //改变名族为字典
+            String nation = hcsHealthCardInfoRes.getNation();
+            String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
+            hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
+            hcsHealthCardInfoRes.setNation(nationDic);
+
+            String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
+            String params = getPostParams(hcsHealthCardInfoRes);
+            params = URLEncoder.encode(params,"UTF-8");
+            log.error("编码后的URL参数[{}]",params);
+            path = path + "?" + params ;
+            //去健康卡详情页面
+            response.sendRedirect(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     /**
      *
