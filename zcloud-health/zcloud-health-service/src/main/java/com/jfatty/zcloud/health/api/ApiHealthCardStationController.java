@@ -270,6 +270,8 @@ public class ApiHealthCardStationController {
             List<WebRegPatientRes> webRegPatientList = resultUtils.getData();
 
             List<HealthCardInfo> healthCardInfos = new ArrayList<HealthCardInfo>();
+
+            int flag = 1 ;
             for (WebRegPatientRes item : webRegPatientList) {
                 HealthCardInfo healthCardInfoItem = new HealthCardInfo();
                 String idCard = item.getSfzh() ;
@@ -281,6 +283,7 @@ public class ApiHealthCardStationController {
                 healthCardInfoItem.setIdNumber(idCard);
                 healthCardInfoItem.setGender(gender);
                 healthCardInfoItem.setBirthday(birthday);
+                healthCardInfoItem.setPatid(item.getBrid());
                 healthCardInfoItem.setNation("未知");
                 healthCardInfoItem.setIdType("01");
                 healthCardInfoItem.setPhone2("");
@@ -298,6 +301,8 @@ public class ApiHealthCardStationController {
                     healthCardInfoItem.setAddress(address);
                 }
                 healthCardInfos.add(healthCardInfoItem);
+                if (flag == 1)
+                    break;
             }
 
             healthCardInfos = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
