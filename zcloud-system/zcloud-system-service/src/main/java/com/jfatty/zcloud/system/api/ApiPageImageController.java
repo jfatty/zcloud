@@ -45,11 +45,11 @@ public class ApiPageImageController  extends ApiBaseSystemController<PageImage,P
 
     @ApiOperation(value="001****获取页面需使用的图片集合")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",required = true,defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",required = true,defaultValue = "wx656a00824f784088"),
             @ApiImplicitParam(name = "pageId", value = "页面ID 每个应用的每个前端页面系统都会分配一个ID作为唯一标志",dataType = "String",required = true,defaultValue = "2C9580916F5F3CD5016F5F3DA6DD0001")
     })
-    @RequestMapping(value={"/index"},method=RequestMethod.GET)
-    public RETResultUtils<PageImageRes> index(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
+    @RequestMapping(value={"/getPageImage"},method=RequestMethod.GET)
+    public RETResultUtils<PageImageRes> getPageImage(@RequestParam(value = "appId" , defaultValue = "wx656a00824f784088" ) String appId  ,
                                               @RequestParam(value = "pageId" , defaultValue = "2C9580916F5F3CD5016F5F3DA6DD0001") String pageId ){
         PageImage pageImage = pageImageService.getByAppId(appId,pageId);
         if(pageImage == null)
