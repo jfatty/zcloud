@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 
 /**
- * 描述
+ * 描述 电子健康卡信息
  *
  * @author jfatty on 2019/12/26
  * @email jfatty@163.com

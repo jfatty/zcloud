@@ -45,14 +45,16 @@ public class HCSIDCardInfoDTO<T extends BaseDTO> extends BaseDTO {
     /**
      *
      */
+    @ApiModelProperty(name = "authority", position = 0, value = "签发机关",example = "xxx公安局")
     private String authority;
 
+    @ApiModelProperty(name = "validDate", position = 0, value = "有效期",example = "xxxx.xx.xx-xxxx.xx.xx")
     private String validDate;
 
     /**
      *
      */
-    @ApiModelProperty(name = "description", position = 0, value = "描述",example = "***")
+    @ApiModelProperty(name = "description", position = 0, value = "描述",example = "***xxxx")
     private String description;
 
     /**

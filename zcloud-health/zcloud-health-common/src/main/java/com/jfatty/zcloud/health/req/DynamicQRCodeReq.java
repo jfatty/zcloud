@@ -11,6 +11,6 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "身份证信息请求实体")
+@ApiModel(description = "获取动态二维码请求实体")
 public class DynamicQRCodeReq extends DynamicQRCodeDTO<DynamicQRCodeReq> {
 }

@@ -20,6 +20,7 @@ public class RegBatHealthCardInfoRes extends HCSHealthCardInfoDTO<RegBatHealthCa
      */
     @ApiModelProperty(name = "qrCodeText", position = 0, value = "二维码文本",required = true ,example = "C220AE414CE6EE581037C311AE24518FCFE19C429BECD478C1A13976260FXXXX:1")
     private String qrCodeText;
+
     @ApiModelProperty(name = "idNumber", position = 0, value = "证件号码",required = true ,example = "432624198888883116")
     private String idNumber;
     /**

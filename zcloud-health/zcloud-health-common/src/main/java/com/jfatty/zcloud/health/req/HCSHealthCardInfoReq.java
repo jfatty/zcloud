@@ -12,7 +12,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "身份证信息请求实体")
+@ApiModel(description = "电子健康卡信息请求实体")
 public class HCSHealthCardInfoReq extends HCSHealthCardInfoDTO<HCSHealthCardInfoReq> {
 
 

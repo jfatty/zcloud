@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.health.res;
 
 import com.jfatty.zcloud.health.dto.HCSHealthCardInfoDTO;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,8 +13,14 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "身份证信息响应实体")
+@ApiModel(description = "电子健康卡信息响应实体")
 public class HCSHealthCardInfoRes extends HCSHealthCardInfoDTO<HCSHealthCardInfoRes> {
+
+    /**
+     * 健康卡信息记录ID(系统健康卡ID)
+     */
+    @ApiModelProperty(name = "id", position = 0, value = "健康卡信息记录ID(系统健康卡ID)",required = true ,example = "2C9580916F47F3AA016F47F3AA0F0000")
+    private String id;
 
     /**
      * 姓名
