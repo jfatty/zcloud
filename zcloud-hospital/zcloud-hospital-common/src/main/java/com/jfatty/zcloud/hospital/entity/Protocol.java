@@ -26,7 +26,10 @@ public class Protocol extends Model<Protocol> {
      * 主键ID页面页面标识唯一
      */
     private String id;
-
+    /**
+     * 应用ID APPID
+     */
+    private String appid;
     /**
      * 协议标题
      */
