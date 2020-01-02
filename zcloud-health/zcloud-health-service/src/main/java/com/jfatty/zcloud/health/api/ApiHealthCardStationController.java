@@ -175,8 +175,8 @@ public class ApiHealthCardStationController {
 
     @ApiOperation(value=" 003**** 3.2.5 OCR接口")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646",required = true),
-            @ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "file",required = true)
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646",required = true)
+            //,@ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "file",required = true)
     })
     @RequestMapping(value="/ocrInfo", method=RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public RETResultUtils<HCSIDCardInfoRes> ocrInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,@RequestPart(value = "IDCardFile") MultipartFile IDCardFile ){
