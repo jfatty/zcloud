@@ -52,7 +52,7 @@ public class ApiAlipayServiceWindowController {
 
     @RequestMapping(value="/alipay/OAuth", method= { RequestMethod.GET,RequestMethod.POST } )
     @ResponseBody
-    public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
+    public ResultUtils aliOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
                                @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
         log.error(" ====>  当前支付宝生活号 appId [{}] ",appId);
         try {
