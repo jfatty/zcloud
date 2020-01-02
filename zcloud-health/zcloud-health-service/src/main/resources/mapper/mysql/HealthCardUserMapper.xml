@@ -26,6 +26,7 @@
         <result column="delete_operator" property="deleteOperator" />
     </resultMap>
 
+
     <!-- 获取表格数据 -->
     <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
         select
@@ -52,7 +53,7 @@
         select
          health_card_info_id
         from hcs_health_card_user
-        where 1 = 1
+        where 1 = 1  and delete_state = 0 and state = 1
         <if test="openId != null" >
             and open_id = #{openId}
         </if>
@@ -61,5 +62,10 @@
         </if>
         order by create_time desc
     </select>
+
+
+    <update id="untieHealthCard">
+        UPDATE hcs_health_card_user SET delete_state = 1 WHERE open_id = #{openId}  AND open_id_type = #{openIdType}  AND health_card_info_id = #{healthCardInfoId} AND hospital_id = #{hospitalId}
+    </update>
 
 </mapper>

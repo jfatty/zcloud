@@ -34,4 +34,9 @@ public class HealthCardUserServiceImpl extends BaseHealthServiceImpl<HealthCardU
     public List<String> getByOpenId(String openId, Integer openIdType) {
         return healthCardUserMapper.getByOpenId(openId,openIdType);
     }
+
+    @Override
+    public Boolean untieHealthCard(String openId, Integer openIdType, String hospitalId, String healthCardInfoId) throws Exception {
+        return healthCardUserMapper.untieHealthCard(openId,openIdType,hospitalId,healthCardInfoId) > 0;
+    }
 }

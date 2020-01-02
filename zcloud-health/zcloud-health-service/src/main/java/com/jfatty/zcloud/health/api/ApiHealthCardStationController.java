@@ -10,6 +10,7 @@ import com.jfatty.zcloud.health.entity.HealthCardSettings;
 import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.RegHealthCardInfoReq;
 import com.jfatty.zcloud.health.req.SimpleHealthCardInfoReq;
+import com.jfatty.zcloud.health.req.UntieHealthCardReq;
 import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.*;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
@@ -290,7 +291,6 @@ public class ApiHealthCardStationController {
                 healthCardInfoItem.setIdType("01");
                 healthCardInfoItem.setPhone2("");
                 String phone1 = item.getYddh() ;
-                healthCardInfoItem.setPatid("");
                 if(StringUtils.isEmptyOrBlank(phone1)){
                     healthCardInfoItem.setPhone1("18062158054");
                 }else {
@@ -393,6 +393,20 @@ public class ApiHealthCardStationController {
         hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
         hcsHealthCardInfoRes.setNation(nationDic);
         return new RETResultUtils(hcsHealthCardInfoRes);
+    }
+
+
+    @ApiOperation(value=" 011**** 解绑电子健康卡接口")
+    @RequestMapping(value="/untieHealthCard", method=RequestMethod.POST)
+    public RETResultUtils<Boolean> untieHealthCard(@RequestBody UntieHealthCardReq untieHealthCardReq){
+        try {
+            Boolean result = healthCardUserService.untieHealthCard(untieHealthCardReq.getOpenId(),untieHealthCardReq.getOpenIdType(),untieHealthCardReq.getHospitalId(),untieHealthCardReq.getHealthCardInfoId());
+            return new RETResultUtils(result) ;
+        } catch (Exception e) {
+            log.error("011**** 解绑电子健康卡接口 出现异常[{}]",e.getMessage());
+            return RETResultUtils.faild("网络异常!请稍后重试");
+        }
+
     }
 
 
