@@ -1,12 +1,8 @@
 package com.jfatty.zcloud.health.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HealthCardSettings;
 import com.jfatty.zcloud.health.mapper.HealthCardSettingsMapper;
-import com.jfatty.zcloud.health.model.AppTokenInfo;
-import com.jfatty.zcloud.health.model.DynamicQRCode;
-import com.jfatty.zcloud.health.model.IDCardInfo;
 import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
 import com.jfatty.zcloud.health.service.HealthCardStationService;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
@@ -22,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 描述
@@ -56,10 +54,10 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         if ( StringUtils.isEmptyOrBlank(settings.getAppToken()) || dis > 0  ){ //或者超时
             //创建健康卡实例，传入appSecret
             HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-            CommonIn commonIn=new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
+            CommonIn commonIn=new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
             //调用接口appId
 
-            AppTokenInfo appTokenInfo = healthCard.getAppToken(commonIn,appId).toJavaObject(AppTokenInfo.class);
+            AppTokenInfo appTokenInfo = healthCard.getAppToken(commonIn,appId);
             //打印响应
             settings.setAppToken(appTokenInfo.getAppToken());
             settings.setExpiresIn(appTokenInfo.getExpiresIn());
@@ -82,8 +80,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         //创建健康卡实例，传入appSecret
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         //创建【公共输入参数commonIn】实例
-        CommonIn commonIn = new CommonIn(settings.getAppToken(), settings.getRequestId(), settings.getHospitalId(),0);
-        IDCardInfo idCardInfo = healthCard.ocrInfo(commonIn,imageContent).getJSONObject("cardInfo").toJavaObject(IDCardInfo.class);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(), settings.getRequestId(), settings.getHospitalId());
+        IDCardInfo idCardInfo = healthCard.ocrInfo(commonIn,imageContent);
         log.error("orc身份证图片数据获取 [{}]",idCardInfo.getId());
         HCSIDCardInfoVO hcsidCardInfoVO = new HCSIDCardInfoVO();
         BeanUtils.copyProperties(idCardInfo,hcsidCardInfoVO);
@@ -95,34 +93,28 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     public HealthCardInfoVO registerHealthCard(String hospitalId, HCSHealthCardInfoReq hcsHealthCardInfoReq) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
 
-        HealthCardServerImpl  healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         HealthCardInfo healthCardInfoR = new HealthCardInfo();
         BeanUtils.copyProperties(hcsHealthCardInfoReq,healthCardInfoR);
         /************************************************************/
         healthCardInfoR.setWechatCode(settings.getWechatCode());
         /************************************************************/
-        JSONObject jsonObject = healthCard.registerHealthCard(commonIn,healthCardInfoR);
-
+        HealthCardInfo hInfo = healthCard.registerHealthCard(commonIn,healthCardInfoR);
+        System.out.println("腾讯返回===================>"+hInfo.getPhid());
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
-        healthCardInfoVO.setQrCodeText(jsonObject.getString("qrCodeText"));
-        healthCardInfoVO.setHealthCardId(jsonObject.getString("healthCardId"));
-        healthCardInfoVO.setPhid(jsonObject.getString("phid"));
-        // HealthCardInfo hInfo = healthCard.registerHealthCard(commonIn,healthCardInfoR);
-        //System.out.println("腾讯返回===================>"+hInfo.getPhid());
-        //BeanUtils.copyProperties(hInfo,healthCardInfoVO);
+        BeanUtils.copyProperties(hInfo,healthCardInfoVO);
         System.out.println("属性拷贝后===================>"+healthCardInfoVO.getPhid());
         return healthCardInfoVO;
     }
-
 
     @Override
     public HealthCardInfoVO getHealthCardByHealthCode(String hospitalId, String healthCode) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
-        HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode).getJSONObject("card").toJavaObject(HealthCardInfo.class);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
         /************************************************************/
@@ -135,8 +127,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     public HealthCardInfoVO getHealthCardByQRCode(String hospitalId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
-        HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText).getJSONObject("card").toJavaObject(HealthCardInfo.class);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
         /************************************************************/
@@ -150,74 +142,44 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     public Boolean bindCardRelation(String hospitalId, String patId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.bindCardRelation(commonIn,patId,qrCodeText).getBoolean("result");
     }
-
-
 
     @Override
     public void reportHISData(String hospitalId, ReportHISDataVO reportHISData) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         ReportHISData reportHIS = new ReportHISData();
         BeanUtils.copyProperties(reportHISData,reportHIS);
         healthCard.reportHISData(commonIn,reportHIS);
     }
-
 
     @Override
     public String getOrderIdByOutAppId(String hospitalId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         String appId = settings.getAppid();
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
-        return healthCard.getOrderIdByOutAppId(commonIn,appId,qrCodeText).getString("orderId");
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        return healthCard.getOrderIdByOutAppId(commonIn,appId,qrCodeText);
     }
-
-
-
 
     @Override
     public List<HealthCardInfo> registerBatchHealthCard(String hospitalId, List<HealthCardInfo> healthCardInfos) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardClientServiceImpl  healthCardService = new HealthCardClientServiceImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
-        List<HealthCardInfo> infoList = healthCardService.registerBatchHealthCard(commonIn,healthCardInfos).getJSONArray("rspItems").toJavaList(HealthCardInfo.class);
-        Map<String, HealthCardInfo> infoMap = new HashMap();
-        Iterator iterator = infoList.iterator();
-
-        HealthCardInfo healthCard;
-        while(iterator.hasNext()) {
-            healthCard = (HealthCardInfo)iterator.next();
-            infoMap.put(healthCard.getIdNumber(), healthCard);
-        }
-
-        iterator = healthCardInfos.iterator();
-
-        while(iterator.hasNext()) {
-            healthCard = (HealthCardInfo)iterator.next();
-            HealthCardInfo cardInfo = (HealthCardInfo)infoMap.get(healthCard.getIdNumber());
-            if (cardInfo != null) {
-                healthCard.setHealthCardId(cardInfo.getHealthCardId());
-                healthCard.setQrCodeText(cardInfo.getQrCodeText());
-            } else {
-                iterator.remove();
-            }
-        }
-
-        return healthCardInfos;
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        return healthCard.registerBatchHealthCard(commonIn,healthCardInfos);
     }
-
 
     @Override
     public DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
-        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId(),0);
-        DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber,"0").toJavaObject(DynamicQRCode.class);
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber);
         DynamicQRCodeVO dynamicQRCodeVO = new DynamicQRCodeVO();
         BeanUtils.copyProperties(dynamicQRCode,dynamicQRCodeVO);
         System.out.println("**************************QrCodeImg**********************************");
