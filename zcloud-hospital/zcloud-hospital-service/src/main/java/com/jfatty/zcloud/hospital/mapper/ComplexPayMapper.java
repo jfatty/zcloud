@@ -108,7 +108,7 @@ public interface ComplexPayMapper {
      * @param hisSync      同步标志
      * @param yjh          预缴号
      */
-    void syncHisInHospitalFeeBack(String outTradeNo, int hisSync, String yjh);
+    void syncHisInHospitalFeeBack(@Param("outTradeNo") String outTradeNo,@Param("hisSync")  int hisSync,@Param("yjh")   String yjh);
 
     /**
      * 向数据库订单表中插入订单信息
