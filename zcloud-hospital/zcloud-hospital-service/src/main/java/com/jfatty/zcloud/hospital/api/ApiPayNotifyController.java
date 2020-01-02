@@ -2,6 +2,8 @@ package com.jfatty.zcloud.hospital.api;
 
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.base.utils.WePayUtil;
 import com.jfatty.zcloud.hospital.entity.AlipayConfig;
 import com.jfatty.zcloud.hospital.entity.WepayConfig;
@@ -16,10 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -106,7 +105,7 @@ public class ApiPayNotifyController {
                 /**========================通知HIS系统支付成功=========================*/
                 //支付成功回调  判断是否已经同步过HIS了 没同步则需要进行同步操作
                 if(result_code.equalsIgnoreCase("SUCCESS") && complexPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && complexPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO )
-                    complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),complexPayOrder.getCreatedType(),complexPayOrder);
+                    complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),2,complexPayOrder);
                 Map<String, String> resMap = new HashMap<String, String>();
                 resMap.put("return_code", "SUCCESS");
                 resMap.put("return_msg", "支付成功");
@@ -225,7 +224,7 @@ public class ApiPayNotifyController {
                     /**=====通知HIS系统支付成功============================================*/
                     //支付成功回调  判断是否已经同步过HIS了 没同步则需要进行同步操作
                     if(complexPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && complexPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO)
-                        complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),complexPayOrder.getCreatedType(),complexPayOrder);
+                        complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),1,complexPayOrder);
                     //注意：
                     //如果签约的是可退款协议，那么付款完成后，支付宝系统发送该交易状态通知。
                 }
@@ -264,6 +263,30 @@ public class ApiPayNotifyController {
             }
         }
         return params;
+    }
+
+    @ApiOperation(value="002*** 手动异步通知HIS系统订单支付成功")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "outTradeNo", value = "交易订单号",dataType = "String",defaultValue = "WC201909261150360002"),
+            @ApiImplicitParam(name = "openIdType", value = "微信 2 支付宝 1 APP 3 openId 类型",dataType = "Integer",defaultValue = "2")
+    })
+    @RequestMapping(value="/asyncLocalTrade2HIS", method=RequestMethod.GET)
+    @ResponseBody
+    public RETResultUtils<Boolean> asyncLocalTrade2HIS(@RequestParam(value = "outTradeNo" , defaultValue = "WC201909216150360002") String outTradeNo , @RequestParam(value = "openIdType" , defaultValue = "2") Integer openIdType){
+        if(StringUtils.isEmptyOrBlank(outTradeNo))
+            return RETResultUtils._509("交易订单号不能为空!");
+        ComplexPay complexPayOrder = complexPayService.getPayRecordByOutTradeNo(outTradeNo);
+        try {
+            if (complexPayOrder != null){
+                if(complexPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && complexPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO)
+                    complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),openIdType,complexPayOrder);
+                return new RETResultUtils(true);
+            }
+            return RETResultUtils._506("未查询到对应交易订单");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return RETResultUtils._506(e.getMessage());
+        }
     }
 
 }
