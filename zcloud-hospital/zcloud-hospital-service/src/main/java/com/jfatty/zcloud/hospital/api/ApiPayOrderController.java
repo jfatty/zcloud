@@ -136,7 +136,7 @@ public class ApiPayOrderController {
         AlipayConfig alipayConfig = alipayConfigService.getByAppId(appId);
         //实例化客户端
         AlipayClient alipayClient = new DefaultAlipayClient(alipayConfig.getGateWay(),//
-                alipayConfig.getAppid() ,//
+                alipayConfig.getMchId() ,//
                 alipayConfig.getPrivateKey(),//
                 alipayConfig.getDataFormat(),//
                 alipayConfig.getPayCharset(),//
