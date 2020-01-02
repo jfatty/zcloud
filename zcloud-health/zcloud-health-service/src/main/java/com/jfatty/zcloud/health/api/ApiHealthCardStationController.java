@@ -29,6 +29,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -177,7 +178,7 @@ public class ApiHealthCardStationController {
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646",required = true),
             @ApiImplicitParam(name = "IDCardFile", value = "身份证正面图片文件",dataType = "file",required = true)
     })
-    @RequestMapping(value="/ocrInfo", method=RequestMethod.POST)
+    @RequestMapping(value="/ocrInfo", method=RequestMethod.POST,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public RETResultUtils<HCSIDCardInfoRes> ocrInfo(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId ,@RequestPart(value = "IDCardFile") MultipartFile IDCardFile ){
         try {
             BASE64Encoder encoder = new BASE64Encoder();
