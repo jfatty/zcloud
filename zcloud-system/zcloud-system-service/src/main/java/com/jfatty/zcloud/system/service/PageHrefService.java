@@ -2,6 +2,8 @@ package com.jfatty.zcloud.system.service;
 
 import com.jfatty.zcloud.system.entity.PageHref;
 
+import java.util.List;
+
 /**
  * <p>
  * 界面链接跳转开发配置 服务类
@@ -12,4 +14,5 @@ import com.jfatty.zcloud.system.entity.PageHref;
  */
 public interface PageHrefService extends BaseSystemService<PageHref> {
 
+    List<PageHref> getPageHrefsByIds(String appId, String pageId);
 }

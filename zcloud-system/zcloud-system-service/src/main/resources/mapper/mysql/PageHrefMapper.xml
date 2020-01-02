@@ -46,4 +46,18 @@
         </if>
     </select>
 
+    <select id="getPageHrefsByIds" resultMap="BaseResultMap">
+        select
+         *
+        from sys_page_href
+        where 1 = 1
+        <if test="appId != null" >
+            and appid = #{appId}
+        </if>
+        <if test="pageId != null" >
+            and page_id = #{pageId}
+        </if>
+        order by create_time desc
+    </select>
+
 </mapper>

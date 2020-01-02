@@ -4,6 +4,8 @@ import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.system.entity.PageImage;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * <p>
  * 界面图片开发配置 Mapper 接口
@@ -15,6 +17,6 @@ import org.apache.ibatis.annotations.Param;
 public interface PageImageMapper extends IBaseMapper<PageImage> {
 
 
-    PageImage getByAppId(@Param("appId") String appId,@Param("pageId")  String pageId);
+    List<PageImage> getByAppId(@Param("appId") String appId, @Param("pageId")  String pageId);
 
 }

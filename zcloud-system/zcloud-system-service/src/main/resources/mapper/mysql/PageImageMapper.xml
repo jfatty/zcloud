@@ -63,7 +63,7 @@
         <if test="pageId != null" >
             and page_id = #{pageId}
         </if>
-        order by create_time desc LIMIT 1
+        order by create_time desc
     </select>
 
 </mapper>

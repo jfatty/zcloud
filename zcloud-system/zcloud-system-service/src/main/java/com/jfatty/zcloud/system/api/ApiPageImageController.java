@@ -1,7 +1,7 @@
 package com.jfatty.zcloud.system.api;
 
 
-import com.jfatty.zcloud.base.utils.RETResultUtils;
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.PageImage;
 import com.jfatty.zcloud.system.interfaces.IPageImage;
 import com.jfatty.zcloud.system.req.PageImageReq;
@@ -14,11 +14,15 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -49,14 +53,18 @@ public class ApiPageImageController  extends ApiBaseSystemController<PageImage,P
             @ApiImplicitParam(name = "pageId", value = "页面ID 每个应用的每个前端页面系统都会分配一个ID作为唯一标志",dataType = "String",required = true,defaultValue = "2C9580916F5F3CD5016F5F3DA6DD0001")
     })
     @RequestMapping(value={"/getPageImage"},method=RequestMethod.GET)
-    public RETResultUtils<PageImageRes> getPageImage(@RequestParam(value = "appId" , defaultValue = "wx656a00824f784088" ) String appId  ,
-                                              @RequestParam(value = "pageId" , defaultValue = "2C9580916F5F3CD5016F5F3DA6DD0001") String pageId ){
-        PageImage pageImage = pageImageService.getByAppId(appId,pageId);
-        if(pageImage == null)
-            return RETResultUtils._506("未查询到对应页面图片配置信息") ;
-        PageImageRes pageImageRes = new PageImageRes();
-        BeanUtils.copyProperties(pageImage,pageImageRes);
-        return new RETResultUtils(pageImageRes);
+    public RELResultUtils<PageImageRes> getPageImage(@RequestParam(value = "appId" , defaultValue = "wx656a00824f784088" ) String appId  ,
+                                                     @RequestParam(value = "pageId" , defaultValue = "2C9580916F5F3CD5016F5F3DA6DD0001") String pageId ){
+        List<PageImage> pageImages = pageImageService.getByAppId(appId,pageId);
+        if(CollectionUtils.isEmpty(pageImages))
+            return RELResultUtils._506("未查询到对应页面图片配置信息") ;
+        List<PageImageRes> pageImageReses = new ArrayList<PageImageRes>();
+        for(PageImage pageImage : pageImages){
+            PageImageRes pageImageRes = new PageImageRes();
+            BeanUtils.copyProperties(pageImage,pageImageRes);
+            pageImageReses.add(pageImageRes);
+        }
+        return new RELResultUtils(pageImageReses);
     }
 
 

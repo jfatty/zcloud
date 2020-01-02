@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface PageElementMapper extends IBaseMapper<PageElement> {
 
-    List<PageElement> getElementsByPageId(@Param("pageId") String pageId);
+    List<PageElement> getElementsByPageId(@Param("appId") String appId,@Param("pageId") String pageId);
 }

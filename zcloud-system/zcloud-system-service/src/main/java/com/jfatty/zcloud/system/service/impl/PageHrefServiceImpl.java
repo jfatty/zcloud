@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 界面链接跳转开发配置 服务实现类
@@ -26,5 +28,10 @@ public class PageHrefServiceImpl extends BaseSystemServiceImpl<PageHref,PageHref
     public void setPageHrefMapper(PageHrefMapper pageHrefMapper) {
         super.setBaseMapper(pageHrefMapper);
         this.pageHrefMapper = pageHrefMapper;
+    }
+
+    @Override
+    public List<PageHref> getPageHrefsByIds(String appId, String pageId) {
+        return pageHrefMapper.getPageHrefsByIds(appId,pageId);
     }
 }

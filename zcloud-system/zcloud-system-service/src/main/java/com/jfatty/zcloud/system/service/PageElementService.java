@@ -15,4 +15,6 @@ import java.util.List;
 public interface PageElementService extends BaseSystemService<PageElement> {
 
     List<PageElement> getElementsByPageId(String pageId);
+
+    List<PageElement> getElementsByPageId(String appId,String pageId);
 }

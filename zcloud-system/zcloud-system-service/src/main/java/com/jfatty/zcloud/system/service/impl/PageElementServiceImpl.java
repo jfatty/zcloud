@@ -32,6 +32,11 @@ public class PageElementServiceImpl extends BaseSystemServiceImpl<PageElement, P
 
     @Override
     public List<PageElement> getElementsByPageId(String pageId) {
-        return pageElementMapper.getElementsByPageId(pageId);
+        return pageElementMapper.getElementsByPageId(null,pageId);
+    }
+
+    @Override
+    public List<PageElement> getElementsByPageId(String appId, String pageId) {
+        return pageElementMapper.getElementsByPageId(appId,pageId);
     }
 }

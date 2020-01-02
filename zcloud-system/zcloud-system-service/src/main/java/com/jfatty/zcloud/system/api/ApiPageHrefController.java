@@ -1,18 +1,28 @@
 package com.jfatty.zcloud.system.api;
 
 
+import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.system.entity.PageHref;
 import com.jfatty.zcloud.system.interfaces.IPageHref;
 import com.jfatty.zcloud.system.req.PageHrefReq;
 import com.jfatty.zcloud.system.res.PageHrefRes;
 import com.jfatty.zcloud.system.service.PageHrefService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -34,6 +44,26 @@ public class ApiPageHrefController  extends ApiBaseSystemController<PageHref,Pag
     public void setPageHrefService(PageHrefService pageHrefService) {
         super.setBaseService(pageHrefService);
         this.pageHrefService = pageHrefService;
+    }
+
+    @ApiOperation(value="通过 页面标识ID 获取界面链接跳转开发配置数组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",required = true ,dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "pageId", value = "页面标识ID",dataType = "String",required = true ,defaultValue = "2C9580916F63C65D016F63CC78410001")
+    })
+    @RequestMapping(value = {"/getPageHrefsByIds"} ,method = RequestMethod.GET)
+    public RELResultUtils<PageHrefRes> getPageHrefsByIds(@RequestParam(value = "appId" , required = true ,defaultValue = "wxe3336a60d2685379" ) String appId  ,//
+                                                          @RequestParam(value = "pageId" , required = true, defaultValue = "2C9580916F63C65D016F63CC78410001") String pageId){
+        List<PageHref> herfs = pageHrefService.getPageHrefsByIds(appId,pageId);
+        if( CollectionUtils.isEmpty(herfs) )
+            return  RELResultUtils.success(pageId + "尚未配置界面链接");
+        List<PageHrefRes> pageHrefReses = new ArrayList<PageHrefRes>();
+        for (PageHref href : herfs){
+            PageHrefRes pageHrefRes = new PageHrefRes();
+            BeanUtils.copyProperties(href,pageHrefRes);
+            pageHrefReses.add(pageHrefRes);
+        }
+        return new RELResultUtils(pageHrefReses);
     }
 
 }

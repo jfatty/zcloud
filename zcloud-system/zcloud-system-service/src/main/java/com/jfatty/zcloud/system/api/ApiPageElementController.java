@@ -2,11 +2,9 @@ package com.jfatty.zcloud.system.api;
 
 
 import com.jfatty.zcloud.base.utils.ResultUtils;
-import com.jfatty.zcloud.system.entity.Dictionary;
 import com.jfatty.zcloud.system.entity.PageElement;
 import com.jfatty.zcloud.system.interfaces.IPageElement;
 import com.jfatty.zcloud.system.req.PageElementReq;
-import com.jfatty.zcloud.system.res.DictionaryRes;
 import com.jfatty.zcloud.system.res.DictionarySimRes;
 import com.jfatty.zcloud.system.res.PageElementMenuRes;
 import com.jfatty.zcloud.system.res.PageElementRes;
@@ -62,6 +60,28 @@ public class ApiPageElementController  extends ApiBaseSystemController<PageEleme
     @RequestMapping(value = {"/getPageElements"} ,method = RequestMethod.GET)
     public ResultUtils getPageElements(@RequestParam(value = "pageId" , required = true, defaultValue = "402881906F150C8F016F150C8F7C0000") String pageId){
         List<PageElement> elements = pageElementService.getElementsByPageId(pageId);
+        if( CollectionUtils.isEmpty(elements) )
+            return  ResultUtils.success(pageId + "尚未配置界面标签元素");
+        Map<String,Object> map = new HashMap<String,Object>();
+        for (PageElement elem : elements){
+            PageElementMenuRes pageElementMenu = new PageElementMenuRes();
+            BeanUtils.copyProperties(elem,pageElementMenu);
+            List<DictionarySimRes> dicts = dictionaryService.getByDictionaryMenu(elem.getDictionaryMenu());
+            pageElementMenu.setDicts(dicts);
+            map.put(elem.getElemId(),pageElementMenu);
+        }
+        return ResultUtils.success(map);
+    }
+
+    @ApiOperation(value="通过 AppId 页面标识ID 获取界面标签元素数组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",required = true ,dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "pageId", value = "页面标识ID",dataType = "String",required = true ,defaultValue = "402881906F150C8F016F150C8F7C0000")
+    })
+    @RequestMapping(value = {"/getPageElementsByIds"} ,method = RequestMethod.GET)
+    public ResultUtils getPageElementsByIds(@RequestParam(value = "appId" ,  required = true, defaultValue = "wxe3336a60d2685379" ) String appId  ,//
+                                       @RequestParam(value = "pageId" , required = true, defaultValue = "402881906F150C8F016F150C8F7C0000") String pageId){
+        List<PageElement> elements = pageElementService.getElementsByPageId(appId,pageId);
         if( CollectionUtils.isEmpty(elements) )
             return  ResultUtils.success(pageId + "尚未配置界面标签元素");
         Map<String,Object> map = new HashMap<String,Object>();
