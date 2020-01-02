@@ -127,7 +127,7 @@ public class ApiAlipayServiceWindowController {
                 log.debug("accessToken  ====>" + oauthTokenResponse.getAccessToken());
                 log.error(" alipayOpenId 存入当前会话 ====>"+oauthTokenResponse.getUserId());
                 session.setAttribute("alipayOpenId", oauthTokenResponse.getUserId());
-                page = page + "?code=" + auth_code + "&version=1.0.0" ;
+                page = page + "?code=" + auth_code + "&version=4.0.0" ;
                 log.error("支付宝认证成功之后重定向页面路径====>"+page);
                 response.sendRedirect(page);
             }else {
