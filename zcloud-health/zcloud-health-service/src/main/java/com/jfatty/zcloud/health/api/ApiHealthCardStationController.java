@@ -197,8 +197,9 @@ public class ApiHealthCardStationController {
             }else {
                 hcsidCardInfoService.updateById(db_hcsidCardInfo);
             }
+            HCSIDCardInfo up_hcsidCardInfo = hcsidCardInfoService.getById(hcsidCardInfoVO.getId());
             HCSIDCardInfoRes hcsidCardInfoRes = new HCSIDCardInfoRes();
-            BeanUtils.copyProperties(hcsidCardInfoVO,hcsidCardInfoRes);
+            BeanUtils.copyProperties(up_hcsidCardInfo,hcsidCardInfoRes);
             return new RETResultUtils(hcsidCardInfoRes) ;
         } catch (Exception e) {
             log.error("hospitalId==>[{}] 调用OCR接口异常[{}]",hospitalId,e.getMessage());
