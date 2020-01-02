@@ -35,9 +35,6 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     private HealthCardSettingsMapper healthCardSettingsMapper ;
 
     @Autowired
-    private HCSIDCardInfoMapper hcsidCardInfoMapper ;
-
-    @Autowired
     public void setHealthCardSettingsMapper(HealthCardSettingsMapper healthCardSettingsMapper) {
         super.setBaseMapper(healthCardSettingsMapper);
         this.healthCardSettingsMapper = healthCardSettingsMapper;
@@ -84,9 +81,6 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         CommonIn commonIn = new CommonIn(settings.getAppToken(), settings.getRequestId(), settings.getHospitalId());
         IDCardInfo idCardInfo = healthCard.ocrInfo(commonIn,imageContent);
         log.error("orc身份证图片数据获取 [{}]",idCardInfo.getId());
-        HCSIDCardInfo hcsidCardInfo = new HCSIDCardInfo();
-        BeanUtils.copyProperties(idCardInfo,hcsidCardInfo);
-        hcsidCardInfoMapper.insert(hcsidCardInfo);
         HCSIDCardInfoVO hcsidCardInfoVO = new HCSIDCardInfoVO();
         BeanUtils.copyProperties(idCardInfo,hcsidCardInfoVO);
         return hcsidCardInfoVO;
