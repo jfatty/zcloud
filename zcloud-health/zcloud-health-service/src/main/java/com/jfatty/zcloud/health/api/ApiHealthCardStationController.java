@@ -114,6 +114,8 @@ public class ApiHealthCardStationController {
             RegHealthCardInfoRes regHealthCardInfoRes = new RegHealthCardInfoRes();
             HCSHealthCardInfoReq hcsHealthCardInfoReq = new HCSHealthCardInfoReq();
             BeanUtils.copyProperties(regHealthCardInfoReq,hcsHealthCardInfoReq);
+
+            hcsHealthCardInfoReq.setIdType("01");
             hcsHealthCardInfoReq.setGender(gender);
             hcsHealthCardInfoReq.setBirthday(birthday);
             hcsHealthCardInfoReq.setNation(nas[0]);
@@ -241,7 +243,7 @@ public class ApiHealthCardStationController {
         return RETResultUtils.faild("网络异常!请稍后重试");
     }
 
-    @ApiOperation(value=" 006**** 3.2.8 获取卡包订单  ID接口")
+    @ApiOperation(value=" 006****  3.2.8 获取卡包订单  ID接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
             @ApiImplicitParam(name = "qrCodeText", value = "二维码文本",dataType = "String",defaultValue = "C7DA29345B6DF90A6F5BBEBD73EBE2EDA26F341A6CFEEEB121XXX:1")
