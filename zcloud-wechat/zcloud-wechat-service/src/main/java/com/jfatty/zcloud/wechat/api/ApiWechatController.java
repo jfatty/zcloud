@@ -112,7 +112,7 @@ public class ApiWechatController {
     public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
                                @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ,HttpServletRequest request){
         HttpSession session = request.getSession();
-        log.error(" ====>  当前微信公众 appId [{}] sessionId ",appId,session.getId());
+        log.error(" ====>  当前微信公众 appId [{}] sessionId [{}]",appId,session.getId());
         String openId =(String) session.getAttribute("openId");
         if(StringUtils.isNotEmptyAndBlank(openId)){
             log.error(" ====>  当前微信公众 appId [{}] 获取openId [{}]",appId,openId);
