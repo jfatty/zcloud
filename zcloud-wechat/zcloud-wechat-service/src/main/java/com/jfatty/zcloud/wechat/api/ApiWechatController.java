@@ -115,6 +115,7 @@ public class ApiWechatController {
         HttpSession session = request.getSession();
         String openId =(String) session.getAttribute("openId");
         if(StringUtils.isNotEmptyAndBlank(openId)){
+            log.error(" ====>  当前微信公众 appId [{}] 获取openId [{}]",appId,openId);
             return ResultUtils.build(200, "SUCCESS",openId) ;
         }
         Account mpAccount = accountService.getByAppId(appId);
