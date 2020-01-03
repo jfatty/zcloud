@@ -53,8 +53,9 @@ public class ApiAlipayServiceWindowController {
     @RequestMapping(value="/alipay/OAuth", method= { RequestMethod.GET,RequestMethod.POST } )
     @ResponseBody
     public ResultUtils aliOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
-                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ){
-        log.error(" ====>  当前支付宝生活号 appId [{}] ",appId);
+                               @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        log.error(" ====>  当前支付宝生活号 appId [{}] sessionId [{}]",appId,session.getId());
         try {
             AlipayAuthCode alipayAuthCode = alipayAuthCodeService.getByAuthCode(code,appId);
             log.error(" ====>  通过当支付宝生活号 appId  [{}] 获取到的 alipayOpenId [{}]",appId,alipayAuthCode.getId());
