@@ -202,14 +202,12 @@ public class ApiHealthCardStationController {
             }
             HCSIDCardInfo up_hcsidCardInfo = hcsidCardInfoService.getById(hcsidCardInfoVO.getId());
             HCSIDCardInfoRes hcsidCardInfoRes = new HCSIDCardInfoRes();
-
+            BeanUtils.copyProperties(up_hcsidCardInfo,hcsidCardInfoRes);
             //改变名族为字典
             String nation = hcsidCardInfoRes.getNation();
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsidCardInfoRes.setIdCard(IDCardUtil.coverStarts(hcsidCardInfoRes.getIdCard(),8,14));
             hcsidCardInfoRes.setNation(nationDic);
-
-            BeanUtils.copyProperties(up_hcsidCardInfo,hcsidCardInfoRes);
             return new RETResultUtils(hcsidCardInfoRes) ;
         } catch (Exception e) {
             log.error("hospitalId==>[{}] 调用OCR接口异常[{}]",hospitalId,e.getMessage());
