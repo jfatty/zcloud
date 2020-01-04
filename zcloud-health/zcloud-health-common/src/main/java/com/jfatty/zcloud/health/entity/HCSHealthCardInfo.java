@@ -3,6 +3,7 @@ package com.jfatty.zcloud.health.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -101,6 +102,15 @@ public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
      * 扩展字段
      */
     private String adminExt;
+
+    //用户openId微信服务号用户唯一标识
+    private String openId;
+
+    //微信跳转链接 模板消息的URL，即服务号健康卡列表页面的URL
+    private String wechatUrl;
+
+    //电子健康卡详情展示跳转地址
+    private String detailUrl ;
 
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...

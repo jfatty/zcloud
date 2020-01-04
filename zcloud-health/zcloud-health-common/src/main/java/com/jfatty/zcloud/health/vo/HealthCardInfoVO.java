@@ -14,6 +14,7 @@ import java.io.Serializable;
 @Data
 public class HealthCardInfoVO implements Serializable {
 
+
     /**
      * 姓名
      */
@@ -103,5 +104,14 @@ public class HealthCardInfoVO implements Serializable {
      */
     //@ApiModelProperty(name = "adminExt", position = 0, value = "扩展字段",example = "{\"qr_code\":\"C220AE414CE6EE581037C311AE24518FCFE19C429BECD478C1A13976260FXXXX:1\",\"ecardId\":\"C220AE414CE6EE581037C311AE24518FCFE19C429BECD478C1A13976260FXXXX\",\"main_index\":\"584AF4B1D110B8BB7CBAC978C03B657191DF84863144E436B5CA38C0F0E2XXXX\",\"id_type\":\"居民身份证\",\"id_number\":\"身份证号码\",\"name\":\"姓名\",\"sex\":\"性别\",\"birthday\":\\\"1998-09-08\",\"telephone\":\"手机号码\",\"nation\":\"民族\",\"unit\":\"null\",\"address\":\"地址\"}")
     private String adminExt;
+
+
+    //用户openId微信服务号用户唯一标识
+    @ApiModelProperty(name = "openId", position = 0, value = "用户openId微信服务号用户唯一标识",example = "C220AE414CE6EE581037C311AE")
+    private String openId;
+
+    //微信跳转链接 模板消息的URL，即服务号健康卡列表页面的URL
+    @ApiModelProperty(name = "wechatUrl", position = 0, value = "微信跳转链接 模板消息的URL，即服务号健康卡列表页面的URL",example = "http://www.baidu.com")
+    private String wechatUrl;
 
 }

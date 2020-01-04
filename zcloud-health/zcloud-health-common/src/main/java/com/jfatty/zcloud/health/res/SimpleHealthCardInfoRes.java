@@ -34,5 +34,8 @@ public class SimpleHealthCardInfoRes extends HCSHealthCardInfoDTO<SimpleHealthCa
     @ApiModelProperty(name = "qrCodeText", position = 0, value = "二维码文本",required = true ,example = "E1D10AAC73D0B947060B099128732C969A6EF97A6014BF41B3D19EEF9A4FBB18:1")
     private String qrCodeText;
 
+    @ApiModelProperty(name = "detailUrl", position = 0, value = "电子健康卡详情展示跳转地址",required = true ,example = "")
+    private String detailUrl ;
+
 
 }
