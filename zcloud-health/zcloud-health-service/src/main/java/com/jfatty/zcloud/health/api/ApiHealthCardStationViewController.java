@@ -91,6 +91,7 @@ public class ApiHealthCardStationViewController {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("001****通过健康卡授权码获取用户健康卡信息接口 3.2.3 通过健康卡授权码获取接口 出现异常[{}]",e.getMessage());
         }
     }
 
@@ -121,8 +122,17 @@ public class ApiHealthCardStationViewController {
             response.sendRedirect(path);
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("002****通过医院ID与健康卡信息记录ID(系统健康卡ID)跳转至电子健康卡详情页面 出现异常[{}]",e.getMessage());
         }
     }
+
+
+//    流程说明
+//    1、用户进入服务号打开健康卡二维码，点击二维码下方的进入卡包Button；
+//    2、ISV调用 获取卡包订单ID接口，获取并缓存订单ID(orderId)；
+//    3、ISV使用orderId配置跳转领取卡包的URL https://health.tengmed.com/open/takeMsCard?order_id=${orderId}&redirect_uri=${redirect_uri}，其中${orderId}是orderId值，${redirect_uri}是在领取卡包页面点击返回时，回跳到ISV页面的URL，如果是服务号打开，则必须包含 https:// 或 http:// 前缀；如果是小程序的webview打开，则${redirect_uri}指返回小程序的页面路径（如page/index，如果返回跳转来的页面，写为back就行）；服务号与小程序打开都必须要对${redirect_uri}进行编码。
+//    4、开放平台根据orderId判断用户是否已领卡包，如果没有，则由卫健委服务号创建，用户点击领取；如果已领，则直接展示；
+//    5、用户在微信卡包中查看电子健康卡。
 
     //加入微信卡包 addWechatPack
     @ApiOperation(value=" 003**** 用户点击 加入微信卡包 跳转至微信卡包电子健康卡领取页面",tags = "注意：页面自动跳转,页面加载时获取URL路径中携带的参数")
@@ -133,27 +143,27 @@ public class ApiHealthCardStationViewController {
     @RequestMapping(value="/{hospitalId}/addWechatPack", method=RequestMethod.GET)
     public void addWechatPack(@PathVariable("hospitalId") String hospitalId , @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000") String healthCardInfoId, HttpServletResponse response){
         try {
-            HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
             HCSHealthCardInfo hcsHealthCardInfo = hcsHealthCardInfoService.getById(healthCardInfoId);
-
-
-
+            String orderId = healthCardStationService.getOrderIdByOutAppId(hospitalId,hcsHealthCardInfo.getQrCodeText()) ;
+            HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
             BeanUtils.copyProperties(hcsHealthCardInfo,hcsHealthCardInfoRes);
             //改变名族为字典
             String nation = hcsHealthCardInfoRes.getNation();
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
             hcsHealthCardInfoRes.setNation(nationDic);
-
             String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
             String params = getPostParams(hcsHealthCardInfoRes);
             params = URLEncoder.encode(params,"UTF-8");
             log.error("编码后的URL参数[{}]",params);
             path = path + "?" + params ;
+            String redirect_uri  = String.format("https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=$s",orderId,path) ;
+            log.error("加入微信卡包的重定向URL参数[{}]",params);
             //去健康卡详情页面
             response.sendRedirect(path);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            log.error("003**** 用户点击 加入微信卡包 跳转至微信卡包电子健康卡领取页面 出现异常[{}]",e.getMessage());
         }
     }
 
