@@ -9,7 +9,6 @@ import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.health.vo.ReportHISDataVO;
-import com.tencent.healthcard.impl.HealthCardServerImpl;
 import com.tencent.healthcard.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * 描述
@@ -53,7 +50,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         log.error("判断appToken是否超时===>[{}]",dis);
         if ( StringUtils.isEmptyOrBlank(settings.getAppToken()) || dis > 0  ){ //或者超时
             //创建健康卡实例，传入appSecret
-            HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+            //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+            HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
             CommonIn commonIn=new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
             //调用接口appId
 
@@ -78,7 +76,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     public HCSIDCardInfoVO ocrInfo(String hospitalId,String imageContent) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         //创建健康卡实例，传入appSecret
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         //创建【公共输入参数commonIn】实例
         CommonIn commonIn = new CommonIn(settings.getAppToken(), settings.getRequestId(), settings.getHospitalId());
         IDCardInfo idCardInfo = healthCard.ocrInfo(commonIn,imageContent);
@@ -96,12 +95,12 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
-        HealthCardInfo healthCardInfoR = new HealthCardInfo();
+        com.jfatty.zcloud.health.model.HealthCardInfo  healthCardInfoR = new com.jfatty.zcloud.health.model.HealthCardInfo ();
         BeanUtils.copyProperties(hcsHealthCardInfoReq,healthCardInfoR);
         /************************************************************/
         healthCardInfoR.setWechatCode(settings.getWechatCode());
         /************************************************************/
-        HealthCardInfo hInfo = healthCard.registerHealthCard(commonIn,healthCardInfoR);
+        com.jfatty.zcloud.health.model.HealthCardInfo  hInfo = healthCard.registerHealthCard(commonIn,healthCardInfoR);
         System.out.println("腾讯返回===================>"+hInfo.getPhid());
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
@@ -112,9 +111,10 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public HealthCardInfoVO getHealthCardByHealthCode(String hospitalId, String healthCode) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
-        HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode);
+        com.jfatty.zcloud.health.model.HealthCardInfo hInfo = healthCard.getHealthCardByHealthCode(commonIn,healthCode);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
         /************************************************************/
@@ -126,9 +126,10 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public HealthCardInfoVO getHealthCardByQRCode(String hospitalId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
-        HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText);
+        com.jfatty.zcloud.health.model.HealthCardInfo hInfo = healthCard.getHealthCardByQRCode(commonIn,qrCodeText);
         HealthCardInfoVO healthCardInfoVO = new HealthCardInfoVO();
         BeanUtils.copyProperties(hInfo,healthCardInfoVO);
         /************************************************************/
@@ -141,7 +142,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public Boolean bindCardRelation(String hospitalId, String patId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.bindCardRelation(commonIn,patId,qrCodeText).getBoolean("result");
     }
@@ -149,7 +151,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public void reportHISData(String hospitalId, ReportHISDataVO reportHISData) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         ReportHISData reportHIS = new ReportHISData();
         BeanUtils.copyProperties(reportHISData,reportHIS);
@@ -160,13 +163,14 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     public String getOrderIdByOutAppId(String hospitalId, String qrCodeText) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         String appId = settings.getAppid();
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         return healthCard.getOrderIdByOutAppId(commonIn,appId,qrCodeText);
     }
 
     @Override
-    public List<HealthCardInfo> registerBatchHealthCard(String hospitalId, List<HealthCardInfo> healthCardInfos) throws Exception {
+    public List<com.jfatty.zcloud.health.model.HealthCardInfo> registerBatchHealthCard(String hospitalId, List<com.jfatty.zcloud.health.model.HealthCardInfo> healthCardInfos) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
         HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
@@ -177,7 +181,8 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
     @Override
     public DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber) throws Exception {
         HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
-        HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
         DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber);
         DynamicQRCodeVO dynamicQRCodeVO = new DynamicQRCodeVO();

@@ -202,6 +202,13 @@ public class ApiHealthCardStationController {
             }
             HCSIDCardInfo up_hcsidCardInfo = hcsidCardInfoService.getById(hcsidCardInfoVO.getId());
             HCSIDCardInfoRes hcsidCardInfoRes = new HCSIDCardInfoRes();
+
+            //改变名族为字典
+            String nation = hcsidCardInfoRes.getNation();
+            String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
+            hcsidCardInfoRes.setIdCard(IDCardUtil.coverStarts(hcsidCardInfoRes.getIdCard(),8,14));
+            hcsidCardInfoRes.setNation(nationDic);
+
             BeanUtils.copyProperties(up_hcsidCardInfo,hcsidCardInfoRes);
             return new RETResultUtils(hcsidCardInfoRes) ;
         } catch (Exception e) {
@@ -274,11 +281,11 @@ public class ApiHealthCardStationController {
 
             List<WebRegPatientRes> webRegPatientList = resultUtils.getData();
 
-            List<HealthCardInfo> healthCardInfos = new ArrayList<HealthCardInfo>();
+            List<com.jfatty.zcloud.health.model.HealthCardInfo> healthCardInfos = new ArrayList<com.jfatty.zcloud.health.model.HealthCardInfo>();
 
             int flag = 1 ;
             for (WebRegPatientRes item : webRegPatientList) {
-                HealthCardInfo healthCardInfoItem = new HealthCardInfo();
+                com.jfatty.zcloud.health.model.HealthCardInfo healthCardInfoItem = new com.jfatty.zcloud.health.model.HealthCardInfo();
                 String idCard = item.getSfzh() ;
                 IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
                 String gender = idCardUtil.getGender() ;
@@ -312,7 +319,7 @@ public class ApiHealthCardStationController {
             healthCardInfos = healthCardStationService.registerBatchHealthCard(hospitalId,healthCardInfos);
             List<RegBatHealthCardInfoRes> regBatHealthCardInfos = new ArrayList<RegBatHealthCardInfoRes>();
 
-            for ( HealthCardInfo healthCardInfo :  healthCardInfos ){
+            for ( com.jfatty.zcloud.health.model.HealthCardInfo healthCardInfo :  healthCardInfos ){
                 RegBatHealthCardInfoRes info = new RegBatHealthCardInfoRes();
                 BeanUtils.copyProperties(healthCardInfo,info);
                 regBatHealthCardInfos.add(info);
@@ -368,10 +375,16 @@ public class ApiHealthCardStationController {
         try {
             List<String> healthCardInfoIds = healthCardUserService.getByOpenId(simpleHealthCardInfoReq.getOpenId(),simpleHealthCardInfoReq.getOpenIdType());
             if (CollectionUtils.isEmpty(healthCardInfoIds))
-                return RELResultUtils._506("您暂无电子健康卡");
+                return RELResultUtils._506("您暂无电子健康卡E0");
             List<HCSHealthCardInfo> hcsHealthCardInfos = hcsHealthCardInfoService.getBatchHealthCardByInfoIds(healthCardInfoIds,simpleHealthCardInfoReq.getHospitalId());
+            if(CollectionUtils.isEmpty(hcsHealthCardInfos))
+                return RELResultUtils._506("您暂无电子健康卡E1");
             List<SimpleHealthCardInfoRes> resList = new ArrayList<SimpleHealthCardInfoRes>();
-            BeanUtils.copyProperties(hcsHealthCardInfos,resList);
+            for (HCSHealthCardInfo healthCardInfo : hcsHealthCardInfos ){
+                SimpleHealthCardInfoRes simpleHealthCardInfoRes = new SimpleHealthCardInfoRes();
+                BeanUtils.copyProperties(healthCardInfo,simpleHealthCardInfoRes);
+                resList.add(simpleHealthCardInfoRes);
+            }
             return new RELResultUtils(resList);
         } catch (Exception e) {
             log.error("009**** 电子健康卡列表获取 出现异常[{}]",e.getMessage());

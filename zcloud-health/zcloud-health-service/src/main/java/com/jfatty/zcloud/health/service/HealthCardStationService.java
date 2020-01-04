@@ -6,7 +6,7 @@ import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
 import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.health.vo.ReportHISDataVO;
-import com.tencent.healthcard.model.HealthCardInfo;
+import com.jfatty.zcloud.health.model.HealthCardInfo;
 
 import java.util.List;
 

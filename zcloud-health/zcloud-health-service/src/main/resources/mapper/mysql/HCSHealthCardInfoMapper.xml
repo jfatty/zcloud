@@ -21,6 +21,9 @@
         <result column="qr_code_text" property="qrCodeText" />
         <result column="health_card_id" property="healthCardId" />
         <result column="admin_ext" property="adminExt" />
+        <result column="open_id" property="openId" />
+        <result column="wechat_url" property="wechatUrl" />
+        <result column="detail_url" property="detailUrl" />
         <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />

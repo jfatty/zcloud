@@ -1,7 +1,6 @@
 package com.jfatty.zcloud.health.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tencent.healthcard.AbstractHealthCardServer;
 import com.tencent.healthcard.model.*;
 import com.tencent.healthcard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,7 @@ import java.util.*;
  * @email jfatty@163.com
  */
 @Slf4j
-public class HealthCardClientServiceImpl extends AbstractHealthCardServer {
+public class HealthCardClientServiceImpl extends AbstractHealthCardServiceServer {
 
 
     private String secret;
@@ -40,7 +39,7 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServer {
     }
 
     @Override
-    public HealthCardInfo registerHealthCard(CommonIn commonIn, HealthCardInfo healthCardInfo) {
+    public com.jfatty.zcloud.health.model.HealthCardInfo registerHealthCard(CommonIn commonIn, com.jfatty.zcloud.health.model.HealthCardInfo healthCardInfo) {
         String reqJson = CommonUtil.packParam(this.secret, commonIn, healthCardInfo);
         JSONObject jsonObject = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/registerHealthCard", reqJson);
         healthCardInfo.setQrCodeText(jsonObject.getString("qrCodeText"));
@@ -50,21 +49,21 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServer {
     }
 
     @Override
-    public HealthCardInfo getHealthCardByHealthCode(CommonIn commonIn, String healthCode) {
+    public com.jfatty.zcloud.health.model.HealthCardInfo getHealthCardByHealthCode(CommonIn commonIn, String healthCode) {
         Map<String, Object> param = new TreeMap();
         param.put("healthCode", healthCode);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
         JSONObject cardObj = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/getHealthCardByHealthCode", reqJson).getJSONObject("card");
-        return (HealthCardInfo)cardObj.toJavaObject(HealthCardInfo.class);
+        return (com.jfatty.zcloud.health.model.HealthCardInfo)cardObj.toJavaObject(com.jfatty.zcloud.health.model.HealthCardInfo.class);
     }
 
     @Override
-    public HealthCardInfo getHealthCardByQRCode(CommonIn commonIn, String qrCodeText) {
+    public com.jfatty.zcloud.health.model.HealthCardInfo getHealthCardByQRCode(CommonIn commonIn, String qrCodeText) {
         Map<String, Object> param = new TreeMap();
         param.put("qrCodeText", qrCodeText);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
         JSONObject cardObj = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/getHealthCardByQRCode", reqJson).getJSONObject("card");
-        return (HealthCardInfo)cardObj.toJavaObject(HealthCardInfo.class);
+        return (com.jfatty.zcloud.health.model.HealthCardInfo)cardObj.toJavaObject(com.jfatty.zcloud.health.model.HealthCardInfo.class);
     }
 
     @Override
@@ -116,14 +115,14 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServer {
     }
 
     @Override
-    public List<HealthCardInfo> registerBatchHealthCard(CommonIn commonIn, List<HealthCardInfo> healthCardInfos) {
+    public List<com.jfatty.zcloud.health.model.HealthCardInfo> registerBatchHealthCard(CommonIn commonIn, List<com.jfatty.zcloud.health.model.HealthCardInfo> healthCardInfos) {
         Map<String, Object> param = new TreeMap();
         param.put("healthCardInfos", healthCardInfos);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
 
         JSONObject obj = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/registerBatchHealthCard", reqJson);
         System.out.println(obj.toJSONString());
-        List<HealthCardInfo> infoList = obj.getJSONArray("rspItems").toJavaList(HealthCardInfo.class);
+        List<com.jfatty.zcloud.health.model.HealthCardInfo> infoList = obj.getJSONArray("rspItems").toJavaList(com.jfatty.zcloud.health.model.HealthCardInfo.class);
         Map<String, HealthCardInfo> infoMap = new HashMap();
         Iterator iterator = infoList.iterator();
 
