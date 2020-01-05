@@ -6,4 +6,8 @@
     <select id="getRegisteredInfo" resultType="com.jfatty.zcloud.hospital.entity.RegisteredInfo">
         select yybh AS id , xm As name , sfzhm AS idCard , yjzrq AS preTreatTime FROM dbo.gh_yyxx WHERE 1=1 AND xm = #{name} AND sfzhm = #{idCard} AND  yjzrq >= getDate() AND qxrq IS NULL AND jzh IS NULL
     </select>
+
+    <select id="appointmentRecord" resultType="com.jfatty.zcloud.hospital.vo.AppointmentRecord">
+        exec dbo.pro_web_mzyyjl #{openId},#{openIdType},#{brid},#{beginTime},#{endTime},'','',''
+    </select>
 </mapper>

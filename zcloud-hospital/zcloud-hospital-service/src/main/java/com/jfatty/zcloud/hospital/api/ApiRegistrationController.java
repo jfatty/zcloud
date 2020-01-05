@@ -3,11 +3,10 @@ package com.jfatty.zcloud.hospital.api;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.hospital.entity.RegisteredInfo;
-import com.jfatty.zcloud.hospital.req.HosClazzReq;
-import com.jfatty.zcloud.hospital.req.HosDeptReq;
-import com.jfatty.zcloud.hospital.req.HosHolidayReq;
-import com.jfatty.zcloud.hospital.req.PreRegisteredReq;
+import com.jfatty.zcloud.hospital.req.*;
+import com.jfatty.zcloud.hospital.res.AppointmentRecordRes;
 import com.jfatty.zcloud.hospital.res.HosClazzRes;
 import com.jfatty.zcloud.hospital.res.HosDeptRes;
 import com.jfatty.zcloud.hospital.res.PreRegisteredRes;
@@ -129,6 +128,51 @@ public class ApiRegistrationController {
             e.printStackTrace();
         }
         return new RETResultUtils(500,"网络异常,请稍后重试") ;
+    }
+
+    @ApiOperation(value="005****挂号记录*****")
+    @RequestMapping(value = {"/appointmentRecord"} ,method = RequestMethod.POST)
+    public RELResultUtils<AppointmentRecordRes> appointmentRecord(@RequestBody AppointmentRecordReq appointmentRecordReq ){
+        String openId = appointmentRecordReq.getOpenId() ;
+        Integer openIdType = appointmentRecordReq.getOpenIdType() ;
+        String brid = appointmentRecordReq.getBrid() ;
+        if (StringUtils.isEmptyOrBlank(brid)) {
+            //
+            List<WebRegPatient> list = complexPatientService.getWebRegList(openId, openIdType);
+            WebRegPatient webRegPatient = null ;
+            if(!CollectionUtils.isEmpty(list)){
+                webRegPatient = list.get(0) ;
+                if ( !(webRegPatient.success()) ){
+                    String msg = webRegPatient.getMsg() ;
+                    if (msg.contains("未找到有效"))
+                        return RELResultUtils._506("请先添加就诊人!") ;
+                    return RELResultUtils._506(msg);
+                }
+                //String defaultPat = "" ;
+                NumoUserInfo userInfo = complexPatientService.getNumoUserInfo(openId,openIdType);
+                if (userInfo != null && StringUtils.isNotEmptyAndBlank(userInfo.getDefaultPat())){
+                    brid = userInfo.getDefaultPat();
+                }else {
+                    brid = webRegPatient.getBrid();
+                }
+            }
+        }
+        if (StringUtils.isEmptyOrBlank(brid))
+            return RELResultUtils._506("请先添加就诊人!") ;
+        List<AppointmentRecord> appointmentRecords = registeredInfoService.appointmentRecord(openId,openIdType,brid,"2018-01-03","2021-10-03");
+        if( !CollectionUtils.isEmpty(appointmentRecords) ){
+            if ( !(appointmentRecords.get(0).success()) )
+                return RELResultUtils._506(appointmentRecords.get(0).getMsg());
+            List<AppointmentRecordRes> appointmentRecordReses = new ArrayList<AppointmentRecordRes>();
+            for ( AppointmentRecord appointmentRecord : appointmentRecords ) {
+                AppointmentRecordRes  appointmentRecordRes = new AppointmentRecordRes();
+                BeanUtils.copyProperties(appointmentRecord,appointmentRecordRes);
+                appointmentRecordReses.add(appointmentRecordRes);
+            }
+            return new RELResultUtils(appointmentRecordReses);
+        }
+        return RELResultUtils._506("暂无挂号记录");
+
     }
 
 }

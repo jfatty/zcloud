@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Import;
 @Import({DynamicDataSourceRegister.class}) // 注册动态多数据源
 @EnableDiscoveryClient
 @ComponentScan("com.jfatty.zcloud")
-public class ZcloudHospitalServiceApplication {
+public class  ZcloudHospitalServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(ZcloudHospitalServiceApplication.class, args);

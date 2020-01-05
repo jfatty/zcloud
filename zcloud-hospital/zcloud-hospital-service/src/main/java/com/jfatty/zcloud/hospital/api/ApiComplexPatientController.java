@@ -99,6 +99,16 @@ public class ApiComplexPatientController {
         boolean res = false;
         String openId = numoPatientInfoReq.getOpenId() ;
         Integer openIdType = numoPatientInfoReq.getOpenIdType() ;
+        if( StringUtils.isEmptyOrBlank( openId ) )
+            return RETResultUtils._509("openId不能为空");
+        //判断就诊人数量是否超标
+        NumoUserInfo userInfo = complexPatientService.getNumoUserInfo(openId,openIdType);
+        if (userInfo != null) {
+            Integer bindMax = userInfo.getBindMax()==null?5:userInfo.getBindMax() ;
+            Integer bindNum = userInfo.getBindNum()==null?0:userInfo.getBindNum() ;
+            if ( bindMax == bindNum )
+                return RETResultUtils._506("您当前绑定的就诊人数已经达到上限");
+        }
         String idCard = null;
         String gender = null;
         try {
