@@ -11,7 +11,6 @@ import com.jfatty.zcloud.hospital.service.AlipayConfigService;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
 import com.jfatty.zcloud.hospital.service.WepayConfigService;
 import com.jfatty.zcloud.hospital.vo.ComplexPay;
-import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -52,7 +51,7 @@ public class ApiPayNotifyController {
     private AlipayConfigService alipayConfigService ;
 
     @Autowired
-    private WechatFeignClient wechatFeignClient ;
+    //private WechatFeignClient wechatFeignClient ;
 
     /**
      * @Description 微信支付回调接口
@@ -115,7 +114,7 @@ public class ApiPayNotifyController {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String dateStr = sdf.format(new Date());
                 String content = "尊敬的用户,您于" + dateStr + "完成了一笔" +complexPayOrder.getFeeName()+"交易.您的就诊号为:" + complexPayOrder.getJzh() + "当前交易订单编号为:" + out_trade_no + "。您可以直接到相关科室检查或者药房取药,出示 缴费记录 中 我的缴费凭证条码,就可以了。" ;
-                wechatFeignClient.massSendTextByOpenId(appId,complexPayOrder.getOpenId(),content);
+                //wechatFeignClient.massSendTextByOpenId(appId,complexPayOrder.getOpenId(),content);
                 //String [] params ;
                 //wechatFeignClient.sendTemplateMessage(appId,complexPayOrder.getOpenId(),wepayConfig.getTplId(),params);
                 Map<String, String> resMap = new HashMap<String, String>();
