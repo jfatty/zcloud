@@ -1,4 +1,4 @@
-package com.jfatty.zcloud.hospital.entity;
+package com.jfatty.zcloud.wechat.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -8,18 +8,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
-
 /**
  * <p>
- * 微信支付配置信息表
+ * 微信模板消息参数配置表
  * </p>
  *
  * @author jfatty
- * @since 2019-12-19
+ * @since 2020-01-05
  */
 @Data
-@TableName("pay_wepay_config")
-public class WepayConfig extends Model<WepayConfig> {
+@TableName("wxcms_tpl_msg_params")
+public class TplMsgParams extends Model<TplMsgParams> {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,63 +28,34 @@ public class WepayConfig extends Model<WepayConfig> {
     private String id;
 
     /**
-     * 公众号APPID
-     */
-    private String appid;
-
-    /**
-     * 微信支付商户号
-     */
-    private String mchId;
-
-    /**
-     * 加密方法
-     */
-    private String signType;
-
-    /**
-     * 微信支付key
-     */
-    private String tradeType;
-
-    /**
-     * 币种，1人民币   66
-     */
-    private String feeFype;
-
-    /**
-     * 支付key
-     */
-    private String payKey;
-
-    /**
-     * 微信支付回调地址
-     */
-    private String payNotifyUrl;
-
-    /**
-     * 微信支付网关地址
-     */
-    private String gateWay;
-
-    /**
-     * 支付秘钥文件地址
-     */
-    private String certPath;
-
-    /**
-     * 支付秘钥密码
-     */
-    private String certPasswd;
-
-    /**
-     * 支付成功跳转详情地址
-     */
-    private String paySuccessTplUrl;
-    /**
      * 模板ID
      */
     private String tplId;
+
+    /**
+     * 模板消息配置key值
+     */
+    private String tplMsgKey;
+
+    /**
+     * 模板消息配置value
+     */
+    private String tplMsgVal;
+
+    /**
+     * 排序号
+     */
+    private Integer orderNum;
+
+    /**
+     * 备注或者描述
+     */
+    private String description;
+
+    /**
+     * 微信原始ID
+     */
+    private String account;
 
     /**
      * 域值

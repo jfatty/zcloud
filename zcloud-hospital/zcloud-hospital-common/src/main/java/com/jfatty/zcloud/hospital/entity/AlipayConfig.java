@@ -111,6 +111,10 @@ public class AlipayConfig extends Model<AlipayConfig> {
      * 支付秘钥密码
      */
     private String certPasswd;
+    /**
+     * 模板ID
+     */
+    private String tplId;
 
     /**
      * 域值

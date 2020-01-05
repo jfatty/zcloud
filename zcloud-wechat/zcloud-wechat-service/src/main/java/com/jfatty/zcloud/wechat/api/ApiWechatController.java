@@ -5,9 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.wechat.entity.Account;
+import com.jfatty.zcloud.wechat.entity.TemplateMessage;
+import com.jfatty.zcloud.wechat.entity.TplMsgParams;
+import com.jfatty.zcloud.wechat.entity.TplMsgText;
 import com.jfatty.zcloud.wechat.exception.WxErrorException;
 import com.jfatty.zcloud.wechat.service.AccountService;
+import com.jfatty.zcloud.wechat.service.TplMsgParamsService;
+import com.jfatty.zcloud.wechat.service.TplMsgTextService;
 import com.jfatty.zcloud.wechat.service.WxService;
+import com.jfatty.zcloud.wechat.utils.DateUtil;
 import com.jfatty.zcloud.wechat.utils.MsgXmlUtil;
 import com.jfatty.zcloud.wechat.utils.WxApiClient;
 import com.jfatty.zcloud.wechat.utils.wx.OAuthAccessToken;
@@ -21,8 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 描述 微信对接接口 基础API
@@ -41,6 +46,12 @@ public class ApiWechatController {
 
     @Autowired
     private AccountService accountService ;
+
+    @Autowired
+    private TplMsgTextService tplMsgTextService ;
+
+    @Autowired
+    private TplMsgParamsService tplMsgParamsService ;
 
     /**
      * GET请求：进行URL、Tocken 认证；
@@ -130,6 +141,56 @@ public class ApiWechatController {
             e.printStackTrace();
             return ResultUtils.build(500, e.getMessage()) ;
         }
+    }
+
+
+    @RequestMapping(value="/wx/massSendTextByOpenId", method= { RequestMethod.GET,RequestMethod.POST } )
+    public void massSendTextByOpenId(@RequestParam(value = "appId" , defaultValue = "appId") String appId,//
+                                    @RequestParam(value = "openId" , defaultValue = "openId") String openId,//
+                                    @RequestParam(value = "content" , defaultValue = "content") String content){
+        Account mpAccount = accountService.getByAppId(appId);
+        try {
+            JSONObject result = wxService.massSendTextByOpenId(openId,content,mpAccount);
+            if(result.getIntValue("errcode") != 0)//发送失败
+                log.error("文本消息 微信返回信息 [{}]" ,result.toString() );
+            log.info(" 发文本消息：[{}]",result.toString());
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            log.info(" 发文本消息：出现异常 [{}]",e.getMessage());
+        }
+
+
+    }
+
+
+    @RequestMapping(value="/wx/sendTemplateMessage", method= { RequestMethod.POST } )
+    public void sendTemplateMessage(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379") String appId,//
+                                    @RequestParam(value = "openId" , defaultValue = "oPGot0QAYXg-Y4OiTYUDn55sjRdo") String openId,//
+                                    @RequestParam(value = "tplId" , defaultValue = "a884ef773e91407582644a18c18d836c") String tplId,//
+                                    @RequestParam(value = "url" , defaultValue = "https://www.baidu.com") String url,//
+                                    @RequestParam(value = "params" )String ... params){
+        Account mpAccount = accountService.getByAppId(appId);
+        TplMsgText tplMsgText = tplMsgTextService.getById(tplId);
+        TemplateMessage tplMsg = new TemplateMessage();
+        tplMsg.setOpenid(openId);
+        //微信公众号号的template id，开发者自行处理参数
+        tplMsg.setTemplateId(tplMsgText.getTplId());
+        tplMsg.setUrl(url);
+        Map<String, String> dataMap = new HashMap<String, String>();
+        List<TplMsgParams> tplMsgParamses = tplMsgParamsService.getTplById(tplId);
+        int index = 0 ;
+        for ( TplMsgParams tplMsgParam : tplMsgParamses) {
+            dataMap.put(tplMsgParam.getTplMsgKey(),params[index]);
+            index ++ ;
+        }
+        tplMsg.setDataMap(dataMap);
+        try {
+            JSONObject result = wxService.sendTemplateMessage(tplMsg, mpAccount);
+            log.error("发送模板消息 微信返回信息 [{}]" ,result.toString() );
+        } catch (WxErrorException e) {
+            log.error("发送模板消息失败 异常信息[{}] " , e.getMessage() );
+        }
+
     }
 
 }

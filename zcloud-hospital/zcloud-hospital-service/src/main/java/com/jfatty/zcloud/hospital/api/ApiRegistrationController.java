@@ -126,6 +126,7 @@ public class ApiRegistrationController {
             return new RETResultUtils("预约成功!",preRegisteredRes);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("004****预约挂号*****出现异常 [{}]",e.getMessage());
         }
         return new RETResultUtils(500,"网络异常,请稍后重试") ;
     }
@@ -145,7 +146,7 @@ public class ApiRegistrationController {
                 if ( !(webRegPatient.success()) ){
                     String msg = webRegPatient.getMsg() ;
                     if (msg.contains("未找到有效"))
-                        return RELResultUtils._506("请先添加就诊人!") ;
+                        return new RELResultUtils(507,"请先添加就诊人!",null) ;
                     return RELResultUtils._506(msg);
                 }
                 //String defaultPat = "" ;
@@ -158,7 +159,7 @@ public class ApiRegistrationController {
             }
         }
         if (StringUtils.isEmptyOrBlank(brid))
-            return RELResultUtils._506("请先添加就诊人!") ;
+            return new RELResultUtils(507,"请先添加就诊人!",null) ;
         List<AppointmentRecord> appointmentRecords = registeredInfoService.appointmentRecord(openId,openIdType,brid,"2018-01-03","2021-10-03");
         if( !CollectionUtils.isEmpty(appointmentRecords) ){
             if ( !(appointmentRecords.get(0).success()) )

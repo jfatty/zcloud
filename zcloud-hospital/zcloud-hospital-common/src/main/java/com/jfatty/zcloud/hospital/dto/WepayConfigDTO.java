@@ -1,11 +1,9 @@
 package com.jfatty.zcloud.hospital.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfatty.zcloud.base.dto.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 
 /**
  * 描述
@@ -77,25 +75,14 @@ public class WepayConfigDTO<T extends BaseDTO> extends BaseDTO {
     private String paySuccessTplUrl;
 
     /**
-     * 域值
+     * 模板ID
      */
-    private String realm;
+    @ApiModelProperty(name = "tplId", position = 0,required = true, value = "模板ID" ,example = "a884ef773e91407582644a18c18d836c")
+    private String tplId;
 
     /**
      * 使用状态
      */
     private Integer state;
-
-    /**
-     * 创建人
-     */
-    private String createOperator;
-
-    /**
-     * 创建时间
-     */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
 
 }

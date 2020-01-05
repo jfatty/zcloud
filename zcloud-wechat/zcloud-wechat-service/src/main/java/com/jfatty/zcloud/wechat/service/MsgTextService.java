@@ -1,6 +1,5 @@
 package com.jfatty.zcloud.wechat.service;
 
-import com.jfatty.zcloud.base.service.BaseService;
 import com.jfatty.zcloud.wechat.entity.MsgText;
 
 import java.util.List;

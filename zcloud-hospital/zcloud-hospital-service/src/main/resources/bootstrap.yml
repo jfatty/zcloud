@@ -8,3 +8,6 @@ spring:
         file-extension: yaml
   profiles:
     active: dev
+feign:
+  sentinel:
+    enabled: true

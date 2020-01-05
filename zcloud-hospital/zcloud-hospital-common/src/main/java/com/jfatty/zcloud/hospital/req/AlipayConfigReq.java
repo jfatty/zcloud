@@ -104,4 +104,10 @@ public class AlipayConfigReq extends AlipayConfigDTO<AlipayConfigReq> {
      */
     @ApiModelProperty(name = "gateWay", position = 0,required = true, value = "支付宝网关" ,example = "https://openapi.alipay.com/gateway.do")
     private String gateWay;
+
+    /**
+     * 模板ID
+     */
+    @ApiModelProperty(name = "tplId", position = 0,required = true, value = "模板ID" ,example = "a884ef773e91407582644a18c18d836c")
+    private String tplId;
 }
