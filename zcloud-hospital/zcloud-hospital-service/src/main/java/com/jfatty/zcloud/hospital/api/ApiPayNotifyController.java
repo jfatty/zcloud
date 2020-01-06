@@ -126,6 +126,7 @@ public class ApiPayNotifyController {
                 wechatFeignClient.massSendTextByOpenId(appId,openId,content);
                 //String [] params = Stream.of("hello", "world", "ok").toArray(String[]::new);
 
+                String url = wepayConfig.getPaySuccessTplUrl() + out_trade_no;
                 String brid = String.valueOf(complexPayOrder.getPatientId()) ;
                 NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(appId,brid);
                 String first = complexPayOrder.getFeeName() +"，已缴费成功。就诊号:"+complexPayOrder.getJzh() ;
@@ -135,7 +136,7 @@ public class ApiPayNotifyController {
                 String keyword4 = dateStr ;
                 String remark = wepayConfig.getSignName();
 
-                wechatFeignClient.sendTemplateMessage(appId,openId,wepayConfig.getTplId(),wepayConfig.getPaySuccessTplUrl(),first,keyword1,keyword2,keyword3,keyword4,remark);
+                wechatFeignClient.sendTemplateMessage(appId,openId,wepayConfig.getTplId(),url,first,keyword1,keyword2,keyword3,keyword4,remark);
                 Map<String, String> resMap = new HashMap<String, String>();
                 resMap.put("return_code", "SUCCESS");
                 resMap.put("return_msg", "支付成功");
