@@ -416,7 +416,9 @@ public class ApiHealthCardStationController {
     public RETResultUtils<Boolean> untieHealthCard(@RequestBody UntieHealthCardReq untieHealthCardReq){
         try {
             Boolean result = healthCardUserService.untieHealthCard(untieHealthCardReq.getOpenId(),untieHealthCardReq.getOpenIdType(),untieHealthCardReq.getHospitalId(),untieHealthCardReq.getHealthCardInfoId());
-            return new RETResultUtils(result) ;
+            if (result)
+                return new RETResultUtils("电子健康卡解绑成功",result);
+            return RETResultUtils._506("电子健康卡解绑失败") ;
         } catch (Exception e) {
             log.error("011**** 解绑电子健康卡接口 出现异常[{}]",e.getMessage());
             return RETResultUtils.faild("网络异常!请稍后重试");
