@@ -62,6 +62,19 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
     private String issueCardOrg ;
 
     /**
+     * 微信服务号appid
+     */
+    private String wxAppId;
+    /**
+     * 模板ID
+     */
+    private String tplId;
+    /**
+     * 模板消息URL参数
+     */
+    private String tplUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;

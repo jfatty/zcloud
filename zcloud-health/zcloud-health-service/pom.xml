@@ -26,7 +26,6 @@
         <dependency>
             <groupId>com.jfatty.zcloud</groupId>
             <artifactId>zcloud-system-feign</artifactId>
-
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -162,6 +161,12 @@
         <dependency>
             <groupId>com.jfatty.zcloud</groupId>
             <artifactId>zcloud-hospital-feign</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jfatty.zcloud</groupId>
+            <artifactId>zcloud-wechat-feign</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 

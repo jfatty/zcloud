@@ -20,6 +20,7 @@ import com.jfatty.zcloud.health.vo.ReportHISDataVO;
 import com.jfatty.zcloud.hospital.feign.ComplexPatientFeignClient;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
+import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import com.tencent.healthcard.model.HealthCardInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -77,6 +78,8 @@ public class ApiHealthCardStationController {
     @Autowired
     private ComplexPatientFeignClient complexPatientFeignClient ;
 
+    @Autowired
+    private WechatFeignClient wechatFeignClient ;
 
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
     @RequestMapping(value="/registerHealthCard", method=RequestMethod.POST)
@@ -424,6 +427,20 @@ public class ApiHealthCardStationController {
             return RETResultUtils.faild("网络异常!请稍后重试");
         }
 
+    }
+
+
+    @ApiOperation(value=" 012**** 测试发送电子健康卡升级模板消息 ")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "openId", value = "微信 openId",dataType = "String",defaultValue = "owisqt8cS_7a3GVnyP70oUIjK5vU")
+    })
+    @RequestMapping(value="/testSendTplMessage", method=RequestMethod.GET)
+    public RETResultUtils<Boolean> testSendTplMessage(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , //
+                                                                  @RequestParam(value = "openId" , defaultValue = "owisqt8cS_7a3GVnyP70oUIjK5vU") String openId  ) {
+        HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId);
+        wechatFeignClient.sendTemplateMessage(settings.getWxAppId(),openId,settings.getTplId(),settings.getTplUrl(),"您已成功将就诊卡升级为健康卡！","2014年7月21日 18:36","健康卡可完全替代就诊卡，支持区域内多家医院跨院就医，无需重复办卡，实现线上挂号缴费，线下扫码就医。","点击查看健康卡");
+        return new RETResultUtils(true);
     }
 
 

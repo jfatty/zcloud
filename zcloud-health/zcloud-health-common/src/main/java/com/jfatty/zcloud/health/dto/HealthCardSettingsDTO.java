@@ -51,6 +51,22 @@ public class HealthCardSettingsDTO<T extends BaseDTO> extends BaseDTO {
      */
     @ApiModelProperty(name = "issueCardOrg", position = 0, value = "发卡机构名称",required = true ,example = "湖南省卫生健康委员会")
     private String issueCardOrg ;
+    /**
+     * 微信服务号appid
+     */
+    @ApiModelProperty(name = "wxAppId", position = 0, value = "微信服务号appid",required = true ,example = "wxe3336a60d2685379")
+    private String wxAppId;
+
+    /**
+     * 模板ID
+     */
+    @ApiModelProperty(name = "tplId", position = 0, value = "模板ID",required = true ,example = "402881906F79F5F4016F7A01D32D000A")
+    private String tplId;
+    /**
+     * 模板消息URL参数
+     */
+    @ApiModelProperty(name = "tplUrl", position = 0, value = "模板消息URL参数",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String tplUrl;
 
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...

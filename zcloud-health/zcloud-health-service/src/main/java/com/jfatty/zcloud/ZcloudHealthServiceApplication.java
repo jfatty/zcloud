@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(value = {"com.jfatty.zcloud" })
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.jfatty.zcloud.system.feign","com.jfatty.zcloud.hospital.feign","com.jfatty.zcloud.wechat.feign"})
 public class ZcloudHealthServiceApplication {
 
     public static void main(String[] args) {
