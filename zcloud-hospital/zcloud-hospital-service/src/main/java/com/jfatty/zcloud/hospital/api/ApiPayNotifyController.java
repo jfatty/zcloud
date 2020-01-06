@@ -50,7 +50,7 @@ public class ApiPayNotifyController {
     @Autowired
     private AlipayConfigService alipayConfigService ;
 
-    @Autowired
+    //@Autowired
     //private WechatFeignClient wechatFeignClient ;
 
     /**
