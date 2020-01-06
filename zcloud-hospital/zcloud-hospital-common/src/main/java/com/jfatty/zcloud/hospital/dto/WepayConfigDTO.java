@@ -81,6 +81,12 @@ public class WepayConfigDTO<T extends BaseDTO> extends BaseDTO {
     private String tplId;
 
     /**
+     * 用户支付成功模板消息备注签名
+     */
+    @ApiModelProperty(name = "signName", position = 0,required = true, value = "用户支付成功模板消息备注签名" ,example = "鹤峰县中心医院")
+    private String signName;
+
+    /**
      * 使用状态
      */
     private Integer state;

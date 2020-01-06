@@ -20,7 +20,7 @@ public interface WechatFeignClient {
                          @RequestParam(value = "start" , defaultValue = "2019-01-01" ) String start ,
                          @RequestParam(value = "end" , defaultValue = "201-11-11") String end);
 
-    @RequestMapping(value="/massSendTextByOpenId", method= { RequestMethod.GET,RequestMethod.POST } )
+    @RequestMapping(value="/massSendTextByOpenId", method= { RequestMethod.POST} )
     void massSendTextByOpenId(@RequestParam(value = "appId" , defaultValue = "appId") String appId,//
                                      @RequestParam(value = "openId" , defaultValue = "openId") String openId,//
                                      @RequestParam(value = "content" , defaultValue = "content") String content);

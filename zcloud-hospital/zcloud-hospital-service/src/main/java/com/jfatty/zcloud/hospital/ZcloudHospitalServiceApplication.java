@@ -12,9 +12,9 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import({DynamicDataSourceRegister.class}) // 注册动态多数据源
+@ComponentScan({"com.jfatty.zcloud"})
 @EnableDiscoveryClient
-@ComponentScan("com.jfatty.zcloud")
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.jfatty.zcloud.wechat.feign"})
 public class  ZcloudHospitalServiceApplication {
 
     public static void main(String[] args) {

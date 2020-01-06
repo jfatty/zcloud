@@ -18,6 +18,7 @@
         <result column="pay_return_url" property="payReturnUrl" />
         <result column="pay_notify_url" property="payNotifyUrl" />
         <result column="pay_success_tpl_url" property="paySuccessTplUrl" />
+        <result column="sign_name" property="signName" />
         <result column="auth_fail_url" property="authFailUrl" />
         <result column="gate_way" property="gateWay" />
         <result column="cert_path" property="certPath" />

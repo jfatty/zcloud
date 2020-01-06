@@ -93,6 +93,11 @@ public class AlipayConfig extends Model<AlipayConfig> {
     private String paySuccessTplUrl;
 
     /**
+     * 用户支付成功模板消息备注签名
+     */
+    private String signName;
+
+    /**
      * 授权失败后跳转页面
      */
     private String authFailUrl;

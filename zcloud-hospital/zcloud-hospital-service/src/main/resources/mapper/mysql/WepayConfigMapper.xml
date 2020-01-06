@@ -17,6 +17,7 @@
         <result column="cert_passwd" property="certPasswd" />
         <result column="pay_success_tpl_url" property="paySuccessTplUrl" />
         <result column="tpl_id" property="tplId" />
+        <result column="sign_name" property="signName" />
         <result column="realm" property="realm" />
         <result column="state" property="state" />
         <result column="create_operator" property="createOperator" />

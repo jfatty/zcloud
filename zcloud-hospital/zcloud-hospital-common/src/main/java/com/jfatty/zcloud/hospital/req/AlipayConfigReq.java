@@ -110,4 +110,10 @@ public class AlipayConfigReq extends AlipayConfigDTO<AlipayConfigReq> {
      */
     @ApiModelProperty(name = "tplId", position = 0,required = true, value = "模板ID" ,example = "a884ef773e91407582644a18c18d836c")
     private String tplId;
+
+    /**
+     * 用户支付成功模板消息备注签名
+     */
+    @ApiModelProperty(name = "signName", position = 0,required = true, value = "用户支付成功模板消息备注签名" ,example = "鹤峰县中心医院")
+    private String signName;
 }

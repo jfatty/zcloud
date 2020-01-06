@@ -3,6 +3,7 @@ package com.jfatty.zcloud.hospital.res;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfatty.zcloud.hospital.dto.AlipayConfigDTO;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -97,6 +98,17 @@ public class AlipayConfigRes  extends AlipayConfigDTO<AlipayConfigRes> {
      * 支付宝网关
      */
     private String gateWay;
+    /**
+     * 模板ID
+     */
+    @ApiModelProperty(name = "tplId", position = 0,required = true, value = "模板ID" ,example = "a884ef773e91407582644a18c18d836c")
+    private String tplId;
+
+    /**
+     * 用户支付成功模板消息备注签名
+     */
+    @ApiModelProperty(name = "signName", position = 0,required = true, value = "用户支付成功模板消息备注签名" ,example = "鹤峰县中心医院")
+    private String signName;
 
     /**
      * 支付秘钥文件地址

@@ -86,6 +86,10 @@ public class WepayConfig extends Model<WepayConfig> {
      * 模板ID
      */
     private String tplId;
+    /**
+     * 用户支付成功模板消息备注签名
+     */
+    private String signName;
 
     /**
      * 域值
