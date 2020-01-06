@@ -377,10 +377,12 @@ public class ApiHealthCardStationController {
             List<HCSHealthCardInfo> hcsHealthCardInfos = hcsHealthCardInfoService.getBatchHealthCardByInfoIds(healthCardInfoIds,simpleHealthCardInfoReq.getHospitalId());
             if(CollectionUtils.isEmpty(hcsHealthCardInfos))
                 return RELResultUtils._506("您暂无电子健康卡E1");
+            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(simpleHealthCardInfoReq.getHospitalId());
             List<SimpleHealthCardInfoRes> resList = new ArrayList<SimpleHealthCardInfoRes>();
             for (HCSHealthCardInfo healthCardInfo : hcsHealthCardInfos ){
                 SimpleHealthCardInfoRes simpleHealthCardInfoRes = new SimpleHealthCardInfoRes();
                 BeanUtils.copyProperties(healthCardInfo,simpleHealthCardInfoRes);
+                simpleHealthCardInfoRes.setIssueCardOrg(settings.getIssueCardOrg());
                 resList.add(simpleHealthCardInfoRes);
             }
             return new RELResultUtils(resList);

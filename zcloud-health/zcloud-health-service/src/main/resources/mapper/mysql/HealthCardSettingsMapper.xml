@@ -13,6 +13,7 @@
         <result column="wechat_code" property="wechatCode" />
         <result column="description" property="description" />
         <result column="expire_time" property="expireTime" />
+        <result column="issue_card_org" property="issueCardOrg" />
         <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />
