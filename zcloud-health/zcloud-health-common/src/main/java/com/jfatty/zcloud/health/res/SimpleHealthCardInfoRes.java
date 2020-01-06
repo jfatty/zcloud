@@ -38,4 +38,11 @@ public class SimpleHealthCardInfoRes extends HCSHealthCardInfoDTO<SimpleHealthCa
     private String detailUrl ;
 
 
+    /**
+     * 发卡机构名称
+     */
+    @ApiModelProperty(name = "issueCardOrg", position = 0, value = "发卡机构名称",required = true ,example = "湖南省卫生健康委员会")
+    private String issueCardOrg ;
+
+
 }

@@ -57,6 +57,11 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
     private LocalDateTime expireTime;
 
     /**
+     * 发卡机构名称
+     */
+    private String issueCardOrg ;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;

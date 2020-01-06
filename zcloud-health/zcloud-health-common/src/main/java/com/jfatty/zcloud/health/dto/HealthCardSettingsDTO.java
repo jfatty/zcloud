@@ -47,6 +47,12 @@ public class HealthCardSettingsDTO<T extends BaseDTO> extends BaseDTO {
     private String description;
 
     /**
+     * 发卡机构名称
+     */
+    @ApiModelProperty(name = "issueCardOrg", position = 0, value = "发卡机构名称",required = true ,example = "湖南省卫生健康委员会")
+    private String issueCardOrg ;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     @ApiModelProperty(name = "status", position = 0, value = "使用状态0表示正常使用-1表示维护中-2表示建设中...",example = "0",allowableValues = "0,-1,-2")
