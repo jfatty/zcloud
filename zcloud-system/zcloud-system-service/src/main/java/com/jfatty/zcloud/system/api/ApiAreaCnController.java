@@ -6,21 +6,15 @@ import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.system.entity.AreaCn;
 import com.jfatty.zcloud.system.interfaces.IAreaCn;
 import com.jfatty.zcloud.system.req.AreaCnReq;
+import com.jfatty.zcloud.system.req.SimpleAreaCnReq;
 import com.jfatty.zcloud.system.res.AreaCnRes;
 import com.jfatty.zcloud.system.service.AreaCnService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +43,12 @@ public class ApiAreaCnController extends ApiBaseSystemController<AreaCn,AreaCnRe
 
 
     @ApiOperation(value="POST 参数查询 层级列表数据")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "parentId", value = "父级行政地区ID",dataType = "String",defaultValue = "748344"),
-            @ApiImplicitParam(name = "level", value = "行政地区 级别0-4",dataType = "Integer",defaultValue = "0",required = true,allowableValues = "0,1,2,3,4"),
-            @ApiImplicitParam(name = "name", value = "行政地区 名称",dataType = "String",defaultValue = "湖北省"),
-            @ApiImplicitParam(name = "shortName", value = "行政地区 简称",dataType = "String",defaultValue = "湖北")
-    })
     @RequestMapping(value={"/level/list"},method = RequestMethod.POST )
-    public RELResultUtils<AreaCnRes> levelList(@RequestParam(value = "parentId" , defaultValue = "") String parentId ,
-                            @RequestParam(value = "level" , defaultValue = "0" ) Integer level ,
-                            @RequestParam(value = "name" , defaultValue = "") String name ,
-                            @RequestParam(value = "shortName" , defaultValue = "") String shortName) {
+    public RELResultUtils<AreaCnRes> levelList(@RequestBody SimpleAreaCnReq simpleAreaCnReq) {
+        String parentId = simpleAreaCnReq.getParentId() ;
+        Integer level = simpleAreaCnReq.getLevel() ;
+        String name = simpleAreaCnReq.getName() ;
+        String shortName = simpleAreaCnReq.getShortName() ;
         log.error("当前请求 level [{}] parentId [{}] name [{}] shortName [{}]",level,parentId,name,shortName);
         if (StringUtils.isEmptyOrBlank(parentId))
             parentId = null;
