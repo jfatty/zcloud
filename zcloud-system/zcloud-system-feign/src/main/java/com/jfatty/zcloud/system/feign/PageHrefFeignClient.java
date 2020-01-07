@@ -6,6 +6,8 @@ import com.jfatty.zcloud.system.entity.PageHref;
 import com.jfatty.zcloud.system.req.PageHrefReq;
 import com.jfatty.zcloud.system.res.PageHrefRes;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "zcloud-system-service" , path = "/api/pageHref")
 public interface PageHrefFeignClient   extends BInterface<PageHref,PageHrefReq,PageHrefRes> {
 
+    @RequestMapping(value = {"/getPageHrefsOpts"} ,method = RequestMethod.GET)
     RELResultUtils<PageHrefRes> getPageHrefsOpts(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,//
                                                  @RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId  ,//
                                                  @RequestParam(value = "verifyName" , defaultValue = "getHealthCardByHealthCardInfoId" ) String verifyName  ,
