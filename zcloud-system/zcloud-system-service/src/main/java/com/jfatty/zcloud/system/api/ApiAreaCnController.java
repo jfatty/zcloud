@@ -60,7 +60,7 @@ public class ApiAreaCnController extends ApiBaseSystemController<AreaCn,AreaCnRe
                             @RequestParam(value = "level" , defaultValue = "0" ) Integer level ,
                             @RequestParam(value = "name" , defaultValue = "") String name ,
                             @RequestParam(value = "shortName" , defaultValue = "") String shortName) {
-
+        log.error("当前请求 level [{}] parentId [{}] name [{}] shortName [{}]",level,parentId,name,shortName);
         if (StringUtils.isEmptyOrBlank(parentId))
             parentId = null;
         name = StringUtils.likeStrSQL(name);
