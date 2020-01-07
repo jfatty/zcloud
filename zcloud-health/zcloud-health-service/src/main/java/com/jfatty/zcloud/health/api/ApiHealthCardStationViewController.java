@@ -1,11 +1,15 @@
 package com.jfatty.zcloud.health.api;
 
 import com.jfatty.zcloud.base.utils.IDCardUtil;
+import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import com.jfatty.zcloud.health.res.HCSHealthCardInfoRes;
 import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
 import com.jfatty.zcloud.health.service.HealthCardStationService;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
+import com.jfatty.zcloud.system.feign.PageHrefFeignClient;
+import com.jfatty.zcloud.system.res.PageHrefRes;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.util.List;
 
 
 /**
@@ -40,6 +45,9 @@ public class ApiHealthCardStationViewController {
     @Autowired
     private HCSHealthCardInfoService hcsHealthCardInfoService ;
 
+    @Autowired
+    private PageHrefFeignClient pageHrefFeignClient ;
+
     @ApiOperation(value=" 001****通过健康卡授权码获取用户健康卡信息接口 3.2.3 通过健康卡授权码获取接口",tags = "注意：页面自动跳转,页面加载时获取URL路径中携带的参数")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
@@ -53,41 +61,47 @@ public class ApiHealthCardStationViewController {
             //注意2：当用户在该页面点击添加健康卡按钮时，开放平台返回healthCode=0，因此ISV必须判断该情况：当healthCode=0时跳转到新用户建卡页面；
             //注意3：当用户在该页面点击暂不授权按钮时，开放平台返回healthCode=-1，因此ISV必须判断该情况：当healthCode=-1时跳转到上一个页面；
             log.error("hospitalId======>[{}]健康平台回传healthCode======>[{}]",hospitalId,healthCode);
-            if ("0".equals(healthCode)) {
-                //页面跳转到添加健康卡页面
-                response.sendRedirect("http://dev.jfatty.com/HealthCardDemo/regist_new.html");
-            } else if ("-1".equals(healthCode)){
-                //不授权直接页面重定向返回健康卡列表页面 并且URL中携带参数提供给页面做判断
-                response.sendRedirect("http://dev.jfatty.com/HealthCardDemo/list.html");
-            }else {
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"","");
+            List<PageHrefRes> hrefs = pageHrefRes.getData();
+            for (PageHrefRes herf : hrefs){
+                if (StringUtils.isEmptyOrBlank(herf.getVerifyCode())){
+                    HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
 
-                HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
+                    HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(hospitalId,healthCode);
+                    BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
 
-                HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(hospitalId,healthCode);
-                BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfoRes);
+                    HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
+                    HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
 
-                HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(healthCardInfoVO.getIdNumber());
-                HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
-
-                BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
-                if (db_HCSHealthCardInfo != null){
-                    hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
-                }else {
-                    hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+                    BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+                    if (db_HCSHealthCardInfo != null){
+                        hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
+                    }else {
+                        hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+                    }
+                    //改变名族为字典
+                    String nation = hcsHealthCardInfoRes.getNation();
+                    String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
+                    hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
+                    hcsHealthCardInfoRes.setNation(nationDic);
+                    //"http://dev.jfatty.com/HealthCardDemo/personal.html"
+                    //ls_health/cardDetail
+                    String path = herf.getTargetHref() ;
+                    String params = getPostParams(hcsHealthCardInfoRes);
+                    params = URLEncoder.encode(params,"UTF-8");
+                    log.error("编码后的URL参数[{}]",params);
+                    path = path + "?" + params ;
+                    //去健康卡详情页面
+                    response.sendRedirect(path);
+                }else if ( healthCode.equals(herf.getVerifyCode()) ){
+                    //"0".equals(healthCode)
+                    //ls_health/createCard
+                    //response.sendRedirect("http://dev.jfatty.com/HealthCardDemo/regist_new.html");
+                    //"-1".equals(healthCode)
+                    //不授权直接页面重定向返回健康卡列表页面 并且URL中携带参数提供给页面做判断
+                    //ls_health/home
+                    response.sendRedirect(herf.getTargetHref());
                 }
-                //改变名族为字典
-                String nation = hcsHealthCardInfoRes.getNation();
-                String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
-                hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
-                hcsHealthCardInfoRes.setNation(nationDic);
-
-                String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
-                String params = getPostParams(hcsHealthCardInfoRes);
-                params = URLEncoder.encode(params,"UTF-8");
-                log.error("编码后的URL参数[{}]",params);
-                path = path + "?" + params ;
-                //去健康卡详情页面
-                response.sendRedirect(path);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,14 +126,18 @@ public class ApiHealthCardStationViewController {
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
             hcsHealthCardInfoRes.setNation(nationDic);
-
-            String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
-            String params = getPostParams(hcsHealthCardInfoRes);
-            params = URLEncoder.encode(params,"UTF-8");
-            log.error("编码后的URL参数[{}]",params);
-            path = path + "?" + params ;
-            //去健康卡详情页面
-            response.sendRedirect(path);
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"getHealthCardByHealthCardInfoId","");
+            List<PageHrefRes> hrefs = pageHrefRes.getData();
+            for (PageHrefRes herf : hrefs){
+                //http://dev.jfatty.com/HealthCardDemo/personal.html
+                String path = herf.getTargetHref() ;
+                String params = getPostParams(hcsHealthCardInfoRes);
+                params = URLEncoder.encode(params,"UTF-8");
+                log.error("编码后的URL参数[{}]",params);
+                path = path + "?" + params ;
+                //去健康卡详情页面
+                response.sendRedirect(path);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             log.error("002****通过医院ID与健康卡信息记录ID(系统健康卡ID)跳转至电子健康卡详情页面 出现异常[{}]",e.getMessage());
@@ -152,15 +170,20 @@ public class ApiHealthCardStationViewController {
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
             hcsHealthCardInfoRes.setNation(nationDic);
-            String path = "http://dev.jfatty.com/HealthCardDemo/personal.html" ;
-            String params = getPostParams(hcsHealthCardInfoRes);
-            params = URLEncoder.encode(params,"UTF-8");
-            log.error("编码后的URL参数[{}]",params);
-            path = path + "?" + params ;
-            String redirect_uri  = String.format("https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=$s",orderId,path) ;
-            log.error("加入微信卡包的重定向URL参数[{}]",params);
-            //去健康卡详情页面
-            response.sendRedirect(path);
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"getHealthCardByHealthCardInfoId","");
+            List<PageHrefRes> hrefs = pageHrefRes.getData();
+            for (PageHrefRes herf : hrefs){
+                //https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=http://dev.jfatty.com/HealthCardDemo/personal.html
+                String path = herf.getTargetHref() ;
+                String params = getPostParams(hcsHealthCardInfoRes);
+                params = URLEncoder.encode(params,"UTF-8");
+                log.error("编码后的URL参数[{}]",params);
+                String redirect_uri  = String.format(path,orderId) ;
+                redirect_uri = redirect_uri + "?" + params ;
+                log.error("加入微信卡包的重定向URL参数[{}]",redirect_uri);
+                //加入微信卡包后去健康卡详情页面
+                response.sendRedirect(redirect_uri);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             log.error("003**** 用户点击 加入微信卡包 跳转至微信卡包电子健康卡领取页面 出现异常[{}]",e.getMessage());
