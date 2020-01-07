@@ -15,4 +15,6 @@ import java.util.List;
 public interface PageHrefService extends BaseSystemService<PageHref> {
 
     List<PageHref> getPageHrefsByIds(String appId, String pageId);
+
+    List<PageHref> getPageHrefsOpts(String appId, String hospitalId, String verifyName, String verifyRule);
 }

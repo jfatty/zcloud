@@ -2,6 +2,7 @@ package com.jfatty.zcloud.system.api;
 
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.system.entity.PageHref;
 import com.jfatty.zcloud.system.interfaces.IPageHref;
 import com.jfatty.zcloud.system.req.PageHrefReq;
@@ -65,6 +66,40 @@ public class ApiPageHrefController  extends ApiBaseSystemController<PageHref,Pag
         }
         return new RELResultUtils(pageHrefReses);
     }
+
+
+    @ApiOperation(value="通过 条件 获取界面链接跳转开发配置数组")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "pageId", value = "页面标识ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "verifyName", value = "页面标识ID",dataType = "String",defaultValue = "getHealthCardByHealthCardInfoId"),
+            @ApiImplicitParam(name = "verifyRule", value = "页面标识ID",dataType = "String",defaultValue = "addWechatPack")
+    })
+    @RequestMapping(value = {"/getPageHrefsOpts"} ,method = RequestMethod.GET)
+    public RELResultUtils<PageHrefRes> getPageHrefsOpts(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,//
+                                                        @RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId  ,//
+                                                        @RequestParam(value = "verifyName" , defaultValue = "getHealthCardByHealthCardInfoId" ) String verifyName  ,
+                                                         @RequestParam(value = "verifyRule" ,  defaultValue = "addWechatPack") String verifyRule){
+        if (StringUtils.isEmptyOrBlank(appId))
+            appId = null ;
+        if (StringUtils.isEmptyOrBlank(hospitalId))
+            hospitalId = null ;
+        if (StringUtils.isEmptyOrBlank(verifyName))
+            verifyName = null ;
+        if (StringUtils.isEmptyOrBlank(verifyRule))
+            verifyRule = null ;
+        List<PageHref> hrefs = pageHrefService.getPageHrefsOpts(appId,hospitalId,verifyName,verifyRule);
+        if( CollectionUtils.isEmpty(hrefs) )
+            return  RELResultUtils.success("尚未配置界面链接");
+        List<PageHrefRes> pageHrefReses = new ArrayList<PageHrefRes>();
+        for (PageHref href : hrefs){
+            PageHrefRes pageHrefRes = new PageHrefRes();
+            BeanUtils.copyProperties(href,pageHrefRes);
+            pageHrefReses.add(pageHrefRes);
+        }
+        return new RELResultUtils(pageHrefReses);
+    }
+
 
 }
 

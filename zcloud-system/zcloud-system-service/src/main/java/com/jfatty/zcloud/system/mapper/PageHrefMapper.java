@@ -18,4 +18,5 @@ public interface PageHrefMapper extends IBaseMapper<PageHref> {
 
     List<PageHref> getPageHrefsByIds(@Param("appId") String appId,@Param("pageId")  String pageId);
 
+    List<PageHref> getPageHrefsOpts(@Param("appId") String appId,@Param("hospitalId")  String hospitalId,@Param("verifyName")  String verifyName,@Param("verifyRule")  String verifyRule);
 }

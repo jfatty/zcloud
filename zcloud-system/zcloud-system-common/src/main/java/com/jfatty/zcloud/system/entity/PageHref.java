@@ -32,6 +32,10 @@ public class PageHref extends Model<PageHref> {
      * 应用ID APPID
      */
     private String appid;
+    /**
+     * 医院ID
+     */
+    private String hospitalId;
 
     /**
      * 页面标识ID
@@ -62,6 +66,18 @@ public class PageHref extends Model<PageHref> {
      * 设置字段 根据需求使用本字段
      */
     private String site;
+    /**
+     * 校验code值
+     */
+    private String verifyCode;
+    /**
+     * 校验名称
+     */
+    private String verifyName;
+    /**
+     * 校验规则
+     */
+    private String verifyRule;
 
     /**
      * 备注或者描述

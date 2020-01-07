@@ -34,4 +34,9 @@ public class PageHrefServiceImpl extends BaseSystemServiceImpl<PageHref,PageHref
     public List<PageHref> getPageHrefsByIds(String appId, String pageId) {
         return pageHrefMapper.getPageHrefsByIds(appId,pageId);
     }
+
+    @Override
+    public List<PageHref> getPageHrefsOpts(String appId, String hospitalId, String verifyName, String verifyRule) {
+        return pageHrefMapper.getPageHrefsOpts(appId,hospitalId,verifyName,verifyRule);
+    }
 }

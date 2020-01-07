@@ -6,12 +6,16 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.system.entity.PageHref">
         <id column="id" property="id" />
         <result column="appid" property="appid" />
+        <result column="hospital_id" property="hospitalId" />
         <result column="page_id" property="pageId" />
         <result column="elem_id" property="elemId" />
         <result column="elem_title" property="elemTitle" />
         <result column="elem_type" property="elemType" />
         <result column="target_href" property="targetHref" />
         <result column="site" property="site" />
+        <result column="verify_code" property="verifyCode" />
+        <result column="verify_name" property="verifyName" />
+        <result column="verify_rule" property="verifyRule" />
         <result column="description" property="description" />
         <result column="realm" property="realm" />
         <result column="state" property="state" />
@@ -56,6 +60,26 @@
         </if>
         <if test="pageId != null" >
             and page_id = #{pageId}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="getPageHrefsOpts" resultMap="BaseResultMap">
+        select
+          *
+        from sys_page_href
+        where 1 = 1
+        <if test="appId != null" >
+            and appid = #{appId}
+        </if>
+        <if test="hospitalId != null" >
+            and hospital_id = #{hospitalId}
+        </if>
+        <if test="verifyName != null" >
+            and verify_name = #{verifyName}
+        </if>
+        <if test="verifyRule != null" >
+            and verify_rule = #{verifyRule}
         </if>
         order by create_time desc
     </select>

@@ -22,6 +22,10 @@ public class PageHrefDTO<T extends BaseDTO> extends BaseDTO {
      * 应用ID APPID
      */
     private String appid;
+    /**
+     * 医院ID
+     */
+    private String hospitalId;
 
     /**
      * 页面标识ID
@@ -47,6 +51,19 @@ public class PageHrefDTO<T extends BaseDTO> extends BaseDTO {
      * 目标地址
      */
     private String targetHref;
+
+    /**
+     * 校验code值
+     */
+    private String verifyCode;
+    /**
+     * 校验名称
+     */
+    private String verifyName;
+    /**
+     * 校验规则
+     */
+    private String verifyRule;
 
     /**
      * 设置字段 根据需求使用本字段
