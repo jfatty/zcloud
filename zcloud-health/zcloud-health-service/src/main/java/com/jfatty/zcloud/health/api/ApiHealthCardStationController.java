@@ -7,10 +7,7 @@ import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import com.jfatty.zcloud.health.entity.HCSIDCardInfo;
 import com.jfatty.zcloud.health.entity.HealthCardSettings;
-import com.jfatty.zcloud.health.req.HCSHealthCardInfoReq;
-import com.jfatty.zcloud.health.req.RegHealthCardInfoReq;
-import com.jfatty.zcloud.health.req.SimpleHealthCardInfoReq;
-import com.jfatty.zcloud.health.req.UntieHealthCardReq;
+import com.jfatty.zcloud.health.req.*;
 import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.*;
 import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
@@ -20,6 +17,8 @@ import com.jfatty.zcloud.health.vo.ReportHISDataVO;
 import com.jfatty.zcloud.hospital.feign.ComplexPatientFeignClient;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
+import com.jfatty.zcloud.system.entity.Address;
+import com.jfatty.zcloud.system.feign.AddressFeignClient;
 import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import com.tencent.healthcard.model.HealthCardInfo;
 import io.swagger.annotations.Api;
@@ -81,6 +80,9 @@ public class ApiHealthCardStationController {
     @Autowired
     private WechatFeignClient wechatFeignClient ;
 
+    @Autowired
+    private AddressFeignClient addressFeignClient ;
+
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
     @RequestMapping(value="/registerHealthCard", method=RequestMethod.POST)
     public RETResultUtils<RegHealthCardInfoRes> registerHealthCard(@RequestBody RegHealthCardInfoReq regHealthCardInfoReq){
@@ -102,34 +104,65 @@ public class ApiHealthCardStationController {
                 return RETResultUtils._509("验证码错误") ;
             //删除缓存
             redisTemplate.delete(phone1);
+            //校验身份证号码
             String idCard = regHealthCardInfoReq.getIdNumber();
             IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
+            //校验身份证号码是否合法
             String gender = idCardUtil.getGender() ;
+            if ( null == gender)
+                return RETResultUtils._509("证件号码不合法:"+idCard) ;
             String birthday = idCardUtil.getBirthdayStr();
+            //切分前端请求中的名族信息
             String nas[] = regHealthCardInfoReq.getNation().split(":::");
+            //查询数据库中是否存在对应证件号码关联的健康卡信息
             HCSHealthCardInfo db_HCSHealthCardInfo = hcsHealthCardInfoService.getByIdCardNumber(regHealthCardInfoReq.getIdNumber());
             String CID = "" ;
             if (db_HCSHealthCardInfo != null){
                 CID = db_HCSHealthCardInfo.getId();
             }else {
+                //保存用户健康卡注册数据
                 CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
             }
+            //定义返回参数
             RegHealthCardInfoRes regHealthCardInfoRes = new RegHealthCardInfoRes();
+            //定义健康卡请求参数
             HCSHealthCardInfoReq hcsHealthCardInfoReq = new HCSHealthCardInfoReq();
             BeanUtils.copyProperties(regHealthCardInfoReq,hcsHealthCardInfoReq);
-
+            //设置证件类型
             hcsHealthCardInfoReq.setIdType("01");
+            //设置请求性别
             hcsHealthCardInfoReq.setGender(gender);
+            //设置请求身份证号码
             hcsHealthCardInfoReq.setBirthday(birthday);
+            //重新设置请求参数中的名族信息
             hcsHealthCardInfoReq.setNation(nas[0]);
+            //设置请求第二个手机号码
             hcsHealthCardInfoReq.setPhone2("");
+            //调用业务层获取健康卡数据
             HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(regHealthCardInfoReq.getHospitalId(),hcsHealthCardInfoReq);
+            //拷贝健康卡数据到返回参数
             BeanUtils.copyProperties(healthCardInfoVO,regHealthCardInfoRes);
+            //拷贝健康卡数据到数据存储实体
             BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+            //数据存储ID
             hcsHealthCardInfo.setId(CID);
+            //重新设置名族信息
+            hcsHealthCardInfo.setNation(regHealthCardInfoReq.getNation());
             log.error("==============================开始=========================================");
+            //更新电子健康卡信息
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
             log.error("==============================结束=========================================");
+            //处理地址信息
+            HCSAddressReq pubAddress = regHealthCardInfoReq.getPubAddress();
+            if ( null != pubAddress){
+                Address address = new Address();
+                //拷贝共用地址信息
+                BeanUtils.copyProperties(pubAddress,address);
+                //设置所属ID
+                address.setBelongId(CID);
+                addressFeignClient.updateByBelongId(address);
+            }
+            //返回注册电子健康卡数据
             return new RETResultUtils(regHealthCardInfoRes) ;
         } catch (Exception e) {
             log.error("001**** 3.2.2 注册健康卡接口 出现异常[{}]",e.getMessage());

@@ -26,4 +26,9 @@ public class AddressServiceImpl extends BaseSystemServiceImpl<Address, AddressMa
         super.setBaseMapper(addressMapper);
         this.addressMapper = addressMapper;
     }
+
+    @Override
+    public Address getByBelongId(String belongId) {
+        return addressMapper.getByBelongId(belongId);
+    }
 }

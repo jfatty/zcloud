@@ -3,7 +3,6 @@ package com.jfatty.zcloud.health.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -111,6 +110,18 @@ public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
 
     //电子健康卡详情展示跳转地址
     private String detailUrl ;
+
+    /**
+     * 与就诊人关系 dicValue:::dicCode:::id 本人、家人、朋友等
+     * 本人:::100212:::402881906EF4795A016EF47A85A80001
+     */
+    private String relationship ;
+
+    /**
+     * 费用类别 dicValue:::dicCode:::id
+     * 自费:::0100:::693c54a870da44029aa03864659ee055
+     */
+    private String feeType ;
 
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...

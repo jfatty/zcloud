@@ -24,6 +24,8 @@
         <result column="open_id" property="openId" />
         <result column="wechat_url" property="wechatUrl" />
         <result column="detail_url" property="detailUrl" />
+        <result column="relationship" property="relationship" />
+        <result column="fee_type" property="feeType" />
         <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />

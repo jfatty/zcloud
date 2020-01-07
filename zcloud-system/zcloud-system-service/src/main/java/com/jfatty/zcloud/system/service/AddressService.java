@@ -12,4 +12,5 @@ import com.jfatty.zcloud.system.entity.Address;
  */
 public interface AddressService extends BaseSystemService<Address> {
 
+    Address getByBelongId(String belongId);
 }

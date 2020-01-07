@@ -33,10 +33,8 @@ public class  RegHealthCardInfoReq  extends HCSHealthCardInfoDTO<RegHealthCardIn
     private String phone1;
     @ApiModelProperty(name = "address", position = 0, value = "地址",example = "湖北省仙桃市通海口镇石垸村三组31号")
     private String address;
-
     @ApiModelProperty(name = "kaptcha", position = 0, value = "短信验证码",required = true ,example = "142578")
     private String kaptcha;
-
 
     @ApiModelProperty(name = "relationship", position = 8, value = "与就诊人关系 dicValue:::dicCode:::id 本人、家人、朋友等" , example = "本人:::100212:::402881906EF4795A016EF47A85A80001")
     private String relationship ;

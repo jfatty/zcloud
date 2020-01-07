@@ -51,4 +51,8 @@ public interface AddressFeignClient  extends BInterface<Address,AddressReq,Addre
 
     @RequestMapping(value = {"/delete"}, method = RequestMethod.POST)
     ResultUtils delete(@RequestBody Map<String, Object> params);
+
+    @RequestMapping(value={"/updateByBelongId"},method=RequestMethod.POST)
+    ResultUtils updateByBelongId(@RequestBody Address address);
+
 }
