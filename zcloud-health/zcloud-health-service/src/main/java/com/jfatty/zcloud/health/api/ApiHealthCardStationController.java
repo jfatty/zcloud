@@ -21,7 +21,6 @@ import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
 import com.jfatty.zcloud.system.entity.Address;
 import com.jfatty.zcloud.system.feign.AddressFeignClient;
 import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
-import com.tencent.healthcard.model.HealthCardInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -156,13 +155,18 @@ public class ApiHealthCardStationController {
             hcsHealthCardInfo.setId(CID);
             //重新设置名族信息
             hcsHealthCardInfo.setNation(regHealthCardInfoReq.getNation());
+            //处理健康卡与微信用户之间的绑定关系
+            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+            //设置微信升级模板消息url
+            String wechatUrl = String.format(settings.getTplUrl(),"update",CID) ;
+            hcsHealthCardInfo.setWechatUrl(wechatUrl);
+            //设置详情url
+            String detailUrl = String.format("http://devv.jfatty.com/health/api/healthCardStation/s%/getHealthCardByHealthCardInfoId?hospitalId=%s",settings.getHospitalId(),CID) ;
+            hcsHealthCardInfo.setDetailUrl(detailUrl);
             log.error("==============================开始=========================================");
             //更新电子健康卡信息
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
             log.error("==============================结束=========================================");
-            //处理健康卡与微信用户之间的绑定关系
-            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
-
             HealthCardUser healthCardUser = healthCardUserService.getByOpts(settings.getWxAppId(),hospitalId,openId,openIdType);
             if ( healthCardUser == null ){
                 healthCardUser = new HealthCardUser();

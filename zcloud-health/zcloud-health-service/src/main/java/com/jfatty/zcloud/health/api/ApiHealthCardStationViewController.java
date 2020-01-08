@@ -89,6 +89,9 @@ public class ApiHealthCardStationViewController {
                     HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
 
                     BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+
+                    HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+
                     String CID = "" ;
                     if (db_HCSHealthCardInfo != null){
                         CID = hcsHealthCardInfo.getId();
@@ -96,8 +99,16 @@ public class ApiHealthCardStationViewController {
                     }else {
                         CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                     }
+                    //设置微信升级模板消息url
+                    String wechatUrl = String.format(settings.getTplUrl(),"update",CID) ;
+                    hcsHealthCardInfo.setWechatUrl(wechatUrl);
+                    //设置详情url
+                    String detailUrl = String.format("http://devv.jfatty.com/health/api/healthCardStation/s%/getHealthCardByHealthCardInfoId?hospitalId=%s",settings.getHospitalId(),CID) ;
+                    hcsHealthCardInfo.setDetailUrl(detailUrl);
+                    //更新电子健康卡信息
+                    hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
 
-                    HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+
                     HealthCardUser healthCardUser = healthCardUserService.getByOpts(settings.getWxAppId(),hospitalId,openId,openIdType);
                     if ( healthCardUser == null ){
                         healthCardUser = new HealthCardUser();
