@@ -54,7 +54,7 @@
          health_card_info_id
         from hcs_health_card_user_relationship
         where 1 = 1  and delete_state = 0 and state = 1
-        and user_id = ( SELECT  id FROM hcs_health_card_user WHERE and open_id = #{openId} and open_id_type = #{openIdType} )
+        and user_id = ( SELECT  id FROM hcs_health_card_user WHERE 1=1 and open_id = #{openId} and open_id_type = #{openIdType} )
         order by create_time desc
     </select>
 
