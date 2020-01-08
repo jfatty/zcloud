@@ -72,14 +72,14 @@ public class ApiPageHrefController  extends ApiBaseSystemController<PageHref,Pag
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "pageId", value = "页面标识ID",dataType = "String",defaultValue = "30646"),
-            @ApiImplicitParam(name = "verifyName", value = "页面标识ID",dataType = "String",defaultValue = "getHealthCardByHealthCardInfoId"),
-            @ApiImplicitParam(name = "verifyRule", value = "页面标识ID",dataType = "String",defaultValue = "addWechatPack")
+            @ApiImplicitParam(name = "verifyName", value = "校验名称",dataType = "String",defaultValue = ""),
+            @ApiImplicitParam(name = "verifyRule", value = "校验规则",dataType = "String",defaultValue = "")
     })
     @RequestMapping(value = {"/getPageHrefsOpts"} ,method = RequestMethod.GET)
     public RELResultUtils<PageHrefRes> getPageHrefsOpts(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,//
                                                         @RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId  ,//
-                                                        @RequestParam(value = "verifyName" , defaultValue = "getHealthCardByHealthCardInfoId" ) String verifyName  ,
-                                                         @RequestParam(value = "verifyRule" ,  defaultValue = "addWechatPack") String verifyRule){
+                                                        @RequestParam(value = "verifyName" , defaultValue = "" ) String verifyName  ,
+                                                         @RequestParam(value = "verifyRule" ,  defaultValue = "") String verifyRule){
         if (StringUtils.isEmptyOrBlank(appId))
             appId = null ;
         if (StringUtils.isEmptyOrBlank(hospitalId))
