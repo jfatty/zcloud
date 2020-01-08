@@ -161,7 +161,7 @@ public class ApiHealthCardStationController {
             String wechatUrl = String.format(settings.getTplUrl(),"update",CID) ;
             hcsHealthCardInfo.setWechatUrl(wechatUrl);
             //设置详情url
-            String detailUrl = String.format("http://devv.jfatty.com/health/api/healthCardStation/s%/getHealthCardByHealthCardInfoId?hospitalId=%s",settings.getHospitalId(),CID) ;
+            String detailUrl = String.format("http://devv.jfatty.com/health/api/healthCardStation/%s/getHealthCardByHealthCardInfoId?hospitalId=%s",settings.getHospitalId(),CID) ;
             hcsHealthCardInfo.setDetailUrl(detailUrl);
             log.error("==============================开始=========================================");
             //更新电子健康卡信息
