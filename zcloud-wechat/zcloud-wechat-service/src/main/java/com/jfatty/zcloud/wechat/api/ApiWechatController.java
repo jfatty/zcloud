@@ -122,8 +122,10 @@ public class ApiWechatController {
     public ResultUtils wxOAuth(@RequestParam(value = "code" , defaultValue = "code") String code ,
                                @RequestParam(value = "appId" , defaultValue = "appId" ) String appId ,HttpServletRequest request){
         HttpSession session = request.getSession();
+        String openIdKey = "openId" + session.getId() + appId ;
+        String accessTokenKey = "accessToken" + session.getId() + appId ;
         log.error(" ====>  当前微信公众 appId [{}] sessionId [{}]",appId,session.getId());
-        String openId =(String) session.getAttribute("openId");
+        String openId =(String) session.getAttribute(openIdKey);
         if(StringUtils.isNotEmptyAndBlank(openId)){
             log.error(" ====>  当前微信公众 appId [{}] 获取openId [{}]",appId,openId);
             return ResultUtils.build(200, "SUCCESS",openId) ;
@@ -132,8 +134,8 @@ public class ApiWechatController {
         try {
             //获取OAuthAccessToken
             OAuthAccessToken token = WxApiClient.getDirectOAuthAccessToken(mpAccount,code) ;
-            session.setAttribute("openId", token.getOpenid());
-            session.setAttribute("accessToken", token.getAccessToken());            //网页授权的access_token
+            session.setAttribute(openIdKey, token.getOpenid());
+            session.setAttribute(accessTokenKey, token.getAccessToken());            //网页授权的access_token
             log.error(" ====>  通过当前微信公众号 appId 获取到的 wcOpenId [{}]",token.getOpenid());
             return ResultUtils.build(200, "SUCCESS",token.getOpenid()) ;
         } catch (WxErrorException e) {
