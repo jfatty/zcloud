@@ -61,7 +61,7 @@ public class ApiHealthCardStationViewController {
             //注意2：当用户在该页面点击添加健康卡按钮时，开放平台返回healthCode=0，因此ISV必须判断该情况：当healthCode=0时跳转到新用户建卡页面；
             //注意3：当用户在该页面点击暂不授权按钮时，开放平台返回healthCode=-1，因此ISV必须判断该情况：当healthCode=-1时跳转到上一个页面；
             log.error("hospitalId======>[{}]健康平台回传healthCode======>[{}]",hospitalId,healthCode);
-            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"","");
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"","getHealthCardByHealthCodePath");
             List<PageHrefRes> hrefs = pageHrefRes.getData();
             for (PageHrefRes herf : hrefs){
                 if (StringUtils.isEmptyOrBlank(herf.getVerifyCode())){
@@ -170,7 +170,7 @@ public class ApiHealthCardStationViewController {
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
             hcsHealthCardInfoRes.setNation(nationDic);
-            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"getHealthCardByHealthCardInfoId","");
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"addWechatPack","");
             List<PageHrefRes> hrefs = pageHrefRes.getData();
             for (PageHrefRes herf : hrefs){
                 //https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=http://dev.jfatty.com/HealthCardDemo/personal.html
