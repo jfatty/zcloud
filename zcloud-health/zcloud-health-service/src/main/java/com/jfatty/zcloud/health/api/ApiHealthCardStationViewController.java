@@ -4,9 +4,13 @@ import com.jfatty.zcloud.base.utils.IDCardUtil;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
+import com.jfatty.zcloud.health.entity.HealthCardSettings;
+import com.jfatty.zcloud.health.entity.HealthCardUser;
 import com.jfatty.zcloud.health.res.HCSHealthCardInfoRes;
 import com.jfatty.zcloud.health.service.HCSHealthCardInfoService;
+import com.jfatty.zcloud.health.service.HealthCardSettingsService;
 import com.jfatty.zcloud.health.service.HealthCardStationService;
+import com.jfatty.zcloud.health.service.HealthCardUserService;
 import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
 import com.jfatty.zcloud.system.feign.PageHrefFeignClient;
 import com.jfatty.zcloud.system.res.PageHrefRes;
@@ -46,15 +50,26 @@ public class ApiHealthCardStationViewController {
     private HCSHealthCardInfoService hcsHealthCardInfoService ;
 
     @Autowired
+    private HealthCardSettingsService healthCardSettingsService;
+
+    @Autowired
+    private HealthCardUserService healthCardUserService ;
+
+    @Autowired
     private PageHrefFeignClient pageHrefFeignClient ;
 
     @ApiOperation(value=" 001****通过健康卡授权码获取用户健康卡信息接口 3.2.3 通过健康卡授权码获取接口",tags = "注意：页面自动跳转,页面加载时获取URL路径中携带的参数")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "openId", value = "微信 openId",dataType = "String",defaultValue = "owisqt8cS_7a3GVnyP70oUIjK5vU"),
+            @ApiImplicitParam(name = "openIdType", value = "微信 2 openId 类型",dataType = "Integer",defaultValue = "2"),
             @ApiImplicitParam(name = "healthCode", value = "健康卡授权码",dataType = "String",defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094")
     })
-    @RequestMapping(value="/{hospitalId}/getHealthCardByHealthCode", method=RequestMethod.GET)
-    public void getHealthCardByHealthCodePath(@PathVariable("hospitalId") String hospitalId , @RequestParam(value = "healthCode" , defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094") String healthCode, HttpServletResponse response){
+    @RequestMapping(value="/{hospitalId}/{openId}/{openIdType}/getHealthCardByHealthCode", method=RequestMethod.GET)
+    public void getHealthCardByHealthCodePath(@PathVariable("hospitalId") String hospitalId ,//
+                                              @PathVariable("openId") String openId ,//
+                                              @PathVariable("openIdType") Integer openIdType ,//
+                                              @RequestParam(value = "healthCode" , defaultValue = "F9D3F8A308FC0EABC581F5903CAA1094") String healthCode, HttpServletResponse response){
         try {
 
             //注意1：健康卡授权码healthCode有效期为30分钟且只能使用一次，一经使用立即失效。每次刷新会分配新的healthCode，为了保持平滑过渡，最近刷新的两个healthCode均有效，且次新healthCode将在5分钟后失效。
@@ -74,11 +89,27 @@ public class ApiHealthCardStationViewController {
                     HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
 
                     BeanUtils.copyProperties(healthCardInfoVO,hcsHealthCardInfo);
+                    String CID = "" ;
                     if (db_HCSHealthCardInfo != null){
+                        CID = hcsHealthCardInfo.getId();
                         hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
                     }else {
-                        hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
+                        CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
                     }
+
+                    HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+                    HealthCardUser healthCardUser = healthCardUserService.getByOpts(settings.getWxAppId(),hospitalId,openId,openIdType);
+                    if ( healthCardUser == null ){
+                        healthCardUser = new HealthCardUser();
+                        healthCardUser.setAppid(settings.getWxAppId());
+                        healthCardUser.setHospitalId(hospitalId);
+                        healthCardUser.setOpenId(openId);
+                        healthCardUser.setOpenIdType(openIdType);
+                        healthCardUserService.saveId(healthCardUser);
+                    }
+                    healthCardUserService.tieHealthCard(openId,openIdType,hospitalId,CID);
+                    //设置电子健康卡信息ID
+                    hcsHealthCardInfoRes.setId(CID);
                     //改变名族为字典
                     String nation = hcsHealthCardInfoRes.getNation();
                     String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
