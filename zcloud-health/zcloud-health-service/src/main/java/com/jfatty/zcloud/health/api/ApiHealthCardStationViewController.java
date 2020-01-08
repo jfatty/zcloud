@@ -94,7 +94,9 @@ public class ApiHealthCardStationViewController {
 
                     String CID = "" ;
                     if (db_HCSHealthCardInfo != null){
-                        CID = hcsHealthCardInfo.getId();
+                        CID = db_HCSHealthCardInfo.getId();
+                        hcsHealthCardInfo.setId(CID);
+                        hcsHealthCardInfo.setNation(db_HCSHealthCardInfo.getNation());
                         hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
                     }else {
                         CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
