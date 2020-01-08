@@ -64,15 +64,7 @@ public class ApiHealthCardStationViewController {
             RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"","getHealthCardByHealthCodePath");
             List<PageHrefRes> hrefs = pageHrefRes.getData();
             for (PageHrefRes herf : hrefs){
-                if ( healthCode.equals(herf.getVerifyCode()) ){
-                    //"0".equals(healthCode)
-                    //ls_health/createCard
-                    //response.sendRedirect("http://dev.jfatty.com/HealthCardDemo/regist_new.html");
-                    //"-1".equals(healthCode)
-                    //不授权直接页面重定向返回健康卡列表页面 并且URL中携带参数提供给页面做判断
-                    //ls_health/home
-                    response.sendRedirect(herf.getTargetHref());
-                } else {
+                if ( StringUtils.isEmptyOrBlank(herf.getVerifyCode()) && healthCode.length() > 2 ){
                     HCSHealthCardInfoRes hcsHealthCardInfoRes  = new HCSHealthCardInfoRes();
 
                     HealthCardInfoVO healthCardInfoVO = healthCardStationService.getHealthCardByHealthCode(hospitalId,healthCode);
@@ -101,7 +93,16 @@ public class ApiHealthCardStationViewController {
                     path = path + "?" + params ;
                     //去健康卡详情页面
                     response.sendRedirect(path);
+                }else if ( healthCode.equals(herf.getVerifyCode()) && healthCode.length() < 3){
+                    //"0".equals(healthCode)
+                    //ls_health/createCard
+                    //response.sendRedirect("http://dev.jfatty.com/HealthCardDemo/regist_new.html");
+                    //"-1".equals(healthCode)
+                    //不授权直接页面重定向返回健康卡列表页面 并且URL中携带参数提供给页面做判断
+                    //ls_health/home
+                    response.sendRedirect(herf.getTargetHref());
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
