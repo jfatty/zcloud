@@ -7,6 +7,7 @@ import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.health.entity.HCSHealthCardInfo;
 import com.jfatty.zcloud.health.entity.HCSIDCardInfo;
 import com.jfatty.zcloud.health.entity.HealthCardSettings;
+import com.jfatty.zcloud.health.entity.HealthCardUser;
 import com.jfatty.zcloud.health.req.*;
 import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.*;
@@ -87,6 +88,7 @@ public class ApiHealthCardStationController {
     @RequestMapping(value="/registerHealthCard", method=RequestMethod.POST)
     public RETResultUtils<RegHealthCardInfoRes> registerHealthCard(@RequestBody RegHealthCardInfoReq regHealthCardInfoReq){
         try {
+
             HCSHealthCardInfo hcsHealthCardInfo = new HCSHealthCardInfo();
             BeanUtils.copyProperties(regHealthCardInfoReq,hcsHealthCardInfo);
 
@@ -111,6 +113,12 @@ public class ApiHealthCardStationController {
             String gender = idCardUtil.getGender() ;
             if ( null == gender)
                 return RETResultUtils._509("证件号码不合法:"+idCard) ;
+
+            String openId = regHealthCardInfoReq.getOpenId();
+            Integer openIdType = regHealthCardInfoReq.getOpenIdType() ;
+            String hospitalId = regHealthCardInfoReq.getHospitalId() ;
+
+
             String birthday = idCardUtil.getBirthdayStr();
             //切分前端请求中的名族信息
             String nas[] = regHealthCardInfoReq.getNation().split(":::");
@@ -139,7 +147,7 @@ public class ApiHealthCardStationController {
             //设置请求第二个手机号码
             hcsHealthCardInfoReq.setPhone2("");
             //调用业务层获取健康卡数据
-            HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(regHealthCardInfoReq.getHospitalId(),hcsHealthCardInfoReq);
+            HealthCardInfoVO healthCardInfoVO = healthCardStationService.registerHealthCard(hospitalId,hcsHealthCardInfoReq);
             //拷贝健康卡数据到返回参数
             BeanUtils.copyProperties(healthCardInfoVO,regHealthCardInfoRes);
             //拷贝健康卡数据到数据存储实体
@@ -152,6 +160,19 @@ public class ApiHealthCardStationController {
             //更新电子健康卡信息
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
             log.error("==============================结束=========================================");
+            //处理健康卡与微信用户之间的绑定关系
+            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+
+            HealthCardUser healthCardUser = healthCardUserService.getByOpts(settings.getWxAppId(),hospitalId,openId,openIdType);
+            if ( healthCardUser == null ){
+                healthCardUser = new HealthCardUser();
+                healthCardUser.setAppid(settings.getWxAppId());
+                healthCardUser.setHospitalId(hospitalId);
+                healthCardUser.setOpenId(openId);
+                healthCardUser.setOpenIdType(openIdType);
+                healthCardUserService.saveId(healthCardUser);
+            }
+            healthCardUserService.tieHealthCard(openId,openIdType,hospitalId,CID);
             //处理地址信息
             HCSAddressReq pubAddress = regHealthCardInfoReq.getPubAddress();
             if ( null != pubAddress){
@@ -407,13 +428,26 @@ public class ApiHealthCardStationController {
     @RequestMapping(value="/getHealthCardList", method=RequestMethod.POST)
     public RELResultUtils<SimpleHealthCardInfoRes> getHealthCardList(@RequestBody SimpleHealthCardInfoReq simpleHealthCardInfoReq){
         try {
-            List<String> healthCardInfoIds = healthCardUserService.getByOpenId(simpleHealthCardInfoReq.getOpenId(),simpleHealthCardInfoReq.getOpenIdType());
+            String openId = simpleHealthCardInfoReq.getOpenId();
+            Integer openIdType = simpleHealthCardInfoReq.getOpenIdType() ;
+            String hospitalId = simpleHealthCardInfoReq.getHospitalId() ;
+            //处理健康卡与微信用户之间的绑定关系
+            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
+            HealthCardUser healthCardUser = healthCardUserService.getByOpts(settings.getWxAppId(),hospitalId,openId,openIdType);
+            if ( healthCardUser == null ){
+                healthCardUser = new HealthCardUser();
+                healthCardUser.setAppid(settings.getWxAppId());
+                healthCardUser.setHospitalId(hospitalId);
+                healthCardUser.setOpenId(openId);
+                healthCardUser.setOpenIdType(openIdType);
+                healthCardUserService.saveId(healthCardUser);
+            }
+            List<String> healthCardInfoIds = healthCardUserService.getByOpenId(openId,openIdType);
             if (CollectionUtils.isEmpty(healthCardInfoIds))
                 return RELResultUtils._506("您暂无电子健康卡E0");
-            List<HCSHealthCardInfo> hcsHealthCardInfos = hcsHealthCardInfoService.getBatchHealthCardByInfoIds(healthCardInfoIds,simpleHealthCardInfoReq.getHospitalId());
+            List<HCSHealthCardInfo> hcsHealthCardInfos = hcsHealthCardInfoService.getBatchHealthCardByInfoIds(healthCardInfoIds,hospitalId);
             if(CollectionUtils.isEmpty(hcsHealthCardInfos))
                 return RELResultUtils._506("您暂无电子健康卡E1");
-            HealthCardSettings settings = healthCardSettingsService.getByHospitalId(simpleHealthCardInfoReq.getHospitalId());
             List<SimpleHealthCardInfoRes> resList = new ArrayList<SimpleHealthCardInfoRes>();
             for (HCSHealthCardInfo healthCardInfo : hcsHealthCardInfos ){
                 SimpleHealthCardInfoRes simpleHealthCardInfoRes = new SimpleHealthCardInfoRes();

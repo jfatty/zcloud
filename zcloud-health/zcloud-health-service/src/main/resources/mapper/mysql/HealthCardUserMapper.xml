@@ -6,9 +6,9 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.health.entity.HealthCardUser">
         <id column="id" property="id" />
         <result column="appid" property="appid" />
+        <result column="hospital_id" property="hospitalId" />
         <result column="open_id" property="openId" />
         <result column="open_id_type" property="openIdType" />
-        <result column="health_card_info_id" property="healthCardInfoId" />
         <result column="name" property="name" />
         <result column="gender" property="gender" />
         <result column="phone" property="phone" />
@@ -52,20 +52,23 @@
     <select id="getByOpenId" resultType="java.lang.String">
         select
          health_card_info_id
-        from hcs_health_card_user
+        from hcs_health_card_user_relationship
         where 1 = 1  and delete_state = 0 and state = 1
-        <if test="openId != null" >
-            and open_id = #{openId}
-        </if>
-        <if test="openIdType != null" >
-            and open_id_type = #{openIdType}
-        </if>
+        and user_id = ( SELECT  id FROM hcs_health_card_user WHERE and open_id = #{openId} and open_id_type = #{openIdType} )
         order by create_time desc
     </select>
 
+    <insert id="tieHealthCard">
+        insert into hcs_health_card_user_relationship(user_id,health_card_info_id) select (SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) , #{healthCardInfoId}
+        where not exists (select user_id from hcs_health_card_user_relationship where user_id=(SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} )
+    </insert>
 
     <update id="untieHealthCard">
-        UPDATE hcs_health_card_user SET delete_state = 1 WHERE open_id = #{openId}  AND open_id_type = #{openIdType}  AND health_card_info_id = #{healthCardInfoId} AND hospital_id = #{hospitalId}
+        UPDATE hcs_health_card_user_relationship SET delete_state = 1 WHERE  1=1 AND  user_id = (SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 )  AND health_card_info_id = #{healthCardInfoId}
     </update>
+
+    <select id="getByOpts" resultMap="BaseResultMap">
+        SELECT * FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND appid = #{appId} AND hospital_id = #{hospitalId} LIMIT 1
+    </select>
 
 </mapper>

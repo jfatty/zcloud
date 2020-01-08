@@ -33,6 +33,11 @@ public class HealthCardUser extends Model<HealthCardUser> {
     private String appid;
 
     /**
+     * 医院ID
+     */
+    private String hospitalId;
+
+    /**
      * 微信openId
      */
     private String openId;
@@ -41,11 +46,6 @@ public class HealthCardUser extends Model<HealthCardUser> {
      * openId类型1,2,3
      */
     private Integer openIdType;
-
-    /**
-     * 健康卡信息记录表ID
-     */
-    private String healthCardInfoId;
 
     /**
      * 微信用户姓名或者昵称

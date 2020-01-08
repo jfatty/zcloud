@@ -18,5 +18,9 @@ public interface HealthCardUserMapper extends IBaseMapper<HealthCardUser> {
 
     List<String> getByOpenId(@Param("openId") String openId,@Param("openIdType")  Integer openIdType);
 
+    Integer tieHealthCard(@Param("openId") String openId, @Param("openIdType") Integer openIdType,@Param("hospitalId")  String hospitalId, @Param("healthCardInfoId") String healthCardInfoId);
+
     Integer untieHealthCard(@Param("openId") String openId, @Param("openIdType") Integer openIdType,@Param("hospitalId")  String hospitalId, @Param("healthCardInfoId") String healthCardInfoId);
+
+    HealthCardUser getByOpts(@Param("appId") String appId, @Param("hospitalId")  String hospitalId, @Param("openId") String openId, @Param("openIdType") Integer openIdType);
 }

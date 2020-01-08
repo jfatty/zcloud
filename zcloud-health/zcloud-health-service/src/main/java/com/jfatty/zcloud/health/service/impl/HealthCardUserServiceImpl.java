@@ -36,7 +36,17 @@ public class HealthCardUserServiceImpl extends BaseHealthServiceImpl<HealthCardU
     }
 
     @Override
+    public Boolean tieHealthCard(String openId, Integer openIdType, String hospitalId, String healthCardInfoId) throws Exception {
+        return healthCardUserMapper.tieHealthCard(openId,openIdType,hospitalId,healthCardInfoId) > 0;
+    }
+
+    @Override
     public Boolean untieHealthCard(String openId, Integer openIdType, String hospitalId, String healthCardInfoId) throws Exception {
         return healthCardUserMapper.untieHealthCard(openId,openIdType,hospitalId,healthCardInfoId) > 0;
+    }
+
+    @Override
+    public HealthCardUser getByOpts(String appId, String hospitalId, String openId, Integer openIdType) {
+        return healthCardUserMapper.getByOpts(appId,hospitalId,openId,openIdType);
     }
 }
