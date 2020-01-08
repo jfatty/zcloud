@@ -92,6 +92,7 @@ public class ApiHealthCardStationViewController {
                     log.error("编码后的URL参数[{}]",params);
                     path = path + "?" + params ;
                     //去健康卡详情页面
+                    log.error("去健康卡详情页面 [{}]",path);
                     response.sendRedirect(path);
                 }else if ( healthCode.equals(herf.getVerifyCode()) && healthCode.length() < 3){
                     //"0".equals(healthCode)
@@ -100,6 +101,7 @@ public class ApiHealthCardStationViewController {
                     //"-1".equals(healthCode)
                     //不授权直接页面重定向返回健康卡列表页面 并且URL中携带参数提供给页面做判断
                     //ls_health/home
+                    log.error("页面跳转 [{}]",herf.getTargetHref());
                     response.sendRedirect(herf.getTargetHref());
                 }
 
@@ -137,6 +139,7 @@ public class ApiHealthCardStationViewController {
                 log.error("编码后的URL参数[{}]",params);
                 path = path + "?" + params ;
                 //去健康卡详情页面
+                log.error("去健康卡详情页面 [{}]",path);
                 response.sendRedirect(path);
             }
         } catch (IOException e) {
@@ -183,6 +186,7 @@ public class ApiHealthCardStationViewController {
                 redirect_uri = redirect_uri + "?" + params ;
                 log.error("加入微信卡包的重定向URL参数[{}]",redirect_uri);
                 //加入微信卡包后去健康卡详情页面
+                log.error("加入微信卡包后去健康卡详情页面 [{}]",redirect_uri);
                 response.sendRedirect(redirect_uri);
             }
         } catch (Exception e) {
