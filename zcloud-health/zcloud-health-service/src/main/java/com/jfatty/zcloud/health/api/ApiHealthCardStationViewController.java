@@ -92,11 +92,12 @@ public class ApiHealthCardStationViewController {
 
                     HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
 
+                    hcsHealthCardInfo.setHospitalId(settings.getHospitalId());
+                    hcsHealthCardInfo.setNation(db_HCSHealthCardInfo.getNation());
                     String CID = "" ;
                     if (db_HCSHealthCardInfo != null){
                         CID = db_HCSHealthCardInfo.getId();
                         hcsHealthCardInfo.setId(CID);
-                        hcsHealthCardInfo.setNation(db_HCSHealthCardInfo.getNation());
                         hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
                     }else {
                         CID = hcsHealthCardInfoService.saveId(hcsHealthCardInfo);
