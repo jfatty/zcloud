@@ -18,7 +18,7 @@ public class IdCardUtil implements Serializable {
     public static  String coverStarts(String source,int start, int end){
         if(StringUtils.isNotBlank(source) && StringUtils.isNotEmpty(source) && source.length() > 11){
             StringBuilder sb = new StringBuilder(source);
-            sb.replace(start, end, "********");
+            sb.replace(start, end, "******");
             return sb.toString();
         }
         return source ;
