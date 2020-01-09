@@ -223,13 +223,14 @@ public class ApiHealthCardStationViewController {
             List<PageHrefRes> hrefs = pageHrefRes.getData();
             for (PageHrefRes herf : hrefs){
                 //https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=http://dev.jfatty.com/HealthCardDemo/personal.html
-                String path = "https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=" + herf.getTargetHref() ;
-                String params = getPostParams(hcsHealthCardInfoRes);
-                params = URLEncoder.encode(params,"UTF-8");
-                log.error("编码后的URL参数[{}]",params);
-                String redirect_uri  = String.format(path,orderId) ;
-                redirect_uri = redirect_uri + "?" + params ;
-                log.error("加入微信卡包的重定向URL参数[{}]",redirect_uri);
+                //+ herf.getTargetHref()
+                String path = "https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=http://dev.jfatty.com/health/api/healthCardStation/%s/getHealthCardByHealthCardInfoId?healthCardInfoId=%s"  ;
+                //String params = getPostParams(hcsHealthCardInfoRes);
+                //params = URLEncoder.encode(params,"UTF-8");
+                //log.error("编码后的URL参数[{}]",params);
+                String redirect_uri  = String.format(path,orderId,hospitalId,healthCardInfoId) ;
+                //redirect_uri = redirect_uri + "?" + params ;
+                //log.error("加入微信卡包的重定向URL参数[{}]",redirect_uri);
                 //加入微信卡包后去健康卡详情页面
                 log.error("加入微信卡包后去健康卡详情页面 [{}]",redirect_uri);
                 response.sendRedirect(redirect_uri);
