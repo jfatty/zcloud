@@ -219,11 +219,11 @@ public class ApiHealthCardStationViewController {
             String nationDic = hcsHealthCardInfoService.getNationDicStr(nation);
             hcsHealthCardInfoRes.setIdNumber(IDCardUtil.coverStarts(hcsHealthCardInfoRes.getIdNumber(),8,14));
             hcsHealthCardInfoRes.setNation(nationDic);
-            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"addWechatPack","");
+            RELResultUtils<PageHrefRes> pageHrefRes = pageHrefFeignClient.getPageHrefsOpts("",hospitalId,"getHealthCardByHealthCardInfoId","");
             List<PageHrefRes> hrefs = pageHrefRes.getData();
             for (PageHrefRes herf : hrefs){
                 //https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=http://dev.jfatty.com/HealthCardDemo/personal.html
-                String path = herf.getTargetHref() ;
+                String path = "https://health.tengmed.com/open/takeMsCard?order_id=%s&redirect_uri=" + herf.getTargetHref() ;
                 String params = getPostParams(hcsHealthCardInfoRes);
                 params = URLEncoder.encode(params,"UTF-8");
                 log.error("编码后的URL参数[{}]",params);
