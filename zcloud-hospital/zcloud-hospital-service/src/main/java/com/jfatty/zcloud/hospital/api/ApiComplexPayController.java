@@ -71,6 +71,8 @@ public class ApiComplexPayController {
                     webMissionReses.add(webMissionRes);
                 }
             }
+            if (CollectionUtils.isEmpty(webMissionReses))
+                return RELResultUtils._506("医院系统中没有查询到待缴费信息");
             return  new RELResultUtils(webMissionReses);
         }
         return RELResultUtils._506("医院系统中没有查询到数据");
