@@ -92,9 +92,12 @@ public class ApiComplexPayController {
                     }
             );
             NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(unPayOutpatientReq.getOpenId(),unPayOutpatientReq.getOpenIdType(),unPayOutpatientReq.getBrid());
+
+            String idCard = IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),8,14)  ;
             WebmzListRes webmzListRes = new WebmzListRes()//
                     .setName(numoPatientDeatilRes.getName())//
-                    .setIdCard(numoPatientDeatilRes.getIdCard())//
+                    .setIdCard(idCard)//
+                    .setJzh(unPayOutpatientReq.getDjh())//就诊号
                     .setUnPays(unPayOutpatientReses);
             return new RETResultUtils(webmzListRes);
         }
@@ -125,7 +128,7 @@ public class ApiComplexPayController {
         TotalUnPayOutpatientRes totalUnPayOutpatientRes = new TotalUnPayOutpatientRes();
         BeanUtils.copyProperties(totalUnPayOutpatient,totalUnPayOutpatientRes);
         totalUnPayOutpatientRes.setXm(numoPatientDeatilRes.getName());
-        totalUnPayOutpatientRes.setSfzh(IdCardUtil.coverStarts(numoPatientDeatilRes .getIdCard(),6,14));
+        totalUnPayOutpatientRes.setSfzh(IdCardUtil.coverStarts(numoPatientDeatilRes .getIdCard(),8,14));
         totalUnPayOutpatientRes.setDqrq(LocalDateTime.now().toString());
         totalUnPayOutpatientRes.setJzh(totalUnPayOutpatientReq.getDjh());
         return new RETResultUtils(totalUnPayOutpatientRes);
@@ -166,7 +169,7 @@ public class ApiComplexPayController {
             OutTradeNoOrderRes outTradeNoOrderRes = new OutTradeNoOrderRes();
             BeanUtils.copyProperties(pay,outTradeNoOrderRes);
             outTradeNoOrderRes.setName(patient.getName());
-            outTradeNoOrderRes.setIdCard(IdCardUtil.coverStarts(patient.getIdCard(),6,14));
+            outTradeNoOrderRes.setIdCard(IdCardUtil.coverStarts(patient.getIdCard(),8,14));
             return new RETResultUtils(outTradeNoOrderRes);
         }
         return RETResultUtils._506("系统中不存在该笔交易!");
