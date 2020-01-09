@@ -3,6 +3,7 @@ package com.jfatty.zcloud.hospital.api;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
+import com.jfatty.zcloud.hospital.annotation.ServiceAspectAnnotation;
 import com.jfatty.zcloud.hospital.req.WebPriceinfoReq;
 import com.jfatty.zcloud.hospital.res.WebPriceinfoRes;
 import com.jfatty.zcloud.hospital.service.WebPriceinfoService;
@@ -23,13 +24,17 @@ import java.util.List;
 @Api(tags = "物价查询API" ,value = "物价查询")
 @Slf4j
 @RestController
+@ServiceAspectAnnotation
 @RequestMapping("/api/webPriceinfo")
 public class ApiWebPriceinfoController {
 
+
     @Autowired
+    @ServiceAspectAnnotation
     private WebPriceinfoService webPriceinfoService ;
 
 
+    @ServiceAspectAnnotation
     @ApiOperation(value="POST 参数 获取列表数据")
     @RequestMapping(value = {"/getWebPriceinfo"} ,method = RequestMethod.POST)
     public RELResultUtils<WebPriceinfoRes> getWebPriceinfo(@RequestBody WebPriceinfoReq webPriceinfoReq){
@@ -40,5 +45,6 @@ public class ApiWebPriceinfoController {
             return new RELResultUtils(list);
         return RELResultUtils._506("没有查询到相关物价信息") ;
     }
+
 
 }
