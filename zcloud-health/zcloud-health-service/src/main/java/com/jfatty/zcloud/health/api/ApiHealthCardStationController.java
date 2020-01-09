@@ -504,13 +504,16 @@ public class ApiHealthCardStationController {
     @ApiOperation(value=" 012**** 测试发送电子健康卡升级模板消息 ")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "hospitalId", value = "医院ID",dataType = "String",defaultValue = "30646"),
+            @ApiImplicitParam(name = "healthCardInfoId", value = "健康卡信息记录ID(系统健康卡ID)",dataType = "String",defaultValue = "2C9580916F47F3AA016F47F3AA0F0000"),
             @ApiImplicitParam(name = "openId", value = "微信 openId",dataType = "String",defaultValue = "owisqt8cS_7a3GVnyP70oUIjK5vU")
     })
     @RequestMapping(value="/testSendTplMessage", method=RequestMethod.GET)
     public RETResultUtils<Boolean> testSendTplMessage(@RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId , //
+                                                      @RequestParam(value = "healthCardInfoId" , defaultValue = "2C9580916F47F3AA016F47F3AA0F0000" ) String healthCardInfoId ,
                                                                   @RequestParam(value = "openId" , defaultValue = "owisqt8cS_7a3GVnyP70oUIjK5vU") String openId  ) {
         HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId);
-        wechatFeignClient.sendTemplateMessage(settings.getWxAppId(),openId,settings.getTplId(),settings.getTplUrl(),"您已成功将就诊卡升级为健康卡！","2014年7月21日 18:36","健康卡可完全替代就诊卡，支持区域内多家医院跨院就医，无需重复办卡，实现线上挂号缴费，线下扫码就医。","点击查看健康卡");
+        String url = String.format(settings.getTplUrl(),"update",healthCardInfoId);
+        wechatFeignClient.sendTemplateMessage(settings.getWxAppId(),openId,settings.getTplId(),url,"您已成功将就诊卡升级为健康卡！","2014年7月21日 18:36","健康卡可完全替代就诊卡，支持区域内多家医院跨院就医，无需重复办卡，实现线上挂号缴费，线下扫码就医。","点击查看健康卡");
         return new RETResultUtils(true);
     }
 
