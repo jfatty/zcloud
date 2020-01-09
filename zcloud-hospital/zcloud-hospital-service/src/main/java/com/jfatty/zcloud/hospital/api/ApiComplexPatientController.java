@@ -73,7 +73,6 @@ public class ApiComplexPatientController {
                 defaultPat = userInfo.getDefaultPat();
 
             List<WebRegPatientRes> results = new ArrayList<WebRegPatientRes>();
-
             String finalDefaultPat = defaultPat;
             list.forEach(
                     webRegPatient -> {
@@ -173,7 +172,7 @@ public class ApiComplexPatientController {
         if ( !b )
             return RETResultUtils._509("此病人不在本系统中");//没有操作数据的权限
         NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(openId,openIdType,brid);
-        numoPatientDeatilRes.setIdCard(IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),6,14));
+        numoPatientDeatilRes.setIdCard(IdCardUtil.coverStarts(numoPatientDeatilRes.getIdCard(),8,14));
         return new RETResultUtils(numoPatientDeatilRes);
     }
 
