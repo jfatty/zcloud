@@ -92,6 +92,13 @@ public class HealthCardSettingsDTO<T extends BaseDTO> extends BaseDTO {
     @ApiModelProperty(name = "wechatPackUrl", position = 0, value = "加入微信卡包配置地址",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
     private String wechatPackUrl;
 
+
+    /**
+     * 详情界面url地址
+     */
+    @ApiModelProperty(name = "detailPageUrl", position = 0, value = "详情界面url地址",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String detailPageUrl;
+
     /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */

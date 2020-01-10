@@ -95,6 +95,11 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
     private String wechatPackUrl;
 
     /**
+     * 详情界面url地址
+     */
+    private String detailPageUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;
