@@ -69,6 +69,30 @@ public class HealthCardSettingsDTO<T extends BaseDTO> extends BaseDTO {
     private String tplUrl;
 
     /**
+     * 新用户建卡页面url地址
+     */
+    @ApiModelProperty(name = "addUrl", position = 0, value = "新用户建卡页面url地址",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String addUrl;
+
+    /**
+     * 电子健康卡管理(列表)页面url
+     */
+    @ApiModelProperty(name = "listUrl", position = 0, value = "电子健康卡管理(列表)页面url",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String listUrl;
+
+    /**
+     * 详情url匹配地址
+     */
+    @ApiModelProperty(name = "detailUrl", position = 0, value = "详情url匹配地址",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String detailUrl;
+
+    /**
+     * 加入微信卡包配置地址
+     */
+    @ApiModelProperty(name = "wechatPackUrl", position = 0, value = "加入微信卡包配置地址",required = true ,example = "http://dev.jfatty.com/ls_health/?option=%s&id=%s")
+    private String wechatPackUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     @ApiModelProperty(name = "status", position = 0, value = "使用状态0表示正常使用-1表示维护中-2表示建设中...",example = "0",allowableValues = "0,-1,-2")

@@ -75,6 +75,26 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
     private String tplUrl;
 
     /**
+     * 新用户建卡页面url地址
+     */
+    private String addUrl;
+
+    /**
+     * 电子健康卡管理(列表)页面url
+     */
+    private String listUrl;
+
+    /**
+     * 详情url匹配地址
+     */
+    private String detailUrl;
+
+    /**
+     * 加入微信卡包配置地址
+     */
+    private String wechatPackUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;
