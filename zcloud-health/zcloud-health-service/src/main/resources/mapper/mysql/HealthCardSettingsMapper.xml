@@ -21,6 +21,7 @@
         <result column="list_url" property="listUrl" />
         <result column="detail_url" property="detailUrl" />
         <result column="wechat_pack_url" property="wechatPackUrl" />
+        <result column="detail_page_url" property="detailPageUrl" />
         <result column="status" property="status" />
         <result column="state" property="state" />
         <result column="realm" property="realm" />

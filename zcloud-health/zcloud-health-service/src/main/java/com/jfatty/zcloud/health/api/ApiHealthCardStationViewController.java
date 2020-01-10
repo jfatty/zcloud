@@ -161,7 +161,7 @@ public class ApiHealthCardStationViewController {
             hcsHealthCardInfoRes.setNation(nationDic);
             HealthCardSettings settings = healthCardSettingsService.getByHospitalId(hospitalId) ;
             //http://dev.jfatty.com/HealthCardDemo/personal.html
-            String path =  settings.getDetailUrl() ;
+            String path = settings.getDetailPageUrl()  ;
             String params = getPostParams(hcsHealthCardInfoRes);
             params = URLEncoder.encode(params,"UTF-8");
             log.error("编码后的URL参数[{}]",params);
