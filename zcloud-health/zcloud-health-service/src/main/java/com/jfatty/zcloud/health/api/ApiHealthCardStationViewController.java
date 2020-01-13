@@ -127,13 +127,13 @@ public class ApiHealthCardStationViewController {
                 hcsHealthCardInfoRes.setNation(nationDic);
                 //"http://dev.jfatty.com/HealthCardDemo/personal.html"
                 //ls_health/cardDetail
-                String params = getPostParams(hcsHealthCardInfoRes);
-                params = URLEncoder.encode(params,"UTF-8");
-                log.error("编码后的URL参数[{}]",params);
+                //String params = getPostParams(hcsHealthCardInfoRes);
+                //params = URLEncoder.encode(params,"UTF-8");
+                //log.error("编码后的URL参数[{}]",params);
 
                 path = String.format(settings.getDetailUrl(),hospitalId,CID) ;
                 log.error("detailUrl ===> [{}]",path);
-                path = path + "?" + params ;
+                //path = path + "?" + params ;
                 //去健康卡详情页面
                 log.error("去健康卡详情页面 [{}]",path);
             }
