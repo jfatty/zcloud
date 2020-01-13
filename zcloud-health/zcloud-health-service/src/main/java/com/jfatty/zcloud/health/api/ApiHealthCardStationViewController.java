@@ -130,10 +130,7 @@ public class ApiHealthCardStationViewController {
                 String params = getPostParams(hcsHealthCardInfoRes);
                 params = URLEncoder.encode(params,"UTF-8");
                 log.error("编码后的URL参数[{}]",params);
-                log.error("==========>",settings.getDetailUrl());
-                log.error("==========>",hospitalId);
-                log.error("==========>",CID);
-                path = String.format(settings.getDetailUrl(),hospitalId,CID) + "?" + params ;
+                path = settings.getDetailPageUrl() + "?" + params ;
                 //去健康卡详情页面
                 log.error("去健康卡详情页面 [{}]",path);
             }
