@@ -59,12 +59,17 @@
     </select>
 
     <insert id="tieHealthCard">
-        insert into hcs_health_card_user_relationship(user_id,health_card_info_id) select (SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) , #{healthCardInfoId}
-        where not exists (select user_id from hcs_health_card_user_relationship where user_id=(SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} )
+        replace into hcs_health_card_user_relationship(user_id,health_card_info_id,create_time,update_time,delete_state,delete_time)
+        SELECT
+        ( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) ,
+        #{healthCardInfoId},
+        IFNULL( ( SELECT create_time from hcs_health_card_user_relationship WHERE  user_id=( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} ),NOW()),
+        0,
+        ( select delete_time from hcs_health_card_user_relationship WHERE  user_id=( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} )
     </insert>
 
     <update id="untieHealthCard">
-        UPDATE hcs_health_card_user_relationship SET delete_state = 1 WHERE  1=1 AND  user_id = (SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 )  AND health_card_info_id = #{healthCardInfoId}
+        UPDATE hcs_health_card_user_relationship SET delete_state = 1 ,delete_time = NOW()  WHERE  1=1 AND  user_id = (SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 )  AND health_card_info_id = #{healthCardInfoId}
     </update>
 
     <select id="getByOpts" resultMap="BaseResultMap">
