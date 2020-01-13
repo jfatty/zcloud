@@ -64,6 +64,7 @@
         ( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) ,
         #{healthCardInfoId},
         IFNULL( ( SELECT create_time from hcs_health_card_user_relationship WHERE  user_id=( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} ),NOW()),
+        NOW(),
         0,
         ( select delete_time from hcs_health_card_user_relationship WHERE  user_id=( SELECT id FROM hcs_health_card_user WHERE 1=1 AND open_id = #{openId}  AND open_id_type = #{openIdType}  AND hospital_id = #{hospitalId} LIMIT 1 ) and health_card_info_id=#{healthCardInfoId} )
     </insert>
