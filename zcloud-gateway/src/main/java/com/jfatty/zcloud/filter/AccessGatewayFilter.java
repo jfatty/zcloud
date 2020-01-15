@@ -133,9 +133,9 @@ public class AccessGatewayFilter  implements GlobalFilter {
             if (redisTemplate.hasKey(authToken)){
                 log.error("校验请求路径[{}] 用户是否登录 更新 token===>[{}] 过期时间",requestUri,authToken);
                 redisTemplate.expire(authToken,7200,TimeUnit.SECONDS);
-                return new BaseResponse(200);
+                return new BaseResponse(200,"登录成功");
             }
-            log.error("校验请求路径[{}] 用户登录已过期 更新 token===>[{}] ",requestUri,authToken);
+            log.error("校验请求路径[{}] 用户登录已过期 token===>[{}] ",requestUri,authToken);
             return new BaseResponse(401,"登录过期,请重新登录");
 
         }
