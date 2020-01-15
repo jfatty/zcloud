@@ -37,7 +37,12 @@ public class AccessGatewayFilter  implements GlobalFilter {
 
 
     private static final String startWith = "/login,/logout,/kaptcha,/alipay,/wx,/healthCardInfo,/idCardInfo,/healthCardSettings,/healthCardStation,/healthCardUser" +
-            ",/menu,/bannerImg";
+            ",/menu,/bannerImg,/pageSettings" +
+            ",/pageImage,/reportView,/electronicDoc" +
+            ",/webPriceinfo,/registration,/complexPay" +
+            ",/payOrder,/payNotify,/queueProgress" +
+            ",/electronicCard,/protocol,/sysPatientInfo" +
+            ",/wepayConfig,/alipayConfig"; //
 
     private static final String GATE_WAY_PREFIX = "/api";
 
