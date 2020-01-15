@@ -24,4 +24,12 @@ public class BaseResponse implements Serializable {
     public BaseResponse() {
     }
 
+    public BaseResponse(int code) {
+        this.code = code;
+    }
+
+    public boolean success(){
+        return this.code == 200 ;
+    }
+
 }
