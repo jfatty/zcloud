@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 描述
@@ -65,41 +66,7 @@ public class ApiKaptchaController {
                                           @RequestParam(value = "random" , defaultValue = "122151881" ) String random,//
                                           @RequestParam(value = "appId" , defaultValue = "wx4712402349f957a4" ) String appId,//
                                           HttpServletRequest request ){
-        String msg = PhoneNumUtil.isPhone(phone) ;
-        if(StringUtils.isNotEmptyAndBlank(msg))
-            return RETResultUtils._509(msg) ;
-        //生成验证码
-        String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
-        AuthSmsLog authSmsLog = new AuthSmsLog();
-        try {
-            AuthSmsConfig authSmsConfig = authSmsConfigService.getByAppId(appId);
-            if("aliyun".equalsIgnoreCase(authSmsConfig.getServiceName())){
-                aliyunSmsService.sendSms(authSmsConfig,phone,code);
-            }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){
-                tencentSmsService.sendSms(authSmsConfig,phone,code);
-            }else {
-                return RETResultUtils.faild("哎呀!网络走丢了!");
-            }
-            redisTemplate.opsForValue().set(phone,code);
-            BeanUtils.copyProperties(authSmsConfig,authSmsLog);
-            authSmsLog.setSmsContent(code);
-            authSmsLog.setSmsPhone(phone);
-            authSmsLog.setStatus(0);
-            authSmsLogService.save(authSmsLog,null);
-            return new RETResultUtils("验证码发送成功,请注意查收") ;
-        } catch (Exception e) {
-            authSmsLog.setStatus(-1);
-            authSmsLog.setErrMsg(e.getMessage());
-        }
-        System.out.println(appId);
-        System.out.println(random);
-        System.out.println(phone);
-        try {
-            authSmsLogService.save(authSmsLog,null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return RETResultUtils.faild("哎呀!网络走丢了!");
+        return sendSms(phone,random,appId);
     }
 
 
@@ -114,41 +81,7 @@ public class ApiKaptchaController {
                                           @RequestParam(value = "random" , defaultValue = "122151881" ) String random,//
                                           @RequestParam(value = "appId" , defaultValue = "wx4712402349f957a4" ) String appId,//
                                           HttpServletRequest request ){
-        String msg = PhoneNumUtil.isPhone(phone) ;
-        if(StringUtils.isNotEmptyAndBlank(msg))
-            return RETResultUtils._509(msg) ;
-        //生成验证码
-        String code = String.valueOf(new Random().nextInt(899999) + 100000);//生成短信验证码
-        AuthSmsLog authSmsLog = new AuthSmsLog();
-        try {
-            AuthSmsConfig authSmsConfig = authSmsConfigService.getByAppId(appId);
-            if("aliyun".equalsIgnoreCase(authSmsConfig.getServiceName())){
-                aliyunSmsService.sendSms(authSmsConfig,phone,code);
-            }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){
-                tencentSmsService.sendSms(authSmsConfig,phone,code);
-            }else {
-                return RETResultUtils.faild("哎呀!网络走丢了!");
-            }
-            redisTemplate.opsForValue().set(phone,code);
-            BeanUtils.copyProperties(authSmsConfig,authSmsLog);
-            authSmsLog.setSmsContent(code);
-            authSmsLog.setSmsPhone(phone);
-            authSmsLog.setStatus(0);
-            authSmsLogService.save(authSmsLog,null);
-            return new RETResultUtils("验证码发送成功,请注意查收") ;
-        } catch (Exception e) {
-            authSmsLog.setStatus(-1);
-            authSmsLog.setErrMsg(e.getMessage());
-        }
-        System.out.println(appId);
-        System.out.println(random);
-        System.out.println(phone);
-        try {
-            authSmsLogService.save(authSmsLog,null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return RETResultUtils.faild("哎呀!网络走丢了!");
+        return sendSms(phone,random,appId);
     }
 
 
@@ -165,6 +98,10 @@ public class ApiKaptchaController {
                                           @RequestParam(value = "appId" , defaultValue = "wx4712402349f957a4" ) String appId, //
                                           @RequestParam(value = "hospitalId" , defaultValue = "30646" ) String hospitalId,//
                                           HttpServletRequest request ){
+        return sendSms(phone,random,appId);
+    }
+
+    protected RETResultUtils<String> sendSms(String phone,String random,String appId){
         String msg = PhoneNumUtil.isPhone(phone) ;
         if(StringUtils.isNotEmptyAndBlank(msg))
             return RETResultUtils._509(msg) ;
@@ -178,9 +115,11 @@ public class ApiKaptchaController {
             }else if ("tencent".equalsIgnoreCase(authSmsConfig.getServiceName())){
                 tencentSmsService.sendSms(authSmsConfig,phone,code);
             }else {
+                log.error("没有配置对应短信验证码发送运营商");
                 return RETResultUtils.faild("哎呀!网络走丢了!");
             }
-            redisTemplate.opsForValue().set(phone,code);
+            //设置有效时间为5分钟
+            redisTemplate.opsForValue().set(phone,code,300,TimeUnit.SECONDS);
             BeanUtils.copyProperties(authSmsConfig,authSmsLog);
             authSmsLog.setSmsContent(code);
             authSmsLog.setSmsPhone(phone);
@@ -198,6 +137,7 @@ public class ApiKaptchaController {
             authSmsLogService.save(authSmsLog,null);
         } catch (Exception e) {
             e.printStackTrace();
+            log.error("系统短信息发送日志记录 保存出现异常[{}]",e.getMessage());
         }
         return RETResultUtils.faild("哎呀!网络走丢了!");
     }
