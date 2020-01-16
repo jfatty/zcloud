@@ -52,6 +52,9 @@
          *
         from hospital_banner_img
         where 1 = 1 AND state = 1 AND delete_state = 0
+        <if test="appId != null" >
+            and appid = #{appId}
+        </if>
         <if test="version != null" >
             and version = #{version}
         </if>

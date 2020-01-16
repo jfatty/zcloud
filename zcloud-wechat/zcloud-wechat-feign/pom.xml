@@ -38,6 +38,7 @@
             <artifactId>feign-form</artifactId>
             <version>3.8.0</version>
         </dependency>
+
         <dependency>
             <groupId>io.github.openfeign.form</groupId>
             <artifactId>feign-form-spring</artifactId>
@@ -45,16 +46,11 @@
         </dependency>
 
 
+
     </dependencies>
 
     <build>
         <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
 
 </project>

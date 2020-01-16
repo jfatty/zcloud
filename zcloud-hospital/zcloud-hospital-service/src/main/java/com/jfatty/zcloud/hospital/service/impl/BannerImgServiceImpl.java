@@ -32,6 +32,6 @@ public class BannerImgServiceImpl extends BaseHospitalServiceImpl<BannerImg, Ban
 
     @Override
     public List<BannerImg> getDiffBannerImgs(String appId, String version, String position, String module) {
-        return bannerImgMapper.getDiffBannerImgs(version,position, module);
+        return bannerImgMapper.getDiffBannerImgs(appId,version,position, module);
     }
 }

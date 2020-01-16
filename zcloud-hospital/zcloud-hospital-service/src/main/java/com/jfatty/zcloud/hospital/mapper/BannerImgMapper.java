@@ -17,6 +17,6 @@ import java.util.List;
 public interface BannerImgMapper extends IBaseMapper<BannerImg> {
 
 
-    List<BannerImg> getDiffBannerImgs(@Param("version") String version,@Param("position")  String position,@Param("module")  String module);
+    List<BannerImg> getDiffBannerImgs(@Param("appId") String appId,@Param("version") String version,@Param("position")  String position,@Param("module")  String module);
 
 }
