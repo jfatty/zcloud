@@ -43,7 +43,7 @@ public class AccessGatewayFilter  implements GlobalFilter {
             ",/payOrder,/payNotify,/queueProgress" +
             ",/electronicCard,/protocol,/sysPatientInfo" +
             ",/wepayConfig,/alipayConfig,/pageHref" +
-            ",/pageElement"; //
+            ",/pageElement,/areaCn"; //
 
     private static final String GATE_WAY_PREFIX = "/api";
 
