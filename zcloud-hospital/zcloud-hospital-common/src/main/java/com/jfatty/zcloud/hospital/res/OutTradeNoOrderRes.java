@@ -67,4 +67,7 @@ public class OutTradeNoOrderRes extends OutTradeNoOrderDTO<OutTradeNoOrderRes> {
     @ApiModelProperty(name = "idCard", position = 2,required = true, value = "身份证号 " , example = "422802558585")
     private String idCard ;
 
+    @ApiModelProperty(name = "createdTime", position = 2,required = true, value = "订单创建时间 " , example = "2020-01-11 15:30")
+    private String createdTime ;
+
 }
