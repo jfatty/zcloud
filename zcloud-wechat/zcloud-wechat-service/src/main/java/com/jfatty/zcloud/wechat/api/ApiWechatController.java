@@ -177,6 +177,7 @@ public class ApiWechatController {
         //微信公众号号的template id，开发者自行处理参数
         tplMsg.setTemplateId(tplMsgText.getTplId());
         tplMsg.setUrl(url);
+        log.error("发送模板消息 模板消息地址 [{}]" ,url );
         Map<String, String> dataMap = new HashMap<String, String>();
         List<TplMsgParams> tplMsgParamses = tplMsgParamsService.getTplById(tplId);
         int index = 0 ;
