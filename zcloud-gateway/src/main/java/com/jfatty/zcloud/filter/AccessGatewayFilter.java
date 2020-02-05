@@ -1,6 +1,8 @@
 package com.jfatty.zcloud.filter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jfatty.zcloud.entity.Gateway;
+import com.jfatty.zcloud.mapper.GatewayMapper;
 import com.jfatty.zcloud.msg.BaseResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +56,9 @@ public class AccessGatewayFilter  implements GlobalFilter {
     @Autowired
     private StringRedisTemplate stringRedisTemplate ;
 
+    @Autowired
+    private GatewayMapper gatewayMapper ;
+
     /**
      * URI是否以什么打头
      *
@@ -73,6 +78,11 @@ public class AccessGatewayFilter  implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("check token and user permission....");
+        gatewayMapper.findAll().forEach(
+                gateway -> {
+                    log.error( " h2 data =====> [{}]" , gateway );
+                }
+        );
         LinkedHashSet requiredAttribute = exchange.getRequiredAttribute(ServerWebExchangeUtils.GATEWAY_ORIGINAL_REQUEST_URL_ATTR);
         ServerHttpRequest request = exchange.getRequest();
         String requestUri = request.getPath().pathWithinApplication().value();
