@@ -35,7 +35,6 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AccessGatewayFilter  implements GlobalFilter {
 
-
     private static final String startWith = "/login,/logout,/kaptcha,/alipay,/wx,/healthCardInfo,/idCardInfo,/healthCardSettings,/healthCardStation,/healthCardUser" +
             ",/menu,/bannerImg,/pageSettings" +
             ",/pageImage,/reportView,/electronicDoc" +
@@ -43,6 +42,7 @@ public class AccessGatewayFilter  implements GlobalFilter {
             ",/payOrder,/payNotify,/queueProgress" +
             ",/electronicCard,/protocol,/sysPatientInfo" +
             ",/wepayConfig,/alipayConfig,/pageHref" +
+            ",/hospital/kaptcha,/health/kaptcha" +
             ",/pageElement,/areaCn"; //
 
     private static final String GATE_WAY_PREFIX = "/api";
