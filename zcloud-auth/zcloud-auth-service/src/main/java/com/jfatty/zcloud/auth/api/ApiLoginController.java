@@ -56,7 +56,8 @@ public class ApiLoginController {
             return RETResultUtils._509("验证码错误") ;
         redisTemplate.delete(loginVo.getAccount());
         String token = "TOKEN"+System.currentTimeMillis() ;
-        redisTemplate.opsForValue().set(token,loginVo,7200,TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(token,loginVo);
+        //redisTemplate.opsForValue().set(token,loginVo,7200,TimeUnit.SECONDS);
         LoginVoReq login = (LoginVoReq) redisTemplate.opsForValue().get(token);
         log.error("login [{}]",login);
         return new RETResultUtils(token) ;
