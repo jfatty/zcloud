@@ -29,10 +29,10 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>ID</th>
                     <th>模板ID</th>
                     <th>模板标题</th>
                     <th>微信模板</th>
-                    <th>模板内容</th>
                     <th>发送内容</th>
                     <th>链接</th>
                     <th>创建时间</th>
@@ -51,13 +51,13 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
+        <td>{{ item.id }}</td>
         <td>{{ item.tplId }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.wxTpl }}</td>
-        <td>{{ item.content }}</td>
         <td id="{{ item.id }}" >{{ item.sendContent }}</td>
         <td>{{ item.url }}</td>
         <td>{{ item.createTime }}</td>
@@ -178,8 +178,10 @@
                                                     //do something
                                                     layerTips.close(index);
                                                     layer.close(editBoxIndex);
-                                                    pageOpts.refre = true;
-                                                    paging.get(pageOpts);
+                                                    pageObj.refre = true;
+                                                    pageObj.pageIndex = paging.getCurrPageIndex();
+                                                    paging.get(pageObj);
+
                                                     //window.location.reload();
                                                 })
                                                 //console.log(value);

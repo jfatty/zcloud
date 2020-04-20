@@ -3,6 +3,7 @@ package com.jfatty.zcloud.wechat.mapper;
 
 import com.jfatty.zcloud.base.mapper.IBaseMapper;
 import com.jfatty.zcloud.wechat.entity.TplMsgText;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,4 +15,5 @@ import com.jfatty.zcloud.wechat.entity.TplMsgText;
  */
 public interface TplMsgTextMapper extends IBaseMapper<TplMsgText> {
 
+    TplMsgText getByAccount(@Param("account") String account, @Param("kw") String kw);
 }

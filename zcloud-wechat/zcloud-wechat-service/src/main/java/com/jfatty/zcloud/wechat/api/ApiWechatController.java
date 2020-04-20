@@ -19,6 +19,7 @@ import com.jfatty.zcloud.wechat.utils.wx.OAuthAccessToken;
 import com.jfatty.zcloud.wechat.utils.wx.SignUtil;
 import com.jfatty.zcloud.wechat.utils.wx.WxApi;
 import com.jfatty.zcloud.wechat.vo.MsgRequest;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ import java.util.*;
  * @author jfatty on 2019/4/10
  * @email jfatty@163.com
  */
-
+@Api(tags = "微信对接接口API" ,value = "微信对接接口")
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -132,6 +133,7 @@ public class ApiWechatController {
         }
         Account mpAccount = accountService.getByAppId(appId);
         try {
+            accountService.updateUsingState(appId);
             //获取OAuthAccessToken
             OAuthAccessToken token = WxApiClient.getDirectOAuthAccessToken(mpAccount,code) ;
             session.setAttribute(openIdKey, token.getOpenid());
@@ -190,7 +192,38 @@ public class ApiWechatController {
             JSONObject result = wxService.sendTemplateMessage(tplMsg, mpAccount);
             log.error("发送模板消息 微信返回信息 [{}]" ,result.toString() );
         } catch (WxErrorException e) {
-            log.error("发送模板消息失败 异常信息[{}] " , e.getMessage() );
+            log.error("发送模板消息失败 参数[{}] 异常信息[{}] " , tplMsg , e.getMessage() );
+        }
+
+    }
+
+    @RequestMapping(value="/wx/sendTplMsg", method= { RequestMethod.POST } )
+    public void sendTplMsg(@RequestParam(value = "openId" , defaultValue = "oPGot0QAYXg-Y4OiTYUDn55sjRdo") String openId,//
+                                    @RequestParam(value = "kw" , defaultValue = "yyghtpl") String kw,//
+                                    @RequestParam(value = "url" , defaultValue = "") String url,//
+                                    @RequestParam(value = "params" )String ... params){
+        Account mpAccount = accountService.getByUsingState();
+        TplMsgText tplMsgText = tplMsgTextService.getByAccount(mpAccount.getAccount(),kw);
+        TemplateMessage tplMsg = new TemplateMessage();
+        tplMsg.setOpenid(openId);
+        //微信公众号号的template id，开发者自行处理参数
+        tplMsg.setTemplateId(tplMsgText.getTplId());
+        tplMsg.setUrl(url);
+        log.error("发送模板消息 模板消息地址 [{}]" ,url );
+        Map<String, String> dataMap = new HashMap<String, String>();
+        List<TplMsgParams> tplMsgParamses = tplMsgParamsService.getTplById(tplMsgText.getId());
+        int index = 0 ;
+        for ( TplMsgParams tplMsgParam : tplMsgParamses) {
+            dataMap.put(tplMsgParam.getTplMsgKey(),params[index]);
+            index ++ ;
+        }
+        tplMsg.setDataMap(dataMap);
+        try {
+            JSONObject result = wxService.sendTemplateMessage(tplMsg, mpAccount);
+            log.error("发送模板消息 微信返回信息 [{}]" ,result.toString() );
+        } catch (WxErrorException e) {
+
+            log.error("发送模板消息失败 参数[{}] 异常信息[{}] " , tplMsg , e.getMessage() );
         }
 
     }

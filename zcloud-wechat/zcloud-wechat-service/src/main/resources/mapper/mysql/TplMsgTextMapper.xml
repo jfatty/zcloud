@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.wechat.entity.TplMsgText">
         <id column="id" property="id" />
         <result column="tpl_id" property="tplId" />
+        <result column="kw" property="kw" />
         <result column="url" property="url" />
         <result column="title" property="title" />
         <result column="content" property="content" />
@@ -43,6 +44,22 @@
                 and account = #{account}
             </if>
         </where>
+    </select>
+
+
+    <select id="getByAccount" resultMap="BaseResultMap" >
+        select
+        *
+        from wxcms_tpl_msg_text
+        <where>
+            <if test="account != null">
+                and account = #{account}
+            </if>
+            <if test="kw != null">
+                and kw = #{kw}
+            </if>
+        </where>
+        limit 1
     </select>
 
 </mapper>

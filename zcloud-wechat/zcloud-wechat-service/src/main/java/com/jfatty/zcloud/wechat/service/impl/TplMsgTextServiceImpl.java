@@ -26,4 +26,10 @@ public class TplMsgTextServiceImpl extends BaseWechatServiceImpl<TplMsgText,TplM
         super.setBaseMapper(tplMsgTextMapper);
         this.tplMsgTextMapper = tplMsgTextMapper;
     }
+
+
+    @Override
+    public TplMsgText getByAccount(String account, String kw) {
+        return tplMsgTextMapper.getByAccount(account,kw);
+    }
 }

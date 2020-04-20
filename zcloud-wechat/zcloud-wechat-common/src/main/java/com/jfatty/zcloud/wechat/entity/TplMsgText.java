@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.apache.tomcat.jni.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -33,6 +32,11 @@ public class TplMsgText extends Model<TplMsgText> {
      * 模板ID
      */
     private String tplId;
+
+    /**
+     * 唯一关键字
+     */
+    private String kw;
 
     /**
      * 链接

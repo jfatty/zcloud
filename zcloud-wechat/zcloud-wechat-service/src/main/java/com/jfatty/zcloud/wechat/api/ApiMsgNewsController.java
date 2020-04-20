@@ -5,6 +5,7 @@ import com.jfatty.zcloud.wechat.entity.Account;
 import com.jfatty.zcloud.wechat.entity.MsgNews;
 import com.jfatty.zcloud.wechat.service.AccountService;
 import com.jfatty.zcloud.wechat.service.MsgNewsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * 描述
+ * 描述 微信消息
  *
  * @author jfatty on 2019/11/8
  * @email jfatty@163.com
  */
+@Api(tags = "微信消息API" ,value = "微信消息")
 @Slf4j
 @RestController
 @RequestMapping("/api/msgNews")

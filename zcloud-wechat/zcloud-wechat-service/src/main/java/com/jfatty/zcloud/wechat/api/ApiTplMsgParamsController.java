@@ -6,6 +6,7 @@ import com.jfatty.zcloud.wechat.interfaces.ITplMsgParams;
 import com.jfatty.zcloud.wechat.req.TplMsgParamsReq;
 import com.jfatty.zcloud.wechat.res.TplMsgParamsRes;
 import com.jfatty.zcloud.wechat.service.TplMsgParamsService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author jfatty
  * @since 2020-01-05
  */
+@Api(tags = "微信模板消息参数配置API" ,value = "微信模板消息参数配置")
 @Slf4j
 @RestController
 @RequestMapping("/api/tplMsgParams")

@@ -11,4 +11,5 @@ import com.jfatty.zcloud.wechat.entity.TplMsgText;
  */
 public interface TplMsgTextService extends BaseWechatService<TplMsgText> {
 
+    TplMsgText getByAccount(String account, String kw);
 }

@@ -1,0 +1,83 @@
+<div style="margin: 15px;">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+		<legend>微信模板消息参数配置</legend>
+	</fieldset>
+
+	<form class="layui-form" action="">
+		<input type="hidden" name="id" id="id"/>
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板ID</label>
+			<div class="layui-input-block">
+				<input type="text" id="tplId" name="tplId" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板消息配置key值</label>
+			<div class="layui-input-block">
+				<input type="text" id="tplMsgKey" name="tplMsgKey" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板消息配置value</label>
+			<div class="layui-input-block">
+				<input type="text" id="tplMsgVal" name="tplMsgVal"  placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序号</label>
+			<div class="layui-input-block">
+				<input type="number" id="orderNum" name="orderNum" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信原始ID</label>
+			<div class="layui-input-block">
+				<input type="text" id="account" name="account"  placeholder="" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">使用状态</label>
+			<div class="layui-input-block">
+				<input type="radio" id="state_y" name="state" value="1" title="启用" >
+				<input type="radio" id="state_n" name="state" value="0" title="停用">
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">描述</label>
+			<div class="layui-input-block">
+				<textarea name="description" id="description" rows="6" placeholder="请输入内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script>
+	layui.use(['form', 'layedit', 'laydate'], function() {
+		var form = layui.form,
+			layer = layui.layer;
+
+        JFATTY.doGet({
+            url : JFATTY.basePath() + "tplMsgParams/edit?id=" + objId,
+            async : false,
+            success : function(value, type) {
+                if(value.ok){
+                    var obj =  value.data ;
+                    $("#id").val(obj.id);
+                    $("#tplId").val(obj.tplId);
+                    $("#tplMsgKey").val(obj.tplMsgKey);
+                    $("#tplMsgVal").val(obj.tplMsgVal);
+                    $("#orderNum").val(obj.orderNum);
+                    $("#account").val(obj.account);
+                    $("#description").val(obj.description);
+                    if(obj.state == 1){
+                        $("#state_y").attr("checked",true);
+                    }else {
+                        $("#state_n").attr("checked",true);
+                    }
+                    form.render();
+                }
+            }
+        });
+
+	});
+</script>

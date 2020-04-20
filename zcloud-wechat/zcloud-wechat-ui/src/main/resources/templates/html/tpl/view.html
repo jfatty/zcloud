@@ -6,6 +6,20 @@
     <form class="layui-form" action="">
         <input type="hidden" name="id" id="id"/>
         <div class="layui-form-item">
+            <label class="layui-form-label">微信原始ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="account" id="account" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">唯一关键字</label>
+            <div class="layui-input-block">
+                <input type="text" name="kw" id="kw" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">模板ID</label>
             <div class="layui-input-block">
                 <input type="text" name="tplId" id="tplId" lay-verify="required" placeholder="请输入模板ID" autocomplete="off"
@@ -65,6 +79,8 @@
                 if (value.ok) {
                     var obj = value.data;
                     $("#id").val(obj.id);
+                    $("#kw").val(obj.kw);
+                    $("#account").val(obj.account);
                     $("#tplId").val(obj.tplId);
                     $("#title").val(obj.title);
                     $("#wxTpl").val(obj.wxTpl);

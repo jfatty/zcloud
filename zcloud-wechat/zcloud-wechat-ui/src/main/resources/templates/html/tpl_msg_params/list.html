@@ -1,25 +1,25 @@
 ﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head head th:replace="common/header::header('','')">
+<head head th:replace="common/header::header('/css/build/common.css,/css/menu.css','/js/plugins/clipboard/clipboard.min.js')">
 </head>
 <body>
 <div class="admin-main">
 
     <blockquote class="layui-elem-quote">
         <a href="javascript:;" class="layui-btn layui-btn-small" id="add">
-            <i class="layui-icon">&#xe608;</i> 新增用户标签
+            <i class="layui-icon">&#xe608;</i> 新增微信模板消息参数配置
         </a>
-        <a shiro:hasPermission="userTag:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="import">
             <i class="layui-icon">&#xe608;</i> 导入信息
         </a>
-        <a shiro:hasPermission="userTag:export" href="javascript:;" class="layui-btn layui-btn-small">
+        <a href="javascript:;" class="layui-btn layui-btn-small">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
         </a>
-        <a shiro:hasPermission="userTag:delete" href="javascript:;" class="layui-btn layui-btn-small" id="getSelected">
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="getSelected">
             <i class="layui-icon" aria-hidden="true">&#xe640;</i> 删除
         </a>
-        <a  href="javascript:;" class="layui-btn layui-btn-small" id="batchAsync">
-            <i class="layui-icon">&#xe615;</i> 批量同步
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
         </a>
     </blockquote>
     <fieldset class="layui-elem-field">
@@ -29,8 +29,12 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
-                    <th>标签名称</th>
-                    <th>粉丝数量</th>
+                    <th>模板ID</th>
+                    <th>模板消息配置key值</th>
+                    <th>模板消息配置value</th>
+                    <th>排序号</th>
+                    <th>备注或者描述</th>
+                    <th>微信原始ID</th>
                     <th>创建时间</th>
                     <th>操作</th>
                 </tr>
@@ -50,25 +54,29 @@
     {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.count }}</td>
+        <td>{{ item.tplId }}</td>
+        <td>{{ item.tplMsgKey }}</td>
+        <td>{{ item.tplMsgVal }}</td>
+        <td>{{ item.orderNum }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ item.account }}</td>
         <td>{{ item.createTime }}</td>
         <td>
-            <a  href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-mini">修改</a>
-            <a  href="javascript:;" data-id="{{ item.id }}" data-opt="see" class="layui-btn btn-danger layui-btn-mini">查看粉丝</a>
+            <a href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-mini">修改</a>
         </td>
     </tr>
     {{# }); }}
 </script>
-<script type="text/javascript" th:inline="none">
-    var editId ;
-    layui.config({
-        base: JFATTY.basePath() + '/js/'
-    });
+<script type="text/javascript" th:inline="none" >
+    var objId;
     var pageObj = {//调用数据获取函数
         pageIndex: 1,
         refre: false
     };
+    layui.config({
+        base: JFATTY.basePath() + '/js/'
+    });
+
     layui.use(['paging', 'form'], function () {
         var $ = layui.jquery,
             paging = layui.paging(),
@@ -76,9 +84,10 @@
             layer = layui.layer, //获取当前窗口的layer对象
             form = layui.form;
 
+
         var pageOpts = {
             openWait: true,
-            url: JFATTY.basePath() + 'userTag/table/list?v=' + new Date().getTime(), //地址
+            url: JFATTY.basePath() + 'tplMsgParams/table/list?v=' + new Date().getTime(), //地址
             elem: '#content', //内容容器
             params: { //发送到服务端的参数
             },
@@ -109,21 +118,20 @@
                     });
                 });
 
-
-                //绑定所有修改按钮事件
+                //绑定所有编辑按钮事件
                 $('#content').children('tr').each(function () {
                     var $that = $(this);
-                    var viewBoxIndex = -1;
+                    var editBoxIndex = -1;
                     $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
-                        editId = $(this).data('id');
-                        //图片盒子开始
-                        if (viewBoxIndex !== -1)
+                        objId = $.trim($(this).data('id'));
+                        //修改盒子开始
+                        if (editBoxIndex !== -1)
                             return;
                         //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
                         $.get('./view.html', null, function (form) {
-                            viewBoxIndex = layer.open({
+                            editBoxIndex = layer.open({
                                 type: 1,
-                                title: '修改用户标签',
+                                title: '修改信息',
                                 content: form,
                                 btn: ['保存', '取消'],
                                 shade: false,
@@ -152,12 +160,12 @@
                                     form.render();
                                     form.on('submit(edit)', function (data) {
                                         JFATTY.doPost({
-                                            url: JFATTY.basePath() + "userTag/edit",
+                                            url: JFATTY.basePath() + "tplMsgParams/edit",
                                             data: data.field,
                                             success: function (value, type) {
                                                 var msg = "";
                                                 if (value.ok) {
-                                                    msg = '修改成功!';
+                                                    msg = "修改成功!";
                                                 } else {
                                                     msg = value.msg;
                                                 }
@@ -167,75 +175,25 @@
                                                 }, function (index) {
                                                     //do something
                                                     layerTips.close(index);
-                                                    layer.close(viewBoxIndex);
-                                                    pageObj.refre = true;
-                                                    pageObj.pageIndex = paging.getCurrPageIndex();
-                                                    paging.get(pageObj);
+                                                    layer.close(editBoxIndex);
+                                                    pageOpts.refre = true;
+                                                    pageObj.pageIndex = paging.getCurrPageIndex() ;
+                                                    paging.get(pageOpts);
                                                     //window.location.reload();
                                                 })
                                                 //console.log(value);
                                             }
                                         });
-                                        //这里可以写ajax方法提交表单
-                                        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+                                        return false;
                                     });
                                     //console.log(layero, index);
                                 },
                                 end: function () {
-                                    viewBoxIndex = -1;
+                                    editBoxIndex = -1;
                                 }
                             });
                         });
-                        //图片盒子结束
-                    });
-
-                });
-
-
-                //绑定所有查看粉丝按钮事件
-                $('#content').children('tr').each(function () {
-                    var $that = $(this);
-                    var viewBoxIndex = -1;
-                    $that.children('td:last-child').children('a[data-opt=see]').on('click', function () {
-                        editId = $(this).data('id');
-                        //查看粉丝盒子开始
-                        if (viewBoxIndex !== -1)
-                            return;
-                        //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
-                        $.get('./fans.html', null, function (form) {
-                            viewBoxIndex = layer.open({
-                                type: 1,
-                                title: '查看粉丝',
-                                content: form,
-                                btn: ['关闭'],
-                                shade: false,
-                                offset: ['100px', '10%'],
-                                area: [0.8*$(window).width() + 'px', 0.8*$(window).height() + 'px'],
-                                zIndex: 19950925,
-                                maxmin: true,
-                                yes: function (index, layero) {
-                                    layer.close(index);
-                                },
-                                full: function (elem) {
-                                    var win = window.top === window.self ? window : parent.window;
-                                    $(win).on('resize', function () {
-                                        var $this = $(this);
-                                        elem.width($this.width()).height($this.height()).css({
-                                            top: 0,
-                                            left: 0
-                                        });
-                                        elem.children('div.layui-layer-content').height($this.height() - 95);
-                                    });
-                                },
-                                success: function (layero, index) {
-
-                                },
-                                end: function () {
-                                    viewBoxIndex = -1;
-                                }
-                            });
-                        });
-                        //查看粉丝盒子结束
+                        //修改盒子结束
                     });
 
                 });
@@ -245,7 +203,7 @@
         };
 
         paging.init(pageOpts);
-        //获取所有选择的列 删除
+        //获取所有选择的列
         $('#getSelected').on('click', function () {
             var ids =  new Array() ;
             var i = 0 ;
@@ -254,10 +212,10 @@
                 var $cbx = $that.children('td').eq(0).children('input[type=checkbox]')[0].checked;
                 if ($cbx) {
                     ids[i] = $that.children('td:last-child').children('a[data-opt=edit]').data('id');
-                    i++;
+                    i++ ;
                 }
             });
-            if (ids.length == 0) {
+            if (  ids.length == 0 ) {
                 layer.msg('请至少选择一条数据!');
                 return false;
             }
@@ -266,7 +224,7 @@
             }, function (index) {
                 var params = {"ids": ids};
                 JFATTY.doPost({
-                    url: JFATTY.basePath() + "userTag/delete",
+                    url: JFATTY.basePath() + "tplMsgParams/delete",
                     data: params,
                     success: function (value, type) {
                         var msg = "";
@@ -290,31 +248,8 @@
             });
         });
 
-
-        $('#batchAsync').on('click', function () {
-            layer.confirm('确认同步用户标签？', {
-                icon: 7,
-                title: "提示",
-                btn: ['确认', '取消'] //按钮
-            }, function () {
-                JFATTY.doGet({
-                    url : JFATTY.basePath() + 'userTag/asyncUserTags',
-                    async : false,
-                    success : function(value, type) {
-                        if (value.success) {
-                            layer.msg("同步成功");
-                            pageObj.refre = true ;
-                            pageObj.pageIndex = paging.getCurrPageIndex() ;
-                            paging.get(pageObj);
-                        }
-                    },
-                    error: function () {
-                        layer.msg("同步异常");
-                    }
-                });
-            }, function () {
-                layer.closeAll();
-            });
+        $('#search').on('click', function () {
+            parent.layer.alert('你点击了搜索按钮')
         });
 
         var addBoxIndex = -1;
@@ -325,7 +260,7 @@
             $.get('./add.html', null, function (form) {
                 addBoxIndex = layer.open({
                     type: 1,
-                    title: '新增用户标签',
+                    title: '新增',
                     content: form,
                     btn: ['保存', '取消'],
                     shade: false,
@@ -354,12 +289,12 @@
                         form.render();
                         form.on('submit(edit)', function (data) {
                             JFATTY.doPost({
-                                url: JFATTY.basePath() + "userTag/save",
+                                url: JFATTY.basePath() + "tplMsgParams/save",
                                 data: data.field,
                                 success: function (value, type) {
                                     var msg = "";
                                     if (value.ok) {
-                                        msg = '新增成功!';
+                                        msg = "新增成功!";
                                     } else {
                                         msg = value.msg;
                                     }
@@ -375,12 +310,10 @@
                                         paging.get(pageObj);
                                         //window.location.reload();
                                     })
-                                    //console.log(value);
                                 }
                             });
                             return false;
                         });
-                        //console.log(layero, index);
                     },
                     end: function () {
                         addBoxIndex = -1;
@@ -388,7 +321,6 @@
                 });
             });
         });
-
 
         $('#import').on('click', function () {
             var that = this;
@@ -398,5 +330,4 @@
     });
 </script>
 </body>
-
 </html>

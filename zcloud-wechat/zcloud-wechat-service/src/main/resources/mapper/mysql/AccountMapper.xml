@@ -29,6 +29,7 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
+
     <!--根据微信账号信息进行查询-->
     <select id="getByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
 		SELECT * FROM wxcms_account WHERE account = #{account} ORDER BY ID DESC limit 1
@@ -116,6 +117,18 @@
     <!--获取系统当前出去激活状态微信账号-->
     <select id="getActiveAccount" resultMap="BaseResultMap">
         SELECT * FROM wxcms_account WHERE active_status = 1 ORDER BY ID DESC limit 1
+    </select>
+
+    <update id="setUnUsingState">
+        UPDATE wxcms_account SET using_state = 0 WHERE <![CDATA[ appid <> #{appId} ]]>
+    </update>
+
+    <update id="setUsingState">
+        UPDATE wxcms_account SET using_state = 1 WHERE appid = #{appId}
+    </update>
+
+    <select id="getByUsingState" resultMap="BaseResultMap">
+        SELECT * FROM wxcms_account WHERE using_state = 1 ORDER BY ID DESC limit 1
     </select>
 
 </mapper>

@@ -11,6 +11,7 @@ import com.jfatty.zcloud.wechat.res.AccountFansRes;
 import com.jfatty.zcloud.wechat.service.AccountFansService;
 import com.jfatty.zcloud.wechat.service.WxService;
 import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author jfatty
  * @since 2019-04-07
  */
-
+@Api(tags = "微信粉丝API" ,value = "微信粉丝")
 @Slf4j
 @RestController
 @RequestMapping("/api/accountFans")

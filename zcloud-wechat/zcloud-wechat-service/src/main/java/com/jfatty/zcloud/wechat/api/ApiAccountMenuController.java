@@ -14,6 +14,7 @@ import com.jfatty.zcloud.wechat.service.*;
 import com.jfatty.zcloud.wechat.utils.WxMemoryCacheClient;
 import com.jfatty.zcloud.wechat.utils.wx.ErrCode;
 import com.jfatty.zcloud.wechat.utils.wx.WxUtil;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ import java.util.List;
  * @author jfatty
  * @since 2019-04-07
  */
-
+@Api(tags = "微信菜单API" ,value = "微信菜单")
 @Slf4j
 @RestController
 @RequestMapping("/api/accountMenu")

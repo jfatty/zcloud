@@ -1,0 +1,59 @@
+<div style="margin: 15px;">
+	<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+		<legend>微信模板消息参数配置</legend>
+	</fieldset>
+
+	<form class="layui-form" action="">
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板ID</label>
+			<div class="layui-input-block">
+				<input type="text" id="tplId" name="tplId" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板消息配置key值</label>
+			<div class="layui-input-block">
+				<input type="text" id="tplMsgKey" name="tplMsgKey" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">模板消息配置value</label>
+			<div class="layui-input-block">
+				<input type="text" id="" name="tplMsgVal"  placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序号</label>
+			<div class="layui-input-block">
+				<input type="number" id="orderNum" name="orderNum" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信原始ID</label>
+			<div class="layui-input-block">
+				<input type="text" id="account" name="account"  placeholder="" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">使用状态</label>
+			<div class="layui-input-block">
+				<input type="radio" name="state" value="1" title="启用" checked="">
+				<input type="radio" name="state" value="0" title="停用">
+			</div>
+		</div>
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">描述</label>
+			<div class="layui-input-block">
+				<textarea name="description" rows="6" placeholder="请输入内容" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script>
+	layui.use(['form', 'layedit', 'laydate'], function() {
+		var form = layui.form,
+			layer = layui.layer;
+
+	});
+</script>

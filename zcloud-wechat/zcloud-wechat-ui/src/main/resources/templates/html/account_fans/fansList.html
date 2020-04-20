@@ -25,7 +25,7 @@
 </div>
 <!--模板-->
 <script type="text/html" id="fans-tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" name="openIds" value="{{ item.openId }}" lay-skin="primary"></td>
         <td>{{ item.nicknameStr }}</td>

@@ -11,6 +11,6 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "电子就诊卡信息响应实体")
+@ApiModel(description = "用户标签响应实体")
 public class UserTagReq  extends UserTagDTO<UserTagReq> {
 }

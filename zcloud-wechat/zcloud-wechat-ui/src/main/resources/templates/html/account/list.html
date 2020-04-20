@@ -52,7 +52,7 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
         <td>{{ item.name }}</td>
@@ -179,6 +179,7 @@
                                                     layerTips.close(index);
                                                     layer.close(editBoxIndex);
                                                     pageOpts.refre = true;
+                                                    pageObj.pageIndex = paging.getCurrPageIndex();
                                                     paging.get(pageOpts);
                                                     //window.location.reload();
                                                 })

@@ -32,4 +32,8 @@ public interface AccountService extends BaseWechatService<Account> {
      * @return
      */
     Account getByAppId(String appId);
+
+    void updateUsingState(String appId);
+
+    Account getByUsingState();
 }

@@ -32,4 +32,10 @@ public interface WechatFeignClient {
                                     @RequestParam(value = "url" , defaultValue = "https://www.baidu.com") String url,//
                                     @RequestParam(value = "params" )String ... params);
 
+    @RequestMapping(value="/sendTplMsg", method= { RequestMethod.POST } )
+    void sendTplMsg(@RequestParam(value = "openId" , defaultValue = "oPGot0QAYXg-Y4OiTYUDn55sjRdo") String openId,//
+                             @RequestParam(value = "kw" , defaultValue = "yyghtpl") String kw,//
+                             @RequestParam(value = "url" , defaultValue = "") String url,//
+                             @RequestParam(value = "params" )String ... params);
+
 }

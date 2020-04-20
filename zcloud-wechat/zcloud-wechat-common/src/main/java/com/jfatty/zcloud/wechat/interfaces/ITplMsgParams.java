@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @email jfatty@163.com
  */
 
-@RequestMapping(value={"/tplMsgParams "})
+@RequestMapping(value={"/tplMsgParams"})
 public interface ITplMsgParams   extends BInterface<TplMsgParams,TplMsgParamsReq,TplMsgParamsRes> {
 
 }

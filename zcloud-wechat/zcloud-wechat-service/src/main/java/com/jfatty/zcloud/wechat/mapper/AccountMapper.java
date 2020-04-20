@@ -34,4 +34,10 @@ public interface AccountMapper extends IBaseMapper<Account> {
      * @return
      */
     Account getByAppId(@Param("appId") String appId);
+
+    void setUnUsingState(@Param("appId") String appId);
+
+    void setUsingState(@Param("appId") String appId);
+
+    Account getByUsingState();
 }

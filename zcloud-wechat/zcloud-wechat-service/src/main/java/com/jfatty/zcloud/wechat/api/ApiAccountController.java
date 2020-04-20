@@ -9,6 +9,7 @@ import com.jfatty.zcloud.wechat.req.AccountReq;
 import com.jfatty.zcloud.wechat.res.AccountRes;
 import com.jfatty.zcloud.wechat.service.AccountService;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -31,6 +32,7 @@ import java.util.UUID;
  * @author jfatty
  * @since 2019-04-04
  */
+@Api(tags = "微信账号API" ,value = "微信账号")
 @Slf4j
 @RestController
 @RequestMapping("/api/account")
