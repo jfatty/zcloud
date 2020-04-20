@@ -23,11 +23,13 @@ public class DictionaryDTO<T extends BaseDTO> extends BaseDTO {
     /**
      * 字典值
      */
+    @ApiModelProperty(name = "dicValue", position = 2 , value = "字典值" ,example = "门诊号")
     private String dicValue;
 
     /**
      * 字典值编码
      */
+    @ApiModelProperty(name = "dicCode", position = 2 , value = "字典值编码" , example = "MZH")
     private String dicCode;
 
 

@@ -1,62 +1,76 @@
 <div style="margin: 15px;">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>界面开发配置</legend>
+        <legend>界面图片开发配置</legend>
     </fieldset>
 
     <form class="layui-form" action="">
         <div class="layui-form-item">
             <label class="layui-form-label">应用ID</label>
             <div class="layui-input-block">
-                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
+                <input type="text" id="appid" name="appid" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">页面标题</label>
+            <label class="layui-form-label">页面标识ID</label>
             <div class="layui-input-block">
-                <input type="text" id="title" name="title" lay-verify="required" placeholder="请输入页面标题" autocomplete="off"
+                <input type="text" name="pageId" id="pageId"  lay-verify="required"
+                       placeholder="页面标识ID" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面标签ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="elemId" name="elemId" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">页面类型</label>
+            <label class="layui-form-label">图片标题</label>
             <div class="layui-input-block">
-                <input type="text" name="pype" id="pype" lay-verify="required"
-                       placeholder="PC网页还是H5页面" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">客户名称</label>
-            <div class="layui-input-block">
-                <input type="text" id="useClient" name="useClient" lay-verify="required" placeholder="请输入" autocomplete="off"
+                <input type="text" id="imgTitle" name="imgTitle" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">系统名称</label>
+            <label class="layui-form-label">图片副标题</label>
             <div class="layui-input-block">
-                <input type="text" id="useSys" name="useSys" lay-verify="required" placeholder="请输入" autocomplete="off"
+                <input type="text" id="subTitle" name="subTitle" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">版本</label>
+            <label class="layui-form-label">图片对应缺标题</label>
             <div class="layui-input-block">
-                <input type="text" id="version" name="version" lay-verify="required" placeholder="请输入" autocomplete="off"
+                <input type="text" id="imgAlt" name="imgAlt" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">页面js类型</label>
+            <label class="layui-form-label">图片类型</label>
             <div class="layui-input-block">
-                <input type="text" id="jsType" name="jsType" lay-verify="required" placeholder="请输入" autocomplete="off"
+                <input type="text" id="imgType" name="imgType"  placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">页面CSS类型</label>
+            <label class="layui-form-label">激活图片对应路径</label>
             <div class="layui-input-block">
-                <input type="text" id="cssType" name="cssType" lay-verify="required" placeholder="请输入" autocomplete="off"
+                <input type="text" id="actIconUrl" name="actIconUrl"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片对应路径</label>
+            <div class="layui-input-block">
+                <input type="text" id="iconUrl" name="iconUrl"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">设置字段</label>
+            <div class="layui-input-block">
+                <input type="text" id="site" name="site"  placeholder="根据需求使用本字段" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -81,5 +95,6 @@
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form,
             layer = layui.layer;
+
     });
 </script>

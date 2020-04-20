@@ -1,12 +1,9 @@
 package com.jfatty.zcloud.system.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfatty.zcloud.base.dto.BaseDTO;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 
 /**
  * 描述
@@ -26,48 +23,44 @@ public class UserGroupDTO<T extends BaseDTO> extends BaseDTO {
     /**
      * 用户组名称
      */
+    @ApiModelProperty(name = "name", position = 2 , value = "用户组名称" ,required = true , example = "医疗组" )
     private String name;
 
     /**
      * 用户组描述
      */
+    @ApiModelProperty(name = "description", value = "用户组描述",  position = 2, example = "备注或者描述备注或者描述备注或者描述备注或者描述备注或者描述")
     private String description;
 
     /**
      * 用户组编码
      */
+    @ApiModelProperty(name = "groupCode", position = 2 , value = "用户组编码" , example = "GROUPCODE" )
     private String groupCode;
-
-    /**
-     * 当前层级
-     */
-    private Integer level;
 
     /**
      * 最大层级
      */
+    @ApiModelProperty(name = "levelMax", position = 2 , value = "最大层级" , example = "N" )
     private Integer levelMax;
 
     /**
-     * 域值
+     * 当前层级
      */
-    private String realm;
+    @ApiModelProperty(name = "level", position = 2 , value = "当前层级" , example = "5" )
+    private Integer level;
 
     /**
      * 使用状态
      */
+    @ApiModelProperty(name = "state", position = 11,required = true,value = "正常使用 1 停用 0 使用状态" , example = "1" ,allowableValues = "0,1")
     private Integer state;
 
-    /**
-     * 创建人
-     */
-    private String createOperator;
 
     /**
-     * 创建时间
+     * 域值
      */
-    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime = LocalDateTime.now() ;
+    @ApiModelProperty(name = "realm", position = 12 , value = "域值" )
+    private String realm;
 
 }

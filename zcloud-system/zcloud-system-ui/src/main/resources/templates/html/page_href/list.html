@@ -4,21 +4,20 @@
 </head>
 <body>
 <div class="admin-main">
-
     <blockquote class="layui-elem-quote">
-        <a shiro:hasPermission="org:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
-            <i class="layui-icon">&#xe608;</i> 新增
+        <a shiro:hasPermission="office:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
+            <i class="layui-icon">&#xe608;</i> 新增界面链接跳转开发配置
         </a>
-        <a shiro:hasPermission="org:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
+        <a shiro:hasPermission="office:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
             <i class="layui-icon">&#xe608;</i> 导入信息
         </a>
-        <a shiro:hasPermission="org:export" href="javascript:;" class="layui-btn layui-btn-small">
+        <a shiro:hasPermission="office:export" href="javascript:;" class="layui-btn layui-btn-small">
             <i class="fa fa-shopping-cart" aria-hidden="true"></i> 导出信息
         </a>
-        <a shiro:hasPermission="org:delete" href="javascript:;" class="layui-btn layui-btn-small" id="getSelected">
+        <a shiro:hasPermission="office:delete" href="javascript:;" class="layui-btn layui-btn-small" id="getSelected">
             <i class="layui-icon" aria-hidden="true">&#xe640;</i> 删除
         </a>
-        <a shiro:hasPermission="org:search" href="javascript:;" class="layui-btn layui-btn-small" id="search">
+        <a shiro:hasPermission="office:search" href="javascript:;" class="layui-btn layui-btn-small" id="search">
             <i class="layui-icon">&#xe615;</i> 搜索
         </a>
     </blockquote>
@@ -29,13 +28,18 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
-                    <th>名称</th>
-                    <th>联系人</th>
-                    <th>联系人电话</th>
-                    <th>地址</th>
-                    <th>邮箱</th>
-                    <th>官网地址</th>
-                    <th>描述</th>
+                    <th>应用ID</th>
+                    <th>医院ID</th>
+                    <th>页面标识ID</th>
+                    <th>页面标签ID</th>
+                    <th>图片标题</th>
+                    <th>链接显示类型</th>
+                    <th>目标地址</th>
+                    <th>设置字段</th>
+                    <th>校验code值</th>
+                    <th>校验名称</th>
+                    <th>校验规则</th>
+                    <th>备注</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -54,28 +58,38 @@
     {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.contact }}</td>
-        <td>{{ item.tel }}</td>
-        <td>{{ item.address }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.www }}</td>
-        <td>{{ item.remark }}</td>
+        <td>{{ item.appid }}</td>
+        <td>{{ item.hospitalId }}</td>
+        <td>{{ item.pageId }}</td>
+        <td>{{ item.elemId }}</td>
+        <td>{{ item.elemTitle }}</td>
+        <td>{{ item.elemType }}</td>
+        <td>{{ item.targetHref }}</td>
+        <td>{{ item.site }}</td>
+        <td>{{ item.verifyCode }}</td>
+        <td>{{ item.verifyName }}</td>
+        <td>{{ item.verifyRule }}</td>
+        <td>{{ item.description }}</td>
         <td>
-            <a shiro:hasPermission="org:edit" href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-mini">修改</a>
+            <a shiro:hasPermission="office:edit" href="javascript:;" data-id="{{ item.id }}" data-opt="edit"
+               class="layui-btn layui-btn-mini">修改</a>
         </td>
     </tr>
     {{# }); }}
 </script>
 <script type="text/javascript" th:inline="none">
-    var orgId, processDefinitionId;
+
+
+    var objId, xtree;
     layui.config({
         base: JFATTY.basePath() + '/js/'
     });
+
     var pageObj = {//调用数据获取函数
         pageIndex: 1,
         refre: false
     };
+
     layui.use(['paging', 'form'], function () {
         var $ = layui.jquery,
             paging = layui.paging(),
@@ -85,7 +99,7 @@
 
         var pageOpts = {
             openWait: true,
-            url: JFATTY.basePath() + 'org/table/list?v=' + new Date().getTime(), //地址
+            url: JFATTY.basePath() + 'pageHref/table/list?v=' + new Date().getTime(), //地址
             elem: '#content', //内容容器
             params: { //发送到服务端的参数
             },
@@ -102,7 +116,6 @@
                 //alert('获取数据失败')
             },
             complate: function () { //完成的回调
-                //alert('处理完成');
                 //重新渲染复选框
                 form.render('checkbox');
                 form.on('checkbox(allselector)', function (data) {
@@ -122,7 +135,7 @@
                     var $that = $(this);
                     var viewBoxIndex = -1;
                     $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
-                        orgId = $(this).data('id');
+                        objId = $(this).data('id');
                         //图片盒子开始
                         if (viewBoxIndex !== -1)
                             return;
@@ -130,7 +143,7 @@
                         $.get('./view.html', null, function (form) {
                             viewBoxIndex = layer.open({
                                 type: 1,
-                                title: '修改信息',
+                                title: '修改界面链接跳转开发配置',
                                 content: form,
                                 btn: ['保存', '取消'],
                                 shade: false,
@@ -159,7 +172,7 @@
                                     form.render();
                                     form.on('submit(edit)', function (data) {
                                         JFATTY.doPost({
-                                            url: JFATTY.basePath() + "org/edit",
+                                            url: JFATTY.basePath() + "pageHref/edit",
                                             data: data.field,
                                             success: function (value, type) {
                                                 var msg = "";
@@ -178,9 +191,7 @@
                                                     pageObj.refre = true;
                                                     pageObj.pageIndex = paging.getCurrPageIndex();
                                                     paging.get(pageObj);
-                                                    //window.location.reload();
                                                 })
-                                                //console.log(value);
                                             }
                                         });
                                         //这里可以写ajax方法提交表单
@@ -198,7 +209,6 @@
 
                 });
 
-
             },
         };
 
@@ -215,17 +225,16 @@
                     i++;
                 }
             });
-            if (ids.length == 0) {
+            if (  ids.length == 0 ) {
                 layer.msg('请至少选择一条数据!');
                 return false;
             }
-
             layer.alert("您确定要删除选中的数据吗?", {
                 title: '温馨提示!'
             }, function (index) {
                 var params = {"ids": ids};
                 JFATTY.doPost({
-                    url: JFATTY.basePath() + "org/delete",
+                    url: JFATTY.basePath() + "pageHref/delete",
                     data: params,
                     success: function (value, type) {
                         var msg = "";
@@ -261,7 +270,7 @@
             $.get('./add.html', null, function (form) {
                 addBoxIndex = layer.open({
                     type: 1,
-                    title: '新增',
+                    title: '新增界面链接跳转开发配置',
                     content: form,
                     btn: ['保存', '取消'],
                     shade: false,
@@ -290,7 +299,7 @@
                         form.render();
                         form.on('submit(edit)', function (data) {
                             JFATTY.doPost({
-                                url: JFATTY.basePath() + "org/save",
+                                url: JFATTY.basePath() + "pageImage/save",
                                 data: data.field,
                                 success: function (value, type) {
                                     var msg = "";
@@ -309,7 +318,6 @@
                                         pageObj.refre = true;
                                         pageObj.pageIndex = paging.getCurrPageIndex();
                                         paging.get(pageObj);
-                                        //window.location.reload();
                                     })
                                     //console.log(value);
                                 }

@@ -19,6 +19,12 @@ public class PageElementDTO<T extends BaseDTO> extends BaseDTO {
     private String id ;
 
     /**
+     * 应用ID APPID
+     */
+    @ApiModelProperty(name = "appid", position = 2,required = true, value = "微信  支付宝  APP appId" , example = "wx0725202a2fe5ffcf" )
+    private String appid;
+
+    /**
      * 页面标识ID
      */
     @ApiModelProperty(name = "pageId", value = "页面标识ID", required = true, position = 2, example = "HOME201912525")

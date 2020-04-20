@@ -39,7 +39,7 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("平台接口")
+                .title("系统配置平台接口")
                 .description("API接口")
                 .termsOfServiceUrl("https://www.jfatty.com/")
                 .contact(new Contact("jfatty ", "https://www.jfatty.com/", "jfatty@163.com"))

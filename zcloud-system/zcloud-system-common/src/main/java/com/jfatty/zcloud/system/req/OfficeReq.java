@@ -11,6 +11,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "系统科室请求实体")
 public class OfficeReq  extends OfficeDTO<OfficeReq> {
+
 }

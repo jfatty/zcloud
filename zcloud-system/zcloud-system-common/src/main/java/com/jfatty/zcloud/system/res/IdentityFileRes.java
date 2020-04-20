@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "XXX理实体")
+@ApiModel(description = "系统证件信息响应实体")
 public class IdentityFileRes extends IdentityFileDTO<IdentityFileRes> {
 
     /**

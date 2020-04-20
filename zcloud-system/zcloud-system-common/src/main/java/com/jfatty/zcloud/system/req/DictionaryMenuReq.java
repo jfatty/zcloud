@@ -11,7 +11,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "系统字典菜单请求实体")
 public class DictionaryMenuReq  extends DictionaryMenuDTO<DictionaryMenuReq> {
 
 }

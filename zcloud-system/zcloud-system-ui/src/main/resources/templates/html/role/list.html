@@ -51,7 +51,7 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
         <td shiro:hasRole="super" >{{ item.id }}</td>
@@ -254,10 +254,6 @@
                                                 privilegeIds[aIndex] = oCks[i].value ;
                                                 aIndex ++ ;
                                             }
-                                        }
-                                        if ( privilegeIds.length == 0 ) {
-                                            layerTips.msg("请选择对应权限");
-                                            return false;
                                         }
                                         var params = {"authId": roleId, "privilegeIds": privilegeIds};
                                         JFATTY.doPost({

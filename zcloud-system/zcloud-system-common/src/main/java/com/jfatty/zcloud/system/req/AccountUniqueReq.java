@@ -12,7 +12,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "登录账号信息请求实体")
 public class AccountUniqueReq extends AccountUniqueDTO<AccountUniqueReq> {
 
 }

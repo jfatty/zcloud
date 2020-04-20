@@ -11,7 +11,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "组织机构请求实体")
 public class OrgReq  extends OrgDTO<OrgReq> {
 
 }

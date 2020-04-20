@@ -47,7 +47,7 @@ public class PageImage extends Model<PageImage> {
      */
     private String imgTitle;
     /**
-     * 图片标题
+     * 图片副标题
      */
     private String subTitle;
 

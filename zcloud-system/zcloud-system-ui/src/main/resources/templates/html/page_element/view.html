@@ -1,32 +1,60 @@
 <div style="margin: 15px;">
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>科室</legend>
+        <legend>界面标签元素开发配置</legend>
     </fieldset>
 
     <form class="layui-form" action="">
         <input type="hidden" name="id" id="id"/>
         <div class="layui-form-item">
-            <label class="layui-form-label">科室名称</label>
+            <label class="layui-form-label">应用ID</label>
             <div class="layui-input-block">
-                <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入科室名称" autocomplete="off"
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">科室编码</label>
+            <label class="layui-form-label">页面标识ID</label>
             <div class="layui-input-block">
-                <input type="text" name="officeCode" readonly id="officeCode" lay-verify="required"
-                       placeholder="请输入科室编码" autocomplete="off" class="layui-input">
+                <input type="text" name="pageId" id="pageId" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">部门</label>
-            <div class="layui-input-inline">
-                <select id="deptId" name="deptId">
-                    <option>请选择部门</option>
-                </select>
+            <label class="layui-form-label">页面标签ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="elemId"  id="elemId" lay-verify="required"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面标签类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="elemType"  id="elemType"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">二级页面标签类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="elemSecType"  id="elemSecType"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">字典菜单ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="dictionaryMenu"  id="dictionaryMenu"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">设置字段</label>
+            <div class="layui-input-block">
+                <input type="text" name="site"  id="site"
+                       placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">使用状态</label>
             <div class="layui-input-block">
@@ -35,9 +63,9 @@
             </div>
         </div>
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">科室描述</label>
+            <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
-                <textarea name="description" id="description" placeholder="请输入科室描述内容" class="layui-textarea"></textarea>
+                <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
             </div>
         </div>
         <button lay-filter="edit" lay-submit style="display: none;"></button>
@@ -48,37 +76,21 @@
         var form = layui.form,
             layer = layui.layer;
 
-        JFATTY.doGet({
-            url: JFATTY.basePath() + "department/list",
-            async: false,
-            data: null,
-            success: function (value, type) {
-                $("#deptId").html("");
-                var html = "<option >请选择部门</option>";
-                if (value.ok) {
-                    var result = value.data;
-                    var size = result.length;
-                    for (var i = 0; i < size; i++) {
-                        var dept = result[i];
-                        html += "<option value=\"" + dept.id + "\">" + dept.name + "</option>";
-                    }
-                    $("#deptId").append(html);
-                }
 
-            }
-        });
-        //修改前预览 通过GET方式拿到数据
-        var params = {id: officeId};
         JFATTY.doGet({
-            url: JFATTY.basePath() + "office/edit?id=" + officeId,
+            url: JFATTY.basePath() + "pageElement/edit?id=" + objId,
             async: false,
             success: function (value, type) {
                 if (value.ok) {
                     var obj = value.data;
                     $("#id").val(obj.id);
-                    $("#name").val(obj.name);
-                    $("#officeCode").val(obj.officeCode);
-                    $("#deptId").val(obj.deptId);
+                    $("#appid").val(obj.appid);
+                    $("#pageId").val(obj.pageId);
+                    $("#elemId").val(obj.elemId);
+                    $("#elemType").val(obj.elemType);
+                    $("#elemSecType").val(obj.elemSecType);
+                    $("#dictionaryMenu").val(obj.dictionaryMenu);
+                    $("#site").val(obj.site);
                     $("#description").val(obj.description);
                     if (obj.state == 1) {
                         $("#state_y").attr("checked", true);
@@ -86,7 +98,6 @@
                         $("#state_n").attr("checked", true);
                     }
                     form.render();
-                    //g_form.render('select');
                 }
             }
         });

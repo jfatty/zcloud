@@ -56,8 +56,10 @@ public class PermRelationshipServiceImpl extends BaseSystemServiceImpl<PermRelat
 
     @Override
     public boolean auth(String authId, List<String> privilegeIds) throws Exception {
-        if(CollectionUtils.isEmpty(privilegeIds))
-            return false ;
+        if(CollectionUtils.isEmpty(privilegeIds)){
+            permRelationshipMapper.deleteOldPrivilege(authId);
+            return true ;
+        }
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("authId", authId);
         map.put("index", privilegeIds);

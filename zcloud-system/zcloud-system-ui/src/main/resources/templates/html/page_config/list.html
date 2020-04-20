@@ -6,7 +6,7 @@
 <div class="admin-main">
     <blockquote class="layui-elem-quote">
         <a shiro:hasPermission="office:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
-            <i class="layui-icon">&#xe608;</i> 新增科室
+            <i class="layui-icon">&#xe608;</i> 新增界面开发配置
         </a>
         <a shiro:hasPermission="office:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
             <i class="layui-icon">&#xe608;</i> 导入信息
@@ -28,9 +28,15 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
-                    <th>科室名称</th>
-                    <th>科室编码</th>
-                    <th>科室描述</th>
+                    <th>页面ID</th>
+                    <th>页面标题</th>
+                    <th>页面类型</th>
+                    <th>客户名称</th>
+                    <th>使用此页面的系统名称</th>
+                    <th>版本</th>
+                    <th>页面js类型</th>
+                    <th>页面CSS</th>
+                    <th>备注或者描述</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -46,11 +52,16 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
-        <td>{{ item.name }}</td>
-        <td>{{ item.officeCode }}</td>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title }}</td>
+        <td>{{ item.pype }}</td>
+        <td>{{ item.useSys }}</td>
+        <td>{{ item.version }}</td>
+        <td>{{ item.jsType }}</td>
+        <td>{{ item.cssType }}</td>
         <td>{{ item.description }}</td>
         <td>
             <a shiro:hasPermission="office:edit" href="javascript:;" data-id="{{ item.id }}" data-opt="edit"
@@ -62,7 +73,7 @@
 <script type="text/javascript" th:inline="none">
 
 
-    var officeId, xtree;
+    var objId, xtree;
     layui.config({
         base: JFATTY.basePath() + '/js/'
     });
@@ -81,7 +92,7 @@
 
         var pageOpts = {
             openWait: true,
-            url: JFATTY.basePath() + 'office/table/list?v=' + new Date().getTime(), //地址
+            url: JFATTY.basePath() + 'pageConfig/table/list?v=' + new Date().getTime(), //地址
             elem: '#content', //内容容器
             params: { //发送到服务端的参数
             },
@@ -117,7 +128,7 @@
                     var $that = $(this);
                     var viewBoxIndex = -1;
                     $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
-                        officeId = $(this).data('id');
+                        objId = $(this).data('id');
                         //图片盒子开始
                         if (viewBoxIndex !== -1)
                             return;
@@ -125,7 +136,7 @@
                         $.get('./view.html', null, function (form) {
                             viewBoxIndex = layer.open({
                                 type: 1,
-                                title: '修改科室信息',
+                                title: '修改界面开发配置',
                                 content: form,
                                 btn: ['保存', '取消'],
                                 shade: false,
@@ -154,7 +165,7 @@
                                     form.render();
                                     form.on('submit(edit)', function (data) {
                                         JFATTY.doPost({
-                                            url: JFATTY.basePath() + "office/edit",
+                                            url: JFATTY.basePath() + "pageConfig/edit",
                                             data: data.field,
                                             success: function (value, type) {
                                                 var msg = "";
@@ -216,7 +227,7 @@
             }, function (index) {
                 var params = {"ids": ids};
                 JFATTY.doPost({
-                    url: JFATTY.basePath() + "office/delete",
+                    url: JFATTY.basePath() + "pageConfig/delete",
                     data: params,
                     success: function (value, type) {
                         var msg = "";
@@ -252,7 +263,7 @@
             $.get('./add.html', null, function (form) {
                 addBoxIndex = layer.open({
                     type: 1,
-                    title: '新增科室',
+                    title: '新增界面开发配置',
                     content: form,
                     btn: ['保存', '取消'],
                     shade: false,
@@ -281,7 +292,7 @@
                         form.render();
                         form.on('submit(edit)', function (data) {
                             JFATTY.doPost({
-                                url: JFATTY.basePath() + "office/save",
+                                url: JFATTY.basePath() + "pageConfig/save",
                                 data: data.field,
                                 success: function (value, type) {
                                     var msg = "";
