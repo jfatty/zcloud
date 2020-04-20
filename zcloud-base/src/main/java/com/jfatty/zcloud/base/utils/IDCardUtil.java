@@ -75,6 +75,7 @@ public class IDCardUtil implements Serializable {
     private String gender;      //性别
     private Date birthday;      //出生日期
     private String birthdayStr ;//出生日期 字符串
+    private Integer age = 0 ;//年龄
 
 
     public String toString() {
@@ -126,6 +127,12 @@ public class IDCardUtil implements Serializable {
                 this.year = currentDay.get(Calendar.YEAR);
                 this.month = currentDay.get(Calendar.MONTH) + 1;
                 this.day = currentDay.get(Calendar.DAY_OF_MONTH);
+                //当前日期
+                String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+                //计算年龄差
+                Integer ageBit = Integer.parseInt(date) - Integer.parseInt(birthday);
+                if (ageBit.toString().length() > 4 )
+                    this.age = Integer.parseInt(ageBit.toString().substring(0, ageBit.toString().length() - 4));
             }
         } catch (Exception e) {
             e.printStackTrace();
