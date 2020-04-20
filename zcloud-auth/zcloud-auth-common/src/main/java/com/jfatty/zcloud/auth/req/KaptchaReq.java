@@ -11,7 +11,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "智慧医疗菜单请求实体")
+@ApiModel(description = "手机号二维码请求实体")
 public class KaptchaReq extends KaptchaDTO<KaptchaReq> {
 
     private String phone ;

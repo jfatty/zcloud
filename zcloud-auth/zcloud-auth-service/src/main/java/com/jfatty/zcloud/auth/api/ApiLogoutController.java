@@ -52,6 +52,30 @@ public class ApiLogoutController  {
         if(StringUtils.isEmptyOrBlank(token))
             return RETResultUtils._509("token不能为空") ;
         //通过请求头信息判断 agent 请求发起者是 APP微信还是PC端
+        String userAgent = request.getHeader("user-agent") ;
+        if ( StringUtils.isNotEmptyAndBlank(userAgent) ) {
+            if (userAgent.contains("linux") || userAgent.contains("android")|| userAgent.contains("adr")|| userAgent.contains("okhttp")) {
+                log.error("isAndroid ");
+            }else if (userAgent.contains("darwin")
+                    || userAgent.contains("iphone")
+                    || userAgent.contains("ipad")
+                    || userAgent.contains("ipod")
+                    || userAgent.contains("macintosh")
+                    || userAgent.contains("cfnetwork")){
+                log.error("isIOS");
+            }else {
+                log.error("Other ");
+            }
+
+            if (  userAgent.contains("AlipayClient") ){
+                log.error("访问端 支付宝浏览器 ");
+            } else if ( userAgent.contains("MicroMessenger") ) {
+                log.error("访问端 微信浏览器 ");
+            } else {
+                log.error("访问端 其他客户端 ");
+            }
+        }
+
         //删除token对应用户信息
         if ( redisTemplate.delete(token) )
             return RETResultUtils.success("注销成功");

@@ -44,8 +44,8 @@ public class ShiroConfig {
         map.put("/v2/api-docs-ext", "anon");
         map.put("/doc.html", "anon");
         map.put("/webjars/** ", "anon");
-
-        map.put("/**", "authc");
+        map.put("/api/**", "anon");
+        //map.put("/**", "authc");
         return map ;
     }
 

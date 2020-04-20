@@ -4,13 +4,13 @@ import com.jfatty.zcloud.base.dto.BaseDTO;
 import lombok.Data;
 
 /**
- * 描述 手机号二维码
+ * 描述
  *
- * @author jfatty on 2019/12/19
+ * @author jfatty on 2020/4/12
  * @email jfatty@163.com
  */
 @Data
-public class KaptchaDTO<T extends BaseDTO> extends BaseDTO {
+public class UserProfileDTO<T extends BaseDTO> extends BaseDTO {
 
 
 

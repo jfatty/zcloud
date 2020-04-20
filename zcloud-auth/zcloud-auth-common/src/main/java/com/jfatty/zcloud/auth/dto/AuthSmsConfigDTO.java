@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 系统短信息配置
  *
  * @author jfatty on 2019/12/27
  * @email jfatty@163.com
