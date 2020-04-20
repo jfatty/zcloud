@@ -4,7 +4,7 @@ import com.jfatty.zcloud.base.dto.BaseDTO;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 预约记录
  *
  * @author jfatty on 2020/1/4
  * @email jfatty@163.com

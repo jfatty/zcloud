@@ -17,4 +17,6 @@ import java.util.List;
 public interface ProtocolMapper extends IBaseMapper<Protocol> {
 
     List<Protocol> getByDiffs(@Param("version") String version,@Param("opcode")  String opcode);
+
+    List<Protocol> getProtocol(@Param("appId") String appId,@Param("version")  String version,@Param("pageId")  String pageId);
 }

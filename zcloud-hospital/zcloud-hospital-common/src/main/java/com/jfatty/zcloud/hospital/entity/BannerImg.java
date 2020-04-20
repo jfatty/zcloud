@@ -27,10 +27,6 @@ public class BannerImg extends Model<BannerImg> {
      */
     private String id;
 
-    /**
-     * 图片标题
-     */
-    private String title;
 
     /**
      * 图片一般存储为地址
@@ -42,40 +38,13 @@ public class BannerImg extends Model<BannerImg> {
      */
     private byte[] picture;
 
-    /**
-     * 图片类型 0 表示图片地址 1 表示二进制文件
-     */
-    private Integer imgType;
 
-    /**
-     * 图片使用方
-     */
-    private String user;
-
-    /**
-     * 路由地址
-     */
-    private String route;
-
-    /**
-     * 跳转链接
-     */
-    private String link;
-
-    /**
-     * 链接跳转类型 打开新页面还是本页面打开
-     */
-    private String linkType;
 
     /**
      * 排序号
      */
     private Integer orderNum;
 
-    /**
-     * 版本
-     */
-    private String version;
 
     /**
      * 备注或者描述
@@ -83,9 +52,14 @@ public class BannerImg extends Model<BannerImg> {
     private String description;
 
     /**
-     * 是否显示
+     * 规格,格式
      */
-    private Integer display;
+    private String specification;
+
+    /**
+     * 关联对象id
+     */
+    private String relationId;
 
     /**
      * 使用状态
@@ -107,7 +81,7 @@ public class BannerImg extends Model<BannerImg> {
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime= LocalDateTime.now();
 
     /**
      * 更新人
@@ -120,6 +94,8 @@ public class BannerImg extends Model<BannerImg> {
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
+
+
 
 
 }

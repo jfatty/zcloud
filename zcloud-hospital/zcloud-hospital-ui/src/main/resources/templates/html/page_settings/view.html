@@ -1,0 +1,162 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>修改操作</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">医院名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="hosName" id="hosName" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">医院口号标语</label>
+            <div class="layui-input-block">
+                <input type="text" name="hosSlogan" id="hosSlogan" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">医院logoUrl地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="hosLogoUrl" id="hosLogoUrl" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">技术支持方名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="techSupport" name="techSupport" lay-verify="required" placeholder="请输入"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">技术支持服务电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="techSupportPhone" id="techSupportPhone"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">技术支持官网地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="techSupportWww" id="techSupportWww" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标类型</label>
+            <div class="layui-input-block">
+                <input type="text" name="iconType" id="iconType" autocomplete="off" placeholder="0 表示图片地址 1 表示二进制文件"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="address" id="address" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">激活状态地址图标地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="actAddressIconUrl" id="actAddressIconUrl" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">地址图标地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="addressIconUrl" id="addressIconUrl" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="phone" id="phone" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">激活状态电话图标地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="actPhoneIconUrl" id="actPhoneIconUrl" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话图标地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="phoneIconUrl" id="phoneIconUrl" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本</label>
+            <div class="layui-input-block">
+                <input type="text" name="version" id="version" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="description" id="description" placeholder="请输入协议内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "pageSettings/edit?id=" + objId,
+            async: false,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#appid").val(obj.appid);
+                    $("#hosName").val(obj.hosName);
+                    $("#hosSlogan").val(obj.hosSlogan);
+                    $("#hosLogoUrl").val(obj.hosLogoUrl);
+                    $("#techSupport").val(obj.techSupport);
+                    $("#techSupportPhone").val(obj.techSupportPhone);
+                    $("#techSupportWww").val(obj.techSupportWww);
+                    $("#iconType").val(obj.iconType);
+                    $("#address").val(obj.address);
+                    $("#actAddressIconUrl").val(obj.actAddressIconUrl);
+                    $("#addressIconUrl").val(obj.addressIconUrl);
+                    $("#phone").val(obj.phone);
+                    $("#actPhoneIconUrl").val(obj.actPhoneIconUrl);
+                    $("#phoneIconUrl").val(obj.phoneIconUrl);
+                    $("#version").val(obj.version);
+                    $("#description").val(obj.description);
+                    form.render();
+                }
+            }
+        });
+
+    });
+</script>

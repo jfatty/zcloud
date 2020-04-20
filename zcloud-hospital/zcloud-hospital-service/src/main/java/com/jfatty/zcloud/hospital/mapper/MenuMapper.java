@@ -17,6 +17,7 @@ import java.util.List;
 public interface MenuMapper extends IBaseMapper<Menu> {
 
 
-    List<Menu> getDiffMenus(@Param("version") String version,@Param("position")  String position,@Param("navId")  String navId);
+    List<Menu> getDiffMenus(@Param("version") String version,@Param("position")  String position,@Param("navId")  String navId,@Param("specification") String specification,@Param("kw") String kw);
 
+    List<Menu> getMenusByModuleId(@Param("appId") String appId,@Param("version")  String version, @Param("moduleId")  String moduleId, @Param("specification")  String specification);
 }

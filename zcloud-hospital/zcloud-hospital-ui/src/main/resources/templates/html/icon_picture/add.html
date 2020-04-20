@@ -1,0 +1,57 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>新增操作</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">关联对象id</label>
+            <div class="layui-input-block">
+                <input type="text" name="relationId" id="relationId" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">规格</label>
+            <div class="layui-input-block">
+                <select id="specification" name="specification">
+                    <option value="PC">电脑</option>
+                    <option value="PAD">平板</option>
+                    <option value="MOBILE">移动H5</option>
+                    <option value="APP">APP应用</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单图标</label>
+            <div class="layui-input-block">
+                <input type="text" name="icon" id="icon" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">激活菜单图标</label>
+            <div class="layui-input-block">
+                <input type="text" id="actIcon" name="actIcon" lay-verify="required" placeholder="请输入"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="description" id="description" placeholder="请输入备注" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+
+    });
+</script>

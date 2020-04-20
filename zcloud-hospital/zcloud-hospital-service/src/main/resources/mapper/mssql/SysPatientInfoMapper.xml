@@ -48,7 +48,7 @@
                         SELECT
                             TOP ${pageIndex} *
                         FROM
-                            dbo.xt_brxx
+                            dbo.xt_brxx WHERE sfzh IS NOT NULL
                         ORDER BY
                             jdrq DESC
                     )
@@ -73,7 +73,7 @@
                         SELECT
                             TOP ${pageIndex} *
                         FROM
-                            dbo.xt_brxx
+                            dbo.xt_brxx WHERE sfzh IS NOT NULL
                         ORDER BY
                             jdrq DESC
                     )
@@ -87,7 +87,7 @@
 
     <!-- 获取表格数据条数 -->
     <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
-        SELECT COUNT(0) FROM dbo.xt_brxx
+        SELECT COUNT(0) FROM dbo.xt_brxx WHERE sfzh IS NOT NULL
     </select>
 
 

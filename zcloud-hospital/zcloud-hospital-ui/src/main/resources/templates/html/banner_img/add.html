@@ -3,85 +3,45 @@
         <legend>新增操作</legend>
     </fieldset>
 
-    <form class="layui-form"  id="fm" action="">
+    <form class="layui-form" action="">
         <div class="layui-form-item">
-            <label class="layui-form-label">图片标题</label>
+            <label class="layui-form-label">关联对象id</label>
             <div class="layui-input-block">
-                <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入图片标题" autocomplete="off"
+                <input type="text" name="relationId" id="relationId" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">规格</label>
+            <div class="layui-input-block">
+                <select id="specification" name="specification">
+                    <option value="PC">电脑</option>
+                    <option value="PAD">平板</option>
+                    <option value="MOBILE">移动H5</option>
+                    <option value="APP">APP应用</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="img" id="img" autocomplete="off" placeholder="请输入"
                        class="layui-input">
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label for="icon" class="layui-form-label">
-                <span style="color: red;">*</span>图标
-            </label>
-            <div class="layui-input-inline">
-                <div style="margin-left: 20px;margin-top:5px">
-                    <ul>
-                        <li style="vertical-align: middle;display: inline-block;width: 90px;" id="menu-icon">
-                            <i class="layui-icon" id="icon" style="font-size: 25px;"></i>
-                        </li>
-                        <li style="vertical-align: middle;display: inline-block;">
-                            <i class="layui-btn layui-btn-primary layui-btn-sm" id="select_icon">选择图标</i>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">图片使用方</label>
-            <div class="layui-input-block">
-                <input type="text" name="user" id="user" lay-verify="required" placeholder="请输入图片使用方" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">路由地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="route" id="route" lay-verify="required" placeholder="请输入路由地址" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">跳转链接</label>
-            <div class="layui-input-block">
-                <input type="text" name="link" lay-verify="link" autocomplete="off" placeholder="请输入跳转链接"
-                       class="layui-input">
-            </div>
-        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">排序号</label>
             <div class="layui-input-block">
-                <input type="number" id="orderNum" name="orderNum" lay-verify="required" placeholder="请输入排序号"
+                <input type="text" id="orderNum" name="orderNum" lay-verify="required" placeholder="请输入"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <label class="layui-form-label">链接跳转类型</label>
-            <div class="layui-input-block">
-                <select id="linkType" name="linkType">
-                    <option value="ROUTE">路由</option>
-                    <option value="TARGET">窗口</option>
-                    <option value="HREF">链接</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">版本</label>
-            <div class="layui-input-block">
-                <input type="text" name="version" id="version" lay-verify="required" placeholder="请输入版本" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-
         <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">描述</label>
+            <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
-                <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
+                <textarea name="description" id="description" placeholder="请输入备注" class="layui-textarea"></textarea>
             </div>
         </div>
         <button lay-filter="edit" lay-submit style="display: none;"></button>
@@ -91,48 +51,7 @@
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form,
             layer = layui.layer;
-        var iconBoxIndex = -1;
-        $('#select_icon').on('click', function () {
-            if (iconBoxIndex !== -1)
-                return;
-            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
-            $.get('./icon.html', null, function (form) {
-                iconBoxIndex = layer.open({
-                    type: 1,
-                    title: '选择图标',
-                    content: form,
-                    //	btn: ['确定', '取消'],
-                    shade: false,
-                    offset: ['100px', '30%'],
-                    area: ['600px', '400px'],
-                    zIndex: 19950924,
-                    maxmin: true,
-                    yes: function (index) {
-                        //触发表单的提交事件
-                        $('form.layui-form').find('li').click();
-                    },
-                    full: function (elem) {
-                        var win = window.top === window.self ? window : parent.window;
-                        $(win).on('resize', function () {
-                            var $this = $(this);
-                            elem.width($this.width()).height($this.height()).css({
-                                top: 0,
-                                left: 0
-                            });
-                            elem.children('div.layui-layer-content').height($this.height() - 95);
-                        });
-                    },
-                    success: function (layero, index) {
-                        //弹出窗口成功后渲染表单
-                        //console.log("1397");
-                        //console.log(layero, index);
-                    },
-                    end: function () {
-                        iconBoxIndex = -1;
-                    }
-                });
-            });
 
-        });
+
     });
 </script>

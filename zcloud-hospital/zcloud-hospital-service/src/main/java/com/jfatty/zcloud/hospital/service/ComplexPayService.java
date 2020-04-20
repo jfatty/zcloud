@@ -34,7 +34,7 @@ public interface ComplexPayService {
      * @param fydh
      * @return
      */
-    OutpatientDetail getWebmzDetail(String openId, Integer openIdType, String fydh);
+    List<OutpatientDetail> getWebmzDetail(String openId, Integer openIdType, String fydh);
 
     /**
      * 调用存储过程 查询就诊人待缴费单信息

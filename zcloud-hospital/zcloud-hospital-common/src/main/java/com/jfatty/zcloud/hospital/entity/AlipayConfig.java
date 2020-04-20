@@ -141,7 +141,7 @@ public class AlipayConfig extends Model<AlipayConfig> {
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime = LocalDateTime.now();
 
     /**
      * 更新人

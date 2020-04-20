@@ -1,12 +1,12 @@
 package com.jfatty.zcloud.hospital.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Blob;
 import java.time.LocalDateTime;
 
 /**
@@ -27,6 +27,11 @@ public class Menu extends Model<Menu> {
      * 主键ID
      */
     private String id;
+
+    /**
+     * 应用ID APPID
+     */
+    private String appid;
 
     /**
      * 菜单标题
@@ -77,21 +82,25 @@ public class Menu extends Model<Menu> {
     /**
      * 菜单图标样式
      */
+    @TableField(exist = false)
     private String icon;
 
     /**
      * 导航激活状态图标路径
      */
+    @TableField(exist = false)
     private String actIcon;
 
     /**
      * icon图标二进制文件
      */
+    @TableField(exist = false)
     private byte[]  iconImg;
 
     /**
      * 导航图标激活状态二进制文件
      */
+    @TableField(exist = false)
     private byte[] actIconImg;
 
     /**
@@ -179,7 +188,7 @@ public class Menu extends Model<Menu> {
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime = LocalDateTime.now();
 
     /**
      * 更新人

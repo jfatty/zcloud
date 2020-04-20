@@ -19,10 +19,11 @@
 
     <!--调用存储过程 添加就诊人-->
     <select id="webRegPatient" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map"  >
-		exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{openId},#{openIdType}
-	</select>
+        <!--exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{sex},#{birthday},#{address},#{openId},#{openIdType}}-->
+         exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{openId},#{openIdType
+</select>
 
-    <!--调用存储过程 添加就诊人 携带就诊卡号 -->
+<!--调用存储过程 添加就诊人 携带就诊卡号 -->
     <select id="webRegOtherPatient" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map"  >
         exec dbo.pro_web_reg_other #{idCard},#{name},#{tel},#{Type},#{No},#{openId},#{openIdType}
     </select>
@@ -62,6 +63,7 @@
         update numo.t_patient set
         name        = #{numoPatientInfo.name},
         gender      = #{numoPatientInfo.gender},
+        age      = #{numoPatientInfo.age},
         tel         = #{numoPatientInfo.tel},
         address     = #{numoPatientInfo.address},
         updatedBy   = #{openId},
@@ -81,6 +83,7 @@
         insert into numo.t_patient(
         name,
         gender,
+        age,
         tel,
         idCard,
         address,
@@ -98,6 +101,7 @@
         )values(
         #{numoPatientInfo.name},
         #{numoPatientInfo.gender},
+        #{numoPatientInfo.age},
         #{numoPatientInfo.tel},
         #{numoPatientInfo.idCard},
         #{numoPatientInfo.address},

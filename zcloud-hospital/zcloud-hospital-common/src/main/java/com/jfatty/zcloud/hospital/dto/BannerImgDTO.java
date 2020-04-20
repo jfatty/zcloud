@@ -19,29 +19,6 @@ public class BannerImgDTO<T extends BaseDTO> extends BaseDTO {
     @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
     private String id ;
 
-    /**
-     * 图片标题
-     */
-    @ApiModelProperty(name = "title", position = 1,required = true, value = "图片标题" ,example = "智慧停车")
-    private String title;
-
-    /**
-     * 路由地址
-     */
-    @ApiModelProperty(name = "route", position = 2, value = "路由地址" ,example = "/home")
-    private String route;
-
-    /**
-     * 跳转链接
-     */
-    @ApiModelProperty(name = "link", position = 3, value = "跳转链接" ,example = "https://hub.docker.com/_/python")
-    private String link;
-
-    /**
-     * 链接跳转类型 打开新页面还是本页面打开
-     */
-    @ApiModelProperty(name = "linkType", position = 4, value = "链接跳转类型 'TARGET','ROUTE','HREF' " ,required = true,example = "ROUTE" ,allowableValues = "TARGET,ROUTE,HREF")
-    private String linkType;
 
     /**
      * 排序号
@@ -49,11 +26,6 @@ public class BannerImgDTO<T extends BaseDTO> extends BaseDTO {
     @ApiModelProperty(name = "orderNum", position = 5, value = "排序号",required = true ,example = "14")
     private Integer orderNum;
 
-    /**
-     * 版本
-     */
-    @ApiModelProperty(name = "version", position = 6, value = "版本" ,required = true,example = "1.0.0" )
-    private String version;
 
     /**
      * 备注或者描述
@@ -68,15 +40,21 @@ public class BannerImgDTO<T extends BaseDTO> extends BaseDTO {
     private Integer state;
 
     /**
-     * 图片类型 0 表示图片地址 1 表示二进制文件
-     */
-    @ApiModelProperty(name = "imgType", position = 9 ,required = true, value = "图片类型 0 表示图片地址 1 表示二进制文件",example = "0",allowableValues = "1,0")
-    private Integer imgType;
-
-    /**
      * 图片一般存储为地址
      */
     @ApiModelProperty(name = "img", position = 10 , value = "存储为地址",example = "http://119.29.96.206/zealsoft/ban01.jpg")
     private String img;
+
+    /**
+     * 规格,格式  PC MOBILE APP
+     */
+    @ApiModelProperty(name = "specification", position = 2 , required = true, value = "规格,格式  PC MOBILE APP" ,example = "MOBILE" , allowableValues = "PC,PAD,MOBILE,APP")
+    private String specification;
+
+    /**
+     * 关联对象id
+     */
+    @ApiModelProperty(name = "relationId", position = 2 , required = true, value = "关联对象id" ,example = "ASWS3332232322")
+    private String relationId;
 
 }

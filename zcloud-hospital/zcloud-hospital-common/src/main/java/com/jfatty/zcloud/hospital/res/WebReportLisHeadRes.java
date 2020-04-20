@@ -64,7 +64,7 @@ public class WebReportLisHeadRes extends WebReportLisHeadDTO<WebReportLisHeadRes
     /**
      *
      */
-    @ApiModelProperty(name = "bz", position = 2 ,required = true, value = "备注 " , example = "备注备注瓶")
+    @ApiModelProperty(name = "bz", position = 2 ,required = true, value = "备注 " , example = "备注瓶")
     private String bz ;
     /**
      *
@@ -96,7 +96,7 @@ public class WebReportLisHeadRes extends WebReportLisHeadDTO<WebReportLisHeadRes
     /**
      * 审核人名称
      */
-    @ApiModelProperty(name = "shrmc", position = 2 ,required = true, value = "审核人名称 " , example = "是瓶")
+    @ApiModelProperty(name = "shrmc", position = 2 ,required = true, value = "审核人名称 " , example = "张荣")
     private String shrmc ;
     /**
      * 审核人签名

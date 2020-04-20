@@ -20,6 +20,12 @@ public class MenuDTO<T extends BaseDTO> extends BaseDTO {
     private String id ;
 
     /**
+     * 应用ID APPID
+     */
+    @ApiModelProperty(name = "appid", position = 1, required = true, value = "应用ID APPID" , example = "wxe3336a60d2685379")
+    private String appid;
+
+    /**
      * 菜单标题
      */
     @ApiModelProperty(name = "title", position = 1 ,required = true, value = "菜单标题" ,example = "住院缴费")

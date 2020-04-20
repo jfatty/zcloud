@@ -56,13 +56,15 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "1.0.0"),
-            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "index")
+            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "index"),
+            @ApiImplicitParam(name = "specification", value = "规格,格式  PC MOBILE PAD APP",dataType = "String",defaultValue = "MOBILE")
     })
     @RequestMapping(value={"/index"},method=RequestMethod.GET)
     public RELResultUtils<MenuRes> index(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
                              @RequestParam(value = "version" , defaultValue = "1.0.0") String version ,
-                             @RequestParam(value = "position" , defaultValue = "index" ) String position ){
-        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
+                             @RequestParam(value = "position" , defaultValue = "index" ) String position  ,
+                                         @RequestParam(value = "specification" ,required = true, defaultValue = "MOBILE" ) String specification ){
+        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null,"MOBILE","index");
         if(CollectionUtils.isEmpty(menus))
             return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
@@ -81,13 +83,15 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "1.0.0"),
-            @ApiImplicitParam(name = "navId", value = "底部导航ID",dataType = "String",defaultValue = "402881906F12FFF9016F12FFF9D50000")
+            @ApiImplicitParam(name = "navId", value = "底部导航ID",dataType = "String",defaultValue = "402881906F12FFF9016F12FFF9D50000"),
+            @ApiImplicitParam(name = "specification", value = "规格,格式  PC MOBILE PAD APP",dataType = "String",defaultValue = "MOBILE")
     })
     @RequestMapping(value={"/indexNav"},method=RequestMethod.GET)
     public RELResultUtils<MenuRes> indexNav(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
                                      @RequestParam(value = "version" , defaultValue = "1.0.0") String version ,
-                                     @RequestParam(value = "navId" , defaultValue = "402881906F12FFF9016F12FFF9D50000" ) String navId ){
-        List<Menu> menus = menuService.getDiffMenus(appId,version,null,navId);
+                                     @RequestParam(value = "navId" , defaultValue = "402881906F12FFF9016F12FFF9D50000" ) String navId  ,
+                                            @RequestParam(value = "specification" ,required = true, defaultValue = "MOBILE" ) String specification ){
+        List<Menu> menus = menuService.getDiffMenus(appId,version,null,navId,"MOBILE","index");
         if(CollectionUtils.isEmpty(menus))
             return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
@@ -106,13 +110,15 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "4.0.0"),
-            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "top_one",allowableValues ="top_one,top_two,middle,bottom" )
+            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "top_one",allowableValues ="top_one,top_two,middle,bottom" ),
+            @ApiImplicitParam(name = "specification", value = "规格,格式  PC MOBILE PAD APP",dataType = "String",defaultValue = "MOBILE")
     })
     @RequestMapping(value={"/indexFour"},method=RequestMethod.GET)
     public RELResultUtils<MenuRes> indexFour(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
                                              @RequestParam(value = "version" , defaultValue = "4.0.0") String version ,
-                                             @RequestParam(value = "position" , defaultValue = "top_one" ) String position  ){
-        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
+                                             @RequestParam(value = "position" , defaultValue = "top_one" ) String position  ,
+                                             @RequestParam(value = "specification" ,required = true, defaultValue = "MOBILE" ) String specification ){
+        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null,"MOBILE","index");
         if(CollectionUtils.isEmpty(menus))
             return RELResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();
@@ -130,15 +136,18 @@ public class ApiMenuController extends ApiBaseHospitalController<Menu,MenuReq,Me
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "4.0.0"),
-            @ApiImplicitParam(name = "position", value = "定位(可选参数)为空表示获取首页所有菜单",dataType = "String",defaultValue = "") //,allowableValues ="top_one,top_two,middle,bottom"
+            @ApiImplicitParam(name = "position", value = "定位(可选参数)为空表示获取首页所有菜单",dataType = "String",defaultValue = ""),//,allowableValues ="top_one,top_two,middle,bottom"
+            @ApiImplicitParam(name = "specification", value = "规格,格式  PC MOBILE PAD APP",dataType = "String",defaultValue = "MOBILE")
+
     })
     @RequestMapping(value={"/indexFourAll"},method=RequestMethod.GET)
     public RETResultUtils<Map<String, List<MenuRes>>> indexFourAll(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
                                                                    @RequestParam(value = "version" , defaultValue = "4.0.0") String version ,
-                                                                   @RequestParam(value = "position" , defaultValue = "" ) String position  ){
+                                                                   @RequestParam(value = "position" , defaultValue = "" ) String position  ,
+                                                                   @RequestParam(value = "specification" ,required = true, defaultValue = "MOBILE" ) String specification ){
         if (StringUtils.isEmptyOrBlank(position))
             position = null ;
-        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null);
+        List<Menu> menus = menuService.getDiffMenus(appId,version,position,null,"MOBILE","index");
         if(CollectionUtils.isEmpty(menus))
             return RETResultUtils._506("未查询到对应菜单") ;
         List<MenuRes> menuReses = new ArrayList<MenuRes>();

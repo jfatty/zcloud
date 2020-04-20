@@ -32,7 +32,7 @@ public interface ComplexPayMapper {
      * 调用存储过程 查询门诊缴费单详情 通过费用单号
      * @return
      */
-    OutpatientDetail getWebmzDetail(@Param("openId") String openId, @Param("openIdType") Integer openIdType, @Param("fydh") String fydh);
+    List<OutpatientDetail> getWebmzDetail(@Param("openId") String openId, @Param("openIdType") Integer openIdType, @Param("fydh") String fydh);
     /**
      * 调用存储过程 查询就诊人待缴费单信息
      * @return

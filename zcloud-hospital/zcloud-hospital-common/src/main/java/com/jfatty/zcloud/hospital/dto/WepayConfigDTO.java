@@ -15,9 +15,10 @@ import lombok.Data;
 public class WepayConfigDTO<T extends BaseDTO> extends BaseDTO {
 
     /**
-     * 主键ID
+     * 主键ID页面页面标识唯一
      */
-    private String id;
+    @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
+    private String id ;
 
     /**
      * 公众号APPID

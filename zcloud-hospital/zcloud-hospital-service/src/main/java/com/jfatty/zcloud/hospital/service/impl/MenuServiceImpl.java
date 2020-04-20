@@ -30,7 +30,12 @@ public class MenuServiceImpl extends BaseHospitalServiceImpl<Menu, MenuMapper> i
     }
 
     @Override
-    public List<Menu> getDiffMenus(String appId, String version, String position, String navId) {
-        return menuMapper.getDiffMenus(version,position,navId) ;
+    public List<Menu> getDiffMenus(String appId, String version, String position, String navId,String specification,String kw) {
+        return menuMapper.getDiffMenus(version,position,navId,specification,kw) ;
+    }
+
+    @Override
+    public List<Menu> getMenusByModuleId(String appId, String version, String moduleId, String specification) {
+        return menuMapper.getMenusByModuleId(appId,version,moduleId,specification);
     }
 }

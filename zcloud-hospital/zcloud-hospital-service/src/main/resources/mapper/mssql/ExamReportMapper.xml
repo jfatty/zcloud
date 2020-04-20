@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ExamReportMapper">
+
+
+    <!--根据单据号获取 体检人基础细信息-->
+    <select id="getReportJcxx" resultType="com.jfatty.zcloud.hospital.vo.ReportJcxx">
+        exec dbo.pro_tj_web_report_jcxx #{djh}
+    </select>
+
+    <!--根据单据号获取 体检报告总结建议 部分-->
+    <select id="getReportZjjy" resultType="com.jfatty.zcloud.hospital.vo.ReportZjjy">
+        exec dbo.pro_tj_web_report_zjjy #{djh}
+    </select>
+
+
+    <select id="getEreportZero" resultType="com.jfatty.zcloud.hospital.vo.EreportResponse">
+        exec dbo.pro_tj_web_report_0  #{djh}
+    </select>
+
+
+    <select id="getEreportOne" resultType="com.jfatty.zcloud.hospital.vo.EreportResponse">
+        exec dbo.pro_tj_web_report_1tx #{djh}
+    </select>
+
+    <select id="getEreportTwo" resultType="com.jfatty.zcloud.hospital.vo.EreportResponse">
+        exec dbo.pro_tj_web_report_2 #{djh}
+    </select>
+
+    <select id="getEreportPic" resultType="com.jfatty.zcloud.hospital.vo.EreportPic">
+        exec dbo.pro_tj_web_report_tx #{djh},#{zhid}
+    </select>
+
+
+    <select id="getEreportXdt" resultType="com.jfatty.zcloud.hospital.vo.EreportResponse">
+        exec dbo.pro_tj_web_report_xdt_dt #{djh}
+    </select>
+
+    <select id="getEreportGmd" resultType="com.jfatty.zcloud.hospital.vo.EreportResponse">
+        exec dbo.pro_tj_web_report_gmd_dt #{djh}
+    </select>
+
+    <select id="getExamReportTasks" resultType="com.jfatty.zcloud.hospital.vo.ExamReportTask">
+        exec dbo.pro_tj_web_bglb #{brid}
+    </select>
+
+</mapper>

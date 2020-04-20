@@ -7,7 +7,7 @@
 
     <blockquote class="layui-elem-quote">
         <a shiro:hasPermission="org:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
-            <i class="layui-icon">&#xe608;</i> 新增
+            <i class="layui-icon">&#xe608;</i> 新增轮播图片
         </a>
         <a shiro:hasPermission="org:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
             <i class="layui-icon">&#xe608;</i> 导入信息
@@ -29,13 +29,11 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
-                    <th>图片标题</th>
-                    <th>图片使用方</th>
-                    <th>路由地址</th>
-                    <th>跳转链接</th>
-                    <th>链接跳转类型</th>
+                    <th>规格</th>
+                    <th>关联对象id</th>
+                    <th>图片地址</th>
                     <th>排序号</th>
-                    <th>版本</th>
+                    <th>备注</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -51,16 +49,14 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
-        <td>{{ item.title }}</td>
-        <td>{{ item.user }}</td>
-        <td>{{ item.route }}</td>
-        <td>{{ item.link }}</td>
-        <td>{{ item.linkType }}</td>
+        <td>{{ item.specification }}</td>
+        <td>{{ item.relationId }}</td>
+        <td>{{ item.img }}</td>
         <td>{{ item.orderNum }}</td>
-        <td>{{ item.version }}</td>
+        <td>{{ item.description }}</td>
         <td>
             <a shiro:hasPermission="org:edit" href="javascript:;" data-id="{{ item.id }}" data-opt="edit" class="layui-btn layui-btn-mini">修改</a>
         </td>
@@ -68,7 +64,7 @@
     {{# }); }}
 </script>
 <script type="text/javascript" th:inline="none">
-    var orgId, processDefinitionId;
+    var bannerImgId;
     layui.config({
         base: JFATTY.basePath() + '/js/'
     });
@@ -122,7 +118,7 @@
                     var $that = $(this);
                     var viewBoxIndex = -1;
                     $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
-                        orgId = $(this).data('id');
+                        bannerImgId = $(this).data('id');
                         //图片盒子开始
                         if (viewBoxIndex !== -1)
                             return;
@@ -178,7 +174,6 @@
                                                     pageObj.refre = true;
                                                     pageObj.pageIndex = paging.getCurrPageIndex();
                                                     paging.get(pageObj);
-                                                    //window.location.reload();
                                                 })
                                                 //console.log(value);
                                             }

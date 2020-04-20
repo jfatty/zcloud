@@ -110,12 +110,18 @@ public class ApiComplexPatientController {
         }
         String idCard = null;
         String gender = null;
+        Integer age = null ;
+        String birthdayStr = null ;
         try {
             idCard = numoPatientInfoReq.getIdCard() ;
             IDCardUtil idCardUtil = new IDCardUtil(idCard) ;
             gender = idCardUtil.getGender();
+            if ( StringUtils.isEmptyOrBlank(gender))
+                throw new RuntimeException("身份证号不合法");
+            age = idCardUtil.getAge();
+            birthdayStr = idCardUtil.getBirthdayStr();
         } catch (Exception e) {
-            log.error("程序绑定就诊人信息时出现异常 就诊人身份证号[{}]不合法:",idCard);
+            log.error("程序绑定就诊人信息时出现异常 就诊人身份证号:[{}]不合法====>[{}]",idCard,e.getMessage());
             return RETResultUtils._509("请输入合法的就诊人身份证号");
         }
         try {
@@ -126,9 +132,8 @@ public class ApiComplexPatientController {
             log.error("====> 关注公众号事件,添加用户信息 处理异常 openId= [{}] openIdType= [{}] 异常信息=[{}]" , openId , openIdType ,e.getMessage() );
         }
         try {
-
             res = complexPatientService.saveComplexPatient(openId,openIdType,numoPatientInfoReq.getName(),//
-                    gender,idCard,numoPatientInfoReq.getTel(),//
+                    gender,age,birthdayStr,idCard,numoPatientInfoReq.getTel(),//
                     numoPatientInfoReq.getAddress(),numoPatientInfoReq.getNation(),//
                     numoPatientInfoReq.getRelationship(),numoPatientInfoReq.getHasCard(),//
                     numoPatientInfoReq.getHisCardNo(),numoPatientInfoReq.getHisCardType());

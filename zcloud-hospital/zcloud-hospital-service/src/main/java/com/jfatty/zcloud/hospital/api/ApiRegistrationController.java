@@ -14,6 +14,7 @@ import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.service.RegisteredInfoService;
 import com.jfatty.zcloud.hospital.service.RegistrationService;
 import com.jfatty.zcloud.hospital.vo.*;
+import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,9 @@ public class ApiRegistrationController {
 
     @Autowired
     private RegisteredInfoService registeredInfoService ;
+
+    @Autowired
+    private WechatFeignClient wechatFeignClient ;
 
     @ApiOperation(value="001****获取医院 可预约挂号科室信息")
     @RequestMapping(value = {"/getHosDepts"} ,method = RequestMethod.POST)
@@ -123,6 +127,15 @@ public class ApiRegistrationController {
             preRegisteredRes.setName(numoPatientInfo.getName());
             preRegisteredRes.setYyghsj(LocalDateTime.now());
             preRegisteredRes.setStatus("预约成功");
+
+            String first = "您好，您已预约挂号成功。" ;
+            String name = numoPatientInfo.getName() ;
+            String hospitalName = preRegistered.getYyHos();
+            String department = preRegistered.getKsmc() ;
+            String doctor = "待分诊" ;
+            String yyh = preRegistered.getYyh();
+            String remark = "请您准时于" + preRegistered.getYyrq() + "到我院就诊" ;
+            wechatFeignClient.sendTplMsg(preRegisteredReq.getOpenId(),"yyghcgtz","",first,name,sex,hospitalName,department,doctor,yyh,remark);
             return new RETResultUtils("预约成功!",preRegisteredRes);
         } catch (Exception e) {
             e.printStackTrace();

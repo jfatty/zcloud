@@ -6,89 +6,90 @@
     <form class="layui-form" action="">
         <input type="hidden" name="id" id="id"/>
         <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
+            <label class="layui-form-label">应用ID</label>
             <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="required" placeholder="请输入" id="name" autocomplete="off"
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">单位法人</label>
+            <label class="layui-form-label">导航标题</label>
             <div class="layui-input-block">
-                <input type="text" name="legal" id="legal" lay-verify="required" placeholder="请输入单位法人姓名" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">联系人</label>
-            <div class="layui-input-block">
-                <input type="text" name="contact" lay-verify="required" placeholder="请输入" id="contact"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">联系人电话</label>
-            <div class="layui-input-block">
-                <input type="tel" name="tel" lay-verify="phone" autocomplete="off" id="tel" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">编码</label>
-            <div class="layui-input-block">
-                <input type="text" name="orgCode" readonly lay-verify="required" placeholder="请输入" id="orgCode"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="address" lay-verify="required" placeholder="请输入" id="address"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">邮箱</label>
-            <div class="layui-input-block">
-                <input type="text" name="email" lay-verify="email" autocomplete="off" id="email" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">官网地址</label>
-            <div class="layui-input-block">
-                <input type="text" name="www" lay-verify="url" autocomplete="off" id="www" class="layui-input">
-            </div>
-        </div>
-
-        <div class="layui-form-item">
-            <label class="layui-form-label">联系QQ</label>
-            <div class="layui-input-block">
-                <input type="text" name="qq" id="qq"  autocomplete="off" placeholder="请输入联系QQ"
+                <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入导航标题" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">联系微信</label>
+            <label class="layui-form-label">导航图标路径</label>
             <div class="layui-input-block">
-                <input type="text" name="wx" id="wx"  autocomplete="off" placeholder="请输入联系微信"
+                <input type="text" id="icon" name="icon" lay-verify="phone" autocomplete="off" placeholder="请输入导航图标路径"
                        class="layui-input">
             </div>
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">上级单位</label>
-            <div class="layui-input-inline">
-                <select id="parentId" name="parentId">
-                    <option value="">请选择上级单位</option>
+            <label class="layui-form-label">act导航图标路径</label>
+            <div class="layui-input-block">
+                <input type="text" id="actIcon" name="actIcon"  autocomplete="off" placeholder="请输入导航激活状态图标路径"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">版本</label>
+            <div class="layui-input-block">
+                <input type="text" name="version" id="version"  placeholder="请输入版本" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">路由</label>
+            <div class="layui-input-block">
+                <input type="text" name="route" id="route"  placeholder="请输入路由" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="number" name="orderNum" id="orderNum" placeholder="请输入排序号" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">跳转链接</label>
+            <div class="layui-input-block">
+                <input type="text" name="link" id="link" autocomplete="off" placeholder="请输入跳转链接"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接跳转类型</label>
+            <div class="layui-input-block">
+                <select id="linkType" name="linkType">
+                    <option value="ROUTE">路由</option>
+                    <option value="TARGET">窗口</option>
+                    <option value="HREF">链接</option>
                 </select>
             </div>
         </div>
 
-        <div class="layui-form-item layui-form-text">
-            <label class="layui-form-label">简介</label>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否显示</label>
             <div class="layui-input-block">
-                <textarea name="remark" placeholder="请输入简介内容" id="remark" class="layui-textarea"></textarea>
+                <input type="text" name="display" id="display" autocomplete="off" placeholder="1 表示显示 0 表示不显示"
+                       class="layui-input">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+                <textarea name="description" id="description" placeholder="请输入描述内容" class="layui-textarea"></textarea>
             </div>
         </div>
         <button lay-filter="edit" lay-submit style="display: none;"></button>
@@ -99,51 +100,73 @@
         var form = layui.form,
             layer = layui.layer;
 
-        JFATTY.doGet({
-            url: JFATTY.basePath() + "org/list",
-            data: null,
-            success: function (value, type) {
-                $("#parentId").html("");
-                var html = "<option value=''>请选择上级单位</option>";
-                if (value.ok) {
-                    var result = value.data;
-                    var size = result.length;
-                    for (var i = 0; i < size; i++) {
-                        var parent = result[i];
-                        html += "<option value=\"" + parent.id + "\">" + parent.name + "</option>";
-                    }
-                    $("#parentId").append(html);
-                    form.render('select');
-                }
 
-            }
-        });
 
-        //修改前预览 通过GET方式拿到数据
-        var params = {id: orgId};
         JFATTY.doGet({
-            url: JFATTY.basePath() + "navigation/edit?id=" + orgId,
+            url: JFATTY.basePath() + "navigation/edit?id=" + navigationId,
             async: false,
             success: function (value, type) {
                 if (value.ok) {
                     var obj = value.data;
                     $("#id").val(obj.id);
-                    $("#legal").val(obj.legal);
-                    $("#name").val(obj.name);
-                    $("#contact").val(obj.contact);
-                    $("#tel").val(obj.tel);
-                    $("#orgCode").val(obj.orgCode);
-                    $("#address").val(obj.address);
-                    $("#email").val(obj.email);
-                    $("#www").val(obj.www);
-                    $("#qq").val(obj.qq);
-                    $("#wx").val(obj.wx);
-                    $("#parentId").val(obj.parentId);
-                    $("#remark").val(obj.remark);
+                    $("#appid").val(obj.appid);
+                    $("#title").val(obj.title);
+                    $("#icon").val(obj.icon);
+                    $("#actIcon").val(obj.actIcon);
+                    $("#version").val(obj.version);
+                    $("#route").val(obj.route);
+                    $("#orderNum").val(obj.orderNum);
+                    $("#link").val(obj.link);
+                    $("#linkType").val(obj.linkType);
+                    $("#display").val(obj.display);
+                    $("#description").val(obj.description);
                     form.render();
-                    //g_form.render('select');
                 }
             }
+        });
+
+        var iconBoxIndex = -1;
+        $('#select_icon').on('click', function () {
+            if (iconBoxIndex !== -1)
+                return;
+            //本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+            $.get('./icon.html', null, function (form) {
+                iconBoxIndex = layer.open({
+                    type: 1,
+                    title: '选择图标',
+                    content: form,
+                    //	btn: ['确定', '取消'],
+                    shade: false,
+                    offset: ['100px', '30%'],
+                    area: ['600px', '400px'],
+                    zIndex: 19950924,
+                    maxmin: true,
+                    yes: function (index) {
+                        //触发表单的提交事件
+                        $('form.layui-form').find('li').click();
+                    },
+                    full: function (elem) {
+                        var win = window.top === window.self ? window : parent.window;
+                        $(win).on('resize', function () {
+                            var $this = $(this);
+                            elem.width($this.width()).height($this.height()).css({
+                                top: 0,
+                                left: 0
+                            });
+                            elem.children('div.layui-layer-content').height($this.height() - 95);
+                        });
+                    },
+                    success: function (layero, index) {
+                        //弹出窗口成功后渲染表单
+                        //console.log("1397");
+                        //console.log(layero, index);
+                    },
+                    end: function () {
+                        iconBoxIndex = -1;
+                    }
+                });
+            });
+
         });
 
     });

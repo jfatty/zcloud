@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ModuleRelationshipMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.ModuleRelationship">
+        <id column="module_id" property="moduleId" />
+        <result column="menu_id" property="menuId" />
+    </resultMap>
+
+    <!-- 页面权限树 封装 -->
+    <resultMap id="MenuTreeMap" type="com.jfatty.zcloud.base.vo.SystemTree" >
+        <result column="title" property="title" jdbcType="VARCHAR" />
+        <result column="id" property="value" jdbcType="VARCHAR" />
+        <!--
+        <result column="root" property="checked" jdbcType="BIT" />
+        <result column="spread" property="spread" jdbcType="BIT" />
+         -->
+    </resultMap>
+
+
+    <insert id="bindMenus" parameterType="map"  >
+        insert into hospital_module_relationship (menu_id, module_id) values
+        <foreach collection="index" index="index" item="menu_id" separator=",">
+            (#{menu_id,jdbcType=VARCHAR}, #{moduleId,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <delete id="deleteOldRels">
+        DELETE FROM  hospital_module_relationship WHERE module_id = #{moduleId}
+    </delete>
+
+    <select id="getBindMenus" resultMap="MenuTreeMap" >
+        select id,concat(title,version) AS title
+        from hospital_menu where 1=1 AND state = 1 AND delete_state = 0 AND id IN (SELECT menu_id FROM hospital_module_relationship WHERE module_id = #{moduleId} )
+    </select>
+
+
+    <select id="getAllMenus" resultMap="MenuTreeMap" >
+        select id,concat(title,version) AS title
+        from hospital_menu WHERE state = 1 AND delete_state = 0
+    </select>
+
+</mapper>

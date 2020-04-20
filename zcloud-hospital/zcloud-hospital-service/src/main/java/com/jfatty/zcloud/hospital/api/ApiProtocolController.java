@@ -58,7 +58,25 @@ public class ApiProtocolController extends ApiBaseHospitalController<Protocol,Pr
                                            @RequestParam(value = "opcode" , defaultValue = "yygh" ) String opcode ){
         List<Protocol> protocols = protocolService.getByDiffs(appId,version,opcode);
         if(CollectionUtils.isEmpty(protocols))
-            return RETResultUtils.success("未查询到对应菜单") ;
+            return RETResultUtils.success("未查询到对应协议或用户需知") ;
+        ProtocolRes protocolRes = new ProtocolRes();
+        BeanUtils.copyProperties(protocols.get(0),protocolRes);
+        return new RETResultUtils(protocolRes);
+    }
+
+    @ApiOperation(value="002******协议或用户需知获取通道")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
+            @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "1.0.0"),
+            @ApiImplicitParam(name = "pageId", value = "页面标识ID",dataType = "String",required = true ,defaultValue = "402881906F150C8F016F150C8F7C0000")
+    })
+    @RequestMapping(value={"/getProtocol"},method=RequestMethod.GET)
+    public RETResultUtils<ProtocolRes> getProtocol(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
+                                               @RequestParam(value = "version" , defaultValue = "1.0.0") String version ,
+                                               @RequestParam(value = "pageId" , defaultValue = "402881906F150C8F016F150C8F7C0000" ) String pageId ){
+        List<Protocol> protocols = protocolService.getProtocol(appId,version,pageId);
+        if(CollectionUtils.isEmpty(protocols))
+            return RETResultUtils.success("未查询到对应协议或用户需知") ;
         ProtocolRes protocolRes = new ProtocolRes();
         BeanUtils.copyProperties(protocols.get(0),protocolRes);
         return new RETResultUtils(protocolRes);

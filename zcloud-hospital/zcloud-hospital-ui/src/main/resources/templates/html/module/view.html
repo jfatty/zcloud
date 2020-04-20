@@ -1,0 +1,93 @@
+<div style="margin: 15px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>修改操作</legend>
+    </fieldset>
+
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" id="name" lay-verify="required" placeholder="请输入协议标题" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">唯一关键字</label>
+            <div class="layui-input-block">
+                <input type="text" name="kw" id="kw" lay-verify="required" placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">父模块ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="parentId" id="parentId" autocomplete="off" placeholder="请输入协议署名"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块位置</label>
+            <div class="layui-input-block">
+                <input type="text" id="pos" name="pos" lay-verify="required" placeholder="请输入协议类型"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="orderNum" id="orderNum"  placeholder="请输入版本" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块使用方</label>
+            <div class="layui-input-block">
+                <input type="text" name="user" id="user" autocomplete="off" placeholder="请输入操作码"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="description" id="description" placeholder="请输入协议内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script type="text/javascript" th:inline="none">
+    layui.use(['form', 'layedit', 'laydate'], function () {
+        var form = layui.form,
+            layer = layui.layer;
+
+
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "module/edit?id=" + objId,
+            async: false,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#appid").val(obj.appid);
+                    $("#name").val(obj.name);
+                    $("#kw").val(obj.kw);
+                    $("#parentId").val(obj.parentId);
+                    $("#pos").val(obj.pos);
+                    $("#orderNum").val(obj.orderNum);
+                    $("#user").val(obj.user);
+                    $("#description").val(obj.description);
+                    form.render();
+                }
+            }
+        });
+
+    });
+</script>

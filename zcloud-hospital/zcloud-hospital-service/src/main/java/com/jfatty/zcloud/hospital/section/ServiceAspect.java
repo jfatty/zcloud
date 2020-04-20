@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -26,6 +27,7 @@ import java.util.Map;
 @Slf4j
 @Aspect
 @Component
+@Order(-1) // 保证该AOP在@Transactional之前执行
 public class ServiceAspect {
 
     /**
@@ -34,7 +36,7 @@ public class ServiceAspect {
      * "execution(public * com.example.demo.controller.HelloController.add*(..))"
      * 定义切点
      */
-    @Pointcut("execution(* com.jfatty.zcloud.hospital.api.*.*(..)) && @annotation(com.jfatty.zcloud.hospital.annotation.ServiceAspectAnnotation)")
+    @Pointcut("execution(* com.jfatty.zcloud.hospital.service.impl.*.*(..)) && @annotation(com.jfatty.zcloud.hospital.annotation.ServiceAspectAnnotation)")
     public void addAdvice(){
 
     }
@@ -53,24 +55,13 @@ public class ServiceAspect {
         String methodName = pjp.getSignature().getName();
         String clazzName = pjp.getTarget().getClass().getSimpleName();
         System.out.println("@Around：执行目标方法之前..."+clazzName);
-        Field[] fields = pjp.getTarget().getClass().getDeclaredFields();
-        System.out.println("fields "+fields.length);
-        //Method[] methods = pjp.getTarget().getClass().getDeclaredMethods();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            System.out.println(field.getName());
-            Annotation[] annos = field.getDeclaredAnnotations();
-            System.out.println("annos "+annos.length);
+        //Field[] fields = pjp.getTarget().getClass().getDeclaredFields();
+        //System.out.println("fields "+fields.length);
+        Method[] methods = pjp.getTarget().getClass().getDeclaredMethods();
+        for ( Method method : methods ){
+            System.out.println("method name"+method.getName());
 
-            Method[]  methods = field.getClass().getDeclaredMethods();
-
-            for (Method m : methods){
-                System.out.println(m.getName());
-            }
-
-            System.out.println("methods "+methods.length);
-
-            TargetDataSource targetDataSource = field.getAnnotation(TargetDataSource.class);
+            TargetDataSource targetDataSource = method.getAnnotation(TargetDataSource.class);
             if ( targetDataSource == null)
                 continue;
             InvocationHandler invocationHandler = Proxy.getInvocationHandler(targetDataSource);
@@ -89,7 +80,6 @@ public class ServiceAspect {
                 e.printStackTrace();
             }
         }
-
         Object result = null;
         try {
             result = pjp.proceed();

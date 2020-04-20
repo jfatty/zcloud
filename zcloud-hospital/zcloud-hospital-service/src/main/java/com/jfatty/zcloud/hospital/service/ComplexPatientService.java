@@ -37,16 +37,17 @@ public interface ComplexPatientService {
      *
      * @param openId
      * @param openIdType
-     * @param name
-     * @param idCard
-     * @param tel
-     * @param address
-     * @param nation
-     * @param hisCardNo
+     * @param name 姓名
+     * @param idCard 身份证号码
+     * @param tel 电话号码
+     * @param address 地址
+     * @param nation 民族
+     * @param hisCardNo 就诊卡号
      * @param hisCardType
      * @return
      */
-    boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender,String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
+    boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender,Integer age,
+                               String birthdayStr,String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception ;
 
 
     NumoPatientDeatilRes getNumoPatientInfo(String openId, String brid);

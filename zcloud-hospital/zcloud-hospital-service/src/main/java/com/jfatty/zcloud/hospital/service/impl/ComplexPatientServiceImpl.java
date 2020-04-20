@@ -49,7 +49,8 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender, String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception {
+    public boolean saveComplexPatient(String openId, Integer openIdType, String name, String gender,Integer age,
+                                      String birthdayStr , String idCard, String tel, String address, String nation,String relationship,Integer hasCard, String hisCardNo, String hisCardType) throws Exception {
         String regMSg = "" ;
         List<WebRegPatient> list = null ;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -57,6 +58,9 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
         map.put("idCard", idCard);
         map.put("name", name);
         map.put("tel", tel);
+        map.put("sex", gender);
+        map.put("birthday", birthdayStr);
+        map.put("address", address);
         map.put("openId", openId);
         map.put("openIdType", openIdType);
         if(StringUtils.isEmptyOrBlank(hisCardNo) && hasCard == 0 ) {
@@ -91,6 +95,7 @@ public class ComplexPatientServiceImpl implements ComplexPatientService {
                     numoPatientInfo.setAddress(webRegPatient.getDz());
                 if(StringUtils.isEmptyOrBlank(webRegPatient.getDz()) && StringUtils.isNotEmptyAndBlank(address))
                     numoPatientInfo.setAddress(address);
+                numoPatientInfo.setAge(age);
                 int affect = complexPatientMapper.addNumoPatientInfo(numoPatientInfo,openId,openIdType);
                 log.error("绑定就诊人 数据库受影响行数: [{}]",affect);
                 return true ;

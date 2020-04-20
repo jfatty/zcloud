@@ -82,6 +82,12 @@ public class NavigationDTO<T extends BaseDTO> extends BaseDTO {
     @ApiModelProperty(name = "state", value = "是否有效", position = 6, required = true,example = "1",allowableValues = "1,0")
     private Integer state;
 
+    /**
+     * 是否显示
+     */
+    @ApiModelProperty(name = "display", position = 8 ,required = true, value = "是否显示 0 不显示 1 显示" ,example = "1",allowableValues = "1,0")
+    private Integer display;
+
 
 
 }

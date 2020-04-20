@@ -34,4 +34,9 @@ public class ProtocolServiceImpl extends BaseHospitalServiceImpl<Protocol, Proto
     public List<Protocol> getByDiffs(String appId, String version, String opcode) {
         return protocolMapper.getByDiffs(version,opcode);
     }
+
+    @Override
+    public List<Protocol> getProtocol(String appId, String version, String pageId) {
+        return protocolMapper.getProtocol(appId,version,pageId);
+    }
 }

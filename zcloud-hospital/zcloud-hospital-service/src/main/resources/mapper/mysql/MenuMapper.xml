@@ -5,6 +5,7 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Menu">
         <id column="id" property="id" />
+        <result column="appid" property="appid" />
         <result column="title" property="title" />
         <result column="pos" property="pos" />
         <result column="nav_id" property="navId" />
@@ -63,20 +64,30 @@
 
 
     <select id="getDiffMenus" resultMap="BaseResultMap" >
-        select
-          *
-        from hospital_menu
-        where 1 = 1 AND state = 1 AND delete_state = 0
+        SELECT m.*,p.icon,p.act_icon,p.icon_img,p.act_icon_img FROM hospital_menu m INNER JOIN hospital_icon_picture p ON p.relation_id = m.id
+        AND p.specification = #{specification} AND p.state = 1 AND p.delete_state = 0 WHERE 1 = 1
+        AND m.id IN ( SELECT menu_id FROM hospital_module_relationship WHERE module_id = ( SELECT id FROM hospital_module WHERE kw = #{kw} LIMIT 1  ) )
         <if test="version != null" >
-            and version = #{version}
+            AND m.version = #{version}
         </if>
         <if test="position != null" >
-            and pos = #{position}
+            AND m.pos = #{position}
         </if>
         <if test="navId != null" >
-            and nav_id = #{navId}
+            AND m.nav_id = #{navId}
         </if>
-        ORDER BY sort_num ASC
+        ORDER BY m.sort_num ASC
+    </select>
+
+
+    <select id="getMenusByModuleId" resultMap="BaseResultMap">
+        SELECT m.*,p.icon,p.act_icon,p.icon_img,p.act_icon_img FROM hospital_menu m INNER JOIN hospital_icon_picture p ON p.relation_id = m.id
+        AND p.specification = #{specification} AND p.state = 1 AND p.delete_state = 0 WHERE 1 = 1
+            AND m.id IN ( SELECT menu_id FROM hospital_module_relationship WHERE module_id = #{moduleId} )
+        <if test="version != null" >
+            AND m.version = #{version}
+        </if>
+        ORDER BY m.sort_num ASC
     </select>
 
 </mapper>

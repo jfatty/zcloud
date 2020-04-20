@@ -2,14 +2,14 @@ package com.jfatty.zcloud.hospital.api;
 
 
 import com.jfatty.zcloud.base.utils.RELResultUtils;
+import com.jfatty.zcloud.hospital.entity.Banner;
 import com.jfatty.zcloud.hospital.entity.BannerImg;
-import com.jfatty.zcloud.hospital.entity.Navigation;
 import com.jfatty.zcloud.hospital.interfaces.IBannerImg;
 import com.jfatty.zcloud.hospital.req.BannerImgReq;
 import com.jfatty.zcloud.hospital.res.BannerImgRes;
-import com.jfatty.zcloud.hospital.res.MenuRes;
-import com.jfatty.zcloud.hospital.res.NavigationRes;
+import com.jfatty.zcloud.hospital.res.BannerRes;
 import com.jfatty.zcloud.hospital.service.BannerImgService;
+import com.jfatty.zcloud.hospital.service.BannerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -44,6 +44,9 @@ public class ApiBannerImgController extends ApiBaseHospitalController<BannerImg,
     private BannerImgService bannerImgService;
 
     @Autowired
+    private BannerService bannerService ;
+
+    @Autowired
     public void setBannerImgService(BannerImgService bannerImgService) {
         super.setBaseService(bannerImgService);
         this.bannerImgService = bannerImgService;
@@ -53,24 +56,27 @@ public class ApiBannerImgController extends ApiBaseHospitalController<BannerImg,
     @ApiImplicitParams({
             @ApiImplicitParam(name = "appId", value = "每个应用都对应有appId支付宝、微信、第三方APP",dataType = "String",defaultValue = "wxe3336a60d2685379"),
             @ApiImplicitParam(name = "version", value = "版本号",dataType = "String",defaultValue = "1.0.0"),
-            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "index")
+            @ApiImplicitParam(name = "position", value = "定位",dataType = "String",defaultValue = "index"),
+            @ApiImplicitParam(name = "specification", value = "规格,格式  PC MOBILE PAD APP",dataType = "String",defaultValue = "MOBILE")
     })
     @RequestMapping(value={"/index"},method=RequestMethod.GET)
-    public RELResultUtils<BannerImgRes> index(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
-                                         @RequestParam(value = "version" , defaultValue = "1.0.0") String version ,
-                                         @RequestParam(value = "position" , defaultValue = "index" ) String position ){
-        List<BannerImg> bannerImgs = bannerImgService.getDiffBannerImgs(appId,version,null,null);
-        if(CollectionUtils.isEmpty(bannerImgs))
+    public RELResultUtils<BannerRes> index(@RequestParam(value = "appId" , defaultValue = "wxe3336a60d2685379" ) String appId  ,
+                                           @RequestParam(value = "version" , defaultValue = "1.0.0") String version ,
+                                           @RequestParam(value = "position" , defaultValue = "index" ) String position ,
+                                           @RequestParam(value = "specification" ,required = true, defaultValue = "MOBILE" ) String specification ){
+        //List<BannerImg> bannerImgs = bannerImgService.getDiffBannerImgs(appId,version,null,null);
+        List<Banner> banners = bannerService.getDiffBanners(appId,version,"MOBILE");
+        if(CollectionUtils.isEmpty(banners))
             return RELResultUtils.success("未查询到对应轮播图");
-        List<BannerImgRes> bannerImgReses = new ArrayList<BannerImgRes>();
-        bannerImgs.forEach(
+        List<BannerRes> bannerReses = new ArrayList<BannerRes>();
+        banners.forEach(
                 bannerImg -> {
-                    BannerImgRes bannerImgRes = new BannerImgRes();
-                    BeanUtils.copyProperties(bannerImg,bannerImgRes);
-                    bannerImgReses.add(bannerImgRes);
+                    BannerRes bannerRes = new BannerRes();
+                    BeanUtils.copyProperties(bannerImg,bannerRes);
+                    bannerReses.add(bannerRes);
                 }
         );
-        return new RELResultUtils(bannerImgReses);
+        return new RELResultUtils(bannerReses);
     }
 
 

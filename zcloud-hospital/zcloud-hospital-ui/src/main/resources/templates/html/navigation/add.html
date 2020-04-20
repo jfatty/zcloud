@@ -3,7 +3,15 @@
         <legend>新增操作</legend>
     </fieldset>
 
-    <form class="layui-form"  id="fm" action="">
+    <form class="layui-form" action="">
+        <input type="hidden" name="id" id="id"/>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">导航标题</label>
             <div class="layui-input-block">
@@ -13,20 +21,18 @@
         </div>
 
         <div class="layui-form-item">
-            <label for="icon" class="layui-form-label">
-                <span style="color: red;">*</span>图标
-            </label>
-            <div class="layui-input-inline">
-                <div style="margin-left: 20px;margin-top:5px">
-                    <ul>
-                        <li style="vertical-align: middle;display: inline-block;width: 90px;" id="menu-icon">
-                            <i class="layui-icon" id="icon" style="font-size: 25px;"></i>
-                        </li>
-                        <li style="vertical-align: middle;display: inline-block;">
-                            <i class="layui-btn layui-btn-primary layui-btn-sm" id="select_icon">选择图标</i>
-                        </li>
-                    </ul>
-                </div>
+            <label class="layui-form-label">导航图标路径</label>
+            <div class="layui-input-block">
+                <input type="text" id="icon" name="icon" lay-verify="phone" autocomplete="off" placeholder="请输入导航图标路径"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">act导航图标路径</label>
+            <div class="layui-input-block">
+                <input type="text" id="actIcon" name="actIcon"  autocomplete="off" placeholder="请输入导航激活状态图标路径"
+                       class="layui-input">
             </div>
         </div>
 
@@ -40,24 +46,11 @@
         <div class="layui-form-item">
             <label class="layui-form-label">路由</label>
             <div class="layui-input-block">
-                <input type="text" name="route" id="route" lay-verify="required" placeholder="请输入路由" autocomplete="off"
+                <input type="text" name="route" id="route"  placeholder="请输入路由" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">联系人电话</label>
-            <div class="layui-input-block">
-                <input type="tel" name="tel" lay-verify="phone" autocomplete="off" placeholder="请输入联系人电话"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">编码</label>
-            <div class="layui-input-block">
-                <input type="text" id="orgCode" name="orgCode" lay-verify="required" placeholder="请输入单位编码"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">排序号</label>
             <div class="layui-input-block">
@@ -84,6 +77,14 @@
             </div>
         </div>
 
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否显示</label>
+            <div class="layui-input-block">
+                <input type="text" name="display" id="display" autocomplete="off" placeholder="1 表示显示 0 表示不显示"
+                       class="layui-input">
+            </div>
+        </div>
+
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
@@ -98,6 +99,32 @@
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form,
             layer = layui.layer;
+
+
+
+        JFATTY.doGet({
+            url: JFATTY.basePath() + "navigation/edit?id=" + navigationId,
+            async: false,
+            success: function (value, type) {
+                if (value.ok) {
+                    var obj = value.data;
+                    $("#id").val(obj.id);
+                    $("#appid").val(obj.appid);
+                    $("#title").val(obj.title);
+                    $("#icon").val(obj.icon);
+                    $("#actIcon").val(obj.actIcon);
+                    $("#version").val(obj.version);
+                    $("#route").val(obj.route);
+                    $("#orderNum").val(obj.orderNum);
+                    $("#link").val(obj.link);
+                    $("#linkType").val(obj.linkType);
+                    $("#display").val(obj.display);
+                    $("#description").val(obj.description);
+                    form.render();
+                }
+            }
+        });
+
         var iconBoxIndex = -1;
         $('#select_icon').on('click', function () {
             if (iconBoxIndex !== -1)
@@ -141,5 +168,6 @@
             });
 
         });
+
     });
 </script>

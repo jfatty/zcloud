@@ -31,6 +31,10 @@ public class Protocol extends Model<Protocol> {
      */
     private String appid;
     /**
+     * 页面标识ID
+     */
+    private String pageId;
+    /**
      * 协议标题
      */
     private String title;
@@ -90,7 +94,7 @@ public class Protocol extends Model<Protocol> {
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime = LocalDateTime.now();
 
     /**
      * 更新人

@@ -108,15 +108,19 @@ public class ApiComplexPayController {
 
     @ApiOperation(value="003******通过费用单号查询单笔门诊缴费详情")
     @RequestMapping(value="/getOutpatientDetail", method=RequestMethod.POST)
-    public RETResultUtils<OutpatientDetailRes> getOutpatientDetail(@RequestBody OutpatientDetailReq outpatientDetailReq ){
-        OutpatientDetail outpatientDetail = complexPayService.getWebmzDetail(outpatientDetailReq.getOpenId(),outpatientDetailReq.getOpenIdType(),outpatientDetailReq.getFydh());
-        if(outpatientDetail == null )
-            return RETResultUtils._506("系统未查询到门诊缴费详情");
-        if(outpatientDetail != null && !outpatientDetail.success())
-            return RETResultUtils._506(outpatientDetail.getMsg());
-        OutpatientDetailRes outpatientDetailRes = new OutpatientDetailRes();
-        BeanUtils.copyProperties(outpatientDetail,outpatientDetailRes);
-        return new RETResultUtils(outpatientDetailRes);
+    public RELResultUtils<OutpatientDetailRes> getOutpatientDetail(@RequestBody OutpatientDetailReq outpatientDetailReq ){
+        List<OutpatientDetail> outpatientDetails = complexPayService.getWebmzDetail(outpatientDetailReq.getOpenId(),outpatientDetailReq.getOpenIdType(),outpatientDetailReq.getFydh());
+        if(CollectionUtils.isEmpty(outpatientDetails) )
+            return RELResultUtils._506("系统未查询到门诊缴费详情");
+        if(!(outpatientDetails.get(0)).success())
+            return RELResultUtils._506(outpatientDetails.get(0).getMsg());
+        List<OutpatientDetailRes> outpatientDetailList = new ArrayList<OutpatientDetailRes>();
+        for ( OutpatientDetail outpatientDetail : outpatientDetails ) {
+            OutpatientDetailRes outpatientDetailRes = new OutpatientDetailRes();
+            BeanUtils.copyProperties(outpatientDetail,outpatientDetailRes);
+            outpatientDetailList.add(outpatientDetailRes);
+        }
+        return new RELResultUtils(outpatientDetailList);
     }
 
     @ApiOperation(value="004****获取门诊缴费合计订单详情")

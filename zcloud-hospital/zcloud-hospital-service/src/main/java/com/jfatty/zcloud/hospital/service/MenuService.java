@@ -14,6 +14,7 @@ import java.util.List;
  */
 public interface MenuService extends BaseHospitalService<Menu> {
 
-    List<Menu> getDiffMenus(String appId, String version, String position, String navId);
+    List<Menu> getDiffMenus(String appId, String version, String position, String navId,String specification,String kw);
 
+    List<Menu> getMenusByModuleId(String appId, String version, String moduleId, String specification);
 }

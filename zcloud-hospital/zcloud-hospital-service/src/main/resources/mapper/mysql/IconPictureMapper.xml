@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.IconPictureMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.IconPicture">
+        <id column="id" property="id" />
+        <result column="relation_id" property="relationId" />
+        <result column="specification" property="specification" />
+        <result column="icon" property="icon" />
+        <result column="act_icon" property="actIcon" />
+        <result column="icon_img" property="iconImg" />
+        <result column="act_icon_img" property="actIconImg" />
+        <result column="description" property="description" />
+        <result column="state" property="state" />
+        <result column="realm" property="realm" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from hospital_icon_picture
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from hospital_icon_picture
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+</mapper>

@@ -33,4 +33,9 @@ public class PreRegistered  extends BaseResponse {
      */
     private String yyrq ;
 
+    /**
+     * 预约医院
+     */
+    private String yyHos = "" ;
+
 }

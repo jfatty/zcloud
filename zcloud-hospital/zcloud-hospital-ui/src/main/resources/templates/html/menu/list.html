@@ -7,7 +7,7 @@
 
     <blockquote class="layui-elem-quote">
         <a shiro:hasPermission="org:add" href="javascript:;" class="layui-btn layui-btn-small" id="add">
-            <i class="layui-icon">&#xe608;</i> 新增
+            <i class="layui-icon">&#xe608;</i> 新增智慧医疗菜单
         </a>
         <a shiro:hasPermission="org:import" href="javascript:;" class="layui-btn layui-btn-small" id="import">
             <i class="layui-icon">&#xe608;</i> 导入信息
@@ -29,6 +29,7 @@
                 <thead>
                 <tr>
                     <th style="width: 30px;"><input type="checkbox" lay-filter="allselector" lay-skin="primary"></th>
+                    <th>菜单ID</th>
                     <th>菜单标题</th>
                     <th>模块</th>
                     <th>路由</th>
@@ -51,9 +52,10 @@
 </div>
 <!--模板-->
 <script type="text/html" id="tpl">
-    {{# layui.each(d.list, function(index, item){ }}
+    {{# layui.each(d.data, function(index, item){ }}
     <tr>
         <td><input type="checkbox" lay-skin="primary"></td>
+        <td>{{ item.id }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.module }}</td>
         <td>{{ item.route }}</td>
@@ -68,7 +70,7 @@
     {{# }); }}
 </script>
 <script type="text/javascript" th:inline="none">
-    var orgId, processDefinitionId;
+    var menuId;
     layui.config({
         base: JFATTY.basePath() + '/js/'
     });
@@ -122,7 +124,7 @@
                     var $that = $(this);
                     var viewBoxIndex = -1;
                     $that.children('td:last-child').children('a[data-opt=edit]').on('click', function () {
-                        orgId = $(this).data('id');
+                        menuId = $(this).data('id');
                         //图片盒子开始
                         if (viewBoxIndex !== -1)
                             return;

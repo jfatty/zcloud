@@ -5,9 +5,23 @@
 
     <form class="layui-form"  id="fm" action="">
         <div class="layui-form-item">
+            <label class="layui-form-label">应用ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="appid" name="appid"  placeholder="请输入" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">协议标题</label>
             <div class="layui-input-block">
                 <input type="text" name="title" id="title" lay-verify="required" placeholder="请输入协议标题" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">页面标识ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="pageId" id="pageId" lay-verify="required" placeholder="请输入" autocomplete="off"
                        class="layui-input">
             </div>
         </div>

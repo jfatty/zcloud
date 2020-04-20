@@ -15,4 +15,6 @@ import java.util.List;
 public interface ProtocolService extends BaseHospitalService<Protocol> {
 
     List<Protocol> getByDiffs(String appId, String version, String opcode);
+
+    List<Protocol> getProtocol(String appId, String version, String pageId);
 }

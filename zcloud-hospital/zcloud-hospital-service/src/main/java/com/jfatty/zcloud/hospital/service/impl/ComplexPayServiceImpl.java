@@ -50,7 +50,7 @@ public class ComplexPayServiceImpl implements ComplexPayService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public OutpatientDetail getWebmzDetail(String openId, Integer openIdType, String fydh) {
+    public List<OutpatientDetail> getWebmzDetail(String openId, Integer openIdType, String fydh) {
         return complexPayMapper.getWebmzDetail(openId,openIdType,fydh);
     }
 

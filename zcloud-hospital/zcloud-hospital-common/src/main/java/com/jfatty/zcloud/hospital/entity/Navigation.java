@@ -28,6 +28,11 @@ public class Navigation extends Model<Navigation> {
     private String id;
 
     /**
+     * 应用ID APPID
+     */
+    private String appid;
+
+    /**
      * 导航标题
      */
     private String title;
@@ -107,7 +112,7 @@ public class Navigation extends Model<Navigation> {
      */
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
+    private LocalDateTime createTime= LocalDateTime.now();
 
     /**
      * 更新人

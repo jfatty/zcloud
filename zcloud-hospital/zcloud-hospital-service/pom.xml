@@ -157,6 +157,12 @@
             <version>2.1.0</version>
         </dependency>
 
+        <!--邮件模块依赖-->
+        <dependency>
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.jfatty.zcloud</groupId>
             <artifactId>zcloud-wechat-feign</artifactId>

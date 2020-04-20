@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ModuleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Module">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="appid" property="appid" />
+        <result column="kw" property="kw" />
+        <result column="parent_id" property="parentId" />
+        <result column="pos" property="pos" />
+        <result column="order_num" property="orderNum" />
+        <result column="description" property="description" />
+        <result column="user" property="user" />
+        <result column="state" property="state" />
+        <result column="realm" property="realm" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from hospital_module
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from hospital_module
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+
+    <select id="getModulesById" resultMap="BaseResultMap" >
+        select
+        *
+        from hospital_module
+        where 1 = 1 AND parent_id = #{moduleId}
+    </select>
+
+</mapper>
