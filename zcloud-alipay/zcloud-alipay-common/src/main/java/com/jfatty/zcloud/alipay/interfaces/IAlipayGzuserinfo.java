@@ -7,7 +7,7 @@ import com.jfatty.zcloud.base.interfaces.BInterface;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * 描述
+ * 描述 支付宝关注用户 接口
  *
  * @author jfatty on 2019/11/11
  * @email jfatty@163.com

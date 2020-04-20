@@ -11,6 +11,6 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "项目管理实体")
+@ApiModel(description = "支付宝关注用户响应实体")
 public class AlipayGzuserinfoRes extends AlipayGzuserinfoDTO<AlipayGzuserinfoRes> {
 }
