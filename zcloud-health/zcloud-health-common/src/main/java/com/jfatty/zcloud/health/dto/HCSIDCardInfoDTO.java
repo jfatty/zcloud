@@ -6,7 +6,7 @@ import lombok.Data;
 
 
 /**
- * 描述
+ * 描述 身份证信息
  *
  * @author jfatty on 2019/12/26
  * @email jfatty@163.com

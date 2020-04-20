@@ -1,10 +1,11 @@
 package com.jfatty.zcloud.health.dto;
 
 import com.jfatty.zcloud.base.dto.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 电子健康卡微信用户信息
  *
  * @author jfatty on 2019/12/31
  * @email jfatty@163.com
@@ -13,13 +14,15 @@ import lombok.Data;
 public class HealthCardUserDTO<T extends BaseDTO> extends BaseDTO {
 
     /**
-     * 主键ID
+     * 主键ID页面页面标识唯一
      */
-    private String id;
+    @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
+    private String id ;
 
     /**
      * 应用ID APPID
      */
+    @ApiModelProperty(name = "appid", position = 2,required = true, value = "微信  支付宝  APP appId" , example = "wx0725202a2fe5ffcf" )
     private String appid;
 
     /**

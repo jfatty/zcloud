@@ -4,7 +4,7 @@ import com.jfatty.zcloud.base.dto.BaseDTO;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 公用地址信息
  *
  * @author jfatty on 2019/12/30
  * @email jfatty@163.com

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 电子健康卡平台配置信息
  *
  * @author jfatty on 2019/12/26
  * @email jfatty@163.com

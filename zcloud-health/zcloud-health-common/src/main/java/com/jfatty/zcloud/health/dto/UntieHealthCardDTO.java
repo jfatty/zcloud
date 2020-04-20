@@ -4,7 +4,7 @@ import com.jfatty.zcloud.base.dto.BaseDTO;
 import lombok.Data;
 
 /**
- * 描述
+ * 描述 解绑电子健康卡
  *
  * @author jfatty on 2020/1/2
  * @email jfatty@163.com
