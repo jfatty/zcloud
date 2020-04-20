@@ -51,12 +51,8 @@ public class ApiExamReportController {
         Integer openIdType = examReportReq.getOpenIdType() ;
         List<WebRegPatient> list = complexPatientService.getWebRegList(openId, openIdType,examReportReq.getPageIndex(),examReportReq.getPageSize());
         if ( !CollectionUtils.isEmpty(list) ){
-            if ( !(list.get(0).success()) ){
-                String msg = list.get(0).getMsg() ;
-                if (msg.contains("未找到有效"))
-                    return RELResultUtils._506("请先添加就诊人!") ;
-                return RELResultUtils._506(msg);
-            }
+            if ( !(list.get(0).success()) )
+                return RELResultUtils._506("未找到有效体检报告") ;
             List<ExamReportRes> results = new ArrayList<ExamReportRes>();
             for ( WebRegPatient webRegPatient : list ) {
                 List<ExamReportTask>  examReportTasks = examReportService.getExamReportTasks(webRegPatient.getBrid());
@@ -75,7 +71,7 @@ public class ApiExamReportController {
                 }
             }
             if ( CollectionUtils.isEmpty(results) )
-                return RELResultUtils._506("请先添加就诊人!") ;
+                return RELResultUtils._506("未找到有效体检报告!") ;
             return new RELResultUtils(results) ;
         }
         return RELResultUtils._506("请先添加就诊人!") ;
