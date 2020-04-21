@@ -139,6 +139,8 @@ public class ApiExamCenterController {
         String openId = reserveRecordReq.getOpenId() ;
         Integer openIdType = reserveRecordReq.getOpenIdType() ;
         List<ReserveRecord> list = examCenterService.getReserveRecords(openId,openIdType);
+        if ( CollectionUtils.isEmpty(list) )
+            return RELResultUtils._506("暂无体检预约记录") ;
         List<ReserveRecordRes> reserveRecordList = new ArrayList<ReserveRecordRes>();
         for ( ReserveRecord reserveRecord : list ) {
             ReserveRecordRes reserveRecordRes = new ReserveRecordRes();
