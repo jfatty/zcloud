@@ -120,15 +120,15 @@
     </select>
 
     <update id="setUnUsingState">
-        UPDATE wxcms_account SET using_state = 0 WHERE <![CDATA[ appid <> #{appId} ]]>
+        UPDATE wxcms_account SET active_status = 0 WHERE <![CDATA[ appid <> #{appId} ]]>
     </update>
 
     <update id="setUsingState">
-        UPDATE wxcms_account SET using_state = 1 WHERE appid = #{appId}
+        UPDATE wxcms_account SET active_status = 1 WHERE appid = #{appId}
     </update>
 
     <select id="getByUsingState" resultMap="BaseResultMap">
-        SELECT * FROM wxcms_account WHERE using_state = 1 ORDER BY ID DESC limit 1
+        SELECT * FROM wxcms_account WHERE active_status = 1 ORDER BY ID DESC limit 1
     </select>
 
 </mapper>
