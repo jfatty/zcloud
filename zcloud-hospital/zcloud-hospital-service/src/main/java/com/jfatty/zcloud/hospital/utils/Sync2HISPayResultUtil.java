@@ -2,6 +2,7 @@ package com.jfatty.zcloud.hospital.utils;
 
 import com.jfatty.zcloud.base.holder.ApplicationContextHolder;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
+import com.jfatty.zcloud.hospital.service.MailConfigService;
 import com.jfatty.zcloud.hospital.vo.ComplexPay;
 import com.jfatty.zcloud.hospital.vo.SyncMZPay;
 import com.jfatty.zcloud.hospital.vo.SyncZYPay;
@@ -150,9 +151,15 @@ public class Sync2HISPayResultUtil extends Thread implements Serializable {
                         complexPayService.syncHisFeeBack(outTradeNo, ComplexPay.HIS_SYNC_YES,syncMZPay.getSfh());
                     }else{
                         log.error("====> 门诊缴费， 通知  HIS 系统 支付状态 出现问题   === " + syncMZPay.getMsg());
+                        MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                        mailConfigService.sendErrorMail("====> 门诊缴费， 通知  HIS 系统 支付状态 出现问题   === ",//
+                                "门诊缴费， 通知  HIS 系统   exec dbo.pro_web_mzsf '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ syncMZPay.getMsg());
                     }
                 } catch (Exception e) {
                     log.error("====> 门诊缴费， 通知  HIS 系统 支付状态 出现问题  异常信息 === " + e.getMessage());
+                    MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                    mailConfigService.sendErrorMail("====> 门诊缴费， 通知  HIS 系统 支付状态 出现问题  异常信息 === ",//
+                            "门诊缴费， 通知  HIS 系统   exec dbo.pro_web_mzsf '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ e.getMessage());
                 }
                 break;
             case ComplexPay.FEE_TYPE_ZY:                                                 //住院预缴
@@ -164,9 +171,15 @@ public class Sync2HISPayResultUtil extends Thread implements Serializable {
                         complexPayService.syncHisInHospitalFeeBack(outTradeNo, ComplexPay.HIS_SYNC_YES, syncZYPay.getYjh());//pihpfVO.getOutTradeNo(), PayVO.HIS_SYNC_YES, pihpfVO.getYjh()
                     }else{
                         log.error("====> 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]" , syncZYPay.getMsg());
+                        MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                        mailConfigService.sendErrorMail("====> 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]",//
+                                "住院预缴， 通知  HIS 系统    exec dbo.pro_web_zyyj '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ syncZYPay.getMsg());
                     }
                 } catch (Exception e) {
                     log.error("====> 住院预缴， 通知  HIS 系统 支付状态 出现问题  异常信息  === [{}]" , e.getMessage());
+                    MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                    mailConfigService.sendErrorMail("====> 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]",//
+                            "住院预缴， 通知  HIS 系统    exec dbo.pro_web_zyyj '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ e.getMessage());
                 }
                 break;
             case ComplexPay.FEE_TYPE_GH:                                                 //挂号缴费

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.ComplexPayOrderMapper">
+
+
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultType="com.jfatty.zcloud.hospital.entity.ComplexPayOrder" parameterType="map" >
+        SELECT
+         *
+        FROM
+            (
+                SELECT
+                    TOP ${pageSize} *
+                FROM
+                    (
+                        SELECT
+                            TOP ${pageIndex} *
+                        FROM
+                            numo.t_pay
+                        ORDER BY
+                            createdTime DESC
+                    )
+                    AS temp_sum_pay
+                ORDER BY createdTime ASC
+            ) temp_pay
+        ORDER BY
+            createdTime DESC
+    </select>
+
+
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+         SELECT COUNT(0) FROM numo.t_pay
+    </select>
+
+
+</mapper>
