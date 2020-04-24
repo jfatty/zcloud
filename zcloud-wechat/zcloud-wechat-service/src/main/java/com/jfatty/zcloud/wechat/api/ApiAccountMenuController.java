@@ -77,7 +77,8 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
 
     @RequestMapping(value = "/menus")
     public Object menus() {
-        String account = WxMemoryCacheClient.getAccount();
+        //String account = WxMemoryCacheClient.getAccount();
+        String account = accountService.getActiveAccount().getAccount() ;
         List<AccountMenu> menus = accountMenuService.selectWxMenus(account);
         MsgText msgText = new MsgText() ;
         msgText.setAccount(account);
@@ -178,7 +179,8 @@ public class ApiAccountMenuController extends ApiBaseWechatController<AccountMen
     //查看当前公众号中已存在的菜单列表
     @RequestMapping(value = "/wcloud")
     public Object wcloud() throws WxErrorException {
-        String account = WxMemoryCacheClient.getAccount();
+        String account = accountService.getActiveAccount().getAccount() ;
+        //String account = WxMemoryCacheClient.getAccount();
         if(account == null )
             return  ResultUtils.failure(501,"缓存中不存在微信账号信息");
         Account mpAccount = WxMemoryCacheClient.getMpAccount(account);

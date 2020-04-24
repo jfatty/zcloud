@@ -71,7 +71,7 @@ public class MsgBase implements Serializable {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm",iso= DateTimeFormat.ISO.DATE_TIME)
-	private LocalDateTime createTime = LocalDateTime.now();
+	private LocalDateTime createTime ;
 
 	/**
 	 * 更新人

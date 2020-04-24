@@ -82,7 +82,7 @@ public class AccountFans extends Model<AccountFans> {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss",iso= DateTimeFormat.ISO.DATE_TIME)
-    private LocalDateTime createTime = LocalDateTime.now();
+    private LocalDateTime createTime ;
 
     /**
      * 更新人
