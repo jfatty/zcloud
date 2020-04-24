@@ -3,7 +3,14 @@
         <legend>新增操作</legend>
     </fieldset>
 
-    <form class="layui-form"  id="fm" action="">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用ID</label>
+            <div class="layui-input-block">
+                <input type="text" id="appid" name="appid"  placeholder="请输入应用ID" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">菜单标题</label>
             <div class="layui-input-block">
@@ -29,16 +36,50 @@
             </div>
         </div>
         <div class="layui-form-item">
+            <label class="layui-form-label">菜单定位</label>
+            <div class="layui-input-block">
+                <input type="text" name="pos" id="pos"  placeholder="请输入菜单定位" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">属导航ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="navId" id="navId"  placeholder="请输入属导航ID" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
             <label class="layui-form-label">模块</label>
             <div class="layui-input-block">
                 <input type="text" name="module" id="module" lay-verify="required" placeholder="请输入模块" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">链接跳转类型</label>
+            <div class="layui-input-block">
+                <select id="type" name="type">
+                    <option value="ROUTE">路由</option>
+                    <option value="TARGET">窗口</option>
+                    <option value="HREF">链接</option>
+                </select>
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <label class="layui-form-label">路由</label>
             <div class="layui-input-block">
-                <input type="text" name="route" id="route" lay-verify="required" placeholder="请输入路由" autocomplete="off"
+                <input type="text" name="route" id="route"  placeholder="请输入路由" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">目标链接窗口</label>
+            <div class="layui-input-block">
+                <input type="text" name="target" id="target" lautocomplete="off" placeholder="请输入目标链接窗口"
                        class="layui-input">
             </div>
         </div>
@@ -63,7 +104,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">菜单样式</label>
             <div class="layui-input-block">
-                <input type="text" name="plass"  id="plass" lay-verify="required" placeholder="请输入菜单样式" autocomplete="off"
+                <input type="text" name="plass"  id="plass"  placeholder="请输入菜单样式" autocomplete="off"
                        class="layui-input">
             </div>
         </div>
@@ -76,24 +117,35 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">链接跳转类型</label>
-            <div class="layui-input-block">
-                <select id="type" name="type">
-                    <option value="ROUTE">路由</option>
-                    <option value="TARGET">窗口</option>
-                    <option value="HREF">链接</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="layui-form-item">
             <label class="layui-form-label">菜单版本</label>
             <div class="layui-input-block">
                 <input type="text" name="version" id="version" lautocomplete="off" placeholder="请输入菜单版本"
                        class="layui-input">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="number" name="sortNum" id="sortNum" lautocomplete="off" placeholder="请输入排序号"
+                       class="layui-input">
+            </div>
+        </div>
 
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标类型</label>
+            <div class="layui-input-block">
+                <input type="radio" name="iconType" id="iconType_y" value="0" title="地址" checked >
+                <input type="radio" name="iconType" id="iconType_n" value="1" title="文件">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用状态</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" id="state_y" value="1" title="启用" checked >
+                <input type="radio" name="state" id="state_n" value="0" title="停用">
+            </div>
+        </div>
 
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">菜单描述</label>

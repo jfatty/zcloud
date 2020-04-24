@@ -32,7 +32,7 @@ public class WepayConfigRes extends WepayConfigDTO<WepayConfigRes> {
     @ApiModelProperty(name = "createTime", position = 13 , value = "创建时间" ,allowableValues = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime = LocalDateTime.now();
+    private LocalDateTime createTime ;
 
 
 }
