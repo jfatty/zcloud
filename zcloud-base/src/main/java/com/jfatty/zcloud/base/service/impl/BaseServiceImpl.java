@@ -9,7 +9,9 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.UUIDGenerator;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,12 +61,33 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
         return entity;
     }
 
+
+    private T setCreateTime(T entity) {
+        LocalDateTime createTime = LocalDateTime.now();
+        String mname = "setCreateTime" ;
+        log.info("类:[{}] 当前生成的创建时间:[{}]",entity.getClass().getName(),createTime);
+        try {
+            Method m = entity.getClass().getMethod(mname,String.class);
+            try {
+                m.invoke(entity, createTime);
+            } catch (IllegalAccessException e) {
+                log.info("类:[{}] 设置创建时间:[{}]失败 属性有些权限保护",entity.getClass().getName(),createTime);
+            } catch (InvocationTargetException e) {
+                log.info("类:[{}] 设置创建时间:[{}]失败 没有找到目标对象",entity.getClass().getName(),createTime);
+            }
+        } catch (NoSuchMethodException e) {
+            log.info("类:[{}] 设置创建时间:[{}]失败 没有找到对应方法",entity.getClass().getName(),createTime);
+        }
+        return entity;
+    }
+
     @Override
     public boolean save(T entity, Map<String, Object> params) throws Exception {
         /**
          * 首先判断id是否存在
          */
         entity = this.setId(entity) ;
+        entity = this.setCreateTime(entity) ;
         return super.save(entity);
     }
 
@@ -74,6 +97,7 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
          * 首先判断id是否存在
          */
         entity = this.setId(entity) ;
+        entity = this.setCreateTime(entity) ;
         super.save(entity);
         return getId(entity);
     }
