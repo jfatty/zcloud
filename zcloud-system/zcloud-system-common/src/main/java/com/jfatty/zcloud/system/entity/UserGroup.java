@@ -62,6 +62,18 @@ public class UserGroup extends Model<UserGroup> {
      */
     private Integer state;
 
+    /**
+     * 创建人
+     */
+    private String createOperator;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime ;
+
 
     /**
      * 更新人
