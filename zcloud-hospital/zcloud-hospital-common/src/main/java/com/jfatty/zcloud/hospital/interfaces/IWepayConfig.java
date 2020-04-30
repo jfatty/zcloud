@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author jfatty on 2019/12/19
  * @email jfatty@163.com
  */
-@RequestMapping(value={"/protocol"})
+@RequestMapping(value={"/wepayConfig "})
 public interface IWepayConfig extends BInterface<WepayConfig,WepayConfigReq,WepayConfigRes> {
 }

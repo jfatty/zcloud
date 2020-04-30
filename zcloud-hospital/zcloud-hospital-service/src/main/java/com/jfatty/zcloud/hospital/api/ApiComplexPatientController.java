@@ -16,6 +16,7 @@ import com.jfatty.zcloud.hospital.utils.IdCardUtil;
 import com.jfatty.zcloud.hospital.vo.NumoPatientInfo;
 import com.jfatty.zcloud.hospital.vo.NumoUserInfo;
 import com.jfatty.zcloud.hospital.vo.WebRegPatient;
+import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -45,6 +48,9 @@ public class ApiComplexPatientController {
 
     @Autowired
     private ComplexPatientService complexPatientService ;
+
+    @Autowired
+    private WechatFeignClient wechatFeignClient ;
 
 
     @ApiOperation(value=" 001**** POST 参数 查询微信/支付宝 ... 用户绑定的就诊人列表信息")
@@ -137,6 +143,13 @@ public class ApiComplexPatientController {
                     numoPatientInfoReq.getAddress(),numoPatientInfoReq.getNation(),//
                     numoPatientInfoReq.getRelationship(),numoPatientInfoReq.getHasCard(),//
                     numoPatientInfoReq.getHisCardNo(),numoPatientInfoReq.getHisCardType());
+            String first = "就诊人绑定成功通知" ;
+            String keyword1 = numoPatientInfoReq.getName();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String keyword2 = LocalDateTime.now().format(formatter);
+            String remark = "证件号:" + idCard ;
+            //发送模板消息
+            wechatFeignClient.sendTplMsg(openId,"bdcgtz","",first,keyword1,keyword2,remark);
             if(res)
                 return RETResultUtils.success("绑定成功");
         } catch (Exception e) {
