@@ -5,6 +5,7 @@ import com.jfatty.zcloud.alipay.mapper.AlipayReceivetextMapper;
 import com.jfatty.zcloud.alipay.service.AlipayReceivetextService;
 import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,5 +19,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class AlipayReceivetextServiceImpl extends BaseServiceImpl<AlipayReceivetext, AlipayReceivetextMapper> implements AlipayReceivetextService {
+
+
+
+    private AlipayReceivetextMapper alipayReceivetextMapper ;
+
+    @Autowired
+    public void setAlipayReceivetextMapper(AlipayReceivetextMapper alipayReceivetextMapper) {
+        super.setBaseMapper(alipayReceivetextMapper);
+        this.alipayReceivetextMapper = alipayReceivetextMapper;
+    }
+
+
 
 }

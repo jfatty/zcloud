@@ -22,4 +22,20 @@
         SELECT * FROM alipay_autoresponse_default WHERE accountid = #{accountId} and iswork = #{isWork}
     </select>
 
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from alipay_autoresponse_default
+        where 1 = 1
+        order by create_date desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from alipay_autoresponse_default
+        where 1 = 1
+    </select>
+
 </mapper>

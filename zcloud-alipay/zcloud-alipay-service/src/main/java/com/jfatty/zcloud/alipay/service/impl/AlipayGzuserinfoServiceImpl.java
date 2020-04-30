@@ -5,6 +5,7 @@ import com.jfatty.zcloud.alipay.mapper.AlipayGzuserinfoMapper;
 import com.jfatty.zcloud.alipay.service.AlipayGzuserinfoService;
 import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlipayGzuserinfoServiceImpl extends BaseServiceImpl<AlipayGzuserinfo, AlipayGzuserinfoMapper> implements AlipayGzuserinfoService {
 
+    private AlipayGzuserinfoMapper alipayGzuserinfoMapper ;
+
+    @Autowired
+    public void setAlipayGzuserinfoMapper(AlipayGzuserinfoMapper alipayGzuserinfoMapper) {
+        super.setBaseMapper(alipayGzuserinfoMapper);
+        this.alipayGzuserinfoMapper = alipayGzuserinfoMapper;
+    }
 }

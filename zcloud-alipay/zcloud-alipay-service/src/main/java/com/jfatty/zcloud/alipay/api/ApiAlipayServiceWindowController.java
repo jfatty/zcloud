@@ -16,6 +16,7 @@ import com.jfatty.zcloud.alipay.service.AlipayConfigService;
 import com.jfatty.zcloud.alipay.service.AlipayCoreService;
 import com.jfatty.zcloud.alipay.utils.RequestUtil;
 import com.jfatty.zcloud.base.utils.ResultUtils;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,12 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * 描述
+ * 描述 支付宝网关授权回调
  *
  * @author jfatty on 2019/11/8
  * @email jfatty@163.com
  */
+@Api(tags = "支付宝网关授权回调API" ,value = "支付宝网关授权回调")
 @Slf4j
 @Controller
 @RequestMapping("/api")

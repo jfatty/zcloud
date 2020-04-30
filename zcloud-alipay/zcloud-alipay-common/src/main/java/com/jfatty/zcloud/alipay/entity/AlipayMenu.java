@@ -15,7 +15,7 @@ import java.util.Date;
  * @email jfatty@163.com
  */
 @Data
-@TableName("alipay_gzuserinfo")
+@TableName("alipay_menu")
 public class AlipayMenu extends Model<AlipayMenu> {
 
     /**

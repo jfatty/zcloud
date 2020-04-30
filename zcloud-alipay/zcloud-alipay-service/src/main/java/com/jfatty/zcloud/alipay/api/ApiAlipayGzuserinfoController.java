@@ -13,6 +13,7 @@ import com.jfatty.zcloud.alipay.req.AlipayGzuserinfoReq;
 import com.jfatty.zcloud.alipay.res.AlipayGzuserinfoRes;
 import com.jfatty.zcloud.alipay.service.AlipayConfigService;
 import com.jfatty.zcloud.alipay.service.AlipayGzuserinfoService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +24,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 描述
+ * 描述 关注用户
  *
  * @author jfatty on 2019/11/11
  * @email jfatty@163.com
  */
+@Api(tags = "关注用户API" ,value = "关注用户")
 @Slf4j
 @RestController
 @RequestMapping(value={"/api/alipayGzuserinfo"})

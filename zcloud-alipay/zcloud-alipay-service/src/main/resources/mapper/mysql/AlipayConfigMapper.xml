@@ -32,4 +32,21 @@
         SELECT * FROM  alipay_config WHERE appid = #{appid}
     </select>
 
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from alipay_config
+        where 1 = 1
+        limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from alipay_config
+        where 1 = 1
+    </select>
+
 </mapper>

@@ -5,6 +5,7 @@ import com.jfatty.zcloud.alipay.mapper.AlipayAutoresponseMapper;
 import com.jfatty.zcloud.alipay.service.AlipayAutoresponseService;
 import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlipayAutoresponseServiceImpl extends BaseServiceImpl<AlipayAutoresponse, AlipayAutoresponseMapper> implements AlipayAutoresponseService {
 
+    private AlipayAutoresponseMapper alipayAutoresponseMapper ;
+
+    @Autowired
+    public void setAlipayAutoresponseMapper(AlipayAutoresponseMapper alipayAutoresponseMapper) {
+        super.setBaseMapper(alipayAutoresponseMapper);
+        this.alipayAutoresponseMapper = alipayAutoresponseMapper;
+    }
 }

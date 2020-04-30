@@ -5,6 +5,7 @@ import com.jfatty.zcloud.alipay.mapper.AlipayNewsitemMapper;
 import com.jfatty.zcloud.alipay.service.AlipayNewsitemService;
 import com.jfatty.zcloud.base.service.impl.BaseServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,4 +20,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AlipayNewsitemServiceImpl extends BaseServiceImpl<AlipayNewsitem, AlipayNewsitemMapper> implements AlipayNewsitemService {
 
+    private  AlipayNewsitemMapper alipayNewsitemMapper ;
+
+    @Autowired
+    public void setAlipayNewsitemMapper(AlipayNewsitemMapper alipayNewsitemMapper) {
+        super.setBaseMapper(alipayNewsitemMapper);
+        this.alipayNewsitemMapper = alipayNewsitemMapper;
+    }
 }
