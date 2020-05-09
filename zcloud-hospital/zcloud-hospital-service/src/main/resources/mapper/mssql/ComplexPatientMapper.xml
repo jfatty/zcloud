@@ -19,8 +19,8 @@
 
     <!--调用存储过程 添加就诊人-->
     <select id="webRegPatient" resultType="com.jfatty.zcloud.hospital.vo.WebRegPatient"  parameterType="map"  >
-        <!--exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{sex},#{birthday},#{address},#{openId},#{openIdType}}-->
-         exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{openId},#{openIdType
+        exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{sex},#{birthday},#{address},#{openId},#{openIdType}
+    <!--exec dbo.pro_web_reg #{idCard},#{name},#{tel},#{openId},#{openIdType}-->
 </select>
 
 <!--调用存储过程 添加就诊人 携带就诊卡号 -->
