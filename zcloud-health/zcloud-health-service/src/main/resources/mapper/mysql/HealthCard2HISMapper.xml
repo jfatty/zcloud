@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.health.mapper.HealthCard2HISMapper">
+
+    <select id="regHealthCardInfo" resultType="com.jfatty.zcloud.health.vo.RegHealthCardInfoVO"
+            parameterType="com.jfatty.zcloud.health.entity.HCSHealthCardInfo">
+        exec dbo.pro_reg_health_card_info #{name},#{gender},#{birthday},#{address},#{phone1},#{healthCardId},#{qrCodeText},#{idNumber}
+    </select>
+</mapper>

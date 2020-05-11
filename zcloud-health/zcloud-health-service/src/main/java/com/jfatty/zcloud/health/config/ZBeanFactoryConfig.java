@@ -17,13 +17,13 @@ public class ZBeanFactoryConfig implements BeanPostProcessor {
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName)  throws BeansException {
-        log.error("对象---[{}]---初始化开始[{}]" ,beanName, bean.getClass().getName());
+        //log.error("对象---[{}]---初始化开始[{}]" ,beanName, bean.getClass().getName());
         return bean;
     }
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        log.error("对象---[{}]---初始化成功" , beanName);
+        //og.error("对象---[{}]---初始化成功" , beanName);
         return bean;
     }
 }

@@ -11,10 +11,7 @@ import com.jfatty.zcloud.health.entity.HealthCardUser;
 import com.jfatty.zcloud.health.req.*;
 import com.jfatty.zcloud.health.res.*;
 import com.jfatty.zcloud.health.service.*;
-import com.jfatty.zcloud.health.vo.DynamicQRCodeVO;
-import com.jfatty.zcloud.health.vo.HCSIDCardInfoVO;
-import com.jfatty.zcloud.health.vo.HealthCardInfoVO;
-import com.jfatty.zcloud.health.vo.ReportHISDataVO;
+import com.jfatty.zcloud.health.vo.*;
 import com.jfatty.zcloud.hospital.feign.ComplexPatientFeignClient;
 import com.jfatty.zcloud.hospital.req.ComplexPatientReq;
 import com.jfatty.zcloud.hospital.res.WebRegPatientRes;
@@ -82,6 +79,9 @@ public class ApiHealthCardStationController {
 
     @Autowired
     private AddressFeignClient addressFeignClient ;
+
+    @Autowired
+    private HealthCard2HISService healthCard2HISService ;
 
     @ApiOperation(value=" 001**** 3.2.2 注册健康卡接口")
     @RequestMapping(value="/registerHealthCard", method=RequestMethod.POST)
@@ -164,6 +164,19 @@ public class ApiHealthCardStationController {
             String detailUrl = String.format(settings.getDetailUrl(),settings.getHospitalId(),CID) ;
             hcsHealthCardInfo.setDetailUrl(detailUrl);
             log.error("==============================开始=========================================");
+            //同步his电子健康信息
+            try{
+                System.out.println(hcsHealthCardInfo.toString());
+                RegHealthCardInfoVO regHealthCardInfoVO = healthCard2HISService.regHealthCardInfo(hcsHealthCardInfo);
+                log.error("返回信息 [{}]",regHealthCardInfoVO.getMsg());
+                if ( regHealthCardInfoVO != null && regHealthCardInfoVO.success() ){
+                    hcsHealthCardInfo.setPatid(regHealthCardInfoVO.getBrid());
+                }else {
+                    log.error("====>同步his电子健康信息失败 错误信息[{}]" , regHealthCardInfoVO!=null?regHealthCardInfoVO.getMsg():"返回对象为空");
+                }
+            } catch ( Exception e) {
+                log.error("====>同步his电子健康信息失败 出现异常[{}]" ,e.getMessage());
+            }
             //更新电子健康卡信息
             hcsHealthCardInfoService.updateById(hcsHealthCardInfo);
             log.error("==============================结束=========================================");
