@@ -38,4 +38,10 @@ public class WebReportMission extends BaseResponse {
      * 未出报告结果数量
      */
     private Integer wbgsl ;
+
+    /**
+     * 报告日期
+     */
+    private String bgrq ;
+
 }

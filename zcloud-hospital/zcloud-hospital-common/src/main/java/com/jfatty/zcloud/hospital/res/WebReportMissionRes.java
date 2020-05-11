@@ -21,9 +21,9 @@ public class WebReportMissionRes  extends WebReportMissionDTO<WebReportMissionRe
     @ApiModelProperty(name = "brid", position = 2 ,required = true, value = "病人id " , example = "1582")
     private String brid ;
     /**
-     * 病人编号
+     * 病人编号/就诊号
      */
-    @ApiModelProperty(name = "brbh", position = 2 ,required = true, value = "病人编号 " , example = "201225")
+    @ApiModelProperty(name = "brbh", position = 2 ,required = true, value = "病人编号/就诊号" , example = "202004030041")
     private String brbh ;
     /**
      * 姓名
@@ -45,5 +45,10 @@ public class WebReportMissionRes  extends WebReportMissionDTO<WebReportMissionRe
      */
     @ApiModelProperty(name = "wbgsl", position = 2 ,required = true, value = "未出报告结果数量 " , example = "2")
     private Integer wbgsl ;
+    /**
+     * 报告日期
+     */
+    @ApiModelProperty(name = "bgrq", position = 2 ,required = true, value = "报告日期" , example = "2020-04-13")
+    private String bgrq = "" ;
 
 }
