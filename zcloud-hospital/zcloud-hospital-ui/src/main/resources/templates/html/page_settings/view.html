@@ -72,6 +72,14 @@
         </div>
 
         <div class="layui-form-item">
+            <label class="layui-form-label">地址地图链接地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="addressHref" id="addressHref" autocomplete="off" placeholder="请输入"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <label class="layui-form-label">激活状态地址图标地址</label>
             <div class="layui-input-block">
                 <input type="text" name="actAddressIconUrl" id="actAddressIconUrl" autocomplete="off" placeholder="请输入"
@@ -146,6 +154,7 @@
                     $("#techSupportWww").val(obj.techSupportWww);
                     $("#iconType").val(obj.iconType);
                     $("#address").val(obj.address);
+                    $("#addressHref").val(obj.addressHref);
                     $("#actAddressIconUrl").val(obj.actAddressIconUrl);
                     $("#addressIconUrl").val(obj.addressIconUrl);
                     $("#phone").val(obj.phone);
