@@ -45,7 +45,7 @@ public class ApiReportViewController {
             if( !((list.get(0)).success() ))
                 return RELResultUtils._506(((list.get(0)).getMsg()));
             List<WebReportMissionRes> results = new ArrayList<WebReportMissionRes>();
-            list = list.stream().sorted(Comparator.comparing(WebReportMission::getBgrq).reversed()).collect(Collectors.toList());
+            //list = list.stream().sorted(Comparator.comparing(WebReportMission::getBgrq).reversed()).collect(Collectors.toList());
             list.forEach(
                     webReportMission -> {
                         WebReportMissionRes webReportMissionRes = new WebReportMissionRes();
