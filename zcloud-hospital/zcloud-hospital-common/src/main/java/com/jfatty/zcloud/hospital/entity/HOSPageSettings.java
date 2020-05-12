@@ -84,6 +84,11 @@ public class HOSPageSettings extends Model<HOSPageSettings> {
     private String address;
 
     /**
+     * 地址地图链接地址
+     */
+    private String addressHref ;
+
+    /**
      * 激活状态地址图标地址
      */
     private String actAddressIconUrl;
