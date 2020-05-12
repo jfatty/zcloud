@@ -16,6 +16,7 @@
         <result column="icon_type" property="iconType" />
         <result column="description" property="description" />
         <result column="address" property="address" />
+        <result column="address_href" property="addressHref" />
         <result column="act_address_icon_url" property="actAddressIconUrl" />
         <result column="address_icon_url" property="addressIconUrl" />
         <result column="act_address_icon_img" property="actAddressIconImg" />
