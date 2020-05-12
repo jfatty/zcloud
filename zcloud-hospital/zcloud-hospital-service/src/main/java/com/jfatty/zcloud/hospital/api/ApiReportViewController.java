@@ -19,10 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 描述 查看报告
@@ -47,6 +45,7 @@ public class ApiReportViewController {
             if( !((list.get(0)).success() ))
                 return RELResultUtils._506(((list.get(0)).getMsg()));
             List<WebReportMissionRes> results = new ArrayList<WebReportMissionRes>();
+            list = list.stream().sorted(Comparator.comparing(WebReportMission::getBgrq).reversed()).collect(Collectors.toList());
             list.forEach(
                     webReportMission -> {
                         WebReportMissionRes webReportMissionRes = new WebReportMissionRes();
