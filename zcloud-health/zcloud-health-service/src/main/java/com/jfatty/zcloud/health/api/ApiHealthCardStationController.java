@@ -166,7 +166,6 @@ public class ApiHealthCardStationController {
             log.error("==============================开始=========================================");
             //同步his电子健康信息
             try{
-                System.out.println(hcsHealthCardInfo.toString());
                 RegHealthCardInfoVO regHealthCardInfoVO = healthCard2HISService.regHealthCardInfo(hcsHealthCardInfo);
                 log.error("返回信息 [{}]",regHealthCardInfoVO.getMsg());
                 if ( regHealthCardInfoVO != null && regHealthCardInfoVO.success() ){
