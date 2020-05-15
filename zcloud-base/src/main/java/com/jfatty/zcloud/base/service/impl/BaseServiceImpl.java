@@ -67,16 +67,16 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
         String mname = "setCreateTime" ;
         log.info("类:[{}] 当前生成的创建时间:[{}]",entity.getClass().getName(),createTime);
         try {
-            Method m = entity.getClass().getMethod(mname,String.class);
+            Method m = entity.getClass().getMethod(mname,LocalDateTime.class);
             try {
                 m.invoke(entity, createTime);
             } catch (IllegalAccessException e) {
-                log.info("类:[{}] 设置创建时间:[{}]失败 属性有些权限保护",entity.getClass().getName(),createTime);
+                log.error("类:[{}] 设置创建时间:[{}]失败 属性有些权限保护",entity.getClass().getName(),createTime);
             } catch (InvocationTargetException e) {
-                log.info("类:[{}] 设置创建时间:[{}]失败 没有找到目标对象",entity.getClass().getName(),createTime);
+                log.error("类:[{}] 设置创建时间:[{}]失败 没有找到目标对象",entity.getClass().getName(),createTime);
             }
         } catch (NoSuchMethodException e) {
-            log.info("类:[{}] 设置创建时间:[{}]失败 没有找到对应方法",entity.getClass().getName(),createTime);
+            log.error("类:[{}] 设置创建时间:[{}]失败 没有找到对应方法",entity.getClass().getName(),createTime);
         }
         return entity;
     }
