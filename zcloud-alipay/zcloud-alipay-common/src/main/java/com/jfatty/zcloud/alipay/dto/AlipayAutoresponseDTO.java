@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.alipay.dto;
 
 import com.jfatty.zcloud.base.dto.BaseDTO;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,28 +16,34 @@ import java.util.Date;
 public class AlipayAutoresponseDTO<T extends BaseDTO> extends BaseDTO {
 
     /**
-     *id
+     * 主键ID页面页面标识唯一
      */
+    @ApiModelProperty(name = "id", position = 0, value = "主键ID编号[添加操作可不传递,修改必传]")
     private String id;
     /**
      *关键字
      */
+    @ApiModelProperty(name = "keyWord", position = 0, required = true, value = "关键字",example = "你好")
     private String keyWord;
     /**
      *回复内容
      */
+    @ApiModelProperty(name = "resContent", position = 0, required = true, value = "回复内容",example = "尊敬的用户您好,感谢你的关注")
     private String resContent;
     /**
      *消息类型
      */
+    @ApiModelProperty(name = "msgType", position = 0, required = true, value = "消息类型",example = "text")
     private String msgType;
     /**
      *模板名称
      */
+    @ApiModelProperty(name = "templateName", position = 0, required = true, value = "模板名称",example = "关注消息回复")
     private String templateName;
     /**
-     *微信账号id
+     *账号id
      */
+    @ApiModelProperty(name = "accountid", position = 0, required = true, value = "账号id",example = "20991928282992")
     private String accountid;
     /**
      *创建人名称
