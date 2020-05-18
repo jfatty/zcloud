@@ -1,5 +1,7 @@
 package com.jfatty.zcloud.base.utils;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author jfatty on 2019/12/17
  * @email jfatty@163.com
  */
+@Data
 public class RETResultUtils<T> implements Serializable {
 
     public static final String SUCCESS = "SUCCESS" ;

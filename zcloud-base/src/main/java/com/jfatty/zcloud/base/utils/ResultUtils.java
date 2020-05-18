@@ -9,6 +9,7 @@ package com.jfatty.zcloud.base.utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 /**
  * 自定义响应结构
  */
+@Data
 public class ResultUtils implements Serializable {
 
     /**

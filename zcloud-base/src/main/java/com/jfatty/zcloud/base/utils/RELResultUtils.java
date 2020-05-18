@@ -1,5 +1,7 @@
 package com.jfatty.zcloud.base.utils;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  * @author jfatty on 2019/11/12
  * @email jfatty@163.com
  */
+@Data
 public class RELResultUtils <T> implements Serializable {
 
     /**
