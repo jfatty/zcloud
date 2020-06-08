@@ -141,7 +141,6 @@ layui.define(['layer', 'laypage', 'laytpl'], function (exports) {
                 if (loadIndex !== undefined)
                     layer.close(loadIndex); //关闭等待层
                 if (result.rel) {
-                    //console.log(result);
                     //获取模板
                     var tpl = _config.tempType === 0 ? $(_config.tempElem).html() : _config.tempElem;
                     //渲染数据 List<T> list;
