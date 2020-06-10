@@ -80,7 +80,7 @@ public class ApiPayNotifyController {
             while ((line = reader.readLine()) != null) {
                 inputString.append(line);
             }
-            log.debug("====> 微信支付回调  " + inputString.toString());
+            log.error("====> 微信支付回调  " + inputString.toString());
             Map<String, String> resultMap = WePayUtil.doXMLParse(inputString.toString());
             String return_code = resultMap.get("return_code");                      //此字段是通信标识
             if(return_code != null && return_code.equalsIgnoreCase("SUCCESS")){
@@ -101,9 +101,29 @@ public class ApiPayNotifyController {
                 String out_trade_no = resultMap.get("out_trade_no");                //订单编号
                 String time_end = resultMap.get("time_end");
                 ComplexPay complexPayOrder = complexPayService.getPayRecordByOutTradeNo(out_trade_no);
+                String openId = complexPayOrder.getOpenId() ;
                 complexPayOrder.setTradeNo(transaction_id);
-                complexPayOrder.setAsync(ComplexPay.PAY_SYNC_YES);
                 complexPayOrder.setAsyncTime(WePayUtil.getTimeStandard(time_end));
+                //如果微信回调
+                if(result_code.equalsIgnoreCase("SUCCESS") && complexPayOrder.getAsync() != ComplexPay.PAY_SYNC_YES ){
+                    /**========================通知微信微服务系统支付成功发送文字消息和模板消息=========================*/
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String dateStr = sdf.format(new Date());
+                    String content = "尊敬的用户,您于" + dateStr + "完成了一笔" +complexPayOrder.getFeeName()+"交易.您的就诊号为:" + complexPayOrder.getJzh() + "当前交易订单编号为:" + out_trade_no + "。您可以直接到相关科室检查或者药房取药,出示 缴费记录 中 我的缴费凭证条码,就可以了。" ;
+                    wechatFeignClient.massSendTextByOpenId(appId,openId,content);
+                    //String [] params = Stream.of("hello", "world", "ok").toArray(String[]::new);
+                    String url = wepayConfig.getPaySuccessTplUrl() + out_trade_no;
+                    String brid = String.valueOf(complexPayOrder.getPatientId()) ;
+                    NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(appId,brid);
+                    String first = complexPayOrder.getFeeName() +"，已缴费成功。就诊号:"+complexPayOrder.getJzh() ;
+                    String keyword1 = numoPatientDeatilRes.getName() ;
+                    String keyword2 = out_trade_no ;
+                    String keyword3 = complexPayOrder.getFeeAmount()  +"元" ;
+                    String keyword4 = dateStr ;
+                    String remark = wepayConfig.getSignName();
+                    wechatFeignClient.sendTemplateMessage(appId,openId,wepayConfig.getTplId(),url,first,keyword1,keyword2,keyword3,keyword4,remark);
+                }
+                complexPayOrder.setAsync(ComplexPay.PAY_SYNC_YES);
                 if(result_code.equalsIgnoreCase("SUCCESS")){
                     complexPayOrder.setPayState(ComplexPay.PAY_STATE_SUCCESS);
                 } else if (result_code.equalsIgnoreCase("FAIL")) {
@@ -114,33 +134,14 @@ public class ApiPayNotifyController {
                 //异步到本地系统
                 complexPayService.payAsync(complexPayOrder);              //异步通知，改变状态
                 /**========================通知HIS系统支付成功=========================*/
-                String openId = complexPayOrder.getOpenId() ;
                 //支付成功回调  判断是否已经同步过HIS了 没同步则需要进行同步操作
                 if(result_code.equalsIgnoreCase("SUCCESS") && complexPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && complexPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO )
                     complexPayService.confirmAsyncStatus(openId,2,complexPayOrder);
-
-                /**========================通知微信微服务系统支付成功发送文字消息和模板消息=========================*/
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateStr = sdf.format(new Date());
-                String content = "尊敬的用户,您于" + dateStr + "完成了一笔" +complexPayOrder.getFeeName()+"交易.您的就诊号为:" + complexPayOrder.getJzh() + "当前交易订单编号为:" + out_trade_no + "。您可以直接到相关科室检查或者药房取药,出示 缴费记录 中 我的缴费凭证条码,就可以了。" ;
-                wechatFeignClient.massSendTextByOpenId(appId,openId,content);
-                //String [] params = Stream.of("hello", "world", "ok").toArray(String[]::new);
-
-                String url = wepayConfig.getPaySuccessTplUrl() + out_trade_no;
-                String brid = String.valueOf(complexPayOrder.getPatientId()) ;
-                NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(appId,brid);
-                String first = complexPayOrder.getFeeName() +"，已缴费成功。就诊号:"+complexPayOrder.getJzh() ;
-                String keyword1 = numoPatientDeatilRes.getName() ;
-                String keyword2 = out_trade_no ;
-                String keyword3 = complexPayOrder.getFeeAmount()  +"元" ;
-                String keyword4 = dateStr ;
-                String remark = wepayConfig.getSignName();
-
-                wechatFeignClient.sendTemplateMessage(appId,openId,wepayConfig.getTplId(),url,first,keyword1,keyword2,keyword3,keyword4,remark);
                 Map<String, String> resMap = new HashMap<String, String>();
                 resMap.put("return_code", "SUCCESS");
                 resMap.put("return_msg", "支付成功");
                 String xml = WePayUtil.mapToXml(resMap);
+                log.error("================> 微信支付回调成功! 系统返回 [{}]===================",xml);
                 return xml ;
             } else if (return_code != null && return_code.equalsIgnoreCase("FAIL")) {
                 log.error("====ELSE=====IF=======> 微信支付回调通信失败! ===return_code===[{}]",return_code);
