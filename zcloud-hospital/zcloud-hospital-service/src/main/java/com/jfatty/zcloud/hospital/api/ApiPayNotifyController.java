@@ -27,10 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 描述
@@ -297,7 +294,7 @@ public class ApiPayNotifyController {
         return params;
     }
 
-    @ApiOperation(value="002*** 手动异步通知HIS系统订单支付成功")
+    @ApiOperation(value="003*** 手动异步通知HIS系统订单支付成功")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "outTradeNo", value = "交易订单号",dataType = "String",defaultValue = "WC201909261150360002"),
             @ApiImplicitParam(name = "openIdType", value = "微信 2 支付宝 1 APP 3 openId 类型",dataType = "Integer",defaultValue = "2")
@@ -319,6 +316,35 @@ public class ApiPayNotifyController {
             e.printStackTrace();
             return RETResultUtils._506(e.getMessage());
         }
+    }
+
+
+    /**
+     * http://weixin.hnlsxzyy.com/
+     * 建行服务器异步通知
+     * @author jfatty 2020-07-20
+     * @param request
+     * @param response
+     * @return
+     */
+    @ApiOperation(value="004***建行服务器异步通知")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mchId", value = "建行对应的商户ID mchId",dataType = "String",defaultValue = "105000080621818")
+    })
+    @ResponseBody
+    @RequestMapping(value = "/ccbNotifyUrl/{mchId}" , method= { RequestMethod.POST , RequestMethod.GET })
+    public Object ccbNotifyUrl(HttpServletRequest request,HttpServletResponse response, @PathVariable(name = "mchId" ,required = true) String  mchId){
+        Map<String, String> map = new HashMap<String, String>();
+        Enumeration<String> parameterNames = request.getParameterNames();
+        StringBuilder data = new StringBuilder();
+        while (parameterNames.hasMoreElements()) {
+            String name = (String) parameterNames.nextElement();
+            String value = request.getParameter(name);
+            map.put(name, value);
+            data.append(name).append("=").append(value).append("&");
+        }
+        log.error(" ccbNotifyUrl 建行返回调原数据:[{}]",data.toString());
+        return "" ;
     }
 
 }
