@@ -344,7 +344,7 @@ public class ApiPayNotifyController {
             data.append(name).append("=").append(value).append("&");
         }
         log.error(" ccbNotifyUrl 建行返回调原数据:[{}]",data.toString());
-        return "" ;
+        return "SUCCESS" ;
     }
 
 }
