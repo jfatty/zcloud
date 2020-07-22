@@ -347,14 +347,41 @@ public class ApiPayNotifyController {
         }
         log.error(" ccbNotifyUrl 建行返回调原数据:[{}]",data.toString());
         StringBuilder sb = new StringBuilder();
+        //POSID=000000000&BRANCHID=110000000&ORDERID=19991101234&PAYMENT=500.00&CURCODE=01&REMARK1=&REMARK2=&
+        // ACC_TYPE=12&SUCCESS=Y&TYPE=1&REFERER=http://www.ccb.com/index.jsp&CLIENTIP=172.0.0.1&
+        // ACCDATE=20100907&USRMSG=T4NJx%2FVgocRsLyQnrMZLyuQQkFzMAxQjdqyzf6pM%2Fcg%3D&
+        // USRINFO= T4NJx%2FVgocRsLyQnrMZLyuQQkFzMAxQjdqyzf6pM%2Fcg%3D&PAYTYPE= ALIPAY&SIGN=
+        // 以下字段只有在满足条件的情况下才参与签名。
+        //TYPE、REFERER、CLIENTIP 、ACC_TYPE、ACCDATE、USRMSG、USRINFO、PAYTYPE
         sb.append("POSID=").append(map.get("POSID")).append("&BRANCHID=").append(map.get("BRANCHID"))
                 .append("&ORDERID=").append(map.get("ORDERID")).append("&PAYMENT=").append(map.get("PAYMENT"))
                 .append("&CURCODE=").append(map.get("CURCODE")).append("&REMARK1=").append(map.get("REMARK1"))
-                .append("&REMARK2=").append(map.get("REMARK2")).append("&ACC_TYPE=").append(map.get("ACC_TYPE"))
-                .append("&SUCCESS=").append(map.get("SUCCESS")).append("&TYPE=").append(map.get("TYPE"))
-                .append("&REFERER=").append(map.get("REFERER")).append("&CLIENTIP=").append(map.get("CLIENTIP"))
-                .append("&ACCDATE=").append(map.get("ACCDATE"));
-
+                .append("&REMARK2=").append(map.get("REMARK2"));
+        if (StringUtils.isNotEmptyAndBlank(map.get("ACC_TYPE"))){
+            sb.append("&ACC_TYPE=").append(map.get("ACC_TYPE")) ;
+        }
+        sb.append("&SUCCESS=").append(map.get("SUCCESS")) ;
+        if (StringUtils.isNotEmptyAndBlank(map.get("TYPE"))){
+            sb.append("&TYPE=").append(map.get("TYPE")) ;
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("REFERER"))){
+            sb.append("&REFERER=").append(map.get("REFERER"));
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("CLIENTIP"))){
+            sb.append("&CLIENTIP=").append(map.get("CLIENTIP"));
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("ACCDATE"))){
+            sb.append("&ACCDATE=").append(map.get("ACCDATE"));
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("USRMSG"))){
+            sb.append("&USRMSG=").append(map.get("USRMSG"));
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("USRINFO"))){
+            sb.append("&USRINFO=").append(map.get("USRINFO"));
+        }
+        if (StringUtils.isNotEmptyAndBlank(map.get("PAYTYPE"))){
+            sb.append("&PAYTYPE=").append(map.get("PAYTYPE"));
+        }
         RSASig rsaSig = new RSASig();
         rsaSig.setPublicKey(CCBConstants.PUBLICKEY);// 公钥
         boolean flag = rsaSig.verifySigature(map.get("SIGN"), sb.toString());
