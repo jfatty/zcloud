@@ -5,6 +5,7 @@ import com.alipay.api.internal.util.AlipaySignature;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.base.utils.WePayUtil;
+import com.jfatty.zcloud.hospital.constants.CCBConstants;
 import com.jfatty.zcloud.hospital.entity.AlipayConfig;
 import com.jfatty.zcloud.hospital.entity.WepayConfig;
 import com.jfatty.zcloud.hospital.res.NumoPatientDeatilRes;
@@ -12,6 +13,7 @@ import com.jfatty.zcloud.hospital.service.AlipayConfigService;
 import com.jfatty.zcloud.hospital.service.ComplexPatientService;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
 import com.jfatty.zcloud.hospital.service.WepayConfigService;
+import com.jfatty.zcloud.hospital.utils.RSASig;
 import com.jfatty.zcloud.hospital.vo.ComplexPay;
 import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import io.swagger.annotations.Api;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -331,9 +334,8 @@ public class ApiPayNotifyController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "mchId", value = "建行对应的商户ID mchId",dataType = "String",defaultValue = "105000080621818")
     })
-    @ResponseBody
     @RequestMapping(value = "/ccbNotifyUrl/{mchId}" , method= { RequestMethod.POST , RequestMethod.GET })
-    public Object ccbNotifyUrl(HttpServletRequest request,HttpServletResponse response, @PathVariable(name = "mchId" ,required = true) String  mchId){
+    public void ccbNotifyUrl(HttpServletRequest request,HttpServletResponse response, @PathVariable(name = "mchId" ,required = true) String  mchId){
         Map<String, String> map = new HashMap<String, String>();
         Enumeration<String> parameterNames = request.getParameterNames();
         StringBuilder data = new StringBuilder();
@@ -344,7 +346,25 @@ public class ApiPayNotifyController {
             data.append(name).append("=").append(value).append("&");
         }
         log.error(" ccbNotifyUrl 建行返回调原数据:[{}]",data.toString());
-        return "SUCCESS" ;
+        StringBuilder sb = new StringBuilder();
+        sb.append("POSID=").append(map.get("POSID")).append("&BRANCHID=").append(map.get("BRANCHID"))
+                .append("&ORDERID=").append(map.get("ORDERID")).append("&PAYMENT=").append(map.get("PAYMENT"))
+                .append("&CURCODE=").append(map.get("CURCODE")).append("&REMARK1=").append(map.get("REMARK1"))
+                .append("&REMARK2=").append(map.get("REMARK2")).append("&ACC_TYPE=").append(map.get("ACC_TYPE"))
+                .append("&SUCCESS=").append(map.get("SUCCESS")).append("&TYPE=").append(map.get("TYPE"))
+                .append("&REFERER=").append(map.get("REFERER")).append("&CLIENTIP=").append(map.get("CLIENTIP"))
+                .append("&ACCDATE=").append(map.get("ACCDATE"));
+
+        RSASig rsaSig = new RSASig();
+        rsaSig.setPublicKey(CCBConstants.PUBLICKEY);// 公钥
+        boolean flag = rsaSig.verifySigature(map.get("SIGN"), sb.toString());
+        log.error("===> verifySigature 签名验证是否成功 [{}]",flag);
+        try {
+            response.sendRedirect("http://weixin.hnlsxzyy.com/payResult?outTradeNo=WC202007211432190004");
+        } catch (IOException e) {
+            log.error("返回建行页面通知时,重定向页面跳转异常 [{}]",e.getMessage());
+        }
+
     }
 
 }
