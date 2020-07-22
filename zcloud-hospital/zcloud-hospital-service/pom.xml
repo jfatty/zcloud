@@ -159,14 +159,43 @@
 
         <!--邮件模块依赖-->
         <dependency>
-              <groupId>org.springframework.boot</groupId>
-              <artifactId>spring-boot-starter-mail</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.jfatty.zcloud</groupId>
             <artifactId>zcloud-wechat-feign</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jfatty.zcloud</groupId>
+            <artifactId>zcloud-health-feign</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.38</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ccb.rsassign</groupId>
+            <artifactId>netpay</artifactId>
+            <version>1.0</version>
         </dependency>
 
     </dependencies>
