@@ -400,84 +400,13 @@ public class ApiPayNotifyController {
         String asyncTime = dateTime.format(fmt24);
 
         if ( "Y".equals(SUCCESS) && flag ) {
-            ComplexPay complexPayOrder = complexPayService.getPayRecordByOutTradeNo(orderId);
-            String openId = complexPayOrder.getOpenId() ;
-            Integer payWay = complexPayOrder.getPayWay();
 
-            complexPayOrder.setTradeNo(orderId);//未支付成功之前设置为空字符串
-            //需要异步同步his系统中的支付状态
-            complexPayOrder.setAsync(ComplexPay.PAY_SYNC_YES); //已同步
-            complexPayOrder.setPayState(ComplexPay.PAY_STATE_SUCCESS);  //支付状态  成功
-
-            if (StringUtils.isNotEmptyAndBlank(ACCDATE)) {
-                complexPayOrder.setRemark(ACCDATE);
-            } else {
-                complexPayOrder.setRemark("建行支付本次交易已经成功完成!");
-            }
-
-            //complexPayOrder.setPayParam(""); //将页面要用到的支付信息从数据库中清除
-            complexPayOrder.setAsyncTime(asyncTime);
-            log.error("=====通知HIS系统支付成功============建行=======查询本地数据的支付信息====="+complexPayOrder);
-            /**
-             * 通知 HIS 系统 支付结果(这是一个异步方法) jfatty 2017-11-17
-             * @param outTradeNo 本地系统唯一订单号
-             * @param feeType 费用类型 门诊支付、住院预付、挂号付款
-             * @param brid  病人id  HIS系统中的病人id
-             * @param fydh  费用订单   HIS系统中的费用单号
-             * @param fkfs  付款方式   支付宝、微信
-             * @param rq    日期   异步通知的时间
-             * @param ssje  实收金额（元）
-             * @param fkzt  付款状态（为1时表示付款成功）
-             * @param zybh  住院编号
-             * @return
-             */
-            try {
-                complexPayService.payAsync(complexPayOrder);                                         //异步通知，改变状态
-            } catch (Exception e) {
-                log.error("建行 支付成功 异步通知，改变状态 出现异常 商户订单号为:[{}] 异常信息:[{}]" , orderId ,e.getMessage());
-            }
-
-            if (payWay == ComplexPay.PAY_WAY_WECHAT ) { //微信支付要发模板消息
-                WepayConfig wepayConfig = wepayConfigService.getByAppId(CCBConstants.WX_APPID);
-
-                /**========================通知微信微服务系统支付成功发送文字消息和模板消息=========================*/
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String dateStr = sdf.format(new Date());
-                String content = "尊敬的用户,您于" + dateStr + "完成了一笔" +complexPayOrder.getFeeName()+"交易.您的就诊号为:" + complexPayOrder.getJzh() + "当前交易订单编号为:" + orderId + "。您可以直接到相关科室检查或者药房取药,出示 缴费记录 中 我的缴费凭证条码,就可以了。" ;
-                wechatFeignClient.massSendTextByOpenId(CCBConstants.WX_APPID,openId,content);
-                //String [] params = Stream.of("hello", "world", "ok").toArray(String[]::new);
-                String url = wepayConfig.getPaySuccessTplUrl() + orderId;
-                String brid = String.valueOf(complexPayOrder.getPatientId()) ;
-                NumoPatientDeatilRes numoPatientDeatilRes = complexPatientService.getNumoPatientInfo(openId,brid);
-                String first = complexPayOrder.getFeeName() +"，已缴费成功。就诊号:"+complexPayOrder.getJzh() ;
-                String keyword1 = numoPatientDeatilRes.getName() ;
-                String keyword2 = orderId ;
-                String keyword3 = complexPayOrder.getFeeAmount()  +"元" ;
-                String keyword4 = dateStr ;
-                String remark = wepayConfig.getSignName();
-                wechatFeignClient.sendTemplateMessage(CCBConstants.WX_APPID,openId,wepayConfig.getTplId(),url,first,keyword1,keyword2,keyword3,keyword4,remark);
-
-            }
-            /**=====通知HIS系统支付成功============================================*/
-            //支付成功回调  判断是否已经同步过HIS了 没同步则需要进行同步操作
-            if(complexPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && complexPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO) {
-                try {
-                    if (payWay == ComplexPay.PAY_WAY_ZFB) {
-                        complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),1,complexPayOrder);
-                    }
-                    if (payWay == ComplexPay.PAY_WAY_WECHAT ) {
-                        complexPayService.confirmAsyncStatus(complexPayOrder.getOpenId(),2,complexPayOrder);
-                    }
-                } catch (Exception e) {
-                    log.error("通知HIS系统支付成功===>出现异常[{}]",e.getMessage());
-                }
-            }
         }
 
         //最后重定向到订单详情页面
         try {
             //WC202007211432190004
-            response.sendRedirect("http://weixin.hnlsxzyy.com/payResult?outTradeNo="+orderId);
+            response.sendRedirect("http://weixin.hnlsxzyy.com/payResult?outTradeNo=WC202007211432190004");
         } catch (IOException e) {
             log.error("返回建行页面通知时,重定向页面跳转异常 [{}]",e.getMessage());
         }
