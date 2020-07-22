@@ -472,16 +472,16 @@ public class ApiPayNotifyController {
                     log.error("通知HIS系统支付成功===>出现异常[{}]",e.getMessage());
                 }
             }
-
-            //最后重定向到订单详情页面
-            try {
-                //WC202007211432190004
-                response.sendRedirect("http://weixin.hnlsxzyy.com/payResult?outTradeNo="+orderId);
-            } catch (IOException e) {
-                log.error("返回建行页面通知时,重定向页面跳转异常 [{}]",e.getMessage());
-            }
-
         }
+
+        //最后重定向到订单详情页面
+        try {
+            //WC202007211432190004
+            response.sendRedirect("http://weixin.hnlsxzyy.com/payResult?outTradeNo="+orderId);
+        } catch (IOException e) {
+            log.error("返回建行页面通知时,重定向页面跳转异常 [{}]",e.getMessage());
+        }
+
     }
 
 }
