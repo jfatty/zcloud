@@ -41,10 +41,15 @@ public class CCBConstants {
     //小程序的APPID
     public static final String SUB_APPID  = "" ;
 
+    //对应微信公众号APPID
+    public static final String WX_APPID  = "wxe3336a60d2685379" ;
+
     public static final String RETURNTYPE = "1" ;
 
 
     public static final String CCB_CREATE_ORDER_URL = "https://ibsbjstar.ccb.com.cn/CCBIS/ccbMain" ;
+    //建行聚合支付URL前缀
+    public static final String CCB_QR_ORDER_URL_PREFIX = "https://ibsbjstar.ccb.com.cn/CCBIS/QR?QRCODE=" ;
 
 
     public static void main(String[] args) {
