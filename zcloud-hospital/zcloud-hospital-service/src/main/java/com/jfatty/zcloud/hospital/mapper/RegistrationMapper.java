@@ -1,9 +1,6 @@
 package com.jfatty.zcloud.hospital.mapper;
 
-import com.jfatty.zcloud.hospital.vo.HosClazz;
-import com.jfatty.zcloud.hospital.vo.HosDept;
-import com.jfatty.zcloud.hospital.vo.HosHoliday;
-import com.jfatty.zcloud.hospital.vo.PreRegistered;
+import com.jfatty.zcloud.hospital.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -46,4 +43,7 @@ public interface RegistrationMapper {
     PreRegistered preRegistered(@Param("openId") String openId,@Param("openIdType") Integer openIdType, @Param("brid") String brid, @Param("name")String name,//
                                 @Param("sex") String sex, @Param("idCard") String idCard, @Param("tel") String tel, @Param("ksid") String ksid,//
                                 @Param("preDate") String preDate, @Param("preTime") String preTime);
+
+
+    CancelRegistered cancelRegistered(@Param("openId") String openId,@Param("openIdType") Integer openIdType, @Param("brid") String brid, @Param("yyh")String yyh);
 }
