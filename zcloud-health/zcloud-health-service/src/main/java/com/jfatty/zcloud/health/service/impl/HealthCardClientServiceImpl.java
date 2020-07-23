@@ -1,6 +1,7 @@
 package com.jfatty.zcloud.health.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jfatty.zcloud.health.vo.ReportHISDataVO;
 import com.tencent.healthcard.model.*;
 import com.tencent.healthcard.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +27,6 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServiceServer
     public HealthCardClientServiceImpl(String secret) {
         this.secret = secret;
     }
-
-
 
 
     @Override
@@ -99,6 +98,11 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServiceServer
         this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/reportHISData", reqJson);
     }
 
+    public void reportHISData(CommonIn commonIn, ReportHISDataVO reportHISData) {
+        String reqJson = CommonUtil.packParam(this.secret, commonIn, reportHISData);
+        this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/reportHISData", reqJson);
+    }
+
     @Override
     public void recvPushMsg(CommonIn commonIn, PushMsg pushMsg) {
         String reqJson = CommonUtil.packParam(this.secret, commonIn, pushMsg);
@@ -117,26 +121,24 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServiceServer
     @Override
     public List<com.jfatty.zcloud.health.model.HealthCardInfo> registerBatchHealthCard(CommonIn commonIn, List<com.jfatty.zcloud.health.model.HealthCardInfo> healthCardInfos) {
         Map<String, Object> param = new TreeMap();
-        param.put("healthCardInfos", healthCardInfos);
+        param.put("healthCardItems", healthCardInfos);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
-
         JSONObject obj = this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/registerBatchHealthCard", reqJson);
-        System.out.println(obj.toJSONString());
         List<com.jfatty.zcloud.health.model.HealthCardInfo> infoList = obj.getJSONArray("rspItems").toJavaList(com.jfatty.zcloud.health.model.HealthCardInfo.class);
-        Map<String, HealthCardInfo> infoMap = new HashMap();
+        Map<String, com.jfatty.zcloud.health.model.HealthCardInfo> infoMap = new HashMap();
         Iterator iterator = infoList.iterator();
 
-        HealthCardInfo healthCard;
+        com.jfatty.zcloud.health.model.HealthCardInfo healthCard;
         while(iterator.hasNext()) {
-            healthCard = (HealthCardInfo)iterator.next();
+            healthCard = (com.jfatty.zcloud.health.model.HealthCardInfo)iterator.next();
             infoMap.put(healthCard.getIdNumber(), healthCard);
         }
 
         iterator = healthCardInfos.iterator();
 
         while(iterator.hasNext()) {
-            healthCard = (HealthCardInfo)iterator.next();
-            HealthCardInfo cardInfo = (HealthCardInfo)infoMap.get(healthCard.getIdNumber());
+            healthCard = (com.jfatty.zcloud.health.model.HealthCardInfo)iterator.next();
+            com.jfatty.zcloud.health.model.HealthCardInfo cardInfo = (com.jfatty.zcloud.health.model.HealthCardInfo)infoMap.get(healthCard.getIdNumber());
             if (cardInfo != null) {
                 healthCard.setHealthCardId(cardInfo.getHealthCardId());
                 healthCard.setQrCodeText(cardInfo.getQrCodeText());
@@ -156,6 +158,16 @@ public class HealthCardClientServiceImpl extends AbstractHealthCardServiceServer
         param.put("idNumber", idNumber);
         String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
         return (DynamicQRCode)this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/getDynamicQRCode", reqJson).toJavaObject(DynamicQRCode.class);
+    }
+
+    public com.jfatty.zcloud.health.model.DynamicQRCode  getDynamicQRCode(CommonIn commonIn, String healthCardId, String idType, String idNumber, String codeType) {
+        Map<String, Object> param = new TreeMap();
+        param.put("healthCardId", healthCardId);
+        param.put("idType", idType);
+        param.put("idNumber", idNumber);
+        param.put("codeType", codeType);
+        String reqJson = CommonUtil.packParam(this.secret, commonIn, param);
+        return (com.jfatty.zcloud.health.model.DynamicQRCode )this.request("https://p-healthopen.tengmed.com/rest/auth/HealthCard/HealthOpenPlatform/ISVOpenObj/getDynamicQRCode", reqJson).toJavaObject(com.jfatty.zcloud.health.model.DynamicQRCode .class);
     }
 
     @Override

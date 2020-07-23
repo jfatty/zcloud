@@ -6,4 +6,6 @@
             parameterType="com.jfatty.zcloud.health.entity.HCSHealthCardInfo">
         exec dbo.pro_reg_health_card_info #{name},#{gender},#{birthday},#{address},#{phone1},#{healthCardId},#{qrCodeText},#{idNumber}
     </select>
+
+
 </mapper>

@@ -46,4 +46,10 @@ public class HCSHealthCardInfoServiceImpl extends BaseHealthServiceImpl<HCSHealt
     public List<HCSHealthCardInfo> getBatchHealthCardByInfoIds(List<String> healthCardInfoIds, String hospitalId) {
         return hcsHealthCardInfoMapper.getBatchHealthCardByInfoIds(healthCardInfoIds, hospitalId);
     }
+
+    @Override
+    public boolean verification(String idCard, String brid,String hospitalId) {
+        int count = hcsHealthCardInfoMapper.verification(idCard,brid,hospitalId);
+        return count > 0 ;
+    }
 }

@@ -17,6 +17,7 @@
         <result column="hospital_id" property="hospitalId" />
         <result column="patid" property="patid" />
         <result column="wechat_code" property="wechatCode" />
+        <result column="code_color" property="codeColor" />
         <result column="phid" property="phid" />
         <result column="qr_code_text" property="qrCodeText" />
         <result column="health_card_id" property="healthCardId" />
@@ -70,7 +71,11 @@
     </select>
 
     <select id="getBatchHealthCardByInfoIds" resultMap="BaseResultMap" >
-        SELECT * FROM hcs_health_card_info WHERE 1 = 1 AND hospital_id = #{hospitalId} AND id IN <foreach collection="healthCardInfoIds" index="infoId" item="infoId" open="(" separator="," close=")" >#{infoId}</foreach>
+        SELECT id_number AS id , id_number , name , qr_code_text , detail_url , code_color  FROM hcs_health_card_info WHERE 1 = 1 AND hospital_id = #{hospitalId} AND id IN <foreach collection="healthCardInfoIds" index="infoId" item="infoId" open="(" separator="," close=")" >#{infoId}</foreach>
+    </select>
+
+    <select id="verification" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM hcs_health_card_info WHERE 1 = 1 AND hospital_id = #{hospitalId} AND id_number = #{idCard} AND patid = #{brid}
     </select>
 
 </mapper>

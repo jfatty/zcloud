@@ -101,5 +101,17 @@ public interface HealthCardStationService extends BaseHealthService<HealthCardSe
      */
     DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber) throws Exception ;
 
+    /**
+     * 3.2.10-2 获取动态二维码接口
+     * @param hospitalId
+     * @param healthCardId
+     * @param idType
+     * @param idNumber
+     * @param codeType
+     * @return
+     * @throws Exception
+     */
+    DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber,String codeType ) throws Exception ;
+
 
 }

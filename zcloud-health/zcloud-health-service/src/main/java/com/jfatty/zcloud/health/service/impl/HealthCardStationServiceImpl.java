@@ -51,18 +51,20 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         if ( StringUtils.isEmptyOrBlank(settings.getAppToken()) || dis > 0  ){ //或者超时
             //创建健康卡实例，传入appSecret
             //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
+            log.error("重新获取AppToken===> 请求Id [{}]",settings.getRequestId());
             HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
             CommonIn commonIn=new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
             //调用接口appId
 
             AppTokenInfo appTokenInfo = healthCard.getAppToken(commonIn,appId);
+            log.error("重新获取AppToken===> 卡平台返回AppToken [{}]",appTokenInfo.getAppToken());
             //打印响应
             settings.setAppToken(appTokenInfo.getAppToken());
             settings.setExpiresIn(appTokenInfo.getExpiresIn());
             settings.setUpdateTime(LocalDateTime.now());
             //
             Long expiresIn = timestamp +  new Long((long)appTokenInfo.getExpiresIn() * 1000) - 60000;
-            LocalDateTime expireTime =LocalDateTime.ofEpochSecond(expiresIn/1000,0,ZoneOffset.ofHours(8));
+            LocalDateTime expireTime = LocalDateTime.ofEpochSecond(expiresIn/1000,0,ZoneOffset.ofHours(8));
             settings.setExpireTime(expireTime);
             //Instant instant = Instant.ofEpochMilli(expiresIn);
             //settings.setExpireTime(LocalDateTime.ofInstant(instant, ZoneId.of("Asia/Shanghai")));
@@ -154,9 +156,10 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
         //HealthCardServerImpl healthCard = new HealthCardServerImpl(settings.getAppSecret());
         CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
-        ReportHISData reportHIS = new ReportHISData();
-        BeanUtils.copyProperties(reportHISData,reportHIS);
-        healthCard.reportHISData(commonIn,reportHIS);
+        //ReportHISData reportHIS = new ReportHISData();
+        //BeanUtils.copyProperties(reportHISData,reportHIS);
+        //healthCard.reportHISData(commonIn,reportHIS);
+        healthCard.reportHISData(commonIn,reportHISData);
     }
 
     @Override
@@ -187,9 +190,20 @@ public class HealthCardStationServiceImpl extends BaseHealthServiceImpl<HealthCa
         DynamicQRCode dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber);
         DynamicQRCodeVO dynamicQRCodeVO = new DynamicQRCodeVO();
         BeanUtils.copyProperties(dynamicQRCode,dynamicQRCodeVO);
-        System.out.println("**************************QrCodeImg**********************************");
-        System.out.println(dynamicQRCode.getQrCodeImg());
-        System.out.println("**************************QrCodeImg**********************************");
+        //System.out.println("**************************QrCodeImg**********************************");
+        //System.out.println(dynamicQRCode.getQrCodeImg());
+        //System.out.println("**************************QrCodeImg**********************************");
+        return dynamicQRCodeVO;
+    }
+
+    @Override
+    public DynamicQRCodeVO getDynamicQRCode(String hospitalId, String healthCardId, String idType, String idNumber, String codeType) throws Exception {
+        HealthCardSettings settings =  getAppTokenHealthCardSettings(hospitalId);
+        HealthCardClientServiceImpl  healthCard = new HealthCardClientServiceImpl(settings.getAppSecret());
+        CommonIn commonIn = new CommonIn(settings.getAppToken(),settings.getRequestId(),settings.getHospitalId());
+        com.jfatty.zcloud.health.model.DynamicQRCode  dynamicQRCode = healthCard.getDynamicQRCode(commonIn,healthCardId,idType,idNumber,codeType);
+        DynamicQRCodeVO dynamicQRCodeVO = new DynamicQRCodeVO();
+        BeanUtils.copyProperties(dynamicQRCode,dynamicQRCodeVO);
         return dynamicQRCodeVO;
     }
 }

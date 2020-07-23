@@ -11,6 +11,13 @@ import com.jfatty.zcloud.health.vo.RegHealthCardInfoVO;
  */
 public interface HealthCard2HISService {
 
-
+    /**
+     * 向HIS注册电子健康卡信息
+     * @param hcsHealthCardInfo
+     * @return
+     * @throws Exception
+     */
     RegHealthCardInfoVO regHealthCardInfo(HCSHealthCardInfo hcsHealthCardInfo) throws Exception ;
+
+
 }

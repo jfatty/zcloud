@@ -22,4 +22,6 @@ public interface HealthCardUserService extends BaseHealthService<HealthCardUser>
     Boolean untieHealthCard(String openId, Integer openIdType, String hospitalId, String healthCardInfoId) throws Exception;
 
     HealthCardUser getByOpts(String appId, String hospitalId, String openId, Integer openIdType);
+
+    boolean bindDefaultHealthCard(String openId, Integer openIdType,String hospitalId ,String healthCardInfoId, Integer bindStatus) throws Exception ;
 }

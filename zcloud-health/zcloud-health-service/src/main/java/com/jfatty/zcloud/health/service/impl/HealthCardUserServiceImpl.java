@@ -49,4 +49,12 @@ public class HealthCardUserServiceImpl extends BaseHealthServiceImpl<HealthCardU
     public HealthCardUser getByOpts(String appId, String hospitalId, String openId, Integer openIdType) {
         return healthCardUserMapper.getByOpts(appId,hospitalId,openId,openIdType);
     }
+
+    @Override
+    public boolean bindDefaultHealthCard(String openId, Integer openIdType, String hospitalId ,String healthCardInfoId, Integer bindStatus) throws Exception {
+        if (bindStatus == 0)
+            healthCardInfoId = "" ;
+        int count = healthCardUserMapper.bindDefaultHealthCard(openId,openIdType,hospitalId,healthCardInfoId);
+        return (count > 0);
+    }
 }

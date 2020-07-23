@@ -9,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 描述 电子健康卡信息同步HIS实现
  *
@@ -27,6 +30,15 @@ public class HealthCard2HISServiceImpl implements HealthCard2HISService {
     @TargetDataSource(name="mssql")
     @Override
     public RegHealthCardInfoVO regHealthCardInfo(HCSHealthCardInfo hcsHealthCardInfo) throws Exception {
+        log.error("同步his电子健康信息 exec dbo.pro_reg_health_card_info '{}','{}','{}','{}','{}','{}','{}','{}'",
+                hcsHealthCardInfo.getName(),
+                hcsHealthCardInfo.getGender(),
+                hcsHealthCardInfo.getBirthday(),
+                hcsHealthCardInfo.getAddress(),
+                hcsHealthCardInfo.getPhone1(),
+                hcsHealthCardInfo.getHealthCardId(),
+                hcsHealthCardInfo.getQrCodeText(),
+                hcsHealthCardInfo.getIdNumber());
         return healthCard2HISMapper.regHealthCardInfo(hcsHealthCardInfo);
     }
 

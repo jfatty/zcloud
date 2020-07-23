@@ -21,4 +21,6 @@ public interface HCSHealthCardInfoMapper extends IBaseMapper<HCSHealthCardInfo> 
     String getNationDicStr(@Param("sourceNation") String sourceNation);
 
     List<HCSHealthCardInfo> getBatchHealthCardByInfoIds(@Param("healthCardInfoIds") List<String> healthCardInfoIds,@Param("hospitalId")  String hospitalId);
+
+    int verification(@Param("idCard") String idCard,@Param("brid")  String brid,@Param("hospitalId")  String hospitalId);
 }

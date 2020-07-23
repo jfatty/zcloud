@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.health.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -21,14 +22,14 @@ import java.lang.reflect.Method;
  * @author xuc
  *
  */
+@Slf4j
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(RedisAutoConfiguration.class)
 public class RedisConfig extends CachingConfigurerSupport {
 
     public RedisConfig() {
-        System.out.println("RedisConfig容器启动初始化。。。");
-        System.out.println("RedisConfig容器启动初始化。。。");
+        log.error("RedisConfig容器启动初始化。。。");
     }
 
     @Resource
