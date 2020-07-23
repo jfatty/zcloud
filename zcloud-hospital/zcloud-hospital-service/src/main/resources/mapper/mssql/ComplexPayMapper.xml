@@ -78,7 +78,8 @@
 			ltrim(rtrim(djh)) = ltrim(rtrim(#{hisNo})) and
 			feeType = #{feeType} and
 			patientId = #{brid} and
-			payWay = #{payWay}
+			payWay = #{payWay} and
+			payChannel = #{payChannel}
 		order by id desc
 	</select>
 
@@ -160,7 +161,8 @@
 			createdTime,
 			updatedTime,
 			djh,
-			jzh
+			jzh,
+			payChannel
 		)values(
 			#{openId,     jdbcType=VARCHAR},
 			#{patientId,  jdbcType=NUMERIC},
@@ -182,7 +184,8 @@
 			getDate(),
 			getDate(),
 			#{djh,     jdbcType=VARCHAR},
-			#{jzh,     jdbcType=VARCHAR}
+			#{jzh,     jdbcType=VARCHAR},
+			#{payChannel,     jdbcType=NUMERIC}
 		)
 	</insert>
 
