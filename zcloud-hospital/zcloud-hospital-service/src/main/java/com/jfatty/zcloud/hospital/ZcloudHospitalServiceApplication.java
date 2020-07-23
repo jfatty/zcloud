@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Import;
 @Import({DynamicDataSourceRegister.class}) // 注册动态多数据源
 @ComponentScan({"com.jfatty.zcloud"})
 @EnableDiscoveryClient
-@EnableFeignClients(basePackages = {"com.jfatty.zcloud.wechat.feign"})
+@EnableFeignClients(basePackages = {"com.jfatty.zcloud.wechat.feign","com.jfatty.zcloud.health.feign"})
 public class  ZcloudHospitalServiceApplication {
 
     public static void main(String[] args) {
