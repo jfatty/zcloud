@@ -52,9 +52,10 @@ public interface ComplexPayMapper {
      * @param feeType 支付类型
      * @param brid      病人id
      * @param payWay  支付方式
+     * @param payChannel  支付渠道
      * @return
      */
-    ComplexPay getLatestPayRecord(@Param("hisNo") String hisNo,@Param("feeType")  int feeType, @Param("payWay") int payWay,@Param("brid")  String brid);
+    ComplexPay getLatestPayRecord(@Param("hisNo") String hisNo,@Param("feeType")  int feeType, @Param("payWay") int payWay,@Param("brid")  String brid, @Param("payChannel") int payChannel);
 
     /**
      * 描述  本地系统支付系统数据存储成功之后调用存储过程通知his系统
