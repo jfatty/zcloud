@@ -79,6 +79,13 @@ public class MenuDTO<T extends BaseDTO> extends BaseDTO {
     @ApiModelProperty(name = "description", position = 1 , value = "菜单描述" ,example = "菜单描述 描述 菜单描述 菜单描述 菜单描述")
     private String description;
 
+
+    /**
+     * 菜单使用对象范围 ALL 所有人 INTERNAL 内部人员 SYSTEM 系统人员
+     */
+    @ApiModelProperty(name = "useScope", position = 1 , value = "菜单使用对象范围" ,example = "ALL 所有人 INTERNAL 内部人员 SYSTEM 系统人员")
+    private String useScope;
+
     /**
      * 菜单图标样式
      */
