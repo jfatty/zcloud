@@ -32,7 +32,7 @@ public class AppointmentRecordRes extends AppointmentRecordDTO<AppointmentRecord
     @ApiModelProperty(name = "jzh", position = 0, value = "就诊号" , example = "20200103087")
     private String jzh = "";
 
-    @ApiModelProperty(name = "zt", position = 0, value = "预约状态" , example = "1")
+    @ApiModelProperty(name = "zt", position = 0, value = "预约状态 -1 已取消 2 爽约 0 未就诊 1  已就诊" , example = "1")
     private Integer zt ;
     @ApiModelProperty(name = "ztmc", position = 0, value = "状态说明" , example = "已就诊",allowableValues = "已取消,已就诊,未就诊")
     private String ztmc ;
