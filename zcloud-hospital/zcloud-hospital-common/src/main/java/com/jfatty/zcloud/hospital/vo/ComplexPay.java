@@ -30,6 +30,7 @@ public class ComplexPay implements Serializable {
     private Integer feeType;                                                        //费用类型 门诊缴费、挂号缴费、住院预缴
     private String feeAmount;                                                       //费用金额
     private Integer payWay;                                                         //支付方式
+    private Integer payChannel;                                                     //支付渠道
     private String outTradeNo;                                                      //商户订单号
     private String tradeNo;                                                         //微信、支付宝订单号
     private Integer payOrientation;                                                 //支付方向， 付款 或者 退款
@@ -147,5 +148,25 @@ public class ComplexPay implements Serializable {
      * 支付方向， 医院向用户退款
      */
     public final static int PAY_ORIENTATION_BACK = 2;
+    /***************支付渠道**********************************************************/
+
+    /**
+     * 走支付宝
+     */
+    public final static int PAY_CHANNEL_ZFB = 1 ;
+    /**
+     * 走微信
+     */
+    public final static int PAY_CHANNEL_WECHAT = 2 ;
+
+    /**
+     * 建行聚合支付
+     */
+    public final static int PAY_CHANNEL_CCB_QR = 3 ;
+
+    /**
+     * 建行龙支付
+     */
+    public final static int PAY_CHANNEL_CCB = 4 ;
 
 }
