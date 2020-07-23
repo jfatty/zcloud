@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.MedicalCheckListMapper">
+
+
+    <select id="getWebZyrqd" resultType="com.jfatty.zcloud.hospital.vo.WebZyrqd">
+        exec dbo.pro_web_zyrqd #{openId},#{openIdType},#{brid},#{startTime},#{endTime},#{Ext1},#{Ext2},#{Ext3}
+    </select>
+
+    <select id="getWebCyqdList" resultType="com.jfatty.zcloud.hospital.vo.WebCyqdList">
+        exec dbo.pro_web_cyqd_list #{openId},#{openIdType},#{brid},#{Ext1},#{Ext2},#{Ext3}
+    </select>
+
+    <select id="getWebCyfyqd" resultType="com.jfatty.zcloud.hospital.vo.WebCyfyqd">
+        exec dbo.pro_web_cyfyqd #{openId},#{openIdType},#{zybh},#{Ext1},#{Ext2},#{Ext3}
+    </select>
+
+</mapper>

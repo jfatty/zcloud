@@ -24,4 +24,9 @@
         exec dbo.pro_web_mzyy #{openId},#{openIdType},#{brid},#{name},#{sex},#{idCard},#{tel},#{ksid},#{preDate},#{preTime}
     </select>
 
+    <!--取消挂号预约-->
+    <select id="cancelRegistered" resultType="com.jfatty.zcloud.hospital.vo.CancelRegistered">
+        exec pro_web_cancel_mzyy #{openId},#{openIdType},#{brid},#{yyh}
+    </select>
+
 </mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.HealthPatientMapper">
+
+
+    <select id="getHealthPatient" resultType="com.jfatty.zcloud.hospital.entity.HealthPatient">
+        SELECT brid , xm , sfzh , healthCardId , qrCodeText FROM dbo.xt_brxx WHERE 1=1
+        <if test="brid != null" >
+            AND brid = #{brid}
+        </if>
+        <if test="sfzh != null" >
+            AND sfzh = #{sfzh}
+        </if>
+    </select>
+
+    <select id="getWebRecordsZy" resultType="com.jfatty.zcloud.hospital.vo.WebRecordsZy">
+        exec dbo.pro_web_records_zy #{brid}
+    </select>
+
+    <select id="getWebRecordsMz" resultType="com.jfatty.zcloud.hospital.vo.WebRecordsMz">
+        exec dbo.pro_web_records_mz #{brid}
+    </select>
+
+    <select id="verifyUserinfo" resultType="com.jfatty.zcloud.hospital.vo.WebVerifyUserinfo">
+        exec dbo.pro_web_verify_userinfo #{phone}
+    </select>
+
+</mapper>
