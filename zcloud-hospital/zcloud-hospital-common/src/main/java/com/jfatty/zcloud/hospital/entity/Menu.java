@@ -78,6 +78,10 @@ public class Menu extends Model<Menu> {
      */
     private String description;
 
+    /**
+     * 菜单使用对象范围 ALL 所有人 INTERNAL 内部人员 SYSTEM 系统人员
+     */
+    private String useScope;
 
     /**
      * 菜单图标样式
