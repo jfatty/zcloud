@@ -34,10 +34,10 @@ public class NumoPatientInfoReq extends NumoPatientInfoDTO<NumoPatientInfoReq> {
     @ApiModelProperty(name = "relationship", position = 8, required = true, value = "与就诊人关系 dicValue:::dicCode:::id 本人、家人、朋友等" , example = "本人:::100212:::402881906EF4795A016EF47A85A80001")
     private String relationship ;
     @ApiModelProperty(name = "hisCardNo", position = 9, value = "就诊卡号" , example = "201253695")
-    private String hisCardNo ;                                                       //就诊卡号
+    private String hisCardNo = "" ;                                                       //就诊卡号
     @ApiModelProperty(name = "hisCardType", position = 10, value = "就诊卡类型 dicValue:::dicCode:::id " , example = "门诊号:::HIS_MZH:::693c54a870da44029aa03864659ee055")
-    private String hisCardType ;                                                     //就诊卡类型
+    private String hisCardType = "" ;                                                     //就诊卡类型
     @ApiModelProperty(name = "hasCard", position = 11,required = true, value = "勾选有就诊卡 值为1 未勾选有就诊卡 值为0" , example = "0" ,allowableValues = "1,0")
-    private Integer hasCard ;
+    private Integer hasCard = 0 ;
 
 }
