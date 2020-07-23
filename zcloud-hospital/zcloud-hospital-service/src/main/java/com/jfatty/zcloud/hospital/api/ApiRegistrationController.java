@@ -4,15 +4,16 @@ import com.jfatty.zcloud.base.utils.RELResultUtils;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.ResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
+import com.jfatty.zcloud.health.vo.ReportHISDataVO;
+import com.jfatty.zcloud.hospital.entity.ConfigProfile;
+import com.jfatty.zcloud.hospital.entity.HealthPatient;
 import com.jfatty.zcloud.hospital.entity.RegisteredInfo;
 import com.jfatty.zcloud.hospital.req.*;
 import com.jfatty.zcloud.hospital.res.AppointmentRecordRes;
 import com.jfatty.zcloud.hospital.res.HosClazzRes;
 import com.jfatty.zcloud.hospital.res.HosDeptRes;
 import com.jfatty.zcloud.hospital.res.PreRegisteredRes;
-import com.jfatty.zcloud.hospital.service.ComplexPatientService;
-import com.jfatty.zcloud.hospital.service.RegisteredInfoService;
-import com.jfatty.zcloud.hospital.service.RegistrationService;
+import com.jfatty.zcloud.hospital.service.*;
 import com.jfatty.zcloud.hospital.vo.*;
 import com.jfatty.zcloud.wechat.feign.WechatFeignClient;
 import io.swagger.annotations.Api;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/registration")
-public class ApiRegistrationController {
+public class ApiRegistrationController extends ApiReportHISDataBaseController {
 
     @Autowired
     private RegistrationService registrationService ;
@@ -51,8 +53,11 @@ public class ApiRegistrationController {
     @Autowired
     private RegisteredInfoService registeredInfoService ;
 
+
+
     @Autowired
     private WechatFeignClient wechatFeignClient ;
+
 
     @ApiOperation(value="001****获取医院 可预约挂号科室信息")
     @RequestMapping(value = {"/getHosDepts"} ,method = RequestMethod.POST)
@@ -122,6 +127,7 @@ public class ApiRegistrationController {
                     preRegisteredReq.getPreDate(),preRegisteredReq.getPreTime());
             if(preRegistered != null && !preRegistered.success() )
                 return RETResultUtils._509(preRegistered.getMsg());
+
             PreRegisteredRes preRegisteredRes = new PreRegisteredRes();
             BeanUtils.copyProperties(preRegistered,preRegisteredRes);
             preRegisteredRes.setName(numoPatientInfo.getName());
@@ -136,6 +142,10 @@ public class ApiRegistrationController {
             String yyh = preRegistered.getYyh();
             String remark = "请您准时于" + preRegistered.getYyrq() + "到我院就诊" ;
             wechatFeignClient.sendTplMsg(preRegisteredReq.getOpenId(),"yyghcgtz","",first,name,sex,hospitalName,department,doctor,yyh,remark);
+
+
+            //数据上报电子健康卡平台
+            reportHISData(preRegisteredReq.getBrid(),null,"0101011","预约挂号",preRegistered.getKsmc(),"");
             return new RETResultUtils("预约成功!",preRegisteredRes);
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,10 +193,33 @@ public class ApiRegistrationController {
                 BeanUtils.copyProperties(appointmentRecord,appointmentRecordRes);
                 appointmentRecordReses.add(appointmentRecordRes);
             }
+            //数据上报电子健康卡平台
+            reportHISData(brid,null,"0101013","挂号记录","","");
             return new RELResultUtils(appointmentRecordReses);
         }
         return RELResultUtils._506("暂无挂号记录");
 
     }
+
+    //取消预约挂号
+    @ApiOperation(value="006****取消预约挂号*****")
+    @RequestMapping(value = {"/cancelRegistered"} ,method = RequestMethod.POST)
+    public RETResultUtils<String> cancelRegistered(@RequestBody CancelRegisteredReq cancelRegisteredReq ){
+        String openId = cancelRegisteredReq.getOpenId() ;
+        Integer openIdType = cancelRegisteredReq.getOpenIdType() ;
+        String brid = cancelRegisteredReq.getBrid() ;
+        String yyh = cancelRegisteredReq.getYyh() ;
+        if (StringUtils.isEmptyOrBlank(brid)) {
+            return RETResultUtils._509("病人ID不能为空");
+        }
+        if (StringUtils.isEmptyOrBlank(yyh)) {
+            return RETResultUtils._509("预约号不能为空");
+        }
+        CancelRegistered cancelRegistered = registrationService.cancelRegistered(openId,openIdType,brid,yyh) ;
+        if(cancelRegistered != null && !cancelRegistered.success() )
+            return RETResultUtils._509(cancelRegistered.getMsg());
+        return new RETResultUtils("预约挂号取消成功");
+    }
+
 
 }

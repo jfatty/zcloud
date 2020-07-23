@@ -34,7 +34,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/complexPay")
-public class ApiComplexPayController {
+public class
+ApiComplexPayController {
 
 
     @Autowired
@@ -148,6 +149,7 @@ public class ApiComplexPayController {
     @RequestMapping(value="/findPatientInHospitalInfoNow", method=RequestMethod.POST)
     public RETResultUtils<InHospitalInfoRes> findPatientInHospitalInfoNow(@RequestBody InHospitalInfoReq inHospitalInfoReq){
         String djh = inHospitalInfoReq.getDjh() ;
+        String brid = inHospitalInfoReq.getBrid() ;
         InHospitalInfo inHospitalInfo = complexPayService.getZYPre(inHospitalInfoReq.getOpenId(),inHospitalInfoReq.getOpenIdType(),djh);
         if(inHospitalInfo == null)
             return RETResultUtils._506("系统未查询到就诊人当前住院详情");
@@ -157,6 +159,7 @@ public class ApiComplexPayController {
         BeanUtils.copyProperties(inHospitalInfo,inHospitalInfoRes);
         inHospitalInfoRes.setDjh(djh);
         inHospitalInfoRes.setJzh(djh);
+        inHospitalInfoRes.setBird(brid);
         return new RETResultUtils(inHospitalInfoRes);
     }
 

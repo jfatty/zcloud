@@ -11,9 +11,7 @@ import com.jfatty.zcloud.base.utils.WePayUtil;
 import com.jfatty.zcloud.hospital.entity.AlipayConfig;
 import com.jfatty.zcloud.hospital.entity.WepayConfig;
 import com.jfatty.zcloud.hospital.req.PayOrderCreateReq;
-import com.jfatty.zcloud.hospital.service.AlipayConfigService;
-import com.jfatty.zcloud.hospital.service.ComplexPayService;
-import com.jfatty.zcloud.hospital.service.WepayConfigService;
+import com.jfatty.zcloud.hospital.service.*;
 import com.jfatty.zcloud.hospital.utils.IPUtil;
 import com.jfatty.zcloud.hospital.vo.ComplexPay;
 import com.jfatty.zcloud.hospital.vo.InHospitalInfo;
@@ -37,7 +35,7 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/payOrder")
-public class ApiPayOrderController {
+public class ApiPayOrderController extends ApiReportHISDataBaseController {
 
     @Autowired
     private ComplexPayService complexPayService ;
@@ -47,6 +45,7 @@ public class ApiPayOrderController {
 
     @Autowired
     private AlipayConfigService alipayConfigService ;
+
 
     private  RETResultUtils<Map<String,Object>> wepayMap(ComplexPay lastPayOrder,String openId,Integer openIdType,String long_djh,int feeType,String brid,String feeAmountStr,String appId,String feeName,String jzh,String sfh, HttpServletRequest request , HttpServletResponse response){
         if(lastPayOrder != null){
@@ -94,7 +93,7 @@ public class ApiPayOrderController {
                 .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
                 .setPayWay(ComplexPay.PAY_WAY_WECHAT).setOutTradeNo(outTradeNo).setPayOrientation(ComplexPay.PAY_ORIENTATION_FRONT)//
                 .setAsync(ComplexPay.PAY_SYNC_NO).setHisAsync(ComplexPay.HIS_SYNC_NO).setPayState(ComplexPay.PAY_STATE_UNNKNOWN).setRemark("prepay_id=" + prepayid)//
-                .setPayParam(WePayUtil.objectToString(sMap));
+                .setPayParam(WePayUtil.objectToString(sMap)).setPayChannel(ComplexPay.PAY_CHANNEL_WECHAT);
         try {
             complexPayService.saveOrderRecord(newComplexPayOrder);         //将订单信息保存到数据库中
         } catch (Exception e) {
@@ -177,7 +176,7 @@ public class ApiPayOrderController {
                 .setDjh(long_djh).setFeeName(feeName).setFeeType(feeType).setFeeAmount(feeAmountStr)//
                 .setPayWay(ComplexPay.PAY_WAY_ZFB).setOutTradeNo(outTradeNo).setPayOrientation(ComplexPay.PAY_ORIENTATION_FRONT)//
                 .setAsync(ComplexPay.PAY_SYNC_NO).setHisAsync(ComplexPay.HIS_SYNC_NO).setPayState(ComplexPay.PAY_STATE_UNNKNOWN).setRemark("out_trade_no=" + outTradeNo)//
-                .setPayParam(trade_no).setTradeNo(trade_no);
+                .setPayParam(trade_no).setTradeNo(trade_no).setPayChannel(ComplexPay.PAY_CHANNEL_ZFB);
         try {
             complexPayService.saveOrderRecord(newComplexPayOrder);         //将订单信息保存到数据库中
         } catch (Exception e) {
@@ -191,6 +190,8 @@ public class ApiPayOrderController {
 
     }
 
+
+
     //创建支付订单
     @ApiOperation(value="001******创建支付订单")
     @RequestMapping(value = {"/createPayOrder"} ,method = RequestMethod.POST)
@@ -200,6 +201,7 @@ public class ApiPayOrderController {
         String appId = payOrderCreateReq.getAppId();
         String djh = payOrderCreateReq.getHisNo() ;
         String brid = payOrderCreateReq.getBrid() ;
+        String scene = "" ;                                                                     //用卡环节
         String jzh = payOrderCreateReq.getJzh();                                                //获取就诊号
         /**===============判断支付类型，根据不同的支付类型来查询对应的订单详情====================*/
         String feeAmountStr = "";                                                               //费用金额
@@ -211,9 +213,10 @@ public class ApiPayOrderController {
         if(feeType == ComplexPay.FEE_TYPE_MZ){
             log.debug("====> getPrepareId 门诊缴费!");
             TotalUnPayOutpatient totalUnPayOutpatient = complexPayService.getMZPay(openId, openIdType,jzh,brid);
-            log.error("====> 查询订单信息! brid = " + brid + " 流水号djh=" + djh + "msg=his系统中未查到该订单");
-            if(totalUnPayOutpatient == null )
+            if(totalUnPayOutpatient == null ){
+                log.error("====> 查询订单信息! brid = " + brid + " 流水号djh=" + djh + "msg=his系统中未查到该订单");
                 return RETResultUtils._506("his系统中未查到该订单");
+            }
             //获取费用单号
             long_djh = totalUnPayOutpatient.getFydh();                                           //流水号 住院号 逗号拼接
             if (StringUtils.isNotEmptyAndBlank( totalUnPayOutpatient.getSfh() )) {               //收费号,当收费号不为空时， 表明已经支付过了
@@ -222,6 +225,7 @@ public class ApiPayOrderController {
             }
             feeAmountStr = String.valueOf(totalUnPayOutpatient.getZfje()) ;                     //拿到支付金额
             feeName = "门诊缴费";
+            scene = "0101051";                                                                  //门诊缴费
         } else if(feeType == ComplexPay.FEE_TYPE_GH){
             //--------挂号
         } else if(feeType == ComplexPay.FEE_TYPE_ZY){
@@ -243,16 +247,27 @@ public class ApiPayOrderController {
                 return RETResultUtils._506("住院编号为空,不能进行预缴!");
             feeName = "住院预缴";
             isHisPay = false;
+            scene = "0101053";                                                                  //住院缴费
         } else{
             return RETResultUtils._509("缴费类型不存在!");
         }
+
+        //数据上报电子健康卡平台
+        reportHISData(brid,null,scene,feeName,"","0100");
+
         if(isHisPay)
             return RETResultUtils.success("该订单已经支付过了");
         /**============================判断支付类型 完成=================================*/
         /**=====根据His系统中的费用单号 和 费用类型查询本地记录的支付状态==========================*/
         ComplexPay lastPayOrder = null;                                                                //最后一次支付记录
-        if(StringUtils.isNotEmptyAndBlank(long_djh))
-            lastPayOrder = complexPayService.getLatestPayRecord(long_djh,feeType,brid,ComplexPay.PAY_WAY_WECHAT);
+        if(StringUtils.isNotEmptyAndBlank(long_djh)){
+            if( openIdType == 2 ){//微信支付
+                lastPayOrder = complexPayService.getLatestPayRecord(long_djh,feeType,brid,ComplexPay.PAY_WAY_WECHAT,ComplexPay.PAY_CHANNEL_WECHAT);
+            }
+            if( openIdType == 1 ){//支付宝支付
+                lastPayOrder = complexPayService.getLatestPayRecord(long_djh,feeType,brid,ComplexPay.PAY_WAY_ZFB,ComplexPay.PAY_CHANNEL_ZFB);
+            }
+        }
         if(lastPayOrder != null && lastPayOrder.getPayState() == ComplexPay.PAY_STATE_SUCCESS && lastPayOrder.getHisAsync() == ComplexPay.HIS_SYNC_NO ) {  //如果本地系统支付成功
             log.error("====> His系统中没有支付成功, 本地系统支付成功=====================" + lastPayOrder);
             try {

@@ -35,7 +35,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping(value="/api/examReport")
-public class ApiExamReportController {
+public class ApiExamReportController  extends ApiReportHISDataBaseController {
 
 
     @Autowired
@@ -56,7 +56,7 @@ public class ApiExamReportController {
             List<ExamReportRes> results = new ArrayList<ExamReportRes>();
             for ( WebRegPatient webRegPatient : list ) {
                 List<ExamReportTask>  examReportTasks = examReportService.getExamReportTasks(webRegPatient.getBrid());
-                if ( !CollectionUtils.isEmpty(list) && examReportTasks.get(0).success() ){
+                if ( !CollectionUtils.isEmpty(examReportTasks) && examReportTasks.get(0).success() ){
                     List<ExamReportTaskRes> tasks = new ArrayList<ExamReportTaskRes>();
                     for ( ExamReportTask examReportTask : examReportTasks ) {
                         ExamReportTaskRes examReportTaskRes = new ExamReportTaskRes();
@@ -68,6 +68,8 @@ public class ApiExamReportController {
                     examReportRes.setBgsl(examReportTasks.size());
                     examReportRes.setTasks(new ArrayList<ExamReportTaskRes>(tasks));
                     results.add(examReportRes);
+                    //上报数据
+                    reportHISData(webRegPatient.getBrid(),null,"0101083","取（查询）体检报告","","");
                 }
             }
             if ( CollectionUtils.isEmpty(results) )

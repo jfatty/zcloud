@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("/api/reportView")
-public class ApiReportViewController {
+public class ApiReportViewController extends ApiReportHISDataBaseController {
 
     @Autowired
     private ReportViewService reportViewService ;
@@ -46,13 +46,17 @@ public class ApiReportViewController {
                 return RELResultUtils._506(((list.get(0)).getMsg()));
             List<WebReportMissionRes> results = new ArrayList<WebReportMissionRes>();
             //list = list.stream().sorted(Comparator.comparing(WebReportMission::getBgrq).reversed()).collect(Collectors.toList());
-            list.forEach(
-                    webReportMission -> {
-                        WebReportMissionRes webReportMissionRes = new WebReportMissionRes();
-                        BeanUtils.copyProperties(webReportMission,webReportMissionRes);
-                        results.add(webReportMissionRes);
-                    }
-            );
+            for (WebReportMission webReportMission : list ) {
+                WebReportMissionRes webReportMissionRes = new WebReportMissionRes();
+                BeanUtils.copyProperties(webReportMission,webReportMissionRes);
+                results.add(webReportMissionRes);
+                if ( webReportMission.getBglx().contains("检验") ) {
+                    reportHISData(webReportMission.getBrid(),null,"0101082","取（查询）检验报告","","");
+                } else {
+                    reportHISData(webReportMission.getBrid(),null,"0101081","取（查询）检查报告","","");
+                }
+
+            }
             return new RELResultUtils(results);
         }
         return RELResultUtils._506("医院系统中没有查询到数据");

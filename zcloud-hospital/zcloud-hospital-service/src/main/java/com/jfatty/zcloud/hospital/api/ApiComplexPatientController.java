@@ -100,7 +100,8 @@ public class ApiComplexPatientController {
 
     @ApiOperation(value=" 002**** 添加/绑定 就诊人")
     @RequestMapping(value="/addComplexPatient", method=RequestMethod.POST)
-    public RETResultUtils<String> AddComplexPatient(@RequestBody NumoPatientInfoReq numoPatientInfoReq){
+    public RETResultUtils<String> addComplexPatient(@RequestBody NumoPatientInfoReq numoPatientInfoReq){
+        log.error("002**** 添加/绑定 就诊人 入参 [{}] " ,numoPatientInfoReq.toString());
         boolean res = false;
         String openId = numoPatientInfoReq.getOpenId() ;
         Integer openIdType = numoPatientInfoReq.getOpenIdType() ;
@@ -216,7 +217,7 @@ public class ApiComplexPatientController {
                 return new RETResultUtils("默认就诊人"+msg+"绑定成功");
         } catch (Exception e) {
             log.error("设置默认就诊人出现异常 [{}]",e.getMessage());
-            return RETResultUtils.faild("网络崩溃了,请联系运维小哥哥");
+            return RETResultUtils.faild("网络崩溃了,请联系运维小哥");
         }
         return RETResultUtils.faild("网络延时,请稍后重试");
     }
@@ -224,6 +225,7 @@ public class ApiComplexPatientController {
     @ApiOperation(value=" 005****删除就诊人，即将就诊人与用户解绑")
     @RequestMapping(value="/delComplexPatient", method=RequestMethod.POST)
     public RETResultUtils<String> deleteComplexPatient(@RequestBody NumoPatientDeatilReq numoPatientDeatilReq){
+        log.error("005****删除就诊人，即将就诊人与用户解绑 入参 [{}] " ,numoPatientDeatilReq.toString());
         String openId = numoPatientDeatilReq.getOpenId() ;
         Integer openIdType = numoPatientDeatilReq.getOpenIdType() ;
         String brid = numoPatientDeatilReq.getBrid();

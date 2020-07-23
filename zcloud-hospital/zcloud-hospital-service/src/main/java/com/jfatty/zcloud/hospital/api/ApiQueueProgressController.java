@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +30,11 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/queueProgress")
-public class ApiQueueProgressController {
+public class ApiQueueProgressController extends ApiReportHISDataBaseController {
 
     @Autowired
     private QueueProgressService queueProgressService ;
+
 
     @ApiOperation(value="查询用户排队的状态")
     @RequestMapping(value = {"/getQueueProgressStatus"} ,method = RequestMethod.POST)
@@ -41,6 +43,10 @@ public class ApiQueueProgressController {
         if( !CollectionUtils.isEmpty(list) ){
             if(!list.get(0).success())
                 return RELResultUtils._506((list.get(0)).getMsg());
+            for( QueueProgress queueProgress : list) {
+                //数据上报电子健康卡平台
+                reportHISData(null,queueProgress.getSfzh(),"0101021","排队候诊","","");
+            }
             List<QueueProgressRes> results = new ArrayList<QueueProgressRes>();
             list.forEach(
                     queueProgress -> {

@@ -9,6 +9,7 @@ import com.jfatty.zcloud.hospital.res.ElectronicDocDetailExtRes;
 import com.jfatty.zcloud.hospital.res.ElectronicDocDetailRes;
 import com.jfatty.zcloud.hospital.res.ElectronicDocRes;
 import com.jfatty.zcloud.hospital.service.ElectronicDocService;
+import com.jfatty.zcloud.hospital.utils.IdCardUtil;
 import com.jfatty.zcloud.hospital.vo.ElectronicDoc;
 import com.jfatty.zcloud.hospital.vo.ElectronicDocDetail;
 import io.swagger.annotations.Api;
@@ -34,7 +35,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api/electronicDoc")
-public class ApiElectronicDocController {
+public class ApiElectronicDocController  extends ApiReportHISDataBaseController {
 
     @Autowired
     private ElectronicDocService electronicDocService ;
@@ -47,13 +48,23 @@ public class ApiElectronicDocController {
             if(!(list.get(0)).success())
                 return RELResultUtils._509((list.get(0)).getMsg());
             List<ElectronicDocRes> result = new ArrayList<ElectronicDocRes>();
-            list.forEach(
-                 electronicDoc -> {
-                     ElectronicDocRes electronicDocRes = new ElectronicDocRes();
-                     BeanUtils.copyProperties(electronicDoc,electronicDocRes);
-                     result.add(electronicDocRes);
-                 }
-            );
+            for (ElectronicDoc electronicDoc : list  ) {
+                ElectronicDocRes electronicDocRes = new ElectronicDocRes();
+                BeanUtils.copyProperties(electronicDoc,electronicDocRes);
+
+                String sfzh = electronicDoc.getSfzh() ;
+                if ( "门诊缴费".equals(electronicDoc.getLx()) ) {
+                    reportHISData(null,sfzh,"0101052","门诊缴费记录","","");
+                } else {
+                    reportHISData(null,sfzh,"0101054","住院缴费记录","","");
+                }
+
+                if ( !sfzh.contains("*") ) {
+                    electronicDocRes.setSfzh( IdCardUtil.coverStarts(sfzh,8,14) );
+                }
+                result.add(electronicDocRes);
+            }
+
             return new RELResultUtils(result);
         }
         return RELResultUtils._506("没有查询到信息");
