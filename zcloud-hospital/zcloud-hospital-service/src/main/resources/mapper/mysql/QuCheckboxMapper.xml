@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.QuCheckboxMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.QuCheckbox">
+        <id column="id" property="id" />
+        <result column="check_type" property="checkType" />
+        <result column="is_note" property="isNote" />
+        <result column="is_required_fill" property="isRequiredFill" />
+        <result column="option_name" property="optionName" />
+        <result column="option_title" property="optionTitle" />
+        <result column="order_by_id" property="orderById" />
+        <result column="qu_id" property="quId" />
+        <result column="visibility" property="visibility" />
+        <result column="score" property="score" />
+        <result column="summary" property="summary" />
+    </resultMap>
+
+    <resultMap id="OptionsFormResultMap" type="com.jfatty.zcloud.hospital.vo.OptionsForm">
+        <id column="id" property="id" />
+        <result column="option_name" property="optionName" />
+        <result column="order_by_id" property="orderById" />
+    </resultMap>
+
+    <select id="getOptionsForms" resultMap="OptionsFormResultMap">
+        SELECT id,option_name,order_by_id FROM stad_qu_checkbox WHERE 1 = 1 AND qu_id = #{quId}
+    </select>
+
+
+</mapper>

@@ -30,6 +30,7 @@
         <result column="level_max" property="levelMax" />
         <result column="sort_num" property="sortNum" />
         <result column="version" property="version" />
+        <result column="use_scope" property="useScope" />
         <result column="display" property="display" />
         <result column="status" property="status" />
         <result column="state" property="state" />

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.AnRadioMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.AnRadio">
+        <id column="id" property="id" />
+        <result column="belong_answer_id" property="belongAnswerId" />
+        <result column="belong_id" property="belongId" />
+        <result column="other_text" property="otherText" />
+        <result column="qu_id" property="quId" />
+        <result column="qu_item_id" property="quItemId" />
+        <result column="visibility" property="visibility" />
+        <result column="score" property="score" />
+        <result column="summary" property="summary" />
+        <result column="answer_status" property="answerStatus" />
+        <result column="answer_status_note" property="answerStatusNote" />
+        <result column="customize" property="customize" />
+    </resultMap>
+
+
+    <select id="getOptionsFormsWithAnswer" resultType="java.lang.String">
+        SELECT id FROM stad_an_radio WHERE belong_answer_id = #{answerId} AND belong_id = #{surveyId} AND qu_id = #{quId} AND qu_item_id = #{quItemId}
+    </select>
+
+</mapper>

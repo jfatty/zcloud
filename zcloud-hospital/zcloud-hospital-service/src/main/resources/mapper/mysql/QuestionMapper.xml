@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.QuestionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.Question">
+        <id column="id" property="id" />
+        <result column="answer_inpustad_row" property="answerInpustadRow" />
+        <result column="answer_inpustad_width" property="answerInpustadWidth" />
+        <result column="belong_id" property="belongId" />
+        <result column="qu_num" property="quNum" />
+        <result column="qu_name" property="quName" />
+        <result column="qu_note" property="quNote" />
+        <result column="cell_count" property="cellCount" />
+        <result column="check_type" property="checkType" />
+        <result column="contacts_attr" property="contactsAttr" />
+        <result column="contacts_field" property="contactsField" />
+        <result column="copy_from_id" property="copyFromId" />
+        <result column="create_date" property="createDate" />
+        <result column="hv" property="hv" />
+        <result column="is_required" property="isRequired" />
+        <result column="keywords" property="keywords" />
+        <result column="order_by_id" property="orderById" />
+        <result column="param_int01" property="paramInt01" />
+        <result column="param_int02" property="paramInt02" />
+        <result column="parenstad_qu_id" property="parenstadQuId" />
+        <result column="qu_tag" property="quTag" />
+        <result column="qu_title" property="quTitle" />
+        <result column="qu_type" property="quType" />
+        <result column="rand_order" property="randOrder" />
+        <result column="tag" property="tag" />
+        <result column="visibility" property="visibility" />
+        <result column="yesno_option" property="yesnoOption" />
+        <result column="answer_input_row" property="answerInputRow" />
+        <result column="answer_input_width" property="answerInputWidth" />
+        <result column="parent_qu_id" property="parentQuId" />
+        <result column="formula" property="formula" />
+        <result column="show_in_result" property="showInResult" />
+        <result column="score" property="score" />
+        <result column="answer" property="answer" />
+        <result column="qu_remark" property="quRemark" />
+        <result column="is_qu_title" property="isQuTitle" />
+        <result column="edit_state" property="editState" />
+        <result column="settings" property="settings" />
+        <result column="label_attr" property="labelAttr" />
+        <result column="merge_row" property="mergeRow" />
+        <result column="merge_col" property="mergeCol" />
+        <result column="stats" property="stats" />
+    </resultMap>
+
+    <resultMap id="QuestionFormResultMap" type="com.jfatty.zcloud.hospital.vo.QuestionForm">
+        <id column="id" property="id" />
+        <result column="qu_title" property="quTitle" />
+        <result column="qu_type" property="quType" />
+        <result column="settings" property="settings" />
+        <result column="order_by_id" property="orderById" />
+    </resultMap>
+
+
+    <select id="getQuestionForms" resultMap="QuestionFormResultMap">
+        SELECT id,qu_title,qu_type,settings,order_by_id FROM stad_question WHERE 1 = 1 AND belong_id = #{surveyId} ORDER BY order_by_id ASC
+    </select>
+
+    <select id="getAnswerQuestionForms" resultMap="QuestionFormResultMap">
+        SELECT
+            q.id,
+            q.qu_title,
+            q.qu_type,
+            q.order_by_id,
+            qa.settings
+        FROM
+            stad_question q LEFT JOIN stad_question_answer qa ON qa.qu_id = q.id
+        WHERE
+            q.belong_id = #{surveyId} AND qa.belong_answer_id = #{answerId}
+        ORDER BY
+            q.order_by_id ASC
+    </select>
+
+</mapper>

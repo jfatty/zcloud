@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.SurveyDirectoryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.SurveyDirectory">
+        <id column="id" property="id" />
+        <result column="an_item_leasstad_num" property="anItemLeasstadNum" />
+        <result column="answer_num" property="answerNum" />
+        <result column="create_date" property="createDate" />
+        <result column="dir_type" property="dirType" />
+        <result column="excerpstad_num" property="excerpstadNum" />
+        <result column="html_path" property="htmlPath" />
+        <result column="show_result" property="showResult" />
+        <result column="is_backup" property="isBackup" />
+        <result column="is_share" property="isShare" />
+        <result column="parenstad_id" property="parenstadId" />
+        <result column="sid" property="sid" />
+        <result column="objecstad_id" property="objecstadId" />
+        <result column="survey_detail_id" property="surveyDetailId" />
+        <result column="survey_model" property="surveyModel" />
+        <result column="survey_name" property="surveyName" />
+        <result column="simple_name" property="simpleName" />
+        <result column="en_name" property="enName" />
+        <result column="survey_content" property="surveyContent" />
+        <result column="survey_type" property="surveyType" />
+        <result column="survey_qu_num" property="surveyQuNum" />
+        <result column="survey_state" property="surveyState" />
+        <result column="survey_tag" property="surveyTag" />
+        <result column="user_id" property="userId" />
+        <result column="view_answer" property="viewAnswer" />
+        <result column="visibility" property="visibility" />
+        <result column="an_item_least_num" property="anItemLeastNum" />
+        <result column="excerpt_num" property="excerptNum" />
+        <result column="parent_id" property="parentId" />
+        <result column="mp_html_path" property="mpHtmlPath" />
+        <result column="auto_calc" property="autoCalc" />
+        <result column="unique_num" property="uniqueNum" />
+        <result column="open_state" property="openState" />
+        <result column="create_time" property="createTime" />
+        <result column="create_operator" property="createOperator" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="state" property="state" />
+        <result column="edit_state" property="editState" />
+        <result column="limit_sum" property="limitSum" />
+        <result column="limit_sum_num" property="limitSumNum" />
+        <result column="result_entry_type" property="resultEntryType" />
+        <result column="statistics_state" property="statisticsState" />
+        <result column="print_support" property="printSupport" />
+        <result column="opt_scope" property="optScope" />
+        <result column="self_test" property="selfTest" />
+        <result column="other_test" property="otherTest" />
+        <result column="sys_test" property="sysTest" />
+        <result column="result_type" property="resultType" />
+    </resultMap>
+
+    <resultMap id="SurveyFormResultMap" type="com.jfatty.zcloud.hospital.vo.SurveyForm">
+        <id column="id" property="surveyId" />
+        <result column="survey_name" property="surveyName" />
+        <result column="simple_name" property="simpleName" />
+        <result column="survey_note" property="surveyNote" />
+    </resultMap>
+
+
+    <resultMap id="SurveyFormWithAnswerResultMap" type="com.jfatty.zcloud.hospital.vo.SurveyForm">
+        <id column="survey_id" property="surveyId" />
+        <result column="survey_name" property="surveyName" />
+        <result column="simple_name" property="simpleName" />
+        <result column="survey_note" property="surveyNote" />
+        <result column="bg_an_date" property="bgAnDate" />
+        <result column="end_an_date" property="endAnDate" />
+        <result column="answer_id" property="answerId" />
+        <result column="association_id" property="associationId" />
+        <result column="associationer" property="associationer" />
+        <result column="operator" property="operator" />
+        <result column="operation_time" property="operationTime" />
+        <result column="total_score" property="totalScore" />
+        <result column="summary" property="summary" />
+        <result column="open_id" property="openId" />
+    </resultMap>
+
+    <select id="getSurveyForm" resultMap="SurveyFormResultMap">
+        SELECT directory.id,directory.survey_name,directory.simple_name,detail.survey_note FROM stad_survey_directory directory LEFT JOIN  stad_survey_detail detail ON detail.dir_id = directory.id  WHERE directory.id = #{surveyId}
+    </select>
+
+
+    <select id="getSurveyFormWithAnswer" resultMap="SurveyFormWithAnswerResultMap">
+        SELECT
+            dir.id AS survey_id,
+            dir.survey_name,
+            dir.simple_name,
+            dir.survey_note,
+            answer.id AS answer_id,
+            answer.bg_an_date,
+            answer.end_an_date,
+            answer.association_id,
+            answer.associationer,
+            answer.operator,
+            answer.operation_time,
+            answer.total_score,
+            answer.summary,
+            answer.open_id
+        FROM
+            (
+                SELECT
+                    _directory.id,
+                    _directory.survey_name,
+                    _directory.simple_name,
+                    detail.survey_note
+                FROM
+                    stad_survey_directory _directory
+                LEFT JOIN stad_survey_detail detail ON detail.dir_id = _directory.id
+            ) dir
+        LEFT JOIN stad_survey_answer answer ON answer.survey_id = dir.id
+        WHERE
+            dir.id = #{surveyId}
+        AND
+            answer.id = #{answerId}
+    </select>
+
+
+    <select id="getSurveyForms" resultMap="SurveyFormResultMap">
+        SELECT directory.id,directory.survey_name,directory.simple_name,detail.survey_note FROM stad_survey_directory directory LEFT JOIN  stad_survey_detail detail ON detail.dir_id = directory.id
+        WHERE directory.id IN ( select survey_id from stad_survey_open_time where start_time <![CDATA[ < ]]> #{currentTime} and end_time <![CDATA[ > ]]>  #{currentTime} and survey_id in ( select survey_id from stad_survey_menu where 1 = 1 and menu_id = #{menuId}  ) )
+</select>
+
+    <select id="getSurFormsByTypes" resultMap="SurveyFormResultMap" parameterType="list">
+        SELECT directory.id,directory.survey_name,directory.simple_name,detail.survey_note FROM stad_survey_directory directory LEFT JOIN  stad_survey_detail detail ON detail.dir_id = directory.id
+        WHERE 1 = 1 AND directory.survey_type IN <foreach  collection="list"  index="index" item="surveyType" open="(" separator="," close=")">#{surveyType,jdbcType=VARCHAR}</foreach>
+    </select>
+
+</mapper>

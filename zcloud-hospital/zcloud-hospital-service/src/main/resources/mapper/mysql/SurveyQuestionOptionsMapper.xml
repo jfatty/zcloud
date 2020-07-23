@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.SurveyQuestionOptionsMapper">
+
+
+    <!-- 批量添加微信服务器的用户标签到本地库 -->
+    <!-- String id,String surveyId, String surveyAnswerId, String quId, String answerValue -->
+    <insert id="insertAnFillblanks" parameterType="list">
+        INSERT INTO stad_an_fillblank ( id, belong_id, belong_answer_id, qu_id, visibility,answer,answer_note,answer_status,answer_status_note,customize  )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+             ( #{item.id},#{item.belongId},#{item.belongAnswerId},#{item.quId},#{item.visibility},#{item.answer},#{item.answerNote},#{item.answerStatus},#{item.answerStatusNote},#{item.customize} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+    <!-- String id,String surveyId, String surveyAnswerId, String quId,String quItemId,String otherText,Integer score -->
+    <insert id="insertAnRadios" parameterType="list">
+        INSERT INTO stad_an_radio ( id, belong_id, belong_answer_id, qu_id, qu_item_id,other_text,visibility,score,answer_status,answer_status_note,customize  )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+             ( #{item.id},#{item.belongId},#{item.belongAnswerId},#{item.quId},#{item.quItemId},#{item.otherText},#{item.visibility},#{item.score},#{item.answerStatus},#{item.answerStatusNote},#{item.customize} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+    <insert id="insertAnCheckboxes" parameterType="list">
+        INSERT INTO stad_an_checkbox ( id, belong_id, belong_answer_id, qu_id, qu_item_id,other_text, visibility,score,answer_status,answer_status_note,customize   )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+             ( #{item.id},#{item.belongId},#{item.belongAnswerId},#{item.quId},#{item.quItemId},#{item.otherText},#{item.visibility},#{item.score},#{item.answerStatus},#{item.answerStatusNote},#{item.customize} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+    <!--批量保存 题目答案 数据-->
+    <insert id="insertQuestionAnswers" parameterType="list">
+        INSERT INTO stad_question_answer ( id, belong_id, belong_answer_id, qu_id, settings  )
+        VALUES
+        <foreach  collection="list" item="item" index="index" separator="," >
+            <![CDATA[
+             ( #{item.id},#{item.belongId},#{item.belongAnswerId},#{item.quId},#{item.settings} )
+        	 ]]>
+        </foreach>
+    </insert>
+
+    <delete id="deleteAnFillblanks" parameterType="list">
+        <foreach  collection="list" item="item" index="index" separator=";" >
+            DELETE FROM stad_an_fillblank where belong_id = #{item.belongId} and  belong_answer_id = #{item.belongAnswerId} and  qu_id = #{item.quId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAnRadios" parameterType="list">
+        <foreach  collection="list" item="item" index="index" separator=";" >
+            DELETE FROM stad_an_radio where belong_id = #{item.belongId} and  belong_answer_id = #{item.belongAnswerId} and  qu_id = #{item.quId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteAnCheckboxes" parameterType="list">
+        <foreach  collection="list" item="item" index="index" separator=";" >
+            DELETE FROM stad_an_checkbox where belong_id = #{item.belongId} and  belong_answer_id = #{item.belongAnswerId} and  qu_id = #{item.quId}
+        </foreach>
+    </delete>
+
+    <!--批量删除 题目答案 数据-->
+    <delete id="deleteQuestionAnswers" parameterType="list">
+        <foreach  collection="list" item="item" index="index" separator=";" >
+            DELETE FROM stad_question_answer where belong_id = #{item.belongId} and  belong_answer_id = #{item.belongAnswerId} and  qu_id = #{item.quId}
+        </foreach>
+    </delete>
+
+
+</mapper>

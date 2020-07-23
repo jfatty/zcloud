@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.QuMultiFillblankMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.QuMultiFillblank">
+        <id column="id" property="id" />
+        <result column="check_type" property="checkType" />
+        <result column="option_name" property="optionName" />
+        <result column="option_title" property="optionTitle" />
+        <result column="qu_id" property="quId" />
+        <result column="visibility" property="visibility" />
+        <result column="score" property="score" />
+        <result column="summary" property="summary" />
+        <result column="order_by_id" property="orderById" />
+    </resultMap>
+
+</mapper>

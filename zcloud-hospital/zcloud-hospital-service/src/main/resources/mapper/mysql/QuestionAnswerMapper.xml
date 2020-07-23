@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.QuestionAnswerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.QuestionAnswer">
+        <id column="id" property="id" />
+        <result column="belong_answer_id" property="belongAnswerId" />
+        <result column="belong_id" property="belongId" />
+        <result column="qu_id" property="quId" />
+        <result column="visibility" property="visibility" />
+        <result column="answer_status" property="answerStatus" />
+        <result column="answer_status_note" property="answerStatusNote" />
+        <result column="settings" property="settings" />
+    </resultMap>
+
+
+    <select id="getQuestionAnswer" resultType="java.lang.String">
+        SELECT settings FROM stad_question_answer WHERE 1 = 1 AND belong_id = #{surveyId} AND belong_answer_id = #{answerId} AND  qu_id = #{quId}
+    </select>
+
+</mapper>

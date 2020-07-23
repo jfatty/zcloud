@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.SurveyAnswerMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.SurveyAnswer">
+        <id column="id" property="id" />
+        <result column="addr" property="addr" />
+        <result column="bg_an_date" property="bgAnDate" />
+        <result column="city" property="city" />
+        <result column="complete_item_num" property="completeItemNum" />
+        <result column="complete_num" property="completeNum" />
+        <result column="data_source" property="dataSource" />
+        <result column="end_an_date" property="endAnDate" />
+        <result column="handle_state" property="handleState" />
+        <result column="ip_addr" property="ipAddr" />
+        <result column="is_complete" property="isComplete" />
+        <result column="completion_percentage" property="completionPercentage" />
+        <result column="is_effective" property="isEffective" />
+        <result column="pc_mac" property="pcMac" />
+        <result column="qu_num" property="quNum" />
+        <result column="survey_id" property="surveyId" />
+        <result column="total_time" property="totalTime" />
+        <result column="user_id" property="userId" />
+        <result column="unique_num" property="uniqueNum" />
+        <result column="association_id" property="associationId" />
+        <result column="associationer" property="associationer" />
+        <result column="operator" property="operator" />
+        <result column="operation_time" property="operationTime" />
+        <result column="total_score" property="totalScore" />
+        <result column="summary" property="summary" />
+        <result column="note" property="note" />
+        <result column="answer_num" property="answerNum" />
+        <result column="survey_status" property="surveyStatus" />
+        <result column="survey_status_note" property="surveyStatusNote" />
+        <result column="survey_grade" property="surveyGrade" />
+        <result column="answer_state" property="answerState" />
+        <result column="suggestion" property="suggestion" />
+        <result column="print_state" property="printState" />
+        <result column="print_time" property="printTime" />
+        <result column="print_operator" property="printOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="create_operator" property="createOperator" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="state" property="state" />
+        <result column="edit_state" property="editState" />
+        <result column="serial_num" property="serialNum" />
+        <result column="doctor" property="doctor" />
+        <result column="open_id" property="openId" />
+    </resultMap>
+
+    <select id="getMidSurveyAnswer" resultMap="BaseResultMap">
+        SELECT * FROM  stad_survey_answer WHERE 1=1 AND survey_id = #{surveyId} AND operator = #{operator} AND operation_time <![CDATA[ > ]]> #{startTime} and operation_time <![CDATA[ < ]]>  #{endTime} LIMIT 1
+    </select>
+
+    <select id="getMoreSurveyAnswer"  resultMap="BaseResultMap">
+        SELECT * FROM  stad_survey_answer WHERE 1=1 AND survey_id = #{surveyId} AND operator = #{operator} AND operation_time <![CDATA[ > ]]> #{endTime} LIMIT 1
+    </select>
+
+</mapper>

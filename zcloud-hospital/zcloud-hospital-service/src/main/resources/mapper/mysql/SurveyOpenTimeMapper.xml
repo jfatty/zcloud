@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.SurveyOpenTimeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.SurveyOpenTime">
+        <id column="id" property="id" />
+        <result column="survey_id" property="surveyId" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="description" property="description" />
+        <result column="state" property="state" />
+        <result column="realm" property="realm" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from stad_survey_open_time
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from stad_survey_open_time
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+    <select id="selectOpenTime" resultMap="BaseResultMap" >
+        SELECT * FROM stad_survey_open_time WHERE 1=1 AND survey_id = #{surveyId} AND end_time <![CDATA[ > ]]> #{currentTime} and start_time <![CDATA[ < ]]>  #{currentTime} LIMIT 1
+    </select>
+
+</mapper>
