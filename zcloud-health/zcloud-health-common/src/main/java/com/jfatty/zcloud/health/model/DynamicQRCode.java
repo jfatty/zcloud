@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class DynamicQRCode implements Serializable {
 
+    private int color ;
     private String qrCodeText;
     private String qrCodeImg;
 
@@ -31,6 +32,15 @@ public class DynamicQRCode implements Serializable {
 
     public DynamicQRCode setQrCodeImg(String qrCodeImg) {
         this.qrCodeImg = qrCodeImg;
+        return this;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public DynamicQRCode setColor(int color) {
+        this.color = color;
         return this;
     }
 }

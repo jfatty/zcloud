@@ -100,6 +100,12 @@ public class HealthCardSettingsDTO<T extends BaseDTO> extends BaseDTO {
     private String detailPageUrl;
 
     /**
+     * 绑定微信链接wechatUrl为开放平台页面链接
+     */
+    @ApiModelProperty(name = "wechatUrl", position = 0, value = "绑定微信链接wechatUrl为开放平台页面链接",required = true ,example = "https://health.tengmed.com/open/batchActiveCard?open_id=%s&redirect_uri=%s")
+    private String wechatUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     @ApiModelProperty(name = "status", position = 0, value = "使用状态0表示正常使用-1表示维护中-2表示建设中...",example = "0",allowableValues = "0,-1,-2")

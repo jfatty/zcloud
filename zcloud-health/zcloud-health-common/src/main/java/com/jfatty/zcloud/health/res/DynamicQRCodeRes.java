@@ -16,6 +16,10 @@ import lombok.Data;
 public class DynamicQRCodeRes extends DynamicQRCodeDTO<DynamicQRCodeRes> {
 
 
+    @ApiModelProperty(name = "codeColor", position = 0, value = "二维码颜色",required = true ,example = "0：黑色 -未申报1：绿色-低风险2：黄色-中风险3：红色-高风险")
+    private int codeColor ;
+
+
     @ApiModelProperty(name = "qrCodeText", position = 0, value = "二维码文本",required = true ,example = "272EB52D0696FD625B6F3E1A830728532779BEB87520CC83948C50A43F439F58:0:8D7E10969D22699A07C2BDA9B4CE9286")
     private String qrCodeText;
 

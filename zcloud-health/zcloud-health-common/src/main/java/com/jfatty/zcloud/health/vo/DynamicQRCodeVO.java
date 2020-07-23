@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class DynamicQRCodeVO {
 
+    private int color ;
     private String qrCodeText;
     private String qrCodeImg;
 

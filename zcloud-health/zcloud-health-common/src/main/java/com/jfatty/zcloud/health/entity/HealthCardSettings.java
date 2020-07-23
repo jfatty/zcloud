@@ -100,6 +100,11 @@ public class HealthCardSettings extends Model<HealthCardSettings> {
     private String detailPageUrl;
 
     /**
+     * 绑定微信链接wechatUrl为开放平台页面链接
+     */
+    private String wechatUrl;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;

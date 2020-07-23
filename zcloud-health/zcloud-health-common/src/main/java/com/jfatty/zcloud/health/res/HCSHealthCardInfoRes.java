@@ -16,6 +16,10 @@ import lombok.Data;
 @ApiModel(description = "电子健康卡信息响应实体")
 public class HCSHealthCardInfoRes extends HCSHealthCardInfoDTO<HCSHealthCardInfoRes> {
 
+    //20200526新增
+    @ApiModelProperty(name = "codeColor", position = 0, value = "二维码颜色",required = true ,example = "0：黑色 -未申报1：绿色-低风险2：黄色-中风险3：红色-高风险")
+    private int codeColor ;
+
     /**
      * 健康卡信息记录ID(系统健康卡ID)
      */

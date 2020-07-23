@@ -83,6 +83,11 @@ public class HCSHealthCardInfo extends Model<HCSHealthCardInfo>  {
     private String wechatCode;
 
     /**
+     * 健康卡二维码条码颜色code
+     */
+    private int codeColor ;
+
+    /**
      * 健康卡主索引
      */
     private String phid;

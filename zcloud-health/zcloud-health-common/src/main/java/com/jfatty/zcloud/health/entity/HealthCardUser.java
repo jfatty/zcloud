@@ -48,6 +48,21 @@ public class HealthCardUser extends Model<HealthCardUser> {
     private Integer openIdType;
 
     /**
+     * 默认电子健康卡ID
+     */
+    private String healthCardInfoId;
+
+    /**
+     * 微信用户是否已激活电子健康卡0表示未激活-1表示激活
+     */
+    private Integer isActive;
+
+    /**
+     * 是否为批量建卡用户0表示否-1表示是
+     */
+    private Integer isBatch;
+
+    /**
      * 微信用户姓名或者昵称
      */
     private String name;
@@ -127,5 +142,14 @@ public class HealthCardUser extends Model<HealthCardUser> {
      * 删除操作者
      */
     private String deleteOperator;
+
+
+    public final static int ACTIVE_YES = 1;
+
+    public final static int ACTIVE_NO = 0;
+
+    public final static int BATCH_YES = 1;
+
+    public final static int BATCH_NO = 1;
 
 }

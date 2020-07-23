@@ -15,6 +15,12 @@ import lombok.Data;
 @ApiModel(description = "电子健康卡列表响应实体")
 public class SimpleHealthCardInfoRes extends HCSHealthCardInfoDTO<SimpleHealthCardInfoRes> {
 
+
+    //20200526新增
+    @ApiModelProperty(name = "codeColor", position = 0, value = "二维码颜色",required = true ,example = "0：黑色 -未申报1：绿色-低风险2：黄色-中风险3：红色-高风险")
+    private int codeColor ;
+
+    //20200521 更新 返回页面都用身份证作为凭证
     //系统健康卡ID
     @ApiModelProperty(name = "id", position = 0, value = "系统健康卡ID",required = true ,example = "2C9580916F47F3AA016F47F3AA0F0000")
     private String id;
