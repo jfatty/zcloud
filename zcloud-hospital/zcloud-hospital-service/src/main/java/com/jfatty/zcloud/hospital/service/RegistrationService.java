@@ -1,9 +1,6 @@
 package com.jfatty.zcloud.hospital.service;
 
-import com.jfatty.zcloud.hospital.vo.HosClazz;
-import com.jfatty.zcloud.hospital.vo.HosDept;
-import com.jfatty.zcloud.hospital.vo.HosHoliday;
-import com.jfatty.zcloud.hospital.vo.PreRegistered;
+import com.jfatty.zcloud.hospital.vo.*;
 
 import java.util.List;
 
@@ -55,4 +52,14 @@ public interface RegistrationService {
      * @return
      */
     PreRegistered preRegistered(String openId, Integer openIdType, String brid, String name, String sex, String idCard, String tel, String ksid, String preDate, String preTime) throws Exception;
+
+    /**
+     * 取消预约挂号
+     * @param openId
+     * @param openIdType
+     * @param brid
+     * @param yyh
+     * @return
+     */
+    CancelRegistered cancelRegistered(String openId, Integer openIdType, String brid, String yyh);
 }

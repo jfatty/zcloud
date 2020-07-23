@@ -68,9 +68,10 @@ public interface ComplexPayService {
      * @param feeType 支付类型
      * @param brid      病人id
      * @param payWay  支付方式
+     * @param payChannel  支付渠道
      * @return
      */
-    ComplexPay getLatestPayRecord(String hisNo, int feeType, String brid, int payWay);
+    ComplexPay getLatestPayRecord(String hisNo, int feeType, String brid, int payWay,int payChannel);
 
     /**
      * 描述 门诊缴费 本地系统支付系统数据存储成功之后调用存储过程通知his系统

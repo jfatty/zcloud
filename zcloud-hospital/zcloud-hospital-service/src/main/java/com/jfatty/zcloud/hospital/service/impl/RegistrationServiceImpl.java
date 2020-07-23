@@ -3,10 +3,7 @@ package com.jfatty.zcloud.hospital.service.impl;
 import com.jfatty.zcloud.hospital.datasource.TargetDataSource;
 import com.jfatty.zcloud.hospital.mapper.RegistrationMapper;
 import com.jfatty.zcloud.hospital.service.RegistrationService;
-import com.jfatty.zcloud.hospital.vo.HosClazz;
-import com.jfatty.zcloud.hospital.vo.HosDept;
-import com.jfatty.zcloud.hospital.vo.HosHoliday;
-import com.jfatty.zcloud.hospital.vo.PreRegistered;
+import com.jfatty.zcloud.hospital.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,5 +46,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public PreRegistered preRegistered(String openId, Integer openIdType, String brid, String name, String sex, String idCard, String tel, String ksid, String preDate, String preTime) throws Exception {
         return registrationMapper.preRegistered(openId,openIdType,brid,name,sex,idCard,tel,ksid,preDate,preTime);
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public CancelRegistered cancelRegistered(String openId, Integer openIdType, String brid, String yyh) {
+        return registrationMapper.cancelRegistered(openId,openIdType,brid,yyh);
     }
 }
