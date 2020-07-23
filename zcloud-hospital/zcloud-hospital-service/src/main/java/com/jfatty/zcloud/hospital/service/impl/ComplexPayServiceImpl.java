@@ -115,9 +115,9 @@ public class ComplexPayServiceImpl implements ComplexPayService {
 
     @TargetDataSource(name="mssql")
     @Override
-    public ComplexPay getLatestPayRecord(String hisNo, int feeType, String brid, int payWay) {
-        log.error("根据 HIS系统中的 '唯一订单号' [{}] 和 支付类型 [{}] 和 病人id [{}] 查询 最新的那一条支付记录 " ,hisNo,payWay,brid );
-        ComplexPay latestPayOrder = complexPayMapper.getLatestPayRecord( hisNo,feeType,payWay,brid );
+    public ComplexPay getLatestPayRecord(String hisNo, int feeType, String brid, int payWay,int payChannel) {
+        log.error("根据 HIS系统中的 '唯一订单号' [{}] 和 支付类型 [{}]和 支付渠道 [{}] 和 病人id [{}] 查询 最新的那一条支付记录 " ,hisNo,payWay,payChannel,brid );
+        ComplexPay latestPayOrder = complexPayMapper.getLatestPayRecord( hisNo,feeType,payWay,brid,payChannel );
         log.error("根据 查询结果  "+latestPayOrder);
         return latestPayOrder;
     }
