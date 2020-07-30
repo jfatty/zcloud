@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jfatty.zcloud.hospital.mapper.CcbConfigMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jfatty.zcloud.hospital.entity.CcbConfig">
+        <id column="id" property="id" />
+        <result column="appid" property="appid" />
+        <result column="merchant_id" property="merchantId" />
+        <result column="pos_id" property="posId" />
+        <result column="branch_id" property="branchId" />
+        <result column="cur_code" property="curCode" />
+        <result column="tx_code" property="txCode" />
+        <result column="pay_notify_url" property="payNotifyUrl" />
+        <result column="gate_way" property="gateWay" />
+        <result column="public_key" property="publicKey" />
+        <result column="pub" property="pub" />
+        <result column="tpl_id" property="tplId" />
+        <result column="pay_success_tpl_url" property="paySuccessTplUrl" />
+        <result column="return_type" property="returnType" />
+        <result column="cert_no" property="certNo" />
+        <result column="realm" property="realm" />
+        <result column="state" property="state" />
+        <result column="create_operator" property="createOperator" />
+        <result column="create_time" property="createTime" />
+        <result column="update_operator" property="updateOperator" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_state" property="deleteState" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="delete_operator" property="deleteOperator" />
+    </resultMap>
+
+    <!-- 获取表格数据 -->
+    <select id="getTable" resultMap="BaseResultMap" parameterType="map" >
+        select
+        *
+        from pay_ccb_config
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+        order by create_time desc limit #{pageIndex,jdbcType=INTEGER} , #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <!-- 获取表格数据条数 -->
+    <select id="getTableCount" resultType="java.lang.Integer" parameterType="map" >
+        select
+        count(0)
+        from pay_ccb_config
+        where 1 = 1
+        <if test="realm != null" >
+            and realm = #{realm}
+        </if>
+    </select>
+
+    <select id="getByMchId" resultMap="BaseResultMap">
+        SELECT  * FROM pay_ccb_config WHERE merchant_id = #{mchId} LIMIT 1
+    </select>
+
+</mapper>

@@ -130,6 +130,15 @@ public interface ComplexPayService {
     void confirmAsyncStatus(String openId, Integer openIdType, ComplexPay lastPayOrder) throws Exception ;
 
     /**
+     * 同步处理订单回调HIS
+     * @param openId
+     * @param openIdType
+     * @param lastPayOrder
+     * @throws Exception
+     */
+    void confirmSyncStatus(String openId, Integer openIdType, ComplexPay lastPayOrder) throws Exception ;
+
+    /**
      * 异步通知，改变状态
      * @param complexPayOrder
      * @throws Exception

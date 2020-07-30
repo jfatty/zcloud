@@ -1,8 +1,10 @@
 package com.jfatty.zcloud.hospital.service.impl;
 
+import com.jfatty.zcloud.base.holder.ApplicationContextHolder;
 import com.jfatty.zcloud.hospital.datasource.TargetDataSource;
 import com.jfatty.zcloud.hospital.mapper.ComplexPayMapper;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
+import com.jfatty.zcloud.hospital.service.MailConfigService;
 import com.jfatty.zcloud.hospital.utils.Sync2HISPayResultUtil;
 import com.jfatty.zcloud.hospital.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -178,6 +180,66 @@ public class ComplexPayServiceImpl implements ComplexPayService {
                         payOrder.getFeeType(),
                         payOrder.getPatientId(),
                         payOrder.getDjh(), payOrder.getPayWay(), payOrder.getCreatedTime(), payOrder.getFeeAmount(), ComplexPay.PAY_STATE_SUCCESS, null, "", "", "");
+                break;
+            default:
+                break;
+        }
+    }
+
+    @TargetDataSource(name="mssql")
+    @Override
+    public void confirmSyncStatus(String openId, Integer openIdType, ComplexPay payOrder) throws Exception {
+        String outTradeNo = payOrder.getOutTradeNo() ;
+        Integer feeType = payOrder.getFeeType();
+        Long brid = payOrder.getPatientId();
+        //费用单号
+        String fydh = payOrder.getDjh();
+        Integer fkfs = payOrder.getPayWay();
+        //String rq = payOrder.getCreatedTime();
+        String ssje = payOrder.getFeeAmount() ;
+        //Integer fkzt = ComplexPay.PAY_STATE_SUCCESS;
+        String Ext1 = "" ;
+        String Ext2 = "";
+        String Ext3 = "" ;
+        switch (feeType) {
+            case ComplexPay.FEE_TYPE_MZ:
+                try {
+                    log.error("===> 同步 门诊缴费， 通知  HIS 系统   exec dbo.pro_web_mzsf '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''");
+                    SyncMZPay syncMZPay  = syncMZPay(openId,openIdType,outTradeNo,brid+"",fydh,fkfs,ssje,Ext1,Ext2,Ext3);
+                    if(syncMZPay.success()){                                          //通知成功
+                        log.error("===> 同步 门诊缴费， 通知  HIS 系统 支付状态  通知成功===============");
+                        syncHisFeeBack(outTradeNo, ComplexPay.HIS_SYNC_YES,syncMZPay.getSfh());
+                    }else{
+                        log.error("===> 同步 门诊缴费， 通知  HIS 系统 支付状态 出现问题   === " + syncMZPay.getMsg());
+                        MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                        mailConfigService.sendErrorMail("===> 同步 门诊缴费， 通知  HIS 系统 支付状态 出现问题   === ",//
+                                "门诊缴费， 通知  HIS 系统   exec dbo.pro_web_mzsf '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ syncMZPay.getMsg());
+                    }
+                } catch (Exception e) {
+                    log.error("===> 同步 门诊缴费， 通知  HIS 系统 支付状态 出现问题  异常信息 === " + e.getMessage());
+                    MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                    mailConfigService.sendErrorMail("===> 同步 门诊缴费， 通知  HIS 系统 支付状态 出现问题  异常信息 === ",//
+                            "门诊缴费， 通知  HIS 系统   exec dbo.pro_web_mzsf '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ e.getMessage());
+                }
+                break;
+            case ComplexPay.FEE_TYPE_ZY:
+                try {
+                    log.error("===> 同步 住院预缴， 通知  HIS 系统    exec dbo.pro_web_zyyj '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''");
+                    SyncZYPay syncZYPay = syncZYPay(openId,openIdType,outTradeNo,brid+"",fydh,fkfs,ssje,Ext1,Ext2,Ext3);
+                    if(syncZYPay.success()){
+                        syncHisInHospitalFeeBack(outTradeNo, ComplexPay.HIS_SYNC_YES, syncZYPay.getYjh());//pihpfVO.getOutTradeNo(), PayVO.HIS_SYNC_YES, pihpfVO.getYjh()
+                    }else{
+                        log.error("===> 同步 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]" , syncZYPay.getMsg());
+                        MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                        mailConfigService.sendErrorMail("===> 同步 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]",//
+                                "住院预缴， 通知  HIS 系统    exec dbo.pro_web_zyyj '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ syncZYPay.getMsg());
+                    }
+                } catch (Exception e) {
+                    log.error("===> 同步 住院预缴， 通知  HIS 系统 支付状态 出现问题  异常信息  === [{}]" , e.getMessage());
+                    MailConfigService mailConfigService =  ApplicationContextHolder.getBean(MailConfigService.class);
+                    mailConfigService.sendErrorMail("===> 同步 住院预缴， 通知  HIS 系统 支付状态 出现问题   ===  [{}]",//
+                            "住院预缴， 通知  HIS 系统    exec dbo.pro_web_zyyj '"+openId+"',"+openIdType+",'"+outTradeNo+"',"+brid+",'"+fydh+"',"+fkfs+","+ssje+",'','',''  ===>"+ e.getMessage());
+                }
                 break;
             default:
                 break;

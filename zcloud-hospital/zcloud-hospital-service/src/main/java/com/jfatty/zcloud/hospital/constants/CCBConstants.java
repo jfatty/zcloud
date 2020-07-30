@@ -12,7 +12,7 @@ public class CCBConstants {
     public static final String MERCHANTID = "105000080621818" ;
 
     //商户柜台代码
-    public static final String POSID = "028473088" ;
+    public static final String POSID = "028473089" ;
 
     //分行代码
     public static final String BRANCHID = "430000000" ;
@@ -27,10 +27,10 @@ public class CCBConstants {
     public static final String TYPE = "1";
 
     //公钥完整字符串
-    public static final String PUBLICKEY = "30819d300d06092a864886f70d010101050003818b0030818702818100874790210271b04300015186373c8b13be31fa22cf5b50f5274e565d3f47b6f37997c10f550211cf06b9a5066137d9fda3dd28e1aed2b0f89a5602fced30cafc6f61ae087cb59a9391454fa267ba21036e5a45cceb4093fd69f584e4525a1dc142aae1d6597f65c2f577d0c20c4d9be9383f7deff9b6653ceee7a3c4cf2fd03d020111";
+    public static final String PUBLICKEY = "30819d300d06092a864886f70d010101050003818b0030818702818100a9fa85d0e343c37a1ca81d7004f361f0a09381c642c88aa5cfab49c5ce6e430a4189baf6a9c3d025df3173731dec63baeb2bbb7b14bdf334d751b4573df1be373557b6176014ed18ef3774679eb7ae798aa84ae0e71d75a613fff04ce1b87c9693e48d46faca200dde18b59030500528f08b39390569acf1faa4767782e77bb1020111";
 
     //公钥后30位
-    public static final String PUB = "f9b6653ceee7a3c4cf2fd03d020111";
+    public static final String PUB = "0569acf1faa4767782e77bb1020111";
 
     //网关
     public static final String GATEWAY = "0" ;
@@ -53,10 +53,8 @@ public class CCBConstants {
 
 
     public static void main(String[] args) {
-        String tmp = "30819d300d06092a864886f70d010101050003818b0030818702818100874790210271b04300015186373c8b13be31fa22cf5b50f5274e565d3f47b6f37997c10f550211cf06b9a5066137d9fda3dd28e1aed2b0f89a5602fced30cafc6f61ae087cb59a9391454fa267ba21036e5a45cceb4093fd69f584e4525a1dc142aae1d6597f65c2f577d0c20c4d9be9383f7deff9b6653ceee7a3c4cf2fd03d020111" ;
-
+        String tmp = "30819d300d06092a864886f70d010101050003818b0030818702818100a9fa85d0e343c37a1ca81d7004f361f0a09381c642c88aa5cfab49c5ce6e430a4189baf6a9c3d025df3173731dec63baeb2bbb7b14bdf334d751b4573df1be373557b6176014ed18ef3774679eb7ae798aa84ae0e71d75a613fff04ce1b87c9693e48d46faca200dde18b59030500528f08b39390569acf1faa4767782e77bb1020111" ;
         String str = tmp.substring(tmp.length()-30,tmp.length()) ;
-
         System.out.println(str);
     }
 

@@ -6,9 +6,11 @@ import com.jfatty.zcloud.base.utils.RETResultUtils;
 import com.jfatty.zcloud.base.utils.StringUtils;
 import com.jfatty.zcloud.base.utils.WePayUtil;
 import com.jfatty.zcloud.hospital.constants.CCBConstants;
+import com.jfatty.zcloud.hospital.entity.CcbConfig;
 import com.jfatty.zcloud.hospital.req.CCBPayOrderCreateReq;
 import com.jfatty.zcloud.hospital.res.CCBPayOrderCreateRes;
 import com.jfatty.zcloud.hospital.res.CCBQrPayOrderCreateRes;
+import com.jfatty.zcloud.hospital.service.CcbConfigService;
 import com.jfatty.zcloud.hospital.service.ComplexPayService;
 import com.jfatty.zcloud.hospital.utils.HttpClientUtil;
 import com.jfatty.zcloud.hospital.utils.MD5Utils;
@@ -44,6 +46,9 @@ public class ApiCCBPayOrderController {
     @Autowired
     private ComplexPayService complexPayService ;
 
+    @Autowired
+    private CcbConfigService ccbConfigService ;
+
     //建行聚合支付支付订单
     @ApiOperation(value="001******建行聚合支付支付订单")
     @RequestMapping(value = {"/createCCBQrPayOrder"} ,method = RequestMethod.POST)
@@ -62,7 +67,9 @@ public class ApiCCBPayOrderController {
         boolean isHisPay = false;                                                               //HIS系统中的支付状态， 是否已经支付过了
         String sfh = "" ;                                                                       //his系统中的收费号
         String long_djh = "" ;                                                                  //本地拼接的流水号 存在逗号拼接的情况 费用单号
-        if (!CCBConstants.MERCHANTID.equals(mchId)) {
+
+        CcbConfig ccbConfig = ccbConfigService.getByMchId(mchId) ;
+        if ( ccbConfig == null){
             return RETResultUtils._509("商户ID不正确!");
         }
         if(feeType == ComplexPay.FEE_TYPE_MZ){
@@ -150,26 +157,26 @@ public class ApiCCBPayOrderController {
         //生成建行聚合支付订单信息
         HashMap<String, String> orderMap = new HashMap<String, String>();
         orderMap.put("CCB_IBSVersion", "V6");
-        orderMap.put("MERCHANTID", CCBConstants.MERCHANTID);
-        orderMap.put("POSID", CCBConstants.POSID);
-        orderMap.put("BRANCHID", CCBConstants.BRANCHID);
+        orderMap.put("MERCHANTID", ccbConfig.getMerchantId());
+        orderMap.put("POSID", ccbConfig.getPosId());
+        orderMap.put("BRANCHID", ccbConfig.getBranchId());
         orderMap.put("ORDERID", outTradeNo);
         orderMap.put("PAYMENT", feeAmountStr);
-        orderMap.put("CURCODE", CCBConstants.CURCODE);
+        orderMap.put("CURCODE", ccbConfig.getCurCode());
         orderMap.put("REMARK1", "");
         orderMap.put("REMARK2", "");
-        orderMap.put("TXCODE", CCBConstants.TXCODE);
-        orderMap.put("RETURNTYPE", CCBConstants.RETURNTYPE);
+        orderMap.put("TXCODE", ccbConfig.getTxCode());
+        orderMap.put("RETURNTYPE", ccbConfig.getReturnType());
         orderMap.put("TIMEOUT", "");
         // MD5加密
         StringBuilder sb = new StringBuilder();
-        sb.append("MERCHANTID=").append(CCBConstants.MERCHANTID).append("&POSID=").append(CCBConstants.POSID)
-                .append("&BRANCHID=").append(CCBConstants.BRANCHID).append("&ORDERID=")
+        sb.append("MERCHANTID=").append(ccbConfig.getMerchantId()).append("&POSID=").append(ccbConfig.getPosId())
+                .append("&BRANCHID=").append(ccbConfig.getBranchId()).append("&ORDERID=")
                 .append(outTradeNo).append("&PAYMENT=").append(feeAmountStr)
-                .append("&CURCODE=").append(CCBConstants.CURCODE).append("&TXCODE=").append(CCBConstants.TXCODE)
+                .append("&CURCODE=").append(ccbConfig.getCurCode()).append("&TXCODE=").append(ccbConfig.getTxCode())
                 .append("&REMARK1=").append("").append("&REMARK2=").append("")
-                .append("&RETURNTYPE=").append(CCBConstants.RETURNTYPE).append("&TIMEOUT=").append("")
-                .append("&PUB=").append(CCBConstants.PUB);
+                .append("&RETURNTYPE=").append(ccbConfig.getReturnType()).append("&TIMEOUT=").append("")
+                .append("&PUB=").append(ccbConfig.getPub());
         log.error("===>MD5加密前的拼接字符串[{}]",sb.toString());
         String sign = MD5Utils.MD5Encode(sb.toString(), "UTF-8").toLowerCase();
         log.error("===>MD5加密后的签名串[{}]",sign);
@@ -253,7 +260,8 @@ public class ApiCCBPayOrderController {
         boolean isHisPay = false;                                                               //HIS系统中的支付状态， 是否已经支付过了
         String sfh = "" ;                                                                       //his系统中的收费号
         String long_djh = "" ;                                                                  //本地拼接的流水号 存在逗号拼接的情况 费用单号
-        if (!CCBConstants.MERCHANTID.equals(mchId)) {
+        CcbConfig ccbConfig = ccbConfigService.getByMchId(mchId) ;
+        if ( ccbConfig == null){
             return RETResultUtils._509("商户ID不正确!");
         }
         if(feeType == ComplexPay.FEE_TYPE_MZ){
@@ -324,10 +332,10 @@ public class ApiCCBPayOrderController {
         }
 
         CCBPayOrderCreateRes ccbPayOrderCreateRes = new CCBPayOrderCreateRes() ;
-        ccbPayOrderCreateRes.setMerchantId(CCBConstants.MERCHANTID);
-        ccbPayOrderCreateRes.setPosId(CCBConstants.POSID);
-        ccbPayOrderCreateRes.setBranchId(CCBConstants.BRANCHID);
-        ccbPayOrderCreateRes.setPub(CCBConstants.PUB);
+        ccbPayOrderCreateRes.setMerchantId(ccbConfig.getMerchantId());
+        ccbPayOrderCreateRes.setPosId(ccbConfig.getPosId());
+        ccbPayOrderCreateRes.setBranchId(ccbConfig.getBranchId());
+        ccbPayOrderCreateRes.setPub(ccbConfig.getPub());
 
         //判断是否为最近一笔订单且没有支付
 
