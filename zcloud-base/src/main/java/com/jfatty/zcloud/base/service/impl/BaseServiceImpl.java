@@ -81,6 +81,25 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
         return entity;
     }
 
+    private T setUpdateTime(T entity) {
+        LocalDateTime updateTime = LocalDateTime.now();
+        String mname = "setUpdateTime" ;
+        log.info("类:[{}] 当前生成的更新时间:[{}]",entity.getClass().getName(),updateTime);
+        try {
+            Method m = entity.getClass().getMethod(mname,LocalDateTime.class);
+            try {
+                m.invoke(entity, updateTime);
+            } catch (IllegalAccessException e) {
+                log.error("类:[{}] 设置更新时间:[{}]失败 属性有些权限保护",entity.getClass().getName(),updateTime);
+            } catch (InvocationTargetException e) {
+                log.error("类:[{}] 设置更新时间:[{}]失败 没有找到目标对象",entity.getClass().getName(),updateTime);
+            }
+        } catch (NoSuchMethodException e) {
+            log.error("类:[{}] 设置更新时间:[{}]失败 没有找到对应方法",entity.getClass().getName(),updateTime);
+        }
+        return entity;
+    }
+
     @Override
     public boolean save(T entity, Map<String, Object> params) throws Exception {
         /**
@@ -100,6 +119,12 @@ public class BaseServiceImpl<T extends Model, M extends BaseMapper<T>> extends S
         entity = this.setCreateTime(entity) ;
         super.save(entity);
         return getId(entity);
+    }
+
+    @Override
+    public boolean updateById(T entity) {
+        entity = this.setUpdateTime(entity);
+        return super.updateById(entity);
     }
 
     @Override

@@ -3,17 +3,28 @@ package com.jfatty.zcloud.base.utils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import javax.net.ssl.SSLContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -433,5 +444,46 @@ public class WePayUtil implements Serializable {
         String sec = timeEnd.substring(12, 14);
         String str = year+"-"+month+"-"+day+" "+hour+":"+minu+":"+sec;
         return str;
+    }
+
+    public static String doRefund(String mchId, String certPath ,String url, String data ) throws Exception {
+        /**
+         * 注意PKCS12证书 是从微信商户平台-》账户设置-》 API安全 中下载的
+         */
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        File file = new File(certPath);
+        InputStream certStream = new FileInputStream(file);
+        try {
+            //这里写密码..默认是你的MCHID
+            keyStore.load(certStream, mchId.toCharArray());
+        } finally {
+            certStream.close();
+        }
+        SSLContext sslcontext = SSLContexts.custom()
+                //这里也是写密码的
+                .loadKeyMaterial(keyStore, mchId.toCharArray())
+                .build();
+        SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+                sslcontext,
+                SSLConnectionSocketFactory.getDefaultHostnameVerifier());
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setSSLSocketFactory(sslsf)
+                .build();
+        try {
+            HttpPost httpost = new HttpPost(url);
+            httpost.setEntity(new StringEntity(data, "UTF-8"));
+            CloseableHttpResponse response = httpclient.execute(httpost);
+            try {
+                HttpEntity entity = response.getEntity();
+                //接受到返回信息
+                String resultStr = EntityUtils.toString(response.getEntity(), "UTF-8");
+                EntityUtils.consume(entity);
+                return resultStr;
+            } finally {
+                response.close();
+            }
+        } finally {
+            httpclient.close();
+        }
     }
 }
