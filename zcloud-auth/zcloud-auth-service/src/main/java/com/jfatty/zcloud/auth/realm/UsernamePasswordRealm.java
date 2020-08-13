@@ -32,7 +32,7 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("UsernamePasswordRealm =================>doGetAuthorizationInfo ");
+        log.debug("UsernamePasswordRealm =================>doGetAuthorizationInfo ");
         return null;
     }
 
@@ -47,18 +47,17 @@ public class UsernamePasswordRealm extends AuthorizingRealm {
         //获取用户的输入的账号.
         String account = (String) usernamePasswordToken.getPrincipal();
         char[] password = (char[]) usernamePasswordToken.getCredentials();
-        System.out.println("UsernamePasswordRealm =================>doGetAuthenticationInfo " + account + " ====> " +  new String(password)  );
+        log.error("UsernamePasswordRealm =================>doGetAuthenticationInfo account [{}] ====> passwd [{}]" ,account, new String(password)  );
 
         UserPasswd userPasswd = userPasswdService.getUserPasswd(account) ;
 
-        redisCacheTemplate.opsForValue().set(String.valueOf(userPasswd.getId()), userPasswd);
+        //redisCacheTemplate.opsForValue().set(String.valueOf(userPasswd.getId()), userPasswd);
 
-        redisCacheTemplate.opsForValue().set("code",123412);
+        //redisCacheTemplate.opsForValue().set("code",123412);
 
-        Serializable code = redisCacheTemplate.opsForValue().get("code");
+        //Serializable code = redisCacheTemplate.opsForValue().get("code");
 
-        System.out.println(code);
-
+        //System.out.println(code);
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 account, //用户名  //用户

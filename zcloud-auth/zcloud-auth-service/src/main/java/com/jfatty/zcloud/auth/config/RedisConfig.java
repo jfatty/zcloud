@@ -32,7 +32,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     public RedisConfig() {
         System.out.println("RedisConfig容器启动初始化。。。");
-        System.out.println("RedisConfig容器启动初始化。。。");
     }
 
     @Resource

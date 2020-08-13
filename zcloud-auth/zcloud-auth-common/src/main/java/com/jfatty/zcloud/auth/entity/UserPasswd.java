@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.auth.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -7,6 +8,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * 描述
@@ -35,6 +37,11 @@ public class UserPasswd extends Model<UserPasswd> {
     private String password;
 
     /**
+     * 手机号码
+     */
+    private String phone ;
+
+    /**
      * 密码的盐值
      */
     private String salt;
@@ -57,6 +64,27 @@ public class UserPasswd extends Model<UserPasswd> {
         //return userName + salt;
         return id + salt;
     }
+
+    /**
+     * 用户角色集合
+     */
+    @TableField(exist = false)
+    private Set<String> roles ;
+
+    /**
+     * 用户权限集合
+     */
+    @TableField(exist = false)
+    private Set<String> perms ;
+
+    /**
+     * 用户权限控制路径集合
+     */
+    @TableField(exist = false)
+    private Set<String> uris ;
+
+    private Integer accEditState ;
+
 
 
 

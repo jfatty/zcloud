@@ -7,6 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * 描述
  *
@@ -28,5 +32,37 @@ public class UserPasswdServiceImpl extends BaseAuthServiceImpl<UserPasswd,UserPa
     @Override
     public UserPasswd getUserPasswd(String account) {
         return userPasswdMapper.getUserPasswd(account);
+    }
+
+    @Override
+    public UserPasswd getUserByPhone(String phone) {
+        return userPasswdMapper.getUserByPhone(phone);
+    }
+
+    @Override
+    public boolean saveUser(UserPasswd userPasswd) {
+        int res = userPasswdMapper.saveUser(userPasswd);
+        return res > 0;
+    }
+
+    @Override
+    public Set<String> getRoles(String uid, Boolean sm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("userId", sm ? null : uid);
+        return userPasswdMapper.getRoles(map);
+    }
+
+    @Override
+    public Set<String> getPermissions(String uid, Boolean sm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("userId", sm ? null : uid);
+        return userPasswdMapper.getPermissions(map);
+    }
+
+    @Override
+    public Set<String> getUris(String uid, Boolean sm) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("userId", sm ? null : uid);
+        return userPasswdMapper.getUris(map);
     }
 }

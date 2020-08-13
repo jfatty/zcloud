@@ -43,4 +43,7 @@ public class UserProfileRes extends UserProfileDTO<UserProfileRes> {
     //登录设备 PC|MOBILE|APP
     @ApiModelProperty(name = "devices", position = 0 , value = "登录设备" , example = "PC|MOBILE|APP")
     private String devices ;
+
+    @ApiModelProperty(name = "accEditState", position = 0 , value = "账号修改状态 0表示未修改还1表示已经修改" , example = "0")
+    private Integer accEditState ;
 }

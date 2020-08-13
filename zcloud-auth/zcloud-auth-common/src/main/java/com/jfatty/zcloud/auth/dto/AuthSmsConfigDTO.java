@@ -86,6 +86,12 @@ public class AuthSmsConfigDTO<T extends BaseDTO> extends BaseDTO {
     private String outId;
 
     /**
+     * 验证码超时时间以秒(s)对单位 默认 300m
+     */
+    @ApiModelProperty(name = "expireTime", value = "验证码超时时间以秒(s)对单位",example = "300")
+    private Integer expireTime ;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;

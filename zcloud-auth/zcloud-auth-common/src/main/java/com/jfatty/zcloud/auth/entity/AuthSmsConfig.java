@@ -81,6 +81,11 @@ public class AuthSmsConfig extends Model<AuthSmsConfig> {
     private String outId;
 
     /**
+     * 验证码超时时间以秒(s)对单位 默认 300m
+     */
+    private Integer expireTime ;
+
+    /**
      * 使用状态0表示正常使用-1表示维护中-2表示建设中...
      */
     private Integer status;

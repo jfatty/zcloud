@@ -1,5 +1,6 @@
 package com.jfatty.zcloud.auth.realm;
 
+import com.jfatty.zcloud.auth.service.UserPasswdService;
 import com.jfatty.zcloud.auth.token.PhoneCaptchaToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
@@ -8,6 +9,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 描述 通过手机验证码登录自定义 Realm
@@ -19,12 +21,15 @@ import org.apache.shiro.subject.PrincipalCollection;
 public class PhoneRealm extends AuthorizingRealm {
 
 
+    @Autowired
+    private UserPasswdService userPasswdService ;
+
     /**
      * 完成授权
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        System.out.println("PhoneRealm =================>doGetAuthorizationInfo ");
+        log.debug("PhoneRealm =================>doGetAuthorizationInfo ");
         return null;
     }
 
@@ -34,7 +39,14 @@ public class PhoneRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        System.out.println("PhoneRealm =================>doGetAuthenticationInfo ");
+        if( !(token instanceof PhoneCaptchaToken) ){
+            //判断不是短信验证码实例 直接返回
+            return null ;
+        }
+        PhoneCaptchaToken phoneCaptchaToken = (PhoneCaptchaToken)token;
+        //获取用户的输入的手机号.
+        String phone = (String) phoneCaptchaToken.getPrincipal();
+        log.debug("PhoneRealm =================>doGetAuthenticationInfo ");
         return null;
     }
 

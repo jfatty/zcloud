@@ -12,7 +12,7 @@ import lombok.Data;
  * @email jfatty@163.com
  */
 @Data
-@ApiModel(description = "登录实体请求请求实体")
+@ApiModel(description = "登录请求实体")
 public class LoginVoReq extends LoginVoDTO<LoginVoReq> {
 
     /**

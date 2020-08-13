@@ -7,13 +7,99 @@
         <id column="id" property="id" />
         <result column="account" property="account" />
         <result column="password" property="password" />
+        <result column="tel" property="phone" />
         <result column="salt" property="salt" />
+        <result column="acc_edit_state" property="accEditState" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
 
+    <insert id="saveUser" parameterType="com.jfatty.zcloud.auth.entity.UserPasswd" >
+        INSERT INTO sys_account_unique (id,user_name,password,salt,tel,create_time)
+        VALUES (#{id},#{account},#{password},#{salt},#{phone},#{createTime})
+    </insert>
+
     <select id="getUserPasswd" resultMap="BaseResultMap">
-        SELECT id,user_name AS account,password,salt,create_time FROM sys_account_unique WHERE user_name = #{account} LIMIT 1
+        SELECT id,user_name AS account,password,salt,tel,create_time,acc_edit_state FROM sys_account_unique WHERE user_name = #{account} LIMIT 1
+    </select>
+
+    <select id="getUserByPhone" resultMap="BaseResultMap">
+        SELECT id,user_name AS account,password,salt,tel,create_time,acc_edit_state FROM sys_account_unique WHERE tel = #{phone} LIMIT 1
+    </select>
+
+    <!--
+      @description:根据用户ID获取对应角色名称集合
+      @author jfatty
+      @date 2018年7月12日
+      @version 1.0.0
+      @param map 封装查询参数用户id   userId
+      @return 返回角色名称  String Set集合
+     -->
+    <select id="getRoles" resultType="java.lang.String" parameterType="map" >
+        SELECT role_code
+        FROM sys_role
+        WHERE 1 = 1
+        <if test="userId != null" >
+            AND id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            )
+        </if>
+        AND role_code IS NOT NUll
+        AND  <![CDATA[ role_code <> '' ]]>
+    </select>
+    <!--
+      @description:根据用户ID获取对应操作权限集合
+      @author jfatty
+      @date 2018年7月12日
+      @version 1.0.0
+      @param map 封装查询参数用户id   userId
+      @return 返回操作权限 路径 String Set 集合
+    -->
+    <select id="getPermissions" resultType="java.lang.String" parameterType="map" >
+        SELECT DISTINCT sys_permission
+        FROM sys_privilege
+        WHERE 1 = 1
+        <if test="userId != null" >
+            AND (id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR}
+            )
+            )
+            )
+        </if>
+        AND sys_permission IS NOT NUll
+        AND  <![CDATA[ sys_permission <> '' ]]>
+    </select>
+
+    <!--
+      @description:根据用户ID获取对应操作权限uri集合
+      @author jfatty
+      @date 2018年7月12日
+      @version 1.0.0
+      @param map 封装查询参数用户id   userId
+      @return 返回操作权限 路径 String Set 集合
+    -->
+    <select id="getUris" resultType="java.lang.String" parameterType="map" >
+        SELECT DISTINCT href
+        FROM sys_privilege
+        WHERE 1 = 1
+        <if test="userId != null" >
+            AND (id IN (
+            SELECT privilege_id
+            FROM sys_perm_relationship
+            WHERE auth_id IN (
+            SELECT role_id
+            FROM sys_user_role
+            WHERE user_id = #{userId,jdbcType=VARCHAR} ) ) )
+        </if>
+        AND href IS NOT NUll
+        AND  <![CDATA[ href <> '' ]]>
     </select>
 
 </mapper>
