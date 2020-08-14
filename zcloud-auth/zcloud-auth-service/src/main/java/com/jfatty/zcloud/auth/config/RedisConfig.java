@@ -13,6 +13,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.cache.interceptor.KeyGenerator;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
@@ -79,5 +81,21 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setConnectionFactory(redisConnectionFactory);
         return template;
     }
+
+    @Bean
+    public JedisPool jedisPoolFactory(){
+        System.out.println("JedisPool注入开始...");
+        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+        jedisPoolConfig.setMaxIdle(20);
+        jedisPoolConfig.setMaxIdle(5);
+        jedisPoolConfig.setMaxWaitMillis(1000L);
+        jedisPoolConfig.setTestOnBorrow(false);
+        jedisPoolConfig.setJmxEnabled(true);
+        jedisPoolConfig.setBlockWhenExhausted(false);
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig,"127.0.0.1",6379);
+        return jedisPool ;
+    }
+
+
 
 }

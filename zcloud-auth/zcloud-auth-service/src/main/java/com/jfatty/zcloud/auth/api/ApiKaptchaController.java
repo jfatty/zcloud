@@ -7,6 +7,7 @@ import com.jfatty.zcloud.auth.service.AuthSmsConfigService;
 import com.jfatty.zcloud.auth.service.AuthSmsLogService;
 import com.jfatty.zcloud.auth.service.SmsService;
 import com.jfatty.zcloud.auth.service.UserPasswdService;
+import com.jfatty.zcloud.auth.utils.JedisUtil;
 import com.jfatty.zcloud.auth.utils.PhoneNumUtil;
 import com.jfatty.zcloud.auth.utils.ShiroKit;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
@@ -62,6 +63,9 @@ public class ApiKaptchaController {
 
     @Resource(name = "tencentSmsService")
     private SmsService tencentSmsService ;
+
+    @Autowired
+    private JedisUtil jedisUtil ;
 
 
     /**
@@ -203,7 +207,12 @@ public class ApiKaptchaController {
             }
             //设置有效时间为5分钟 timeout
             log.error("========>存入redis之前");
-            redisTemplate.opsForValue().set(phone,code,authSmsConfig.getExpireTime(),TimeUnit.SECONDS);
+            try{
+                redisTemplate.opsForValue().set(phone,code,authSmsConfig.getExpireTime(),TimeUnit.SECONDS);
+            } catch (Exception e){
+                log.error("========>redisTemplate 缓存短信验证码失败 尝试使用jdeis方式");
+                jedisUtil.set(phone,code);
+            }
             log.error("========>存入redis之后");
             BeanUtils.copyProperties(authSmsConfig,authSmsLog);
             authSmsLog.setSmsContent(code);

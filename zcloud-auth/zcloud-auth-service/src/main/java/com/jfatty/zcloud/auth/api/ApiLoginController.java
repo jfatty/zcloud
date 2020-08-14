@@ -5,6 +5,8 @@ import com.jfatty.zcloud.auth.req.LoginVoReq;
 import com.jfatty.zcloud.auth.req.SellLoginReq;
 import com.jfatty.zcloud.auth.res.UserProfileRes;
 import com.jfatty.zcloud.auth.service.UserPasswdService;
+import com.jfatty.zcloud.auth.utils.JedisUtil;
+import com.jfatty.zcloud.auth.utils.JsonUtils;
 import com.jfatty.zcloud.auth.utils.PhoneNumUtil;
 import com.jfatty.zcloud.base.utils.JwtUtil;
 import com.jfatty.zcloud.base.utils.RETResultUtils;
@@ -53,6 +55,9 @@ public class ApiLoginController {
     @Autowired
     private UserPasswdService userPasswdService ;
 
+    @Autowired
+    private JedisUtil jedisUtil ;
+
     @ApiOperation(value="001******登录")
     @RequestMapping(value = {"/login"} ,method = RequestMethod.POST)
     public RETResultUtils<String> login(@RequestBody LoginVoReq loginVo , HttpServletRequest request){
@@ -68,13 +73,23 @@ public class ApiLoginController {
             return RETResultUtils._509(msg) ;
         if(StringUtils.isEmptyOrBlank(loginVo.getPassword()))
             return RETResultUtils._509("验证码不能为空") ;
-        String code = (String) redisTemplate.opsForValue().get(phone);
+        String code = "" ;
+        try {
+            code = (String) redisTemplate.opsForValue().get(phone);
+        } catch (Exception e) {
+            log.error("====>通过redisTemplate 获取手机号[{}]对应验证码失败尝试通过jedis获取 [{}]",phone,e.getMessage());
+            code = jedisUtil.get(phone) ;
+        }
         if(StringUtils.isEmptyOrBlank(code))
             return RETResultUtils._506("验证码已经失效") ;
         if(!code.equalsIgnoreCase(loginVo.getPassword()))
             return RETResultUtils._509("验证码错误") ;
-        redisTemplate.delete(loginVo.getAccount());
-
+        try {
+            redisTemplate.delete(loginVo.getAccount());
+        } catch (Exception e) {
+            log.error("====>通过redisTemplate 删除手机号[{}] 缓存验证码[{}]失败尝试通过jedis删除 [{}]",phone,code,e.getMessage());
+            jedisUtil.del(loginVo.getAccount());
+        }
         UserPasswd  userPasswd = userPasswdService.getUserByPhone(phone);
         String uid = userPasswd.getId() ;
         String account = userPasswd.getAccount() ;
@@ -97,7 +112,13 @@ public class ApiLoginController {
         claims.put("perms",perms);
         claims.put("uris",uris);
         String token = JwtUtil.createJWT(uid,account,uid,claims,JwtUtil.TTL) ;
-        redisTemplate.opsForValue().set(token,userPasswd);
+        try{
+            redisTemplate.opsForValue().set(token,userPasswd);
+        } catch ( Exception e) {
+            log.error("====>通过redisTemplate 缓存用户信息失败 token[{}] 尝试用过jedis [{}]",token,e.getMessage());
+            //把用户信息写入redis
+            jedisUtil.set(token, JsonUtils.objectToJson(userPasswd));
+        }
         //redisTemplate.opsForValue().set(token,loginVo,7200,TimeUnit.SECONDS);
         //LoginVoReq login = (LoginVoReq) redisTemplate.opsForValue().get(token);
         log.error("====>   login user info [{}]",userPasswd);
