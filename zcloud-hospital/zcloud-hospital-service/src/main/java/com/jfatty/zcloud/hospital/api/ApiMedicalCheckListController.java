@@ -67,7 +67,7 @@ public class ApiMedicalCheckListController {
             }
             return new RELResultUtils(results);
         }
-        return RELResultUtils._506("没有查询到住院日清单查询信息!");
+        return RELResultUtils._506("没有查询到住院日清单信息!");
     }
 
     @ApiOperation(value="**********02住院记录查询")
