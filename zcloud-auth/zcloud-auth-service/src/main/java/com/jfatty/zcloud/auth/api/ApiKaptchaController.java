@@ -208,7 +208,8 @@ public class ApiKaptchaController {
             //设置有效时间为5分钟 timeout
             log.error("========>存入redis之前");
             try{
-                redisTemplate.opsForValue().set(phone,code,authSmsConfig.getExpireTime(),TimeUnit.SECONDS);
+                //redisTemplate.opsForValue().set(phone,code,authSmsConfig.getExpireTime(),TimeUnit.SECONDS);
+                stringRedisTemplate.opsForValue().set(phone,code,authSmsConfig.getExpireTime(),TimeUnit.SECONDS);
             } catch (Exception e){
                 log.error("========>redisTemplate 缓存短信验证码失败 尝试使用jdeis方式");
                 jedisUtil.set(phone,code);

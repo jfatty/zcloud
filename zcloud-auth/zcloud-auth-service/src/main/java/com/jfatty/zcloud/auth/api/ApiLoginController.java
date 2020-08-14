@@ -75,7 +75,8 @@ public class ApiLoginController {
             return RETResultUtils._509("验证码不能为空") ;
         String code = "" ;
         try {
-            code = (String) redisTemplate.opsForValue().get(phone);
+            //code = (String) redisTemplate.opsForValue().get(phone);
+            code = stringRedisTemplate.opsForValue().get(phone);
         } catch (Exception e) {
             log.error("====>通过redisTemplate 获取手机号[{}]对应验证码失败尝试通过jedis获取 [{}]",phone,e.getMessage());
             code = jedisUtil.get(phone) ;
@@ -88,7 +89,8 @@ public class ApiLoginController {
         if(!code.equalsIgnoreCase(loginVo.getPassword()))
             return RETResultUtils._509("验证码错误") ;
         try {
-            redisTemplate.delete(loginVo.getAccount());
+            //redisTemplate.delete(loginVo.getAccount());
+            stringRedisTemplate.delete(loginVo.getAccount());
         } catch (Exception e) {
             log.error("====>通过redisTemplate 删除手机号[{}] 缓存验证码[{}]失败尝试通过jedis删除 [{}]",phone,code,e.getMessage());
             jedisUtil.del(loginVo.getAccount());
