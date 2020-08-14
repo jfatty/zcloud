@@ -80,6 +80,9 @@ public class ApiLoginController {
             log.error("====>通过redisTemplate 获取手机号[{}]对应验证码失败尝试通过jedis获取 [{}]",phone,e.getMessage());
             code = jedisUtil.get(phone) ;
         }
+        if (StringUtils.isEmptyOrBlank(code)) {
+            code = jedisUtil.get(phone) ;
+        }
         if(StringUtils.isEmptyOrBlank(code))
             return RETResultUtils._506("验证码已经失效") ;
         if(!code.equalsIgnoreCase(loginVo.getPassword()))
