@@ -134,5 +134,21 @@ public class Address extends Model<Address> {
     private String deleteOperator;
 
 
+    public String getAddressStr(){
+        try {
+            StringBuilder sb = new StringBuilder();
+            String [] provinces = this.province.split(":::") ;
+            String [] cities = this.city.split(":::");
+            String [] areas = this.area.split(":::");
+            sb.append(provinces[0]).append(cities[0]).append(areas[0]).append(this.household);
+            return sb.toString();
+        } catch ( Exception e ) {
+            e.printStackTrace();
+            return "" ;
+        }
+
+
+
+    }
     
 }
